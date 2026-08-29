@@ -1,0 +1,130 @@
+sources:
+  - name: Hacker News Front Page
+    url: https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=35
+    kind: api
+    lang: en
+    parser: hn_algolia
+    max_items: 30
+
+  - name: GitHub Trending AI & Agents
+    url: https://github.com/trending?since=daily
+    kind: html
+    lang: en
+    parser: github_trending
+    max_items: 20
+    keywords: [ai, agent, agents, llm, rag, model, neural, embedding, inference, mcp]
+
+  - name: arXiv cs.AI
+    url: https://export.arxiv.org/api/query?search_query=cat%3Acs.AI&sortBy=submittedDate&sortOrder=descending&max_results=25
+    kind: atom
+    lang: en
+    parser: feed
+    max_items: 20
+
+  - name: arXiv cs.CL
+    url: https://export.arxiv.org/api/query?search_query=cat%3Acs.CL&sortBy=submittedDate&sortOrder=descending&max_results=25
+    kind: atom
+    lang: en
+    parser: feed
+    max_items: 20
+
+  - name: Hugging Face Daily Papers
+    url: https://huggingface.co/api/daily_papers?limit=30
+    kind: api
+    lang: en
+    parser: hf_papers
+    max_items: 25
+
+  - name: Simon Willison
+    url: https://simonwillison.net/atom/everything/
+    kind: atom
+    lang: en
+    parser: feed
+    max_items: 12
+
+  - name: Latent Space
+    url: https://www.latent.space/feed
+    kind: rss
+    lang: en
+    parser: feed
+    max_items: 12
+
+  - name: Anthropic Newsroom
+    url: https://www.anthropic.com/news
+    kind: html
+    lang: en
+    parser: html_links
+    include_url_regex: ^https://www\.anthropic\.com/news/[^/?#]+$
+    max_items: 15
+
+  - name: OpenAI News
+    url: https://openai.com/news/rss.xml
+    kind: rss
+    lang: en
+    parser: feed
+    max_items: 15
+
+  - name: Google DeepMind Blog
+    url: https://deepmind.google/blog/rss.xml
+    kind: rss
+    lang: en
+    parser: feed
+    max_items: 15
+
+  - name: 机器之心
+    url: https://www.jiqizhixin.com/
+    kind: html
+    lang: zh
+    parser: html_links
+    include_url_regex: ^https://(?:pro\.)?jiqizhixin\.com/(?:reference|article|articles)/
+    max_items: 12
+    fallbacks:
+      - url: "https://news.google.com/rss/search?q=site%3Ajiqizhixin.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans"
+        parser: feed
+        timeout: 12
+
+  - name: 量子位
+    url: https://www.qbitai.com/
+    kind: html
+    lang: zh
+    parser: html_links
+    include_url_regex: ^https://www\.qbitai\.com/\d{4}/\d{2}/\d+\.html$
+    max_items: 15
+    fallbacks:
+      - url: "https://rsshub.app/qbitai/category/%E8%B5%84%E8%AE%AF"
+        parser: feed
+        timeout: 10
+      - url: "https://news.google.com/rss/search?q=site%3Aqbitai.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans"
+        parser: feed
+        timeout: 12
+
+  - name: 少数派 AI
+    url: https://sspai.com/feed
+    kind: rss
+    lang: zh
+    parser: feed
+    keywords: [AI, 人工智能, 智能体, Agent, LLM, 模型, 提示词, 知识库]
+    max_items: 12
+    fallbacks:
+      - url: "https://rsshub.app/sspai/index"
+        parser: feed
+        timeout: 10
+      - url: "https://news.google.com/rss/search?q=site%3Asspai.com%20AI&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans"
+        parser: feed
+        timeout: 12
+
+  - name: 阮一峰科技爱好者周刊
+    url: https://www.ruanyifeng.com/blog/weekly/
+    kind: html
+    lang: zh
+    parser: html_links
+    include_url_regex: ^https://www\.ruanyifeng\.com/blog/\d{4}/\d{2}/weekly-issue-\d+\.html$
+    max_items: 8
+
+  - name: Product Hunt AI
+    url: https://www.producthunt.com/feed
+    kind: atom
+    lang: en
+    parser: feed
+    keywords: [AI, agent, LLM, model, automation, copilot, assistant, MCP]
+    max_items: 15

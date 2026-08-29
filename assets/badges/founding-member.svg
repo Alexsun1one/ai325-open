@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" role="img" aria-labelledby="title desc">
+  <title id="title">创始成员纪念徽章</title>
+  <desc id="desc">达成条件：建群 48 小时内入群。中心图标：星星。</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="72%">
+      <stop offset="0" stop-color="#fcd34d" stop-opacity=".18"/>
+      <stop offset=".48" stop-color="#0b1024"/>
+      <stop offset="1" stop-color="#030308" class="space-stop"/>
+    </radialGradient>
+    <linearGradient id="rim" x1="22" y1="28" x2="175" y2="176" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fcd34d"/><stop offset=".48" stop-color="#a78bfa"/><stop offset="1" stop-color="#fcd34d"/>
+    </linearGradient>
+    <linearGradient id="ink" x1="70" y1="56" x2="134" y2="140" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f8fbff" class="icon-hi-stop"/><stop offset=".45" stop-color="#fcd34d"/><stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#fcd34d" flood-opacity=".9" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="halo"/>
+      <feMerge><feMergeNode in="halo"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="disc"><circle cx="100" cy="100" r="91"/></clipPath>
+    <style>
+      .space { fill:#030308; }
+      .space-stop { stop-color:#030308; }
+      .icon-hi-stop { stop-color:#f8fbff; }
+      .grid { stroke:#94a3b8; }
+      .spark { stroke:#f8fbff; }
+      .label { fill:#e6efff; font:700 12px -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; letter-spacing:.06em; }
+      @media (prefers-color-scheme: light) {
+        .space { fill:#eaf2ff; }
+        .space-stop { stop-color:#eaf2ff; }
+        .icon-hi-stop { stop-color:#ffffff; }
+        .grid { stroke:#475569; }
+        .label { fill:#172554; }
+      }
+      .icon { fill:none; stroke:url(#ink); stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
+      .spark-fill { fill:url(#ink); stroke:url(#ink); }
+    </style>
+  </defs>
+  <circle cx="100" cy="100" r="96" class="space" stroke="#111a36" stroke-width="2"/>
+  <circle cx="100" cy="100" r="91" fill="url(#bg)"/>
+  <g clip-path="url(#disc)" opacity=".75">
+    <path d="M-8 131C42 92 69 99 105 65s76-26 110-53" fill="none" stroke="url(#rim)" stroke-width="15" opacity=".07" filter="url(#glow)"/>
+    <path d="M24 47h152M17 78h166M11 109h178M17 140h166" class="grid" stroke-width=".5" opacity=".08"/>
+    <path d="M48 15v145M78 8v157M108 8v157M138 15v145" class="grid" stroke-width=".5" opacity=".07"/>
+  </g>
+  <circle cx="100" cy="100" r="89" fill="none" stroke="url(#rim)" stroke-width="2.5" filter="url(#glow)"/>
+  <circle cx="100" cy="100" r="82" fill="none" stroke="url(#rim)" stroke-width=".8" stroke-dasharray="2 7" opacity=".7"/>
+  <path d="M41 151A74 74 0 0 0 159 151" fill="none" stroke="url(#rim)" stroke-width="1" opacity=".4"/>
+  <g fill="#fcd34d" filter="url(#soft-glow)">
+    <circle cx="43" cy="50" r="1.4"/><circle cx="155" cy="54" r="1"/><circle cx="164" cy="116" r="1.4"/>
+    <circle cx="35" cy="112" r=".9"/><circle cx="72" cy="36" r=".8"/><circle cx="137" cy="145" r=".8"/>
+  </g>
+  <g class="icon" filter="url(#glow)"><path d="M100 53l13 28 31 4-23 22 6 31-27-15-27 15 6-31-23-22 31-4 13-28z" class="spark-fill"/><path d="M100 68l8 19 20 2-15 14 4 20-17-10-17 10 4-20-15-14 20-2 8-19z" opacity=".55"/><path d="M145 57v12M139 63h12M57 119v10M52 124h10"/></g>
+  <path d="M60 155h80" stroke="url(#rim)" stroke-width="1" opacity=".45"/>
+  <text x="100" y="174" text-anchor="middle" class="label">创始成员</text>
+  <circle cx="100" cy="100" r="96" fill="none" stroke="url(#rim)" stroke-width="1" opacity=".42"/>
+</svg>

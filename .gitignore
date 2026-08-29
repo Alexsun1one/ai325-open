@@ -1,0 +1,29 @@
+# 本地/临时
+.DS_Store
+*.log
+.omx/
+.playwright-mcp/
+shot-*.png
+.local-data/
+.impeccable/sketches/
+# 截图与生图源稿（体积大，产物已在 site/public）
+.fleet/polish/
+.fleet/review/
+.fleet/shots/
+.fleet/art-src/
+.fleet-panes.txt
+# 密钥类（从不入仓）
+.env
+.env.*
+*.pem
+*.key
+# python
+__pycache__/
+*.pyc
+.venv/
+hermes/arsenal/candidates/
+# node
+node_modules/
+site/.next/
+site/out/
+logs/

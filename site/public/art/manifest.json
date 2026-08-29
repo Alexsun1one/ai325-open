@@ -1,0 +1,387 @@
+[
+  {
+    "file": "cover-light-square.png",
+    "purpose": "目标 2 期刊库与分享卡封面意象，明色方形版",
+    "dimensions": "1200x1200",
+    "prompt_summary": "纸白背景上的蓝线玻璃量杯，盛放刚蒸出的琥珀液体与一滴入液涟漪；扁平哑光，无文字",
+    "theme_fit": "light",
+    "webp": "cover-light-square.webp"
+  },
+  {
+    "file": "cover-light-og.png",
+    "purpose": "目标 2 期刊库与分享卡封面意象，明色 OG 横版",
+    "dimensions": "1200x630",
+    "prompt_summary": "宽幅纸白留白中的蓝线玻璃量杯与琥珀液体；扁平印刷插画，无文字",
+    "theme_fit": "light",
+    "webp": "cover-light-og.webp"
+  },
+  {
+    "file": "cover-dark-square.png",
+    "purpose": "目标 2 期刊库与分享卡封面意象，深色方形版",
+    "dimensions": "1200x1200",
+    "prompt_summary": "深海军蓝背景上的亮蓝线量杯、琥珀液体与细流；安静哑光，无文字",
+    "theme_fit": "dark",
+    "webp": "cover-dark-square.webp"
+  },
+  {
+    "file": "cover-dark-og.png",
+    "purpose": "目标 2 期刊库与分享卡封面意象，深色 OG 横版",
+    "dimensions": "1200x630",
+    "prompt_summary": "宽幅深海军蓝背景中的亮蓝线量杯与琥珀液体，保留充足负空间；无文字",
+    "theme_fit": "dark",
+    "webp": "cover-dark-og.webp"
+  },
+  {
+    "file": "poster-vi.png",
+    "purpose": "目标 3 活动专区：VI 设计大赛无字海报底图",
+    "dimensions": "1600x900",
+    "prompt_summary": "纸白设计工作台上的空白蓝边铭牌、名片与圆形钢印模具，左侧预留叠字区；无文字",
+    "theme_fit": "light",
+    "webp": "poster-vi.webp"
+  },
+  {
+    "file": "poster-essay.png",
+    "purpose": "目标 3 活动专区：小作文无字海报底图",
+    "dimensions": "1600x900",
+    "prompt_summary": "侧光下的一叠空白蓝线稿纸和深蓝钢笔，左侧大留白；清除所有疑似手写痕迹",
+    "theme_fit": "light",
+    "webp": "poster-essay.webp"
+  },
+  {
+    "file": "poster-badges.png",
+    "purpose": "目标 3 活动专区：徽章墙无字海报底图",
+    "dimensions": "1600x900",
+    "prompt_summary": "纸白展示板上一排八枚空圆托槽，蓝、琥珀、青、朱砂色环等待点亮，上方留白；无文字",
+    "theme_fit": "light",
+    "webp": "poster-badges.webp"
+  },
+  {
+    "file": "avatar-default-01.png",
+    "purpose": "目标 4 默认成员头像：浅蓝同心环与斜杠",
+    "dimensions": "200x200",
+    "prompt_summary": "浅蓝抽象同心环与斜向粗线，扁平几何，无人脸无文字",
+    "theme_fit": "mixed",
+    "webp": "avatar-default-01.webp"
+  },
+  {
+    "file": "avatar-default-02.png",
+    "purpose": "目标 4 默认成员头像：浅蓝阶梯块",
+    "dimensions": "200x200",
+    "prompt_summary": "浅蓝五级几何阶梯，扁平几何，无人脸无文字",
+    "theme_fit": "light",
+    "webp": "avatar-default-02.webp"
+  },
+  {
+    "file": "avatar-default-03.png",
+    "purpose": "目标 4 默认成员头像：蓝色弧环与方块",
+    "dimensions": "200x200",
+    "prompt_summary": "中蓝三重开口弧环与偏心方块，扁平几何，无人脸无文字",
+    "theme_fit": "mixed",
+    "webp": "avatar-default-03.webp"
+  },
+  {
+    "file": "avatar-default-04.png",
+    "purpose": "目标 4 默认成员头像：深蓝四分圆拼块",
+    "dimensions": "200x200",
+    "prompt_summary": "深蓝四片四分圆拼合，扁平几何，无人脸无文字",
+    "theme_fit": "light",
+    "webp": "avatar-default-04.webp"
+  },
+  {
+    "file": "avatar-default-05.png",
+    "purpose": "目标 4 默认成员头像：浅琥珀同心圆",
+    "dimensions": "200x200",
+    "prompt_summary": "浅琥珀断口同心圆，扁平几何，无人脸无文字",
+    "theme_fit": "mixed",
+    "webp": "avatar-default-05.webp"
+  },
+  {
+    "file": "avatar-default-06.png",
+    "purpose": "目标 4 默认成员头像：浅琥珀叠层胶囊",
+    "dimensions": "200x200",
+    "prompt_summary": "浅琥珀三枚横向圆角胶囊，扁平几何，无人脸无文字",
+    "theme_fit": "light",
+    "webp": "avatar-default-06.webp"
+  },
+  {
+    "file": "avatar-default-07.png",
+    "purpose": "目标 4 默认成员头像：琥珀放射片",
+    "dimensions": "200x200",
+    "prompt_summary": "琥珀八片放射结构与空心圆，扁平几何，无人脸无文字",
+    "theme_fit": "light",
+    "webp": "avatar-default-07.webp"
+  },
+  {
+    "file": "avatar-default-08.png",
+    "purpose": "目标 4 默认成员头像：深琥珀折纸块",
+    "dimensions": "200x200",
+    "prompt_summary": "深琥珀折叠多边形组，扁平几何，无人脸无文字",
+    "theme_fit": "mixed",
+    "webp": "avatar-default-08.webp"
+  },
+  {
+    "file": "avatar-default-09.png",
+    "purpose": "目标 4 默认成员头像：浅青节点网络",
+    "dimensions": "200x200",
+    "prompt_summary": "浅青六向圆点分支网络，扁平几何，无人脸无文字",
+    "theme_fit": "light",
+    "webp": "avatar-default-09.webp"
+  },
+  {
+    "file": "avatar-default-10.png",
+    "purpose": "目标 4 默认成员头像：浅青波形拼块",
+    "dimensions": "200x200",
+    "prompt_summary": "浅青三枚互锁波形，扁平几何，无人脸无文字",
+    "theme_fit": "mixed",
+    "webp": "avatar-default-10.webp"
+  },
+  {
+    "file": "avatar-default-11.png",
+    "purpose": "目标 4 默认成员头像：青色轨道环",
+    "dimensions": "200x200",
+    "prompt_summary": "青色双轨道弧、中心圆与小节点，扁平几何，无人脸无文字",
+    "theme_fit": "mixed",
+    "webp": "avatar-default-11.webp"
+  },
+  {
+    "file": "avatar-default-12.png",
+    "purpose": "目标 4 默认成员头像：深青斜向格栅",
+    "dimensions": "200x200",
+    "prompt_summary": "深青圆角粗线斜向交织，扁平几何，无人脸无文字",
+    "theme_fit": "light",
+    "webp": "avatar-default-12.webp"
+  },
+  {
+    "file": "avatar-default-13.png",
+    "purpose": "目标 4 默认成员头像：浅朱砂方块圆孔",
+    "dimensions": "200x200",
+    "prompt_summary": "浅朱砂四枚偏移方块与中心圆孔，扁平几何，无人脸无文字",
+    "theme_fit": "mixed",
+    "webp": "avatar-default-13.webp"
+  },
+  {
+    "file": "avatar-default-14.png",
+    "purpose": "目标 4 默认成员头像：浅朱砂扇叶",
+    "dimensions": "200x200",
+    "prompt_summary": "浅朱砂六枚宽扇叶环绕空心圆，扁平几何，无人脸无文字",
+    "theme_fit": "light",
+    "webp": "avatar-default-14.webp"
+  },
+  {
+    "file": "avatar-default-15.png",
+    "purpose": "目标 4 默认成员头像：朱砂折带箭片",
+    "dimensions": "200x200",
+    "prompt_summary": "朱砂三枚折纸式箭片，扁平几何，无人脸无文字",
+    "theme_fit": "mixed",
+    "webp": "avatar-default-15.webp"
+  },
+  {
+    "file": "avatar-default-16.png",
+    "purpose": "目标 4 默认成员头像：深朱砂三角簇",
+    "dimensions": "200x200",
+    "prompt_summary": "深朱砂三角形与圆形平衡簇，扁平几何，无人脸无文字",
+    "theme_fit": "mixed",
+    "webp": "avatar-default-16.webp"
+  },
+  {
+    "file": "og-blank.png",
+    "webp": "og-blank.webp",
+    "purpose": "追加任务：网页叠字专用极简 OG 空白底图",
+    "dimensions": "1200x630",
+    "prompt_summary": "纸白底、蓝色边框与稀疏格线、右下无字空圆章；无量杯无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/theme-01.png",
+    "webp": "illus/theme-01.webp",
+    "purpose": "首期六幕主题插画 1：换脑工程",
+    "dimensions": "1600x900",
+    "prompt_summary": "侧面头脑剖面中移出旧齿轮、装入琥珀酒精计与量具，蓝色认知路径重新接线；左侧留白，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/theme-02.png",
+    "webp": "illus/theme-02.webp",
+    "purpose": "首期六幕主题插画 2：知识库远征",
+    "dimensions": "1600x900",
+    "prompt_summary": "庞大书架逐层变成蒸馏塔，琥珀细流穿过纸片、检索放大镜与层板抵达小瓶；左侧留白，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/theme-03.png",
+    "webp": "illus/theme-03.webp",
+    "purpose": "首期六幕主题插画 3：销售结构化之夜",
+    "dimensions": "1600x900",
+    "prompt_summary": "三种蓝色客户路径经独立漏斗汇入量杯，柔性清水倒入大部分已被琥珀液体填充的结构；左侧留白，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/theme-04.png",
+    "webp": "illus/theme-04.webp",
+    "purpose": "首期六幕主题插画 4：AI 经济学",
+    "dimensions": "1600x900",
+    "prompt_summary": "工业天平上一枚昂贵大砝码对阵互联的小琥珀砝码集群与送料带；左侧留白，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/theme-05.png",
+    "webp": "illus/theme-05.webp",
+    "purpose": "首期六幕主题插画 5：小作文马拉松",
+    "dimensions": "1600x900",
+    "prompt_summary": "月夜台灯下的群体写作、稿纸堆、接力笔与旧身份物件沿琥珀带通向空白新徽牌；左侧留白，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/theme-06.png",
+    "webp": "illus/theme-06.webp",
+    "purpose": "首期六幕主题插画 6：WeFlow 之夜",
+    "dimensions": "1600x900",
+    "prompt_summary": "拆解的数据流装置旁长出分叉新枝，枝端承载找回的零件并汇成回装模块；左侧留白，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/spot-intake.png",
+    "webp": "illus/spot-intake.webp",
+    "purpose": "首期节插图：进料",
+    "dimensions": "600x600",
+    "prompt_summary": "谷物与种子由料铲倒入漏斗，漏斗颈有少量琥珀颗粒；无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/spot-run.png",
+    "webp": "illus/spot-run.webp",
+    "purpose": "首期节插图：蒸馏曲线",
+    "dimensions": "600x600",
+    "prompt_summary": "多层蒸馏塔、冷凝器与无标注上升曲线，出口一滴琥珀；无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/spot-timeline.png",
+    "webp": "illus/spot-timeline.webp",
+    "purpose": "首期节插图：大事记",
+    "dimensions": "600x600",
+    "prompt_summary": "空白表盘怀表连接细长时间线，线上一颗琥珀节点；无文字数字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/spot-tone.png",
+    "webp": "illus/spot-tone.webp",
+    "purpose": "首期节插图：真伪鉴定",
+    "dimensions": "600x600",
+    "prompt_summary": "三枚内部完全空白、外圈结构不同的圆形章，极小琥珀点；无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/spot-quotes.png",
+    "webp": "illus/spot-quotes.webp",
+    "purpose": "首期节插图：逐字摘录",
+    "dimensions": "600x600",
+    "prompt_summary": "一张被撕下的空白蓝边纸条与小琥珀回形针；无引号无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/spot-score.png",
+    "webp": "illus/spot-score.webp",
+    "purpose": "首期节插图：度数",
+    "dimensions": "600x600",
+    "prompt_summary": "酒精计浮在液面，无数字刻线与小琥珀弯月液面；无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/spot-growth.png",
+    "webp": "illus/spot-growth.webp",
+    "purpose": "首期节插图：出品",
+    "dimensions": "600x600",
+    "prompt_summary": "空白小玻璃瓶以琥珀封蜡封口，旁置蓝色液滴；无标签文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/spot-docket.png",
+    "webp": "illus/spot-docket.webp",
+    "purpose": "首期节插图：悬案",
+    "dimensions": "600x600",
+    "prompt_summary": "蓝绳挂起一枚中心完全空白的标签，结绳极少琥珀；无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "illus/spot-members.png",
+    "webp": "illus/spot-members.webp",
+    "purpose": "首期节插图：成员",
+    "dimensions": "600x600",
+    "prompt_summary": "一排五只轮廓不同的空酒杯，杯底极少琥珀高光；无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "../icons/app-icon-512.png",
+    "webp": "../icons/app-icon-512.webp",
+    "purpose": "第二轮应用图标：512px 蓝色批次章母版",
+    "dimensions": "512x512",
+    "prompt_summary": "纸白底双重印刷蓝圆环、中心琥珀几何液滴与极小朱砂点；全不透明，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "../icons/app-icon-192.png",
+    "webp": "../icons/app-icon-192.webp",
+    "purpose": "第二轮应用图标：192px PWA 变体",
+    "dimensions": "192x192",
+    "prompt_summary": "由 512px 批次章母版等比派生；双蓝环与琥珀液滴，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "../icons/apple-touch-icon.png",
+    "webp": "../icons/apple-touch-icon.webp",
+    "purpose": "第二轮应用图标：180px Apple Touch 变体",
+    "dimensions": "180x180",
+    "prompt_summary": "由 512px 批次章母版等比派生；双蓝环与琥珀液滴，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "../icons/favicon-32.png",
+    "webp": "../icons/favicon-32.webp",
+    "ico": "../icons/favicon.ico",
+    "purpose": "第二轮 favicon：32px PNG/WebP 与同尺寸 ICO",
+    "dimensions": "32x32",
+    "prompt_summary": "由 512px 批次章母版等比派生；小尺寸仍可辨双蓝环与琥珀液滴，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "round2/arsenal-shelf.png",
+    "webp": "round2/arsenal-shelf.webp",
+    "purpose": "第二轮军火库意象 1：知识藏品架",
+    "dimensions": "1600x900",
+    "prompt_summary": "蓝线酒架/书架格子收藏琥珀小瓶、空白卷轴和卡匣；左侧留白，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "round2/arsenal-workbench.png",
+    "webp": "round2/arsenal-workbench.webp",
+    "purpose": "第二轮军火库意象 2：方法工作台",
+    "dimensions": "1600x900",
+    "prompt_summary": "俯视工作台上的无数字量具、空白卡片、纸带、夹具与琥珀样品瓶；左侧留白，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "round2/activity-submission.png",
+    "webp": "round2/activity-submission.webp",
+    "purpose": "第二轮活动专区：投稿箱/酒样提交",
+    "dimensions": "1600x900",
+    "prompt_summary": "六格木质收纳箱中的琥珀酒样管与完全空白吊牌，一只手正放入新样品；左侧留白，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "round2/activity-gallery.png",
+    "webp": "round2/activity-gallery.webp",
+    "purpose": "第二轮活动专区：空作品墙",
+    "dimensions": "1600x900",
+    "prompt_summary": "蓝色模块化展架、空画框、空层板、圆形托台与琥珀固定夹；左侧留白，无文字",
+    "theme_fit": "light"
+  },
+  {
+    "file": "round2/agent-intake.png",
+    "webp": "round2/agent-intake.webp",
+    "purpose": "第二轮 Agent 接入页：多 Agent 共添一缸",
+    "dimensions": "1600x900",
+    "prompt_summary": "五只小机械臂与探针从不同方向向同一无数字量杯滴入琥珀液体；左侧留白，无文字",
+    "theme_fit": "light"
+  }
+]

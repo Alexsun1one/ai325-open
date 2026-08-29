@@ -1,0 +1,145 @@
+{
+  "date": "2000-01-01",
+  "issue": 0,
+  "title": "公开源码构建示例",
+  "coverage": {
+    "from": "2000-01-01",
+    "to": "2000-01-01",
+    "cutoff": "2000-01-01 00:00",
+    "note": "全部内容均为合成占位数据。"
+  },
+  "complete": true,
+  "lead": "这是一份用于验证公开源码可以独立构建的合成台账，不来自任何群聊。",
+  "stats": {
+    "msgs": 0,
+    "speakers": 0,
+    "members": 0,
+    "essays": 0,
+    "essays_open": 0,
+    "quotes": 1,
+    "themes": 1,
+    "decoded": 0
+  },
+  "hours": {},
+  "pulse": {
+    "caption": "合成数据",
+    "note": "没有生产消息。"
+  },
+  "events": [
+    {
+      "t": "00:00",
+      "h": "公开构建",
+      "d": "验证页面结构。",
+      "src": "digest"
+    }
+  ],
+  "themes": [
+    {
+      "h": "示例主题",
+      "when": "构建时",
+      "body": "这里只展示通用页面能力。",
+      "deep": "真实内容由部署者自行提供。",
+      "voices": [
+        {
+          "a": "示例学徒",
+          "v": "这是一句合成发言。"
+        }
+      ]
+    }
+  ],
+  "tone_notes": [
+    {
+      "h": "认真",
+      "cls": "s",
+      "body": "合成数据。"
+    }
+  ],
+  "insights": [
+    {
+      "h": "示例洞察",
+      "en": "SAMPLE",
+      "body": "用于构建验证。"
+    }
+  ],
+  "quotes": [
+    {
+      "t": "公开源码不携带生产内容。",
+      "a": "示例学徒",
+      "g": "s"
+    }
+  ],
+  "glossary": [
+    {
+      "term": "合成数据",
+      "def": "为测试结构人工编写的数据。"
+    }
+  ],
+  "arsenal": [
+    {
+      "h": "示例工具",
+      "body": "部署者自行替换。"
+    }
+  ],
+  "docket": [
+    {
+      "kind": "示例",
+      "h": "替换数据源",
+      "d": "接入自己的内容。",
+      "status": "open"
+    }
+  ],
+  "clashes": [
+    {
+      "h": "示例分歧",
+      "en": "DEMO",
+      "sides": "甲 / 乙",
+      "verdict": "仅作布局验证。"
+    }
+  ],
+  "growth": {
+    "takeaways": [
+      "先保护隐私，再公开源码。"
+    ],
+    "todo": [
+      {
+        "phase": "接入",
+        "items": [
+          "提供自己的数据。"
+        ]
+      }
+    ]
+  },
+  "members_focus": [],
+  "newcomers": [],
+  "thanks": [],
+  "quality": {
+    "overall": 0,
+    "grade": "N/A",
+    "dimensions": [
+      {
+        "name": "示例",
+        "score": 0,
+        "grade": "N/A",
+        "detail": "合成数据"
+      }
+    ],
+    "basis": "不参与生产质量计算。"
+  },
+  "threads": [
+    {
+      "id": "sample",
+      "title": "示例线索",
+      "theme": "示例主题",
+      "status": "ongoing",
+      "first_issue": 0
+    }
+  ],
+  "credits": {
+    "distilled_by": "synthetic fixture",
+    "reviewed_by": "none",
+    "generated_at": "2000-01-01T00:00:00Z"
+  },
+  "footer": [
+    "PUBLIC SYNTHETIC FIXTURE"
+  ]
+}

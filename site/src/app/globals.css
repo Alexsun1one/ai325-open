@@ -1,0 +1,327 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ———————————————————————————————————————————
+   先锋队台账 · 品鉴单 The Tasting Sheet · tokens
+   蓝 = 表单印刷色（表头/格线/章） 琥珀 = 酒液（数据）
+   朱砂 = 鉴定章 / 半真   青 = 玩笑   纸 / 墨 = 阅读
+   ——————————————————————————————————————————— */
+:root {
+  --paper: #f2f1ec;
+  --paper-2: #e9e7e0;
+  --paper-3: #dedbd2;
+  --rule: #c9c6bc;
+  --rule-soft: #dddacf;
+  --rule-strong: #9a9ea8;
+  --nav-h: 126px;
+  --ink: #15171b;
+  --ink-2: #3f434b;
+  --ink-3: #5f646e;
+  --blue: #1c47a3;
+  --blue-2: #2e5fcb;
+  --blue-text: #1a42a0;
+  --blue-wash: #dfe7f8;
+  --blue-wash-2: #c6d5f2;
+  --amber: #c37a14;
+  --amber-2: #d9953a;
+  --amber-deep: #8c5306;
+  --amber-text: #7e4a05;
+  --amber-wash: #f4e4c3;
+  --amber-wash-2: #ebd19c;
+  --cinnabar: #b8331f;
+  --cinnabar-text: #a12c1a;
+  --cinnabar-wash: #f3dad4;
+  --teal: #107878;
+  --teal-text: #0d6a6a;
+  --teal-wash: #d2ece8;
+  --shadow-sheet: 0 1px 2px rgba(21, 23, 27, 0.06), 0 10px 28px -14px rgba(21, 23, 27, 0.22);
+  --shadow-pop: 0 2px 6px rgba(21, 23, 27, 0.08), 0 16px 40px -16px rgba(21, 23, 27, 0.3);
+  --glass: rgba(255, 255, 255, 0.55);
+  color-scheme: light;
+}
+[data-theme="dark"] {
+  --paper: #0f1219;
+  --paper-2: #161a24;
+  --paper-3: #1e2330;
+  --rule: #2b3142;
+  --rule-soft: #222838;
+  --rule-strong: #4a5166;
+  --ink: #eceae3;
+  --ink-2: #c3c6ce;
+  --ink-3: #8f95a3;
+  --blue: #5d88ee;
+  --blue-2: #7ea3f6;
+  --blue-text: #a9c2ff;
+  --blue-wash: #1b2c52;
+  --blue-wash-2: #2a4380;
+  --amber: #d79a3a;
+  --amber-2: #e6b05a;
+  --amber-deep: #b3782a;
+  --amber-text: #f0be6a;
+  --amber-wash: #2e2412;
+  --amber-wash-2: #4a3715;
+  --cinnabar: #e0624f;
+  --cinnabar-text: #f08a79;
+  --cinnabar-wash: #3a1c17;
+  --teal: #3eafa8;
+  --teal-text: #6fd2cb;
+  --teal-wash: #10302f;
+  --shadow-sheet: 0 1px 2px rgba(0, 0, 0, 0.5), 0 14px 36px -14px rgba(0, 0, 0, 0.7);
+  --shadow-pop: 0 2px 6px rgba(0, 0, 0, 0.5), 0 20px 48px -16px rgba(0, 0, 0, 0.8);
+  --glass: rgba(15, 18, 25, 0.6);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-paper-3: var(--paper-3);
+  --color-rule: var(--rule);
+  --color-rule-soft: var(--rule-soft);
+  --color-rule-strong: var(--rule-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-blue: var(--blue);
+  --color-blue-2: var(--blue-2);
+  --color-blue-text: var(--blue-text);
+  --color-blue-wash: var(--blue-wash);
+  --color-blue-wash-2: var(--blue-wash-2);
+  --color-amber: var(--amber);
+  --color-amber-2: var(--amber-2);
+  --color-amber-deep: var(--amber-deep);
+  --color-amber-text: var(--amber-text);
+  --color-amber-wash: var(--amber-wash);
+  --color-amber-wash-2: var(--amber-wash-2);
+  --color-cinnabar: var(--cinnabar);
+  --color-cinnabar-text: var(--cinnabar-text);
+  --color-cinnabar-wash: var(--cinnabar-wash);
+  --color-teal: var(--teal);
+  --color-teal-text: var(--teal-text);
+  --color-teal-wash: var(--teal-wash);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", serif;
+  --font-kai: "LXGW WenKai", "Kaiti SC", "STKaiti", "KaiTi", "Noto Serif SC", serif;
+
+  --shadow-sheet: var(--shadow-sheet);
+  --shadow-pop: var(--shadow-pop);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 640px) { :root { --nav-h: 56px; } }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.9;
+  font-feature-settings: "palt" 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+@media (max-width: 640px) {
+  body { font-size: 16px; line-height: 1.85; }
+}
+::selection { background: var(--amber-wash-2); color: var(--ink); }
+[data-theme="dark"] ::selection { background: var(--amber-wash-2); color: var(--ink); }
+
+:focus-visible {
+  outline: 2px solid var(--blue-2);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* 表单语法 · 印刷标签 */
+.label {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  font-weight: 500;
+  color: var(--blue-text);
+  line-height: 1.4;
+}
+.label-ink { color: var(--ink-3); }
+
+/* 数字：系统字体 + 等宽数字，永不用宋体/不合成粗体 */
+.num {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  letter-spacing: -0.01em;
+}
+
+/* 阅读正文 */
+.prose-sheet {
+  font-family: var(--font-serif);
+  max-width: 39em;
+  color: var(--ink);
+  text-wrap: pretty;
+  text-align: justify;
+  text-justify: inter-character;
+  hanging-punctuation: first allow-end;
+  font-feature-settings: "palt" 1, "kern" 1;
+  letter-spacing: 0.012em;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  line-break: strict;
+}
+.prose-sheet:is(li, blockquote), .prose-sheet.text-left { text-align: start; }
+h1, h2, h3 { text-wrap: balance; font-feature-settings: "palt" 1, "kern" 1; }
+h1 { letter-spacing: 0.01em; }
+h3 { letter-spacing: 0.02em; }
+.hand { font-feature-settings: "palt" 1; letter-spacing: 0.02em; }
+/* 段间距必须大于行距，否则读者看不出这里换了段——1em（17px）比行距 32px 还小，
+   正是「挤在一起」的根因。1.75em ≈ 30px，接近空一行，段落边界一眼可见。 */
+.prose-sheet p + p { margin-top: 1.75em; }
+.prose-sheet :is(p, li) { text-indent: 0; }
+.prose-sheet b, .prose-sheet strong { font-weight: 700; color: var(--ink); }
+
+/* 首段首字下沉两行：印刷刊物的开篇记号，只给挂 .prose-drop 的正文（每幕重织） */
+.prose-drop > p:first-child::first-letter {
+  -webkit-initial-letter: 2;
+  initial-letter: 2;
+  font-weight: 700;
+  color: var(--ink);
+  margin-right: 0.14em;
+}
+@supports not ((initial-letter: 2) or (-webkit-initial-letter: 2)) {
+  .prose-drop > p:first-child::first-letter {
+    float: left;
+    font-size: 2.55em;
+    line-height: 1;
+    padding: 0.04em 0.12em 0 0;
+  }
+}
+
+/* 段落入场：在视口下缘轻微上浮显影。scroll-driven 渐进增强，不支持的浏览器保持静态 */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .prose-sheet > p {
+      animation: para-in 1ms linear both;
+      animation-timeline: view();
+      animation-range: entry 8% entry 55%;
+    }
+  }
+}
+@keyframes para-in {
+  from { opacity: 0.12; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* 可评论段落：悬停时左缘出一道琥珀校对标，示意「这一段可以说话」 */
+@media (hover: hover) {
+  .has-anchor { transition: box-shadow 0.25s ease; }
+  .has-anchor:hover { box-shadow: -16px 0 0 -14px var(--amber); }
+}
+.prose-sheet u, .hand u {
+  text-decoration: none;
+  font-family: var(--font-kai);
+  font-size: 1.04em;
+  color: var(--ink-2);
+  background: linear-gradient(transparent 62%, var(--amber-wash) 62%, var(--amber-wash) 92%, transparent 92%);
+}
+[data-theme="dark"] :is(.prose-sheet, .hand) u { background: linear-gradient(transparent 62%, var(--amber-wash-2) 62%, var(--amber-wash-2) 92%, transparent 92%); }
+
+/* 手写层 */
+.hand {
+  font-family: var(--font-kai);
+  color: var(--ink-2);
+}
+
+/* 格线 */
+.rule-top { border-top: 1px solid var(--rule); }
+.rule-bottom { border-bottom: 1px solid var(--rule); }
+.rule-soft { border-color: var(--rule-soft); }
+
+/* 章 */
+.stamp-ink { color: var(--blue); }
+
+/* 滚动条低调 */
+* { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
+
+/* 页面装订：纸张质感只用极轻的网点，不用噪点滤镜 */
+.sheet-ground {
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--rule-soft) 0.6px, transparent 0.6px);
+  background-size: 22px 22px;
+  background-position: 0 0;
+}
+[data-theme="dark"] .sheet-ground {
+  background-image: radial-gradient(var(--rule-soft) 0.6px, transparent 0.6px);
+}
+
+/* 打印 */
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; color: #000; font-size: 11pt; }
+  .sheet-ground { background-image: none; }
+}
+
+/* 黑话词条：正文里首次出现，虚线蓝底标，悬停释义 */
+dfn[data-term] {
+  font-style: normal;
+  text-decoration: underline dotted var(--blue-2);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  cursor: help;
+}
+dfn[data-term]:hover { color: var(--blue-text); }
+
+/* 选中文字后的「记下」气泡 */
+.note-pop {
+  box-shadow: var(--shadow-pop);
+}
+
+/* 段落锚点：悬停时右侧出工具条（lg+），段落本身只有极轻的底 */
+.has-anchor { border-radius: 4px; transition: background-color .2s; }
+@media (min-width: 1024px) { .has-anchor:hover { background-color: color-mix(in srgb, var(--blue-wash) 45%, transparent); } }
+
+/* 器皿：液面与气泡的节律 */
+@keyframes vessel-wave { from { transform: translateX(0); } to { transform: translateX(-40px); } }
+@keyframes vessel-wave-2 { from { transform: translateX(-30px); } to { transform: translateX(0); } }
+@keyframes vessel-bubble { 0% { transform: translateY(0); opacity: 0; } 12% { opacity: .55; } 85% { opacity: .4; } 100% { transform: translateY(-150px); opacity: 0; } }
+.vessel-wave { animation: vessel-wave 4.8s linear infinite; }
+.vessel-wave-2 { animation: vessel-wave-2 7.2s linear infinite; }
+.vessel-bubble { animation-name: vessel-bubble; animation-timing-function: ease-out; animation-iteration-count: infinite; }
+@media (prefers-reduced-motion: reduce) { .vessel-wave, .vessel-wave-2, .vessel-bubble { animation: none; } }
+
+/* 人名章：正文里的群友名字——和正文区分、可悬停出名片、可点进群像 */
+[data-person] {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.94em;
+  color: var(--ink);
+  padding: 0 2px;
+  margin: 0 1px;
+  border-bottom: 1px solid var(--blue-wash-2);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color .16s, border-color .16s, color .16s;
+}
+[data-person]:hover { background: var(--blue-wash); border-color: var(--blue-2); color: var(--blue-text); }
+
+/* 各节小插图：线稿融进纸面（把图底推到比纸更亮再 darken，方块就消失） */
+.spot-illus { mix-blend-mode: normal; filter: none; }
+[data-theme="dark"] .spot-illus { filter: invert(1) hue-rotate(180deg) brightness(1.05); opacity: .85; }
+
+/* 窄栏不做两端对齐（会出空隙河）：金句三栏、悬案/对撞三栏、名片、读数 */
+#quotes .prose-sheet, #quotes blockquote, #docket .grid .prose-sheet, #docket .grid .hand, [data-personcard] .prose-sheet, .note-pop .prose-sheet { text-align: start; }
+/* 署名处的人名章：已经是蓝色小字，不再加下划线与底色，只保留手感 */
+figcaption [data-person], .byline [data-person] { border-bottom-color: transparent; color: var(--blue-text); padding: 0; margin: 0; font-size: inherit; }
+figcaption [data-person]:hover, .byline [data-person]:hover { background: transparent; border-bottom-color: var(--blue-2); }
+
+/* 表单控件的边界要够 3:1 */
+textarea, input[type="text"], input[type="password"], input[type="email"] { border-color: var(--rule-strong); }
+/* 跳到正文 */
+.skip-link { position: absolute; left: 12px; top: -48px; z-index: 100; background: var(--paper); color: var(--blue-text); border: 1px solid var(--blue); border-radius: 6px; padding: 6px 10px; font-family: var(--font-sans); font-size: 13px; }
+.skip-link:focus { top: 12px; }

@@ -1,0 +1,136 @@
+{
+  "collection": "先锋队群像站纪念徽章",
+  "version": 1,
+  "format": "SVG",
+  "dimensions": {
+    "width": 200,
+    "height": 200
+  },
+  "theme": "deep-space neon",
+  "colorSchemes": [
+    "dark",
+    "light"
+  ],
+  "files": [
+    {
+      "file": "newcomer.svg",
+      "name": "初来乍到",
+      "trigger": "入群",
+      "centerIcon": "种子发芽",
+      "colors": [
+        "#34d399",
+        "#22d3ee"
+      ]
+    },
+    {
+      "file": "first-work.svg",
+      "name": "首作",
+      "trigger": "第一篇小作文",
+      "centerIcon": "钢笔",
+      "colors": [
+        "#60a5fa",
+        "#a78bfa"
+      ]
+    },
+    {
+      "file": "night-owl.svg",
+      "name": "夜行者",
+      "trigger": "凌晨 0-5 点发言超过 20 条",
+      "centerIcon": "月亮与星星",
+      "colors": [
+        "#818cf8",
+        "#c084fc"
+      ]
+    },
+    {
+      "file": "hundred-milestone.svg",
+      "name": "百条里程碑",
+      "trigger": "累计发言 100 条",
+      "centerIcon": "火焰",
+      "colors": [
+        "#fb7185",
+        "#f59e0b"
+      ]
+    },
+    {
+      "file": "thousand-legend.svg",
+      "name": "千条传奇",
+      "trigger": "累计发言 1000 条",
+      "centerIcon": "钻石",
+      "colors": [
+        "#22d3ee",
+        "#c084fc"
+      ]
+    },
+    {
+      "file": "brain-certified.svg",
+      "name": "换脑认证",
+      "trigger": "被群主点名纳入蒸馏范围",
+      "centerIcon": "发光大脑",
+      "colors": [
+        "#a78bfa",
+        "#38bdf8"
+      ]
+    },
+    {
+      "file": "weflow-rescuer.svg",
+      "name": "WeFlow救援者",
+      "trigger": "参与 WeFlow fork 救援讨论",
+      "centerIcon": "火箭",
+      "colors": [
+        "#38bdf8",
+        "#8b5cf6"
+      ]
+    },
+    {
+      "file": "quality-contributor.svg",
+      "name": "质量贡献者",
+      "trigger": "消息被引用次数 TOP10",
+      "centerIcon": "奖杯",
+      "colors": [
+        "#fbbf24",
+        "#fb7185"
+      ]
+    },
+    {
+      "file": "question-artist.svg",
+      "name": "提问艺术家",
+      "trigger": "问题引发 50+ 条回复",
+      "centerIcon": "靶心",
+      "colors": [
+        "#f472b6",
+        "#60a5fa"
+      ]
+    },
+    {
+      "file": "knowledge-library.svg",
+      "name": "知识图书馆",
+      "trigger": "分享文件或链接超过 10 个",
+      "centerIcon": "书堆",
+      "colors": [
+        "#2dd4bf",
+        "#818cf8"
+      ]
+    },
+    {
+      "file": "agent-tamer.svg",
+      "name": "Agent 驯兽师",
+      "trigger": "分享 Agent 经验并获群主认可",
+      "centerIcon": "闪电",
+      "colors": [
+        "#facc15",
+        "#22d3ee"
+      ]
+    },
+    {
+      "file": "founding-member.svg",
+      "name": "创始成员",
+      "trigger": "建群 48 小时内入群",
+      "centerIcon": "星星",
+      "colors": [
+        "#fcd34d",
+        "#a78bfa"
+      ]
+    }
+  ]
+}

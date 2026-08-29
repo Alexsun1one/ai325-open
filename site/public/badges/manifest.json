@@ -1,0 +1,107 @@
+{
+  "collection": "先锋队台账 · 纪念徽章",
+  "version": 2,
+  "note": "图形按品鉴单 token 重绘：蓝色印刷外框 + 琥珀/青线稿图标，无渐变无发光，明暗两主题共用一份。名称与触发条件沿用 assets/badges/manifest.json v1。",
+  "dimensions": {
+    "width": 200,
+    "height": 200
+  },
+  "files": [
+    {
+      "file": "newcomer.svg",
+      "slug": "newcomer",
+      "name": "初来乍到",
+      "trigger": "入群",
+      "icon": "种子发芽",
+      "accent": "teal"
+    },
+    {
+      "file": "first-work.svg",
+      "slug": "first-work",
+      "name": "首作",
+      "trigger": "第一篇小作文",
+      "icon": "钢笔",
+      "accent": "amber"
+    },
+    {
+      "file": "night-owl.svg",
+      "slug": "night-owl",
+      "name": "夜行者",
+      "trigger": "凌晨 0-5 点发言超过 20 条",
+      "icon": "月亮与星星",
+      "accent": "amber"
+    },
+    {
+      "file": "hundred-milestone.svg",
+      "slug": "hundred-milestone",
+      "name": "百条里程碑",
+      "trigger": "累计发言 100 条",
+      "icon": "火焰",
+      "accent": "amber"
+    },
+    {
+      "file": "thousand-legend.svg",
+      "slug": "thousand-legend",
+      "name": "千条传奇",
+      "trigger": "累计发言 1000 条",
+      "icon": "钻石",
+      "accent": "amber"
+    },
+    {
+      "file": "brain-certified.svg",
+      "slug": "brain-certified",
+      "name": "换脑认证",
+      "trigger": "被群主点名纳入蒸馏范围",
+      "icon": "发光大脑",
+      "accent": "amber"
+    },
+    {
+      "file": "weflow-rescuer.svg",
+      "slug": "weflow-rescuer",
+      "name": "WeFlow救援者",
+      "trigger": "参与 WeFlow fork 救援讨论",
+      "icon": "火箭",
+      "accent": "amber"
+    },
+    {
+      "file": "quality-contributor.svg",
+      "slug": "quality-contributor",
+      "name": "质量贡献者",
+      "trigger": "消息被引用次数 TOP10",
+      "icon": "奖杯",
+      "accent": "amber"
+    },
+    {
+      "file": "question-artist.svg",
+      "slug": "question-artist",
+      "name": "提问艺术家",
+      "trigger": "问题引发 50+ 条回复",
+      "icon": "靶心",
+      "accent": "teal"
+    },
+    {
+      "file": "knowledge-library.svg",
+      "slug": "knowledge-library",
+      "name": "知识图书馆",
+      "trigger": "分享文件或链接超过 10 个",
+      "icon": "书堆",
+      "accent": "amber"
+    },
+    {
+      "file": "agent-tamer.svg",
+      "slug": "agent-tamer",
+      "name": "Agent 驯兽师",
+      "trigger": "分享 Agent 经验并获群主认可",
+      "icon": "闪电",
+      "accent": "amber"
+    },
+    {
+      "file": "founding-member.svg",
+      "slug": "founding-member",
+      "name": "创始成员",
+      "trigger": "建群 48 小时内入群",
+      "icon": "星星",
+      "accent": "teal"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" role="img" aria-labelledby="t d">
+  <title id="t">千条传奇 · 纪念徽章</title>
+  <desc id="d">达成条件：累计发言 1000 条。中心图标：钻石。</desc>
+  <g fill="none" stroke="#2e5fcb" stroke-width="2.4"><circle cx="100" cy="100" r="92"/></g>
+  <g fill="none" stroke="#2e5fcb" stroke-width="0.9" opacity="0.65"><circle cx="100" cy="100" r="85"/></g>
+  <g fill="none" stroke="#c37a14" stroke-width="1" opacity="0.55"><circle cx="100" cy="100" r="70"/></g>
+  <g fill="none" stroke="#2e5fcb" stroke-width="1.6" opacity="0.8" stroke-linecap="round"><path d="M100.0 22.0 L100.0 15.0"/><path d="M140.5 29.9 L142.5 26.4"/><path d="M170.1 59.5 L173.6 57.5"/><path d="M178.0 100.0 L185.0 100.0"/><path d="M170.1 140.5 L173.6 142.5"/><path d="M140.5 170.1 L142.5 173.6"/><path d="M100.0 178.0 L100.0 185.0"/><path d="M59.5 170.1 L57.5 173.6"/><path d="M29.9 140.5 L26.4 142.5"/><path d="M22.0 100.0 L15.0 100.0"/><path d="M29.9 59.5 L26.4 57.5"/><path d="M59.5 29.9 L57.5 26.4"/></g>
+  <g fill="none" stroke="#c37a14" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M78 92l10-16h24l10 16-22 34z"/><path d="M78 92h44"/><path d="M88 76l12 16 12-16"/><path d="M100 92v34"/></g>
+  <g fill="#c37a14"><circle cx="100" cy="152" r="3"/></g>
+</svg>

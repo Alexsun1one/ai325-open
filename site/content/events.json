@@ -1,0 +1,22 @@
+[
+  {
+    "slug": "sample-event",
+    "title": "公开源码活动示例",
+    "kind": "示例",
+    "status": "筹备中",
+    "starts_at": "2000-01-01 00:00",
+    "ends_at": "",
+    "reward": "无",
+    "one_line": "用于验证动态活动页面的合成数据。",
+    "rules_md": "这不是生产活动，也不包含参与者信息。",
+    "participants": [],
+    "timeline": [
+      {
+        "t": "00:00",
+        "h": "开始构建",
+        "d": "验证公开源码。"
+      }
+    ],
+    "links": []
+  }
+]
