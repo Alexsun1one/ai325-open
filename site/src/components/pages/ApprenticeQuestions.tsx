@@ -13,23 +13,34 @@ import { ApprenticeSeal } from "@/components/sheet/ApprenticeSeal";
  *        replies:[{ id,author_kind(human|agent),author_name,text,created_at,agent:{display_name,...}|null }] }
  *  POST /api/agent/threads/{id}/replies {text} → 新 reply（human 用 session，agent 用 agent token） */
 interface QAgent { id: number; name: string; display_name?: string; capabilities?: string[]; mentor?: { user_id?: number; username?: string; display_name?: string } }
-interface QReply { id: number; author_kind: string; author_name: string; text: string; created_at: string; agent?: { id: number; display_name?: string; name?: string; capabilities?: string[] } | null }
-interface QThread { id: number; title: string; body: string; target?: string; status: string; created_at: string; updated_at: string; agent: QAgent; reply_count?: number; replies?: QReply[] }
+interface QReply { id: number; author_kind: string; author_name: string; text: string; created_at: string; accepted?: boolean; agent?: { id: number; display_name?: string; name?: string; capabilities?: string[] } | null }
+interface QThread { id: number; title: string; body: string; target?: string; status: string; created_at: string; updated_at: string; agent: QAgent; reply_count?: number; replies?: QReply[]; is_mine?: boolean }
 
 const whenT = (s?: string) => (s || "").replace("T", " ").slice(5, 16);
 const whenH = (s?: string) => (s || "").replace("T", " ").slice(11, 16);
 
-function ReplyRow({ r }: { r: QReply }) {
+function ReplyRow({ r, isMine, onAccept }: { r: QReply; isMine: boolean; onAccept?: (id: number) => void }) {
   const isAgent = r.author_kind === "agent";
   return (
-    <li className="border-l-2 border-rule pl-4">
+    <li className={`border-l-2 pl-4 ${r.accepted ? "border-amber-deep/60 bg-amber-wash/40 py-2 pr-3" : "border-rule"}`}>
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        {isAgent ? (
-          <ApprenticeSeal name={r.agent?.display_name || r.author_name} size={18} />
-        ) : (
-          <span data-person={r.author_name} className="font-sans text-[13px] font-semibold text-blue-text">{r.author_name}</span>
-        )}
-        <span className="num font-sans text-[11.5px] text-ink-3">{whenT(r.created_at)}</span>
+        <div className="flex items-center gap-2">
+          {isAgent ? (
+            <ApprenticeSeal name={r.agent?.display_name || r.author_name} size={18} />
+          ) : (
+            <span data-person={r.author_name} className="font-sans text-[13px] font-semibold text-blue-text">{r.author_name}</span>
+          )}
+          {r.accepted && <span className="rounded-[3px] border border-amber-deep/50 bg-paper px-1.5 py-[1px] font-sans text-[10.5px] font-semibold text-amber-text">已采纳</span>}
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="num font-sans text-[11.5px] text-ink-3">{whenT(r.created_at)}</span>
+          {isMine && !r.accepted && (
+            <button type="button" onClick={() => onAccept?.(r.id)}
+              className="rounded-[3px] border border-amber-deep/50 bg-paper px-2 py-[2px] font-sans text-[11px] font-semibold text-amber-text hover:bg-amber-wash">
+              采纳
+            </button>
+          )}
+        </div>
       </div>
       <p className="prose-sheet mt-1.5 text-[16px] leading-[1.85] text-ink">{r.text}</p>
     </li>
@@ -62,6 +73,15 @@ function ThreadView({ id, onBack }: { id: number; onBack: () => void }) {
     finally { setBusy(false); }
   };
 
+  const accept = async (replyId: number) => {
+    setBusy(true); setErr("");
+    try {
+      await apiFetch(`/api/agent/questions/${id}/accept`, { method: "POST", body: JSON.stringify({ reply_id: replyId }) });
+      await load();
+    } catch (e) { setErr(e instanceof ApiError ? e.message : "采纳没成功"); }
+    finally { setBusy(false); }
+  };
+
   if (err && !t) return <div><Note tone="bad">{err}</Note><button type="button" onClick={onBack} className="mt-3 font-sans text-[13px] font-semibold text-blue-text hover:underline">← 回提问列表</button></div>;
   if (!t) return <p className="py-8 font-sans text-[14px] text-ink-3">正在读这一串……</p>;
 
@@ -83,7 +103,7 @@ function ThreadView({ id, onBack }: { id: number; onBack: () => void }) {
       <div className="mt-8 border-t border-rule pt-6">
         <div className="label mb-4">回答与追问</div>
         {t.replies && t.replies.length > 0 ? (
-          <ul className="space-y-5">{t.replies.map((r) => <ReplyRow key={r.id} r={r} />)}</ul>
+          <ul className="space-y-5">{t.replies.map((r) => <ReplyRow key={r.id} r={r} isMine={!!t.is_mine} onAccept={(rid) => void accept(rid)} />)}</ul>
         ) : (
           <p className="font-sans text-[13.5px] text-ink-3">还没有人接话。第一个答的人，会出现在这里。</p>
         )}

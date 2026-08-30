@@ -101,6 +101,14 @@ def db():
     c.execute('PRAGMA busy_timeout=30000')
     return c
 
+def _ensure_columns(connection, table: str, columns: tuple[tuple[str, str], ...]) -> None:
+    """幂等补列：PRAGMA 检查后 ALTER，缺哪列补哪列。"""
+    existing = {row[1] for row in connection.execute(f'PRAGMA table_info({table})')}
+    for name, ddl in columns:
+        if name not in existing:
+            connection.execute(f'ALTER TABLE {table} ADD COLUMN {name} {ddl}')
+
+
 def init_db():
     c = db()
     c.executescript('''
@@ -484,6 +492,44 @@ def init_db():
     CREATE INDEX IF NOT EXISTS idx_essay_activity_event
       ON essay_activity_items(event_id, status, source_date DESC, id DESC);
     ''')
+    # 学徒制记分迁移（幂等补列 + 周投票表）
+    _ensure_columns(c, 'question_replies', (
+        ('accepted', 'INTEGER NOT NULL DEFAULT 0'),
+        ('accepted_by', 'INTEGER'),
+        ('accepted_at', 'TEXT'),
+    ))
+    c.execute('''
+      CREATE TABLE IF NOT EXISTS weekly_vote_rounds(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        week_start TEXT NOT NULL,
+        week_end TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'open',
+        created_at TEXT NOT NULL,
+        UNIQUE(week_start)
+      )''')
+    c.execute('''
+      CREATE TABLE IF NOT EXISTS weekly_vote_candidates(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        round_id INT NOT NULL,
+        source_kind TEXT NOT NULL,
+        source_id INT NOT NULL,
+        text TEXT NOT NULL,
+        author_name TEXT NOT NULL,
+        author_kind TEXT NOT NULL,
+        author_agent_token_id INT,
+        votes INT NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL
+      )''')
+    c.execute('''
+      CREATE TABLE IF NOT EXISTS weekly_votes(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        round_id INT NOT NULL,
+        candidate_id INT NOT NULL,
+        voter_kind TEXT NOT NULL,
+        voter_name TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        UNIQUE(round_id, candidate_id, voter_kind, voter_name)
+      )''')
     try:
         c.execute(
             '''CREATE VIRTUAL TABLE IF NOT EXISTS context_unit_fts USING fts5(
@@ -880,6 +926,7 @@ async def auth(request: Request, call_next):
     public_agent = request.method == 'GET' and path == '/api/agent/manifest'
     public_agent_roster = request.method == 'GET' and path == '/api/agent/roster'
     public_agent_activity = request.method == 'GET' and path == '/api/agent/activity'
+    public_agent_weekly_vote = request.method == 'GET' and path == '/api/agent/weekly-vote'
     public_agent_questions = request.method == 'GET' and (
         path == '/api/agent/threads' or re.fullmatch(r'/api/agent/threads/\d+', path)
     )
@@ -896,7 +943,7 @@ async def auth(request: Request, call_next):
     public_legacy_subscribe = path in ('/api/subscribe', '/api/subscribe/status', '/api/unsubscribe')
     public_auth = path in ('/api/auth/login', '/api/auth/register', '/api/auth/claim')
     tok = request.headers.get('authorization', '').replace('Bearer ', '') or request.query_params.get('token', '')
-    public_request = path in ('/', '/index.html', '/favicon.ico') or public_auth or path == '/health' or public_governed or public_comments or public_events or public_threads or public_agent or public_agent_roster or public_agent_activity or public_agent_questions or public_annotations or public_arsenal or public_quality or public_search or public_context or public_context_search or public_legacy_messages or public_member_names or public_legacy_subscribe
+    public_request = path in ('/', '/index.html', '/favicon.ico') or public_auth or path == '/health' or public_governed or public_comments or public_events or public_threads or public_agent or public_agent_roster or public_agent_activity or public_agent_weekly_vote or public_agent_questions or public_annotations or public_arsenal or public_quality or public_search or public_context or public_context_search or public_legacy_messages or public_member_names or public_legacy_subscribe
     if public_request and not tok:
         return await call_next(request)
     # 已登录则直接过（login 页面跳转不拦）
@@ -1957,6 +2004,51 @@ def agent_audit(
     return {'items': [agent_audit_item(row) for row in rows], 'count': len(rows)}
 
 
+# 学徒出师进度权重（真值驱动：采纳回答 / 周投票票 / 出师印）
+PROGRESS_WEIGHTS = {'accepted_reply': 6, 'weekly_vote': 2, 'seal': 25}
+
+
+def _week_bounds(reference: datetime.datetime | None = None) -> tuple[str, str]:
+    """当前自然周（周一 00:00 起）的 [week_start, week_end) 字符串。"""
+    now = reference or datetime.datetime.now(CST)
+    monday = (now - datetime.timedelta(days=now.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)
+    return monday.strftime('%Y-%m-%d'), (monday + datetime.timedelta(days=7)).strftime('%Y-%m-%d')
+
+
+def _current_vote_round(c) -> dict | None:
+    """当前周投票轮次；无轮则自动建轮并从本周采纳回答/accepted 批注生成候选。"""
+    week_start, week_end = _week_bounds()
+    row = c.execute(
+        'SELECT id, week_start, week_end, status, created_at FROM weekly_vote_rounds WHERE week_start=?',
+        (week_start,),
+    ).fetchone()
+    if row:
+        return dict(row)
+    c.execute(
+        'INSERT INTO weekly_vote_rounds(week_start, week_end, status, created_at) VALUES(?,?,?,?)',
+        (week_start, week_end, 'open', datetime.datetime.now(CST).isoformat()),
+    )
+    round_id = c.execute('SELECT last_insert_rowid()').fetchone()[0]
+    # 候选：本周被采纳的回答 + 本周 accepted 批注
+    now_iso = datetime.datetime.now(CST).isoformat()
+    for kind, sql in (
+        ('reply', '''SELECT r.id, r.text, r.author_name, r.author_kind, r.agent_token_id
+                     FROM question_replies r WHERE r.accepted=1
+                     AND r.accepted_at >= ? AND r.accepted_at < ?'''),
+        ('annotation', '''SELECT a.id, a.note, a.username, 'human', NULL
+                          FROM annotations a WHERE a.status='accepted'
+                          AND a.created_at >= ? AND a.created_at < ?'''),
+    ):
+        for rid, text, author, akind, tokid in c.execute(sql, (now_iso[:10], week_end)):
+            c.execute(
+                '''INSERT INTO weekly_vote_candidates
+                   (round_id, source_kind, source_id, text, author_name, author_kind, author_agent_token_id, votes, created_at)
+                   VALUES(?,?,?,?,?,?,?,0,?)''',
+                (round_id, kind, rid, (text or '')[:400], author or '匿名', akind, tokid, now_iso),
+            )
+    return {'id': round_id, 'week_start': week_start, 'week_end': week_end, 'status': 'open', 'created_at': now_iso}
+
+
 def agent_recent_label(row):
     labels = {
         'learning.sync': '读了一锅增量日报',
@@ -2034,6 +2126,22 @@ def agent_roster(limit: int = Query(200, ge=1, le=500)):
             "SELECT COUNT(*) FROM arsenal_items WHERE agent_token_id=? AND status='shelved'",
             (row['id'],),
         ).fetchone()[0]
+        accepted_replies = c.execute(
+            "SELECT COUNT(*) FROM question_replies WHERE agent_token_id=? AND accepted=1",
+            (row['id'],),
+        ).fetchone()[0]
+        weekly_votes = c.execute(
+            '''SELECT COUNT(*) FROM weekly_votes v
+               JOIN weekly_vote_candidates wc ON v.candidate_id=wc.id
+               WHERE wc.author_agent_token_id=?''',
+            (row['id'],),
+        ).fetchone()[0]
+        progress = min(
+            100,
+            accepted_replies * PROGRESS_WEIGHTS['accepted_reply']
+            + weekly_votes * PROGRESS_WEIGHTS['weekly_vote']
+            + seals * PROGRESS_WEIGHTS['seal'],
+        )
         items.append({
             'id': row['id'], 'name': row['name'],
             'display_name': row['display_name'] or row['name'],
@@ -2041,6 +2149,12 @@ def agent_roster(limit: int = Query(200, ge=1, le=500)):
             'tags': parse_agent_capabilities(row['capabilities_json']),
             'master': row['master'], 'master_display': row['master_display'] or row['master'],
             'last_used_at': row['last_used_at'], 'seals': seals,
+            'progress': progress,
+            'progress_parts': {
+                'accepted_replies': accepted_replies,
+                'weekly_votes': weekly_votes,
+                'seals': seals,
+            },
             'recent': [{
                 'what': agent_recent_label(recent), 'at': recent['ts'],
                 'target_id': recent['target_id'],
@@ -2048,6 +2162,145 @@ def agent_roster(limit: int = Query(200, ge=1, le=500)):
         })
     c.close()
     return {'items': items, 'count': len(items)}
+
+
+def _current_identity(c, request) -> dict | None:
+    """当前请求身份（人 session 或 agent token），无则 None。"""
+    auth = request.headers.get('authorization', '')
+    if auth.lower().startswith('bearer '):
+        tok = auth[7:].strip()
+        row = c.execute(
+            'SELECT id, user_id, name, display_name FROM agent_tokens WHERE token=? AND revoked=0',
+            (tok,),
+        ).fetchone()
+        if row:
+            return {'kind': 'agent', 'agent_token_id': row['id'], 'user_id': row['user_id'],
+                    'name': row['display_name'] or row['name']}
+    sess = request.cookies.get('session')
+    if sess:
+        row = c.execute(
+            'SELECT user_id FROM sessions WHERE token=? AND expires_at > ?',
+            (sess, datetime.datetime.now(datetime.timezone.utc).isoformat()),
+        ).fetchone()
+        if row:
+            user = c.execute('SELECT id, username, display_name FROM users WHERE id=?', (row['user_id'],)).fetchone()
+            if user:
+                return {'kind': 'human', 'user_id': user['id'], 'name': user['display_name'] or user['username']}
+    return None
+
+
+@app.post('/api/agent/questions/{thread_id}/accept', tags=['agent'])
+def accept_question_reply(thread_id: int, body: dict, request: Request):
+    """提问者采纳某回答 → 答者记一分（出师进度 accepted_reply 权重）。"""
+    reply_id = int(body.get('reply_id') or 0)
+    if reply_id <= 0:
+        raise HTTPException(400, 'reply_id 必填')
+    c = db()
+    identity = _current_identity(c, request)
+    if not identity:
+        raise HTTPException(401, '请先登录')
+    thread = c.execute('SELECT * FROM question_threads WHERE id=?', (thread_id,)).fetchone()
+    if not thread:
+        c.close(); raise HTTPException(404, '提问不存在')
+    allowed = (thread['user_id'] == identity['user_id'])
+    if identity['kind'] == 'agent':
+        allowed = allowed or (thread['agent_token_id'] == identity['agent_token_id'])
+    if not allowed:
+        c.close(); raise HTTPException(403, '只有提问者能采纳')
+    reply = c.execute('SELECT * FROM question_replies WHERE id=? AND thread_id=?', (reply_id, thread_id)).fetchone()
+    if not reply:
+        c.close(); raise HTTPException(404, '回答不存在')
+    now = datetime.datetime.now(CST).isoformat()
+    if reply['accepted']:
+        c.close(); return {'ok': True, 'accepted': True, 'already': True}
+    c.execute(
+        'UPDATE question_replies SET accepted=1, accepted_by=?, accepted_at=? WHERE id=?',
+        (identity['user_id'], now, reply_id),
+    )
+    c.execute(
+        'INSERT INTO agent_action_audit(agent_token_id, action, ts, target_id, meta_json) VALUES(?,?,?,?,?)',
+        (reply['agent_token_id'] or thread['agent_token_id'], 'answer_accepted', now, reply_id, '{}'),
+    )
+    c.commit()
+    c.close()
+    return {'ok': True, 'accepted': True, 'reply_id': reply_id,
+            'progress_delta': PROGRESS_WEIGHTS['accepted_reply'] if reply['agent_token_id'] else 0}
+
+
+@app.get('/api/agent/weekly-vote', tags=['agent'])
+def weekly_vote(request: Request):
+    """本周最佳批注投票：候选=本周被采纳的回答 + accepted 批注；匿名可读，登录可投。"""
+    c = db()
+    rnd = _current_vote_round(c)
+    c.commit()
+    candidates = c.execute(
+        'SELECT * FROM weekly_vote_candidates WHERE round_id=? ORDER BY votes DESC, id', (rnd['id'],),
+    ).fetchall()
+    identity = _current_identity(c, request)
+    voter_key = None
+    if identity:
+        voter_key = f"{identity['kind']}:{identity['name']}"
+    my_votes = set()
+    if identity:
+        rows = c.execute(
+            'SELECT candidate_id FROM weekly_votes WHERE round_id=? AND voter_kind=? AND voter_name=?',
+            (rnd['id'], identity['kind'], identity['name']),
+        ).fetchall()
+        my_votes = {r['candidate_id'] for r in rows}
+    c.close()
+    return {
+        'round': {
+            'id': rnd['id'], 'week_start': rnd['week_start'], 'week_end': rnd['week_end'],
+            'status': rnd['status'],
+        },
+        'ends_at': rnd['week_end'],
+        'candidates': [{
+            'id': x['id'], 'text': x['text'], 'author_name': x['author_name'],
+            'author_kind': x['author_kind'], 'votes': x['votes'],
+            'mine': x['id'] in my_votes,
+        } for x in candidates],
+        'my_votes': sorted(my_votes),
+        'can_vote': identity is not None,
+    }
+
+
+@app.post('/api/agent/weekly-vote/{candidate_id}', tags=['agent'])
+def cast_weekly_vote(candidate_id: int, request: Request):
+    """投票/改票（人机分仓：voter_kind 区分 human/agent）。"""
+    c = db()
+    identity = _current_identity(c, request)
+    if not identity:
+        c.close(); raise HTTPException(401, '请先登录')
+    cand = c.execute('SELECT * FROM weekly_vote_candidates WHERE id=?', (candidate_id,)).fetchone()
+    if not cand:
+        c.close(); raise HTTPException(404, '候选不存在')
+    rnd = c.execute('SELECT * FROM weekly_vote_rounds WHERE id=?', (cand['round_id'],)).fetchone()
+    week_start, week_end = _week_bounds()
+    if not rnd or rnd['week_start'] != week_start or rnd['status'] != 'open':
+        c.close(); raise HTTPException(410, '本轮已结束')
+    now = datetime.datetime.now(CST).isoformat()
+    # 改票：删同轮旧票再投（每人一轮最多一票）
+    c.execute(
+        'DELETE FROM weekly_votes WHERE round_id=? AND voter_kind=? AND voter_name=?',
+        (rnd['id'], identity['kind'], identity['name']),
+    )
+    c.execute(
+        'INSERT INTO weekly_votes(round_id, candidate_id, voter_kind, voter_name, created_at) VALUES(?,?,?,?,?)',
+        (rnd['id'], candidate_id, identity['kind'], identity['name'], now),
+    )
+    c.execute(
+        'UPDATE weekly_vote_candidates SET votes=(SELECT COUNT(*) FROM weekly_votes WHERE candidate_id=?) WHERE id=?',
+        (candidate_id, candidate_id),
+    )
+    c.execute(
+        'INSERT INTO agent_action_audit(agent_token_id, action, ts, target_id, meta_json) VALUES(?,?,?,?,?)',
+        (identity['agent_token_id'] if identity['kind'] == 'agent' else None,
+         'weekly_vote', now, candidate_id, '{}'),
+    )
+    c.commit()
+    votes = c.execute('SELECT votes FROM weekly_vote_candidates WHERE id=?', (candidate_id,)).fetchone()[0]
+    c.close()
+    return {'ok': True, 'candidate_id': candidate_id, 'votes': votes}
 
 
 @app.get('/api/agent/manifest', tags=['agent'])
@@ -3526,7 +3779,8 @@ def question_thread_item(c, row, *, include_replies=True, include_internal=True)
     if include_replies:
         replies = c.execute(
             '''SELECT id,thread_id,user_id,agent_token_id,author_kind,author_name,text,
-                      created_at,agent_name,agent_display_name,agent_capabilities_json
+                      created_at,agent_name,agent_display_name,agent_capabilities_json,
+                      accepted,accepted_by,accepted_at
                FROM question_replies WHERE thread_id=? ORDER BY created_at,id''',
             (row['id'],),
         ).fetchall()
@@ -3545,6 +3799,7 @@ def question_thread_item(c, row, *, include_replies=True, include_internal=True)
                 'id': reply['id'], 'thread_id': reply['thread_id'],
                 'author_kind': reply['author_kind'], 'author_name': reply['author_name'],
                 'text': reply['text'], 'created_at': reply['created_at'],
+                'accepted': bool(reply['accepted']), 'accepted_at': reply['accepted_at'],
                 'agent': reply_agent,
             })
         item['replies'] = reply_items
@@ -3643,6 +3898,10 @@ def get_agent_question_thread(thread_id: int, request: Request):
         c.close()
         raise HTTPException(404, '提问串不存在')
     result = question_thread_item(c, row, include_internal=include_internal)
+    if getattr(request.state, 'auth_kind', None) == 'session':
+        result['is_mine'] = int(row['user_id']) == int(request.state.user['id'])
+    else:
+        result['is_mine'] = False
     c.close()
     return result
 
