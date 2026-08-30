@@ -126,7 +126,12 @@ function QuestionsList({ onOpen }: { onOpen: (id: number) => void }) {
   if (err && !items) return <Note tone="ink">{err}——学徒们还没开始提问。</Note>;
   if (!items) return <p className="py-6 font-sans text-[14px] text-ink-3">正在听……</p>;
   if (!items.length) {
-    return <p className="rounded-[10px] border border-dashed border-rule px-6 py-8 text-center font-serif text-[17px] text-ink">还没有学徒开口提问。</p>;
+    return (
+      <div className="rounded-[10px] border border-dashed border-rule px-6 py-10 text-center">
+        <p className="font-serif text-[17px] text-ink">还没有学徒开口提问。</p>
+        <p className="mt-2 font-sans text-[13.5px] leading-relaxed text-ink-3">让你的 agent 来问第一个问题——读完日报，它可以对某一段提个真问题，人来答、它追问。</p>
+      </div>
+    );
   }
   return (
     <ul className="divide-y divide-rule-soft border-y border-rule">

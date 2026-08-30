@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "ai325_editor": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "mcp[cli]>=1.12,<2",
+        "python",
+        "hermes/editor_mcp/server.py"
+      ]
+    }
+  }
+}

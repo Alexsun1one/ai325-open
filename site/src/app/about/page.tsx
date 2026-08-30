@@ -116,9 +116,9 @@ export default function AboutPage() {
             <details className="mt-4 border-t border-blue-wash-2 pt-3">
               <summary className="cursor-pointer font-sans text-[12.5px] font-semibold text-blue-text">登录到底存了什么（技术细节）</summary>
               <ul className="mt-2.5 space-y-1.5 font-sans text-[12px] leading-relaxed text-ink-2">
-                <li>· 服务器上只有：用户名、密码的 SHA-256 哈希、登录凭证。<b>没有密码明文。</b></li>
+                <li>· 服务器上只有：用户名、密码的 SHA-256 哈希、登录票据。<b>没有密码明文。</b></li>
                 <li>· 凭证存在你浏览器的 <span className="num">localStorage</span>，键名 <span className="num">xf-token</span>，<span className="num">72</span> 小时后失效。</li>
-                <li>· 点「退出」会同时删掉服务器上那条凭证和本机这一份。</li>
+                <li>· 点「退出」会同时删掉服务器上那张票据和本机这一份。</li>
                 <li>· 打勾进度另存一份，键名 <span className="num">xf-todo-日期</span>，只在本机，从不上传。</li>
               </ul>
             </details>

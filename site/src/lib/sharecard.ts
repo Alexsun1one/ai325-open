@@ -162,7 +162,7 @@ export async function renderShareCard(i: CardInput): Promise<Blob> {
   ctx.fillText("0", x0, barY + 32); ctx.fillText("100", x1, barY + 32);
   ctx.textAlign = "right";
   ctx.fillStyle = blueText; ctx.font = `600 24px ${SANS}`; ctx.fillText(i.url, W - 104, 1196);
-  ctx.fillStyle = ink3; ctx.font = `400 17px ${SANS}`; ctx.fillText("治理产物 · 原始聊天不上站", W - 104, 1230);
+  ctx.fillStyle = ink3; ctx.font = `400 17px ${SANS}`; ctx.fillText("蒸好的 · 原始聊天不上站", W - 104, 1230);
   ctx.textAlign = "left";
   return await new Promise((res) => c.toBlob((b) => res(b!), "image/png"));
 }

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Hermes content.json（_hermes_spec.md §4/§4b）→ 网站 Ledger JSON（site/content/ledgers/<date>.json）
-用法: python3 scripts/hermes_to_ledger.py <materials/YYYY-MM-DD/> <site/content/ledgers/> [--quality-json <path>]
+用法: python3 scripts/hermes_to_ledger.py <materials/YYYY-MM-DD/> <site/content/ledgers/> [--quality-json <path>] [--docket-evidence <path>]
 - 线索承接：用上一期 ledger 的 threads 做匹配（theme.thread_id 优先；否则标题关键词重合）
 - 悬案顺延：上一期 docket 里 status=open 且本期未声明 closed 的，自动带入并标 carried_from
 - 行动顺延：上一期 todo 原样带入 growth.carried（前端可选显示）
+- 悬案事实：可用 scripts/ops/docket-verify.sh 生成的 evidence JSON 对唯一事实匹配项自动闭案；不传参数则保持旧行为
 - 质量五维：--quality-json 给 /api/quality 的输出；缺省写 null，前端显示「待评判」
 """
 import json, os, sys, glob, re, datetime, sqlite3
@@ -11,7 +12,19 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from markup import mark_terms, mark_people, load_people
 
 mat, out_dir = sys.argv[1], sys.argv[2]
-qpath = sys.argv[sys.argv.index('--quality-json') + 1] if '--quality-json' in sys.argv else None
+
+
+def _optional_arg(name):
+    if name not in sys.argv:
+        return None
+    index = sys.argv.index(name)
+    if index + 1 >= len(sys.argv) or sys.argv[index + 1].startswith('--'):
+        raise SystemExit(f'{name} 缺少路径参数')
+    return sys.argv[index + 1]
+
+
+qpath = _optional_arg('--quality-json')
+evidence_path = _optional_arg('--docket-evidence')
 c = json.load(open(os.path.join(mat, 'content.json'), encoding='utf-8'))
 stats = json.load(open(os.path.join(mat, 'stats.json'), encoding='utf-8')) if os.path.exists(os.path.join(mat, 'stats.json')) else {}
 date = c['date']
@@ -35,6 +48,36 @@ def _optional_int(mapping, key):
     except (TypeError, ValueError):
         return None
     return value if value >= 0 else None
+
+
+def _load_docket_evidence(path):
+    if not path:
+        return {}
+    try:
+        payload = json.load(open(path, encoding='utf-8'))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SystemExit(f'无法读取悬案事实证据 {path}: {exc}')
+    if not isinstance(payload, dict) or not isinstance(payload.get('closures'), list):
+        raise SystemExit(f'悬案事实证据格式错误（需要 closures 数组）: {path}')
+    if payload.get('date') not in (None, date):
+        raise SystemExit(f'悬案事实证据日期不匹配: expected={date} got={payload.get("date")!r}')
+    if prev and payload.get('previous_date') not in (None, prev.get('date')):
+        raise SystemExit(
+            f'悬案事实证据上一期不匹配: expected={prev.get("date")} '
+            f'got={payload.get("previous_date")!r}'
+        )
+    result = {}
+    for proof in payload['closures']:
+        if not isinstance(proof, dict) or proof.get('status') != 'closed' or not proof.get('h'):
+            continue
+        evidence = proof.get('evidence')
+        if not isinstance(evidence, dict) or not evidence.get('matches'):
+            continue
+        key = str(proof['h'])
+        if key in result:
+            raise SystemExit(f'悬案事实证据重复 heading: {key}')
+        result[key] = proof
+    return result
 
 
 _RAW_MEMBER = re.compile(r'^(?:wxid_[A-Za-z0-9_-]+|QQ\d{5,}|q\d{6,}|gh_[A-Za-z0-9_-]+)$', re.I)
@@ -157,6 +200,72 @@ def _essay_db_truth(day):
         if connection is not None:
             connection.close()
 
+
+def _daily_db_truth(day):
+    """Return the same date-window speaker truth used by /api/quality.
+
+    speakers is the daily distinct display identity count. members is the
+    cumulative distinct display identity count through that day. A missing
+    database/date deliberately falls back to the stamped materials.
+    """
+    db_path = os.environ.get('XF_DB') or os.path.join(
+        os.environ.get('XF_DATA_DIR', '/opt/xfsite/data'), 'xf.db'
+    )
+    if not os.path.isfile(db_path):
+        return {}
+    connection = None
+    identity = "COALESCE(NULLIF(sender_name,'?'),sender)"
+    try:
+        connection = sqlite3.connect(f'file:{os.path.abspath(db_path)}?mode=ro', uri=True)
+        tables = {
+            row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        }
+        if 'messages' not in tables:
+            return {}
+        daily = int(
+            connection.execute(
+                f"""SELECT COUNT(DISTINCT {identity}) FROM messages
+                    WHERE substr(COALESCE(cst,''),1,10)=?""",
+                (day,),
+            ).fetchone()[0]
+        )
+        if daily <= 0:
+            return {}
+        cumulative = int(
+            connection.execute(
+                f"""SELECT COUNT(DISTINCT {identity}) FROM messages
+                    WHERE substr(COALESCE(cst,''),1,10)<=?""",
+                (day,),
+            ).fetchone()[0]
+        )
+        msgs = int(
+            connection.execute(
+                "SELECT COUNT(*) FROM messages WHERE substr(COALESCE(cst,''),1,10)=?",
+                (day,),
+            ).fetchone()[0]
+        )
+        readable = int(
+            connection.execute(
+                "SELECT COUNT(*) FROM messages WHERE substr(COALESCE(cst,''),1,10)=? AND content<>''",
+                (day,),
+            ).fetchone()[0]
+        )
+        hours = {
+            row[0]: row[1]
+            for row in connection.execute(
+                "SELECT substr(COALESCE(cst,''),12,2) AS hh, COUNT(*) FROM messages "
+                "WHERE substr(COALESCE(cst,''),1,10)=? GROUP BY hh",
+                (day,),
+            ).fetchall()
+        }
+        return {'speakers': daily, 'members': cumulative, 'msgs': msgs, 'readable': readable, 'hours': hours}
+    except (OSError, sqlite3.Error):
+        return {}
+    finally:
+        if connection is not None:
+            connection.close()
+
+
 # —— 线索承接 ——
 prev_threads = {t['id']: t for t in (prev or {}).get('threads', [])}
 threads = []
@@ -178,6 +287,20 @@ docket = [dict(d, status=d.get('status', 'open')) for d in c.get('docket', [])]
 for d in (prev or {}).get('docket', []):
     if d['status'] == 'open' and d['h'] not in closed and all(d['h'] != x['h'] for x in docket):
         docket.append(dict(d, status='open', carried_from=d.get('carried_from', prev['issue'])))
+
+# 事实核验在蒸馏前由 ops/docket-verify.sh 生成；这里只消费带唯一证据的闭案结果。
+docket_evidence = _load_docket_evidence(evidence_path)
+for index, item in enumerate(docket):
+    proof = docket_evidence.get(str(item.get('h')))
+    if not proof or item.get('status') != 'open' or '承诺未兑' not in str(item.get('kind') or ''):
+        continue
+    docket[index] = dict(
+        item,
+        status='closed',
+        closed_at=proof.get('closed_at') or date,
+        closed_by=proof.get('closed_by') or 'docket-verifier-v1',
+        evidence=proof['evidence'],
+    )
 
 quality = json.load(open(qpath, encoding='utf-8')) if qpath else None
 if quality:
@@ -210,16 +333,33 @@ if essay_open is None:
     essay_open = essay_db.get('open', previous_stats.get('essays_open', 0))
 essay_daily = essay_db.get('daily', essay_total)
 essay_cumulative = essay_db.get('cumulative', essay_total)
+daily_db = _daily_db_truth(date)
+stats_override = c.get('stats_override') if isinstance(c.get('stats_override'), dict) else {}
+speaker_total = daily_db.get('speakers')
+if speaker_total is None:
+    speaker_total = _optional_int(stats, 'speaker_count')
+if speaker_total is None:
+    speaker_total = _optional_int(stats_override, 'active')
+if speaker_total is None:
+    speaker_total = len(stats.get('speakers', [])) if isinstance(stats.get('speakers'), list) else 0
+members_total = daily_db.get('members')
+if members_total is None:
+    members_total = _optional_int(stats, 'members_total')
+if members_total is None:
+    members_total = _optional_int(c, 'members_total')
+if members_total is None:
+    members_total = previous_stats.get('members', 0)
 
 ledger = {
   'date': date, 'issue': issue, 'title': c.get('title') or f'第 {issue:03d} 批',
   'coverage': c.get('coverage') or {'from': date, 'to': date, 'cutoff': f'{date} 23:59', 'note': '这一期记的是这一天。小号每隔几小时会掉一次线，掉线那段的消息没补上——曲线上空着的那几格就是。'},
   'complete': c.get('complete', True), 'lead': c.get('lead', ''),
-  'stats': {'msgs': c.get('stats_override', {}).get('msgs') or stats.get('msgs', 0), 'speakers': c.get('stats_override', {}).get('active') or len(stats.get('speakers', [])),
-            'members': c.get('members_total', (prev or {}).get('stats', {}).get('members', 0)), 'essays': essay_total,
+  'stats': {'msgs': daily_db.get('msgs') or stats_override.get('msgs') or stats.get('msgs', 0), 'speakers': speaker_total,
+            'members': members_total, 'essays': essay_total,
             'essays_daily': essay_daily, 'essays_cumulative': essay_cumulative, 'essays_open': essay_open,
-            'quotes': len(c.get('quotes', [])), 'themes': len(c.get('themes', [])), 'decoded': stats.get('readable', 0)},
-  'hours': c.get('hours') or stats.get('hours', {}),
+            'quotes': len(c.get('quotes', [])), 'themes': len(c.get('themes', [])),
+            'decoded': daily_db.get('readable') or stats.get('readable', 0)},
+  'hours': c.get('hours') or daily_db.get('hours') or stats.get('hours', {}),
   'pulse': c.get('pulse', {'caption': '', 'note': ''}),
   'events': c.get('events', []), 'themes': [{k: v for k, v in t.items() if k not in ('thread_id', 'thread_title', 'thread_status')} for t in c.get('themes', [])],
   'tone_notes': c.get('tone_notes', []), 'insights': c.get('insights', []), 'quotes': c.get('quotes', []),

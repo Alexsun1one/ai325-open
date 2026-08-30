@@ -247,6 +247,37 @@ class LedgerDistillTests(unittest.TestCase):
         self.assertIn("隐私形态", str(raised.exception))
         self.assertIn("quotes[0].g", str(raised.exception))
 
+    def test_fill_gate_rejects_missing_tone_class_and_too_few_actions(self) -> None:
+        content = self.fixed()
+        content["tone_notes"] = [
+            note for note in content["tone_notes"] if note.get("cls") != "j"
+        ]
+        content["growth"]["todo"] = [
+            {"phase": "今天", "items": ["记录一个判断", "验证一条证据"]}
+        ]
+        with self.assertRaises(ledger.ValidationFailure) as raised:
+            ledger.validate_content(content, self.date)
+        self.assertIn("tone_notes 未覆盖 s/j/h 三档", str(raised.exception))
+        self.assertIn("行动清单数量异常：2", str(raised.exception))
+        self.assertIn("以明确动作动词开头", str(raised.exception))
+
+    def test_skeleton_gate_rejects_short_growth_plan(self) -> None:
+        skeleton = {
+            "title": "标题",
+            "lead_angle": "角度",
+            "event_plan": [],
+            "theme_plan": [],
+            "tone_plan": [],
+            "quote_plan": [],
+            "member_plan": [],
+            "growth_plan": {"takeaways": ["只有一个"], "actions": ["只有一个"]},
+            "extension_plan": {},
+        }
+        with self.assertRaises(ledger.ValidationFailure) as raised:
+            ledger.validate_skeleton(skeleton, [])
+        self.assertIn("growth_plan.takeaways 必须是 3–5 个非空字符串", str(raised.exception))
+        self.assertIn("growth_plan.actions 必须是 3–5 个非空字符串", str(raised.exception))
+
     def test_repair_keeps_previous_json_and_concrete_error(self) -> None:
         responses = [json.dumps({"wrong": []}), json.dumps({"ok": []})]
 
@@ -365,6 +396,17 @@ class LedgerDistillTests(unittest.TestCase):
                 )
             self.assertEqual(len(chunks), 2)
             self.assertEqual(mocked.call_count, 1)
+
+    def test_extraction_cache_key_changes_when_prompt_changes(self) -> None:
+        cache = Path("/tmp/cache-key-only")
+        first_path, first_digest = ledger.extraction_cache_path(
+            cache, 1, "chunk", self.date, "model", "prompt-a"
+        )
+        second_path, second_digest = ledger.extraction_cache_path(
+            cache, 1, "chunk", self.date, "model", "prompt-b"
+        )
+        self.assertNotEqual(first_digest, second_digest)
+        self.assertNotEqual(first_path, second_path)
 
     def test_quote_supplement_uses_line_refs_and_judge_feedback(self) -> None:
         transcript = "\n".join(

@@ -7,6 +7,7 @@ export const LINKS: { href: string; label: string; gated?: boolean }[] = [
   { href: "/archive/", label: "往期" },
   { href: "/events/", label: "活动" },
   { href: "/members/", label: "群像", gated: true },
+  { href: "/cellar/", label: "原浆", gated: true },
   { href: "/essays/", label: "窖藏", gated: true },
   { href: "/library/", label: "文库", gated: true },
   { href: "/arsenal/", label: "军火库" },

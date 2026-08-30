@@ -63,13 +63,13 @@ python3 hermes/harness/judge.py site/content/arsenal/2026-08-23.json \
 
 运行时 prompt 位于 `hermes/prompts/`：
 
-- `ledger-extract-v3.md`
-- `ledger-skeleton-v3.md`
-- `ledger-fill-v3.md`
+- `ledger-extract-v4.md`
+- `ledger-skeleton-v4.md`
+- `ledger-fill-v4.md`
 - `arsenal-distill-v3.md`
 - `judge-v1.md`
 
-每个文件都有 frontmatter `prompt_version`。Ledger 成品写 `prompt_version: ledger-v3`，转换后再进入 `credits.prompt_version`；Arsenal v3 版本进入质量日志。修改 prompt 后必须跑黄金回归。
+每个文件都有 frontmatter `prompt_version`。Ledger 成品写 `prompt_version: ledger-v4`，转换后再进入 `credits.prompt_version`；Arsenal v3 版本进入质量日志。Ledger v4 把逐字金句由固定上限改为按当天成色浮动 6–12 条，机械门禁同时拒绝少于 6 或多于 12。修改 prompt 后必须跑黄金回归。
 
 ## 黄金回归
 

@@ -1,18 +1,20 @@
 import type { Ledger } from "@/lib/shared";
+
+type LedgerCore = Omit<Ledger, "members_focus" | "thanks">;
 import { pad3 } from "@/lib/shared";
 import { byName } from "@/components/pages/PageHead";
 import { Stamp } from "./Stamp";
 import { Vessel } from "./Vessel";
 import { TypeReveal } from "./TypeReveal";
 
-function readMinutes(l: Ledger) {
+function readMinutes(l: LedgerCore) {
   const text = [l.lead, ...l.themes.flatMap((t) => [t.body, t.deep]), ...l.insights.map((i) => i.body), ...l.events.map((e) => e.d), ...l.quotes.map((q) => q.t), ...l.growth.takeaways].join("");
   const chars = text.replace(/<[^>]+>/g, "").length;
   return Math.max(3, Math.round(chars / 420));
 }
 
 /** 刊头：样品信息行 + 刊名 + 导语；右上批次章。这一屏是论点，不是 banner。 */
-export function SheetHeader({ l, prevOpen, totalIssues = 1 }: { l: Ledger; prevOpen: number; totalIssues?: number }) {
+export function SheetHeader({ l, prevOpen, totalIssues = 1 }: { l: LedgerCore; prevOpen: number; totalIssues?: number }) {
   const mins = readMinutes(l);
   // 液位 = 累计批次的成长：第 1 批 12%，之后每批 +4%，封顶 92%（对数缓和）
   const vesselLevel = Math.min(0.92, 0.12 + Math.log1p(Math.max(0, totalIssues - 1)) * 0.16);

@@ -24,7 +24,7 @@ export function TodoCheck({ todo, date }: { todo: TodoPhase[]; date: string }) {
           <span className="num text-[42px] font-semibold leading-none text-amber-text">{ready ? count : 0}</span>
           <span className="num text-[16px] font-medium text-ink-3">/ {ids.length} 项</span>
         </div>
-        <span className="font-sans text-[12.5px] text-ink-3">{ready ? "只留在你这台设备上 · 不上传、不汇总、换台设备就没了" : "读取中……"}</span>
+        <span className="font-sans text-[12.5px] text-ink-3">{ready ? "只留在你这台设备上 · 不上传、不汇总、换台设备就没了" : "正在取……"}</span>
       </div>
       <div className="mt-2.5 h-[4px] w-full overflow-hidden rounded-full bg-paper-3">
         <div className="h-full bg-amber transition-[width] duration-700 ease-[var(--ease-out-expo)]" style={{ width: `${ready ? pct : 0}%` }} />

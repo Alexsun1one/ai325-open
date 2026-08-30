@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import importlib.util
 import json
 from pathlib import Path
@@ -31,16 +32,16 @@ ledger = load_module("ledger_distill_for_harness", REPO / "hermes/ledger/distill
 def test_all_prompts_are_versioned_and_runtime_versions_match() -> None:
     prompt_dir = REPO / "hermes/prompts"
     expected = {
-        "ledger-extract-v3.md": "ledger-v3",
-        "ledger-skeleton-v3.md": "ledger-v3",
-        "ledger-fill-v3.md": "ledger-v3",
+        "ledger-extract-v4.md": "ledger-v4",
+        "ledger-skeleton-v4.md": "ledger-v4",
+        "ledger-fill-v4.md": "ledger-v4",
         "arsenal-distill-v3.md": "arsenal-v3",
         "judge-v1.md": "judge-v1",
     }
     for name, version in expected.items():
         text = (prompt_dir / name).read_text(encoding="utf-8")
         assert f"prompt_version: {version}" in text
-    assert ledger.PROMPT_VERSION == "ledger-v3"
+    assert ledger.PROMPT_VERSION == "ledger-v4"
     assert judge.PROMPT_VERSION == "judge-v1"
 
 
@@ -60,7 +61,7 @@ def test_ledger_dry_run_passes_runtime_schema_and_hard_self_check() -> None:
     ledger.validate_content(content, "2026-08-23")
     checks = ledger.self_check(content, material["transcript"], warnings)
     assert checks["quotes_verified"] >= 5
-    assert content["prompt_version"] == "ledger-v3"
+    assert content["prompt_version"] == "ledger-v4"
 
 
 def test_real_0823_ledger_structure_stays_within_40_percent_of_golden() -> None:
@@ -108,11 +109,47 @@ def test_mechanical_judge_passes_deterministic_dry_ledger() -> None:
     assert metrics["quotes_verified"] == 6
 
 
+def test_quote_gate_accepts_0_to_12_and_rejects_above_cap() -> None:
+    """金句数量：上限 12 硬、下限软（宁缺毋滥，当天几条算几条，0 条也可出刊）。"""
+    material = ledger.load_materials(REPO / "hermes/ledger/sample")
+    artifact = ledger.dry_run_content("2026-08-23", material["stats"], {}, "deepseek-chat")
+    warnings: list[str] = []
+    artifact = ledger.normalize_content(
+        artifact, material["transcript"], material["stats"], {}, "2026-08-23", "deepseek-chat", warnings
+    )
+    base_quotes = copy.deepcopy(artifact["quotes"])
+    assert len(base_quotes) == 6
+    for count, accepted in ((0, True), (4, True), (12, True), (13, False)):
+        candidate = copy.deepcopy(artifact)
+        candidate["quotes"] = (base_quotes * 3)[:count]
+        _score, hard, _soft, _suggestions, metrics, _context = judge.ledger_mechanical(
+            candidate, REPO / "hermes/ledger/sample/transcript.txt", {}, []
+        )
+        quantity_failures = [item for item in hard if item.startswith("金句")]
+        assert bool(quantity_failures) is not accepted, (count, hard)
+        assert metrics["quotes"] == count
+
+
+def test_stamped_speaker_and_member_scalars_override_truncated_list() -> None:
+    material = ledger.load_materials(REPO / "hermes/ledger/sample")
+    stats = copy.deepcopy(material["stats"])
+    stats["speakers"] = stats["speakers"][:1]
+    stats["speaker_count"] = 46
+    stats["members_total"] = 79
+    content = ledger.dry_run_content("2026-08-23", stats, {}, "deepseek-chat")
+    warnings: list[str] = []
+    content = ledger.normalize_content(
+        content, material["transcript"], stats, {}, "2026-08-23", "deepseek-chat", warnings
+    )
+    assert content["stats_override"]["active"] == 46
+    assert content["members_total"] == 79
+
+
 def test_health_combine_alert_and_14_day_aggregate(tmp_path: Path) -> None:
     ledger_result = tmp_path / "ledger.json"
     arsenal_result = tmp_path / "arsenal.json"
     ledger_result.write_text(
-        json.dumps({"passed": True, "score": 88, "grade": "A", "hard_fail": [], "soft": [], "suggestions": [], "redistill_count": 0, "elapsed_ms": 10, "token_usage": {"total_tokens": 20}, "prompt_version": "judge-v1", "artifact_prompt_version": "ledger-v3"}),
+        json.dumps({"passed": True, "score": 88, "grade": "A", "hard_fail": [], "soft": [], "suggestions": [], "redistill_count": 0, "elapsed_ms": 10, "token_usage": {"total_tokens": 20}, "prompt_version": "judge-v1", "artifact_prompt_version": "ledger-v4"}),
         encoding="utf-8",
     )
     arsenal_result.write_text(
@@ -137,10 +174,10 @@ def test_stamp_puts_prompt_and_quality_in_visible_footer(tmp_path: Path, monkeyp
     judge_path = tmp_path / "judge.json"
     ledger_path.write_text(json.dumps({"credits": {}, "footer": []}), encoding="utf-8")
     judge_path.write_text(json.dumps({"score": 78, "grade": "B", "prompt_version": "judge-v1"}), encoding="utf-8")
-    monkeypatch.setattr(sys, "argv", ["stamp.py", str(ledger_path), "--judge-result", str(judge_path), "--prompt-version", "ledger-v3", "--model", "deepseek-chat"])
+    monkeypatch.setattr(sys, "argv", ["stamp.py", str(ledger_path), "--judge-result", str(judge_path), "--prompt-version", "ledger-v4", "--model", "deepseek-chat"])
     assert stamp.main() == 0
     payload = json.loads(ledger_path.read_text(encoding="utf-8"))
-    assert payload["credits"]["prompt_version"] == "ledger-v3"
+    assert payload["credits"]["prompt_version"] == "ledger-v4"
     assert payload["quality_gate"] == {"score": 78, "grade": "B", "judge_prompt_version": "judge-v1"}
     assert "本期自检 78 分" in payload["footer"][-1]
 

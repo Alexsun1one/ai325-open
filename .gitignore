@@ -27,3 +27,7 @@ node_modules/
 site/.next/
 site/out/
 logs/
+
+# 中间产物不入库
+materials/
+*.bak-*

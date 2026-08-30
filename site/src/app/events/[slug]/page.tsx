@@ -120,7 +120,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
             <div className="h-full bg-cinnabar-wash" style={{ width: `${(l.stats.essays_open / (l.stats.essays + l.stats.essays_open)) * 100}%` }} />
           </div>
           <p className="mt-5 font-sans text-[12.5px] leading-relaxed text-ink-3">
-            分母是<b>「已交 + 已经答应要交」</b>，不是群里的 {l.stats.members} 个人。没被点名、也没答应过的不算进来——拿全群当分母，会算出一个不存在的完成率。
+            分母是<b>「已交 + 已经答应要交」</b>，不是截至本批发过言的 {l.stats.members} 人。没被点名、也没答应过的不算进来——拿全群当分母，会算出一个不存在的完成率。
           </p>
         </Section>
       )}

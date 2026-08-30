@@ -109,8 +109,8 @@ function Activity({ items }: { items: Apprentice[] }) {
   );
 }
 
-export function ApprenticeWorkshop() {
-  const [items, setItems] = useState<Apprentice[] | null>(null);
+export function ApprenticeWorkshop({ initial }: { initial?: Apprentice[] | null }) {
+  const [items, setItems] = useState<Apprentice[] | null>(initial ?? null);
   const [err, setErr] = useState("");
 
   const load = useCallback(async () => {

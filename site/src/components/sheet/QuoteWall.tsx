@@ -45,7 +45,9 @@ export function QuoteWall({ quotes, issue, date, degree }: { quotes: Quote[]; is
   const btn = "inline-flex h-[22px] items-center justify-center rounded-[5px] px-1.5 font-sans text-[12px] leading-none text-ink-3 decoration-1 underline-offset-[3px] transition-colors duration-200 ease-[var(--ease-out-expo)] hover:bg-paper-2 hover:text-ink hover:underline active:bg-paper-3 disabled:pointer-events-none disabled:text-ink-3/60 disabled:no-underline";
   return (
     <div className="columns-1 gap-10 border-b border-rule md:columns-2 xl:columns-3 [column-fill:balance]">
-      {quotes.map((q, i) => (
+      {quotes.length === 0 ? (
+        <p className="border-t border-rule px-1 pb-6 pt-4 font-sans text-[14px] leading-relaxed text-ink-3">今天没摘到够格的原话——宁缺毋滥，这一栏空着比硬凑强。</p>
+      ) : quotes.map((q, i) => (
         <figure key={i} className="mb-0 break-inside-avoid border-t border-rule px-1 pb-6 pt-4 transition-colors duration-200 ease-[var(--ease-out-expo)] hover:bg-paper-2/40">
           {/* 引号是这个世界的琥珀记号，但落在 color 上只能取 -text 变体；700 是真实字重，不是合成粗体 */}
           <blockquote className="font-serif text-[18px] leading-[1.8] text-ink">
@@ -55,6 +57,13 @@ export function QuoteWall({ quotes, issue, date, degree }: { quotes: Quote[]; is
             <div className="flex min-w-0 items-center gap-2.5">
               <span data-person={q.a} className="truncate font-sans text-[13px] font-semibold text-blue-text">{q.a}</span>
               <ToneTag g={q.g} />
+              {q.evidence && (
+                <a href={`/cellar/?unit=${q.evidence.unit}${q.evidence.ordinal ? `&at=${q.evidence.ordinal}` : ""}`}
+                  className="inline-flex shrink-0 items-center gap-1 rounded-[4px] border border-amber-deep/40 bg-amber-wash/40 px-1.5 py-[2px] font-sans text-[11px] font-semibold text-amber-text no-underline transition-colors hover:border-amber-deep/70 hover:bg-amber-wash">
+                  <svg aria-hidden width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/></svg>
+                  凭证 · 话题块 #{q.evidence.unit}
+                </a>
+              )}
             </div>
             {/* 常显而非 hover 才现：触屏没有 hover，且 70% 透明度只是把字弄脏。安静=灰、可按=纸底 */}
             <div className="flex shrink-0 items-center gap-0.5 whitespace-nowrap" aria-live="polite">

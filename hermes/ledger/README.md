@@ -1,7 +1,6 @@
 # Hermes Ledger Distiller
 
-> 路径变量：`$HERMES_ROOT` = 材料根目录（如 `/srv/hermes-ledger`）；`$HERMES_ENV` = 密钥文件（`DEEPSEEK_API_KEY`，不入仓）。
-把 `$HERMES_ROOT/materials/YYYY-MM-DD/` 中的群聊全文蒸馏为同目录的 `content.json`。输出遵循 `_hermes_spec.md` 的八段结构、三档语气、深潜写法、原文纪律和网站扩展字段。
+把 `/opt/hermes-ledger/materials/YYYY-MM-DD/` 中的群聊全文蒸馏为同目录的 `content.json`。输出遵循 `_hermes_spec.md` 的八段结构、三档语气、深潜写法、原文纪律和网站扩展字段。
 
 ## 处理链路
 
@@ -15,7 +14,7 @@ transcript.txt + stats.json + context-prev.md + newcomers.json?
   → 原子替换 content.json
 ```
 
-- `stats_override` 和 `hours` 始终回锁 `stats.json`，模型不能改写统计真值。
+- `stats_override`、`members_total` 和 `hours` 始终回锁 `stats.json`；`speaker_count`/`members_total` 由数据库日窗口盖写，模型不能改写统计真值。
 - transcript 每行先编号为 `L0001…`；模型只提交行号、署名及连续片段/字符偏移，程序再从原 transcript 回填 `quotes[].t` 与 `themes[].voices[].v`。比较时忽略空白并统一全半角标点与省略号，成品始终保留原始字符。
 - 初次抽取不足 5 条逐字金句时，会从 stats 高频发言者的编号行补抽一次；仍不足才 hard fail。成功切片写入 `materials/.distill-cache`，后续切片失败重跑时不会重复调用已成功切片。
 - 发送模型前会打码手机号，并移除疑似密码、口令、密钥和长令牌所在消息；任何密码类内容都不会进入成品。
@@ -51,23 +50,23 @@ python3 distill_ledger.py sample \
 蒸馏器只用 Python 标准库，不需要额外 pip 依赖：
 
 ```bash
-sudo install -d -m 0755 $HERMES_ROOT
-sudo rsync -a hermes/ledger/ $HERMES_ROOT/
-sudo chmod +x $HERMES_ROOT/run.sh $HERMES_ROOT/distill_ledger.py
+sudo install -d -m 0755 /opt/hermes-ledger
+sudo rsync -a hermes/ledger/ /opt/hermes-ledger/
+sudo chmod +x /opt/hermes-ledger/run.sh /opt/hermes-ledger/distill_ledger.py
 ```
 
-`run.sh` 默认从 `$HERMES_ENV` 加载 `DEEPSEEK_API_KEY`，不会打印密钥。材料根目录默认 `$HERMES_ROOT/materials`，站点仓库用 `XF_REPO` 指定：
+`run.sh` 默认从 `/data/second-brain/hermes/.env` 加载 `DEEPSEEK_API_KEY`，不会打印密钥。材料根目录默认 `/opt/hermes-ledger/materials`，站点仓库用 `XF_REPO` 指定：
 
 ```bash
-export XF_REPO=$XF_REPO/repo
-$HERMES_ROOT/run.sh 2026-08-23
+export XF_REPO=/opt/xfsite/repo
+/opt/hermes-ledger/run.sh 2026-08-23
 ```
 
 单独在每天 23:38 CST 蒸馏：
 
 ```cron
 CRON_TZ=Asia/Shanghai
-38 23 * * * /bin/bash -lc 'export XF_REPO=$XF_REPO/repo; $HERMES_ROOT/run.sh' >> /var/log/hermes-ledger-distill.log 2>&1
+38 23 * * * /bin/bash -lc 'export XF_REPO=/opt/xfsite/repo; /opt/hermes-ledger/run.sh' >> /var/log/hermes-ledger-distill.log 2>&1
 ```
 
 `scripts/server-daily.sh` 也有兜底：第 3 步转换前如果已有 transcript、尚无 content.json，就先调用本蒸馏器；失败只记 warning，站点继续沿用上一期日报。

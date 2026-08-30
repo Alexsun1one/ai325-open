@@ -104,7 +104,7 @@ export function InvitesAdmin() {
       <div className="min-w-0">
         <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
           <h2 className="font-serif text-[22px] font-bold text-ink">已发放的码{items && <span className="num ml-3 text-[14px] font-normal text-ink-3">{items.length}</span>}</h2>
-          <button type="button" onClick={() => void load()} className="font-sans text-[13px] text-blue-text hover:underline">重新读取</button>
+          <button type="button" onClick={() => void load()} className="font-sans text-[13px] text-blue-text hover:underline">再取一次</button>
         </div>
 
         {err && <div className="mt-4"><Note tone="bad">{err}</Note></div>}
@@ -129,7 +129,7 @@ export function InvitesAdmin() {
         {items === null ? (
           <div className="mt-5">
             <GapNote>
-              <b>读不到已发的码</b>（上面是服务器原话）。这一页本身是好的，等服务器恢复了点「重新读取」就行——现在显示的不是「没有码」，是「问不到」。
+              <b>读不到已发的码</b>（上面是服务器原话）。这一页本身是好的，等服务器恢复了点「再取一次」就行——现在显示的不是「没有码」，是「问不到」。
             </GapNote>
           </div>
         ) : items.length === 0 ? (

@@ -1,8 +1,10 @@
 "use client";
 import type { Ledger } from "@/lib/shared";
+
+type LedgerCore = Omit<Ledger, "members_focus" | "thanks">;
 import { DoubleRule } from "./DoubleRule";
 
-export function SheetFooter({ l, prev, next }: { l: Ledger; prev?: { date: string; issue: number; title: string } | null; next?: { date: string; issue: number; title: string } | null }) {
+export function SheetFooter({ l, prev, next }: { l: LedgerCore; prev?: { date: string; issue: number; title: string } | null; next?: { date: string; issue: number; title: string } | null }) {
   return (
     <footer className="pt-2">
       <DoubleRule />

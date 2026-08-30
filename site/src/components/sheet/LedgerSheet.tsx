@@ -19,6 +19,7 @@ import { SheetFooter } from "./SheetFooter";
 import { ProofRuler } from "./ProofRuler";
 import { TermHover } from "./TermHover";
 import { Newcomers } from "./Newcomers";
+import { LazySection } from "./LazySection";
 import { Notebook } from "./Notebook";
 import { Ambient } from "./Ambient";
 import { DoubleRule } from "./DoubleRule";
@@ -42,11 +43,13 @@ const SECTIONS = [
 ];
 
 type Neighbor = { date: string; issue: number; title: string } | null;
-export function LedgerSheet({ l, prevOpen = 0, totalIssues = 1, prev = null, next = null, illus = [], spots = {} }: { l: Ledger; prevOpen?: number; totalIssues?: number; prev?: Neighbor; next?: Neighbor; illus?: (string | null)[]; spots?: Record<string, string> }) {
+/** 首屏子集：群像高光与新面孔卡片数据不内嵌（页尾懒加载），由整刊 JSON 按需取；newcomers 计数保留给进料栏。 */
+type LedgerCore = Omit<Ledger, "members_focus" | "thanks">;
+export function LedgerSheet({ l, prevOpen = 0, totalIssues = 1, prev = null, next = null, illus = [], spots = {} }: { l: LedgerCore; prevOpen?: number; totalIssues?: number; prev?: Neighbor; next?: Neighbor; illus?: (string | null)[]; spots?: Record<string, string> }) {
   const ref = useRef<HTMLDivElement>(null);
   const intake = [
     { k: "消息", v: l.stats.msgs, note: "含建群日档案" },
-    { k: "发声者", v: l.stats.speakers, note: `群成员 ${l.stats.members}` },
+    { k: "发声者", v: l.stats.speakers, note: `截至本批 ${l.stats.members} 人发声过` },
     { k: "小作文", v: l.stats.essays, suffix: l.stats.essays_open ? `+${l.stats.essays_open} 悬` : undefined, note: "入群仪式已交" },
     { k: "新面孔", v: (l.newcomers ?? []).length, note: "本批入群" },
     { k: "主题幕", v: l.stats.themes, note: "本批蒸出的主题" },
@@ -112,8 +115,16 @@ export function LedgerSheet({ l, prevOpen = 0, totalIssues = 1, prev = null, nex
       </Section>
 
       <Section id="members" spot={spots["members"]} label="成员高光" sub="新面孔先出卡，再看本期最值得看见的人">
-        <Newcomers items={l.newcomers ?? []} issue={l.issue} />
-        <MembersFocus items={l.members_focus} thanks={l.thanks ?? []} />
+        <LazySection
+          date={l.date}
+          height={90}
+          render={(d: Pick<Ledger, "newcomers" | "members_focus" | "thanks">) => (
+            <>
+              <Newcomers items={d.newcomers ?? []} issue={l.issue} />
+              <MembersFocus items={d.members_focus} thanks={d.thanks ?? []} />
+            </>
+          )}
+        />
       </Section>
 
       </div>

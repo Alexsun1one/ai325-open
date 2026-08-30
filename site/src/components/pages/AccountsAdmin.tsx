@@ -80,7 +80,7 @@ export function AccountsAdmin() {
   if (status === "out") return <Note tone="bad">请先登录。这一页只对群主（admin）开放。</Note>;
   if (user?.role !== "admin") return <Note tone="bad">这页只对群主开放，你的账号没有这个权限。</Note>;
   if (err) return <Note tone="bad">{err}</Note>;
-  if (!data) return <p className="py-10 font-sans text-[14px] text-ink-3">正在读取成员与账号……</p>;
+  if (!data) return <p className="py-10 font-sans text-[14px] text-ink-3">正在取成员与账号……</p>;
 
   const doGen = async (mk: string) => {
     setBusy(true); setMsg(null);

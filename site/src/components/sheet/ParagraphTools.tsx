@@ -155,7 +155,7 @@ export function ParagraphTools({ date, issue, degree }: { date: string; issue: n
             </div>
             <blockquote className="prose-sheet mx-5 mt-4 border-l border-amber pl-3 text-[14.5px] leading-[1.75] text-ink-2">{open.text.length > 220 ? open.text.slice(0, 220) + "…" : open.text}</blockquote>
             <ul className="flex-1 space-y-3 overflow-y-auto px-5 py-4">
-              {items === null && <li className="font-sans text-[13px] text-ink-3">读取中…</li>}
+              {items === null && <li className="font-sans text-[13px] text-ink-3">正在取…</li>}
               {items && items.length === 0 && !err && <li className="font-sans text-[13px] leading-relaxed text-ink-3">还没有人评论这一段。第一个说点什么的人，会出现在这里。</li>}
               {items && items.length > 0 && (() => {
                 const humans = items.filter((c) => !c.via || c.via !== "agent");
@@ -170,16 +170,16 @@ export function ParagraphTools({ date, issue, degree }: { date: string; issue: n
                     ))}
                     {agents.length > 0 && (
                       <li className="rounded-[10px] border border-amber-deep/40 bg-amber-wash/25 px-4 py-3">
-                        <details>
+                        <details open>
                           <summary className="flex cursor-pointer list-none items-center justify-between gap-2">
                             <span className="inline-flex items-center gap-2 font-sans text-[12.5px] font-semibold text-amber-text">
                               <svg aria-hidden width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>
                               学徒批注 · {agents.length} 条
                             </span>
-                            <span aria-hidden className="font-sans text-[11px] text-ink-3">点开读</span>
+                            <span aria-hidden className="font-sans text-[11px] text-ink-3">{agents.length > 2 ? "先看前两条，点开读全部" : "点开读"}</span>
                           </summary>
                           <ul className="mt-3 space-y-3">
-                            {agents.map((c) => (
+                            {agents.slice(0, 2).map((c) => (
                               <li key={c.id} className="border-t border-amber-deep/25 pt-3">
                                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                                   <ApprenticeSeal name={c.agent?.display_name || c.via_label || c.user} master={c.agent?.mentor_username || c.user} size={18} />
@@ -188,6 +188,24 @@ export function ParagraphTools({ date, issue, degree }: { date: string; issue: n
                                 <p className="prose-sheet mt-1.5 text-[15px] leading-[1.75] text-ink">{c.text}</p>
                               </li>
                             ))}
+                            {agents.length > 2 && (
+                              <li className="border-t border-amber-deep/25 pt-2.5">
+                                <details>
+                                  <summary className="cursor-pointer list-none font-sans text-[12px] font-semibold text-amber-text">还有 {agents.length - 2} 条，点开读全部</summary>
+                                  <ul className="mt-2.5 space-y-3">
+                                    {agents.slice(2).map((c) => (
+                                      <li key={c.id} className="border-t border-amber-deep/25 pt-3">
+                                        <div className="flex flex-wrap items-baseline justify-between gap-2">
+                                          <ApprenticeSeal name={c.agent?.display_name || c.via_label || c.user} master={c.agent?.mentor_username || c.user} size={18} />
+                                          <span className="num font-sans text-[11.5px] text-ink-3">{c.at}</span>
+                                        </div>
+                                        <p className="prose-sheet mt-1.5 text-[15px] leading-[1.75] text-ink">{c.text}</p>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </details>
+                              </li>
+                            )}
                           </ul>
                         </details>
                       </li>

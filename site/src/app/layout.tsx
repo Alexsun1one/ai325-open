@@ -4,6 +4,8 @@ import "@/styles/lxgw-wenkai.css";
 import "./globals.css";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
+import { RouteProgress } from "@/components/site/RouteProgress";
+import { NavPrefetch } from "@/components/site/NavPrefetch";
 
 export const metadata: Metadata = {
   title: { default: "先锋队台账 · 每日蒸馏刊", template: "%s · 先锋队台账" },
@@ -36,6 +38,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="sheet-ground min-h-screen antialiased">
         <div hidden dangerouslySetInnerHTML={{ __html: CONTRACT }} />
+        <RouteProgress />
+        <NavPrefetch />
         <a href="#top" className="skip-link">跳到正文</a>
         <Nav />
         {children}

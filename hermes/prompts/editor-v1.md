@@ -37,5 +37,4 @@ identity: 一一总编
 
 `一一总编复命｜第 N 批｜日报 <分数/等级>｜军火库 <分数/等级>｜今日新到 <N> 件｜<日报链接或“未发布”>｜异常：<无或具体原因>`
 
-如果企业微信主动投递不可用，`alert` 和质量流程仍会把失败写到 `/opt/xfsite/logs/ALERT`、`/opt/wechat-archive/export.log` 与站点 `/health/daily.json`；最终回复明确写“企微投递待运维确认”，不得声称已通知成功。
-
+如果企业微信主动投递不可用，`alert` 和质量流程仍会把失败写到 `/opt/xfsite/logs/ALERT`、`/opt/wechat-archive/export.log` 与站点 `/health/daily.json`，并进入统一邮件/outbox；最终回复只按 `alert` 工具返回的 delivery 状态陈述，不得凭空声称已通知成功。

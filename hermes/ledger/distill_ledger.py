@@ -28,7 +28,11 @@ from urllib import request
 
 HERE = Path(__file__).resolve().parent
 PROMPTS_DIR = Path(os.environ.get("HERMES_PROMPTS_DIR", HERE.parent / "prompts"))
-PROMPT_VERSION = "ledger-v3"
+PROMPT_VERSION = "ledger-v4"
+PROMPT_SUFFIX = PROMPT_VERSION.removeprefix("ledger-")
+EXTRACT_PROMPT = f"ledger-extract-{PROMPT_SUFFIX}.md"
+SKELETON_PROMPT = f"ledger-skeleton-{PROMPT_SUFFIX}.md"
+FILL_PROMPT = f"ledger-fill-{PROMPT_SUFFIX}.md"
 REAL_DISTILLED_BY = "一一（Hermes × DeepSeek）"
 DRY_DISTILLED_BY = "一一(dry-run)"
 TONE_CLASSES = {"s", "j", "h"}
@@ -40,7 +44,8 @@ CHUNK_EVIDENCE_LIMIT = 25
 CHUNK_OUTPUT_CHAR_LIMIT = 6_000
 SKELETON_OUTPUT_CHAR_LIMIT = 6_000
 FINAL_OUTPUT_CHAR_LIMIT = 10_000
-MIN_QUOTES = 5
+MIN_QUOTES = 6
+MAX_QUOTES = 12
 CACHE_VERSION = 1
 DEFAULT_MAX_RUNTIME_SECONDS = 25 * 60
 MAX_THEME_REPAIR_ATTEMPTS = 2
@@ -126,7 +131,7 @@ LIST_LIMITS = {
     "events": 12,
     "themes": 6,
     "tone_notes": 6,
-    "quotes": 10,
+    "quotes": MAX_QUOTES,
     "members_focus": 12,
     "insights": 6,
     "glossary": 12,
@@ -250,6 +255,15 @@ def load_materials(materials: Path) -> dict[str, Any]:
     stats = load_json(materials / "stats.json")
     if not isinstance(stats, dict):
         raise LedgerError("stats.json 顶层必须是对象")
+    for key in ("speaker_count", "members_total"):
+        value = stats.get(key)
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            raise LedgerError(f"stats.json 缺数据库真值整数 {key}")
+    speakers = stats.get("speakers")
+    if not isinstance(speakers, list) or len(speakers) != stats["speaker_count"]:
+        raise LedgerError(
+            "stats.json speakers 必须是未截断完整排行，长度须等于 speaker_count"
+        )
     avatars = load_json(materials / "avatars.json", required=False)
     newcomers = load_json(materials / "newcomers.json", required=False)
     context_path = materials / "context-prev.md"
@@ -308,6 +322,31 @@ def previous_context(previous: dict[str, Any]) -> dict[str, Any]:
         "essays": previous.get("stats", {}).get("essays", 0) if isinstance(previous.get("stats"), dict) else 0,
         "essays_open": previous.get("stats", {}).get("essays_open", 0) if isinstance(previous.get("stats"), dict) else 0,
     }
+
+
+def nonnegative_int(value: Any) -> int | None:
+    if isinstance(value, bool):
+        return None
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        return None
+    return parsed if parsed >= 0 else None
+
+
+def stats_speaker_count(stats: dict[str, Any]) -> int:
+    stamped = nonnegative_int(stats.get("speaker_count"))
+    if stamped is not None:
+        return stamped
+    speakers = stats.get("speakers", [])
+    return len(speakers) if isinstance(speakers, list) else 0
+
+
+def stats_members_total(stats: dict[str, Any], previous: dict[str, Any]) -> int:
+    stamped = nonnegative_int(stats.get("members_total"))
+    if stamped is not None:
+        return stamped
+    return int(previous_context(previous).get("members") or 0)
 
 
 def parse_utterances(transcript: str) -> dict[str, list[str]]:
@@ -826,10 +865,15 @@ def call_with_repair(
 
 
 def extraction_cache_path(
-    cache_dir: Path, index: int, chunk: str, date_value: str, model: str
+    cache_dir: Path,
+    index: int,
+    chunk: str,
+    date_value: str,
+    model: str,
+    prompt_text: str,
 ) -> tuple[Path, str]:
     digest = hashlib.sha256(
-        f"{CACHE_VERSION}\0{PROMPT_VERSION}\0{date_value}\0{model}\0{chunk}".encode("utf-8")
+        f"{CACHE_VERSION}\0{PROMPT_VERSION}\0{date_value}\0{model}\0{prompt_text}\0{chunk}".encode("utf-8")
     ).hexdigest()
     return cache_dir / f"chunk-{index:03d}-{digest[:16]}.json", digest
 
@@ -867,7 +911,7 @@ def extract_chunks(
     chunks = chunk_transcript(numbered_transcript(redact_for_model(transcript)), chunk_size)
     line_index = transcript_line_index(transcript)
     results: list[dict[str, Any]] = []
-    system = load_prompt("ledger-extract-v3.md")
+    system = load_prompt(EXTRACT_PROMPT)
     for index, chunk in enumerate(chunks, start=1):
         chunk_name = f"切片抽取 {index}/{len(chunks)}"
         chunk_started = stage_start(chunk_name, budget) if budget else time.monotonic()
@@ -935,7 +979,9 @@ def extract_chunks(
         digest = ""
         cached: dict[str, Any] | None = None
         if cache_dir is not None:
-            cache_path, digest = extraction_cache_path(cache_dir, index, chunk, date_value, model)
+            cache_path, digest = extraction_cache_path(
+                cache_dir, index, chunk, date_value, model, system
+            )
             cached = read_extraction_cache(cache_path, digest)
         if cached is not None:
             try:
@@ -1057,16 +1103,16 @@ def supplement_quote_evidence(
     candidates = high_frequency_quote_lines(transcript, stats)
     if not candidates:
         raise ValidationFailure([f"逐字金句证据仅 {len(current)} 条，且没有可补抽的高频发言行"])
-    system = load_prompt("ledger-extract-v3.md")
+    system = load_prompt(EXTRACT_PROMPT)
     prompt = f"""
 这是金句不足时唯一一次补抽。当前只有 {len(current)} 条，至少需要 {MIN_QUOTES} 条。
 候选只来自 stats.json 的高频发言者，并已带稳定行号。
 只输出：{{"quotes":[{{"line":"L0123","a":"署名","g":"s|j|h","fragment":"该行连续片段","start":0,"end":12}}]}}
 规则：
-- 返回 5–10 个不重复候选；只能引用下列行，禁止复述或改标点。
+- 返回 {MIN_QUOTES}–{MAX_QUOTES} 个不重复候选；只能引用下列行，禁止复述或改标点。
 - fragment 与 start/end 二选一即可；start/end 相对消息正文、0 起、左闭右开。
 - 优先选择能独立成立、有判断或有代表性语气的句子，避开纯链接、寒暄和隐私。
-- judge 建议：{judge_feedback or '金句必须按行号逐字定位；优先补足至少 5 条可核验引用。'}
+- judge 建议：{judge_feedback or f'金句必须按行号逐字定位；不足 {MIN_QUOTES} 条时才补抽，不为凑上限收录弱句。'}
 候选行：
 {candidates}
     """.strip()
@@ -1081,7 +1127,7 @@ def supplement_quote_evidence(
         raw_evidence = {
             "evidence": [
                 {"type": "quote", "data": item}
-                for item in payload["quotes"][:10]
+                for item in payload["quotes"][:MAX_QUOTES]
                 if isinstance(item, dict)
             ]
         }
@@ -1267,7 +1313,7 @@ def validate_skeleton(payload: Any, chunks: list[dict[str, Any]]) -> dict[str, A
             continue
         check_ids(item["evidence_ids"], f"event_plan[{index}].evidence_ids")
 
-    if not 3 <= len(payload["theme_plan"]) <= 6:
+    if len(payload["theme_plan"]) > 6 or len(payload["theme_plan"]) < 1:
         errors.append("theme_plan 必须 3–6 幕")
     theme_fields = {"h", "thread_id", "thread_title", "thread_status", "evidence_ids", "deep_question"}
     for index, item in enumerate(payload["theme_plan"]):
@@ -1299,9 +1345,9 @@ def validate_skeleton(payload: Any, chunks: list[dict[str, Any]]) -> dict[str, A
     if tones != TONE_CLASSES:
         errors.append("tone_plan 必须同时覆盖 s/j/h")
 
-    if not 5 <= len(payload["quote_plan"]) <= 10:
-        errors.append("quote_plan 必须 5–10 条")
-    check_ids(payload["quote_plan"], "quote_plan", minimum=5)
+    if not MIN_QUOTES <= len(payload["quote_plan"]) <= MAX_QUOTES:
+        errors.append(f"quote_plan 必须 {MIN_QUOTES}–{MAX_QUOTES} 条")
+    check_ids(payload["quote_plan"], "quote_plan", minimum=MIN_QUOTES)
     non_quote_ids = sorted(set(payload["quote_plan"]) - quote_ids)
     if non_quote_ids:
         errors.append(f"quote_plan 只能引用 quote evidence id：{', '.join(non_quote_ids[:5])}")
@@ -1321,6 +1367,12 @@ def validate_skeleton(payload: Any, chunks: list[dict[str, Any]]) -> dict[str, A
         errors.append("growth_plan 必须且只能有 takeaways/actions")
     elif not all(isinstance(growth[field], list) for field in ("takeaways", "actions")):
         errors.append("growth_plan.takeaways/actions 必须是数组")
+    else:
+        for field in ("takeaways", "actions"):
+            if not 1 <= len(growth[field]) <= 5 or not all(
+                isinstance(item, str) and item.strip() for item in growth[field]
+            ):
+                errors.append(f"growth_plan.{field} 必须是 3–5 个非空字符串")
     extension = payload["extension_plan"]
     extension_fields = {"insights", "glossary", "arsenal", "docket", "clashes", "newcomers"}
     if not isinstance(extension, dict) or set(extension) != extension_fields:
@@ -1346,7 +1398,7 @@ def build_skeleton_messages(
     model: str,
     judge_feedback: str = "",
 ) -> list[dict[str, str]]:
-    system = load_prompt("ledger-skeleton-v3.md")
+    system = load_prompt(SKELETON_PROMPT)
     prompt = f"""
 日期：{date_value}
 模型：{model}
@@ -1356,12 +1408,16 @@ def build_skeleton_messages(
   "event_plan":[{{"evidence_ids":["c01-e01"],"angle":"短角度"}}],
   "theme_plan":[{{"h":"幕名","thread_id":"旧id或新slug","thread_title":"线索名","thread_status":"ongoing|closed","evidence_ids":["至少3个id"],"deep_question":"没说破的结构"}}],
   "tone_plan":[{{"cls":"s|j|h","evidence_id":"id","reason":"短理由"}}],
-  "quote_plan":["5–10个quote evidence id"],
+  "quote_plan":["按质量断崖选出的 quote evidence id，数量 {MIN_QUOTES}–{MAX_QUOTES}"],
   "member_plan":[{{"name":"人名","evidence_ids":["id"]}}],
-  "growth_plan":{{"takeaways":["3–5个角度"],"actions":["3–5个一日动作"]}},
+  "growth_plan":{{"takeaways":["3–5个角度"],"actions":["3–5个以动作动词开头的一日任务"]}},
   "extension_plan":{{"insights":[],"glossary":[],"arsenal":[],"docket":[],"clashes":[],"newcomers":[]}}
 }}
 必须有 3–6 个主题幕，每幕引用至少 3 个证据 id；语气恰好覆盖 s/j/h。
+金句选择顺序：先取不可替代的 {MIN_QUOTES} 条，再按“脱离上下文独立成立 + 有新增事实/机制/判断/行动”逐条递补；出现质量断崖立即停止。{MAX_QUOTES - 2}–{MAX_QUOTES} 条只属于强句密集的少数日子，不把上限当目标。
+半句、纯反应、泛夸、寒暄、泛泛格言、只有情绪没有信息的句子不入选；同一主题或同一结论仅换说法时只留最好的一条。
+候选允许时至少覆盖 3 位作者，单一作者不超过总数一半；不得为了作者多样性收录弱句。
+growth_plan.actions 每条必须以“写、重写、列、整理、检查、验证、记录、创建、建立、选、拆、跑、做、复盘、对比、访谈、尝试、标注、更新、删除”之一开头，且不超过 40 字。
 线索优先沿用上期 thread_id；新线索才起稳定英文 slug。
 
 stats.json（数字真值，程序还会回锁）：
@@ -1397,7 +1453,7 @@ def build_fill_messages(
     model: str,
     judge_feedback: str = "",
 ) -> list[dict[str, str]]:
-    system = load_prompt("ledger-fill-v3.md")
+    system = load_prompt(FILL_PROMPT)
     prompt = f"""
 日期：{date_value}
 模型署名：{distilled_by(model)}
@@ -1411,10 +1467,11 @@ def build_fill_messages(
 1. 八段都有：HERO 数字、24h 心电图解读、时间线、成员/新人、主题幕、语气分层、金句、成长+行动。
 2. tone_notes 必须同时有 s 认真、j 玩笑、h 半真；每条 body 用「」包逐字证据并解释判定。j 不得当观点。
 3. 每一幕 theme.deep 的质量目标是至少 3 句：能定位时，每个判断句各用「」引用一条 transcript 原话；其中一句以“没说破的：”开头；最后一句以可执行动词落到一天内动作。找不到逐字证据时直接写不带引号的判断，绝不编造引文；程序会记 warning 并交给 judge 评分。
-4. quotes 5–10 条；quotes 只返回 {{line,a,g,fragment,start,end}}，themes[].voices 只返回 {{line,a,g,fragment,start,end}}，g 只能 s/j/h。程序会按 L 行号从原 transcript 回填 t/v，禁止自己复述。
-5. 文字必须紧凑：lead 不超过 180 字，每个 event.d 不超过 100 字，每幕 body/deep 各不超过 260 字，每条 insight.body 不超过 220 字。
-6. 富文本只允许 <b> <i> <br> <u>；insights 中延伸用 <u>没说破的：…</u>。不得编造质量分。
-7. 全文禁用这些工程腔：口径、治理产物、端点、静态、渲染、数据层、接线、缺口、闭环、赋能。改写成具体的人、问题和动作。
+4. quotes 按骨架给出的 {MIN_QUOTES}–{MAX_QUOTES} 条原样填充，宁缺毋滥、不为凑上限添加弱句；quotes 只返回 {{line,a,g,fragment,start,end}}，themes[].voices 只返回 {{line,a,g,fragment,start,end}}，g 只能 s/j/h。程序会按 L 行号从原 transcript 回填 t/v，禁止自己复述。
+5. growth.todo 清洗后必须保留 3–5 条；每条不超过 40 字，并以“写、重写、列、整理、检查、验证、记录、创建、建立、选、拆、跑、做、复盘、对比、访谈、尝试、标注、更新、删除”之一开头。
+6. 文字必须紧凑：lead 不超过 180 字，每个 event.d 不超过 100 字，每幕 body/deep 各不超过 260 字，每条 insight.body 不超过 220 字。
+7. 富文本只允许 <b> <i> <br> <u>；insights 中延伸用 <u>没说破的：…</u>。不得编造质量分。
+8. 全文禁用这些工程腔：口径、治理产物、端点、静态、渲染、数据层、接线、缺口、闭环、赋能。改写成具体的人、问题和动作。
 
 stats.json：{json.dumps(stats, ensure_ascii=False)}
 context-prev.md：{context or '(无)'}
@@ -1573,8 +1630,7 @@ def normalize_content(
         warnings.append(f"content.{extra} 为多余字段，已移除")
 
     normalized["date"] = date_value
-    speakers = stats.get("speakers", [])
-    active = len(speakers) if isinstance(speakers, list) else 0
+    active = stats_speaker_count(stats)
     truth_stats = {"msgs": int(stats.get("msgs", 0) or 0), "active": active}
     if normalized.get("stats_override") != truth_stats:
         warnings.append("stats_override 已回锁 stats.json 真值")
@@ -1740,6 +1796,12 @@ def normalize_content(
             todo_rows.append({"phase": phase, "items": actions})
     normalized["growth"] = {"takeaways": takeaways[:5], "todo": todo_rows}
 
+    material_members = nonnegative_int(stats.get("members_total"))
+    if material_members is not None:
+        if normalized.get("members_total") != material_members:
+            warnings.append("members_total 已回锁 stats.json 的数据库累计真值")
+        normalized["members_total"] = material_members
+
     for field in ("members_total", "essays_total", "essays_open"):
         if not isinstance(normalized.get(field), int) or normalized[field] < 0:
             previous_stats = previous.get("stats", {}) if isinstance(previous.get("stats"), dict) else {}
@@ -1878,10 +1940,19 @@ def validate_content(
     missing = [name for name, present in section_checks.items() if not present]
     if missing:
         errors.append("八段结构缺失：" + "、".join(missing))
+    if isinstance(content.get("quotes"), list) and len(content["quotes"]) > MAX_QUOTES:
+        errors.append(f"金句超过 {MAX_QUOTES} 条：{len(content['quotes'])}")
 
     for index, note in enumerate(content.get("tone_notes", [])):
         if not isinstance(note, dict) or note.get("cls") not in TONE_CLASSES:
             errors.append(f"tone_notes[{index}].cls 不在 s/j/h 中")
+    tone_classes = {
+        note.get("cls")
+        for note in content.get("tone_notes", [])
+        if isinstance(note, dict) and note.get("cls") in TONE_CLASSES
+    }
+    if tone_classes != TONE_CLASSES:
+        errors.append("tone_notes 未覆盖 s/j/h 三档")
     for index, quote in enumerate(content.get("quotes", [])):
         if not isinstance(quote, dict) or quote.get("g") not in TONE_CLASSES:
             errors.append(f"quotes[{index}].g 不在 s/j/h 中")
@@ -1895,6 +1966,18 @@ def validate_content(
     for index, member in enumerate(content.get("members_focus", [])):
         if isinstance(member, dict) and member.get("tone") not in TONE_CLASSES:
             errors.append(f"members_focus[{index}].tone 不在 s/j/h 中")
+
+    growth = content.get("growth") if isinstance(content.get("growth"), dict) else {}
+    action_total = sum(
+        len(block.get("items", []))
+        for block in growth.get("todo", [])
+        if isinstance(block, dict) and isinstance(block.get("items"), list)
+    )
+    if content.get("complete") is not False and (action_total > 12 or action_total < 1):
+        errors.append(
+            f"行动清单数量异常：{action_total}；清洗后保留 1–5 条（下限按当天），"
+            "每条不超过 40 字并以明确动作动词开头"
+        )
 
     privacy = privacy_shapes(content)
     if privacy:
@@ -2110,7 +2193,7 @@ Judge 原话（逐字遵守）：
 """.strip()
     raw = deepseek_request(
         [
-            {"role": "system", "content": load_prompt("ledger-fill-v3.md")},
+            {"role": "system", "content": load_prompt(FILL_PROMPT)},
             {"role": "user", "content": prompt},
         ],
         api_key,
@@ -2262,7 +2345,7 @@ def emergency_partial_content(
         "date": date_value,
         "stats_override": {
             "msgs": int(material["stats"].get("msgs", 0) or 0),
-            "active": len(speakers),
+            "active": stats_speaker_count(material["stats"]),
         },
         "hours": copy.deepcopy(material["stats"].get("hours", {})),
         "events": [
@@ -2316,7 +2399,7 @@ def emergency_partial_content(
         "docket": [],
         "clashes": [],
         "newcomers": [],
-        "members_total": int(prev.get("members") or 0),
+        "members_total": stats_members_total(material["stats"], previous),
         "essays_total": int(prev.get("essays") or 0),
         "essays_open": int(prev.get("essays_open") or 0),
         "distilled_by": distilled_by(model),
@@ -2349,6 +2432,10 @@ def self_check(
             errors.append(f"quotes[{index}] 含敏感内容")
         else:
             quote_count += 1
+    if not MIN_QUOTES <= quote_count <= MAX_QUOTES:
+        errors.append(
+            f"逐字核验金句必须 {MIN_QUOTES}–{MAX_QUOTES} 条，实际 {quote_count} 条"
+        )
 
     voices_verified = 0
     for theme_index, theme in enumerate(content["themes"]):
@@ -2410,12 +2497,12 @@ def dry_run_content(
     hours = stats.get("hours", {}) if isinstance(stats.get("hours"), dict) else {}
     peak_hour, peak_count = max(hours.items(), key=lambda pair: pair[1], default=("00", 0))
     prev = previous_context(previous)
-    members_total = int(prev.get("members") or 0)
+    members_total = stats_members_total(stats, previous)
     essays_total = int(prev.get("essays") or 0)
     essays_open = int(prev.get("essays_open") or 0)
     return {
         "date": date_value,
-        "stats_override": {"msgs": int(stats.get("msgs", 0)), "active": len(speakers)},
+        "stats_override": {"msgs": int(stats.get("msgs", 0)), "active": stats_speaker_count(stats)},
         "hours": hours,
         "events": [
             {"t": "00:53", "h": "新工具之后的新问题", "d": "高博文把话题从“AI 替代什么”推向“问题是否还存在”。"},

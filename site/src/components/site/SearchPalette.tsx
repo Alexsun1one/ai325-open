@@ -229,7 +229,7 @@ export function SearchPalette() {
               </div>
 
               <div className="flex flex-wrap items-center justify-between gap-2 border-t border-rule px-5 py-2.5 font-sans text-[11.5px] text-ink-3">
-                <span>只检索治理产物 · 原始聊天不进检索</span>
+                <span>只检索蒸好的 · 原始聊天不进检索</span>
                 <span>{data?.gated_included ? "已含窖藏与群像" : "登录后，窖藏与群像也会进检索"}</span>
               </div>
             </motion.div>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { API_BASE, ApiError, apiFetch, getToken, useAuth } from "@/lib/auth";
 import { Btn, Field, Note } from "./FormBits";
 import { Gate } from "./Gate";
+import { AlertCenter } from "./AlertCenter";
 import { CellarArticles, CellarEssay, CellarFavorites, CellarFragments, CellarTrail } from "./MyCellar";
 
 interface Settings { username: string; display_name?: string; role?: string; email?: string; subscribed?: boolean }
@@ -91,6 +92,12 @@ function Center() {
         <Card label="改密码" sub="改完其他设备要重登">
           <PwCard />
         </Card>
+
+        {isAdmin && (
+          <Card label="值守台" sub="自动化出没出事的灯">
+            <AlertCenter />
+          </Card>
+        )}
 
         <Card label="常用去处" sub="都在你名下">
           <ul className="divide-y divide-rule-soft border-y border-rule">

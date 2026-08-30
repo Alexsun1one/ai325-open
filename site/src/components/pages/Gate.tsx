@@ -50,7 +50,7 @@ export function Gate({ what, why, children }: { what: string; why: string; child
         <p className="prose-sheet mt-4 text-[16.5px] leading-[1.85] text-ink-2">{why}</p>
         <dl className="mt-7 space-y-4 border-t border-rule pt-5">
           <div><dt className="label">谁能进</dt><dd className="mt-1 font-sans text-[14px] leading-relaxed text-ink-2">群友。注册要邀请码——由群主发放，一人一码、可撤销，群内向 Sun 索取。</dd></div>
-          <div><dt className="label">存了什么</dt><dd className="mt-1 font-sans text-[14px] leading-relaxed text-ink-2">用户名、密码的哈希、一张 90 天有效的登录凭证（常来会自动续期，基本不用重复登录）。凭证只留在你这台设备的浏览器里，退出登录就清掉（存放细节写在<a href="/about/#invite" className="inline-flex min-h-11 items-center text-blue-text underline underline-offset-2 sm:min-h-0">关于</a>页）。</dd></div>
+          <div><dt className="label">存了什么</dt><dd className="mt-1 font-sans text-[14px] leading-relaxed text-ink-2">用户名、密码的哈希、一张 90 天有效的登录票据（常来会自动续期，基本不用重复登录）。凭证只留在你这台设备的浏览器里，退出登录就清掉（存放细节写在<a href="/about/#invite" className="inline-flex min-h-11 items-center text-blue-text underline underline-offset-2 sm:min-h-0">关于</a>页）。</dd></div>
           <div><dt className="label">看不到什么</dt><dd className="mt-1 font-sans text-[14px] leading-relaxed text-ink-2">原始聊天记录。登录也看不到——它根本不上站。</dd></div>
         </dl>
       </div>

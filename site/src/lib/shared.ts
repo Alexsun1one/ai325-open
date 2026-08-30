@@ -5,7 +5,7 @@ export interface Theme { h: string; when: string; body: string; deep: string; vo
 export interface Event { t: string; h: string; d: string; src?: "digest" | "db" }
 export interface ToneNote { h: string; cls: Tone; body: string }
 export interface Insight { h: string; en: string; body: string }
-export interface Quote { t: string; a: string; g: Tone }
+export interface Quote { t: string; a: string; g: Tone; evidence?: { unit: number; ordinal?: number } }
 export interface Glossary { term: string; def: string }
 export interface Arsenal { h: string; body: string }
 export interface Docket { kind: string; h: string; d: string; status: "open" | "closed"; carried_from?: number }

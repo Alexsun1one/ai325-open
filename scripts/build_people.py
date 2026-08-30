@@ -27,6 +27,7 @@ for p in d['profiles']:
         try:
             im = Image.open(io.BytesIO(b)).convert('RGB'); im.thumbnail((96, 96)); im.save(f'{pub}/avatars/{sl}.webp', 'WEBP', quality=82); av = f'/avatars/{sl}.webp'
         except Exception as e: print('avatar fail', name, e)
-    people.append({'name': name, 'slug': sl, 'aliases': aliases, 'role': p.get('role', ''), 'msgs': p.get('msgs', 0), 'tone': p.get('tone', 's'), 'quote': p.get('quote', ''), 'tags': p.get('tags', [])[:4], 'avatar': av})
+    people.append({'name': name, 'slug': sl, 'aliases': aliases, 'role': p.get('role', ''), 'msgs': p.get('msgs', 0), 'tone': p.get('tone', 's'), 'quote': p.get('quote', ''), 'tags': p.get('tags', [])[:4], 'avatar': av,
+                   'wxid': p.get('wxid'), 'name_history': p.get('name_history') or []})
 json.dump(people, open(f'{pub}/people.json', 'w', encoding='utf-8'), ensure_ascii=False)
 print('people', len(people), 'avatars', sum(1 for x in people if x['avatar']), '→', f'{pub}/people.json')

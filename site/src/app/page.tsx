@@ -1,6 +1,7 @@
 import { getLatestLedger, getNeighbors, getSpotIllustrations, getThemeIllustrations, listLedgerDates } from "@/lib/content";
 import { LedgerSheet } from "@/components/sheet/LedgerSheet";
 import { FontPreload } from "@/components/site/FontPreload";
+import { ApprenticeFeed } from "@/components/site/ApprenticeFeed";
 import type { Ledger } from "@/lib/shared";
 
 /** 整页字体预载计划：宋体 400（正文）/700（小标题/粗体）/900（刊名）+ 文楷（深潜/批注）。 */
@@ -20,5 +21,6 @@ function fontPlan(l: Ledger) {
 export default function Home() {
   const l = getLatestLedger();
   const nb = getNeighbors(l.date);
-  return (<><FontPreload plan={fontPlan(l)} /><LedgerSheet l={l} totalIssues={listLedgerDates().length} prev={nb.prev} next={nb.next} prevOpen={nb.prevOpen} illus={getThemeIllustrations(l.themes.length)} spots={getSpotIllustrations()} /></>);
+  const { members_focus: _mf, thanks: _th, ...core } = l; // 群像高光/感谢走页尾懒加载，不进首屏 HTML
+  return (<><FontPreload plan={fontPlan(l)} /><LedgerSheet l={core} totalIssues={listLedgerDates().length} prev={nb.prev} next={nb.next} prevOpen={nb.prevOpen} illus={getThemeIllustrations(l.themes.length)} spots={getSpotIllustrations()} /><ApprenticeFeed /></>);
 }

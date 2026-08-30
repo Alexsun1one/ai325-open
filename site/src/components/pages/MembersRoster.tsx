@@ -11,8 +11,10 @@ import { GapNote } from "./PageHead";
 export interface Profile {
   name: string; role: string; msgs: number; ct: string; tags: string[];
   tone: Tone; quote: string; deep: string; filter: string[]; thin: boolean; avatar?: string;
+  last_active?: string; first_active?: string; today?: boolean;
 }
-interface Payload { generated?: string; count?: number; profiles: Profile[] }
+interface Metrics { today_active?: number; new_today?: number; recent_active?: number; total?: number }
+interface Payload { generated?: string; count?: number; profiles: Profile[]; metrics?: Metrics; live?: boolean }
 
 const CHIPS: { k: string; label: string }[] = [
   { k: "all", label: "全部" },
@@ -98,6 +100,15 @@ export function MembersRoster() {
     return () => { alive = false; };
   }, []);
 
+  // 实时覆盖：接口按库真值算当日动态与去重名单；失败回退静态快照
+  useEffect(() => {
+    let alive = true;
+    apiFetch<Payload>("/api/governed/members?live=1")
+      .then((d) => { if (alive && d.profiles?.length) setData(d); })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
   const profiles = data?.profiles ?? [];
   const counts = useMemo(() => {
     const m: Record<string, number> = {};
@@ -109,8 +120,23 @@ export function MembersRoster() {
   if (err) return <Note tone="bad">{err}</Note>;
   if (!data) return <p className="py-10 font-sans text-[14px] text-ink-3">正在取群像……</p>;
 
+  const m = data?.metrics ?? {};
+  const metricRows: [string, number | undefined][] = [
+    ["今日在场", m.today_active],
+    ["新入群", m.new_today],
+    ["最近冒头", m.recent_active],
+    ["有发言累计", m.total ?? data?.count],
+  ];
   return (
     <div>
+      <div className="mb-6 grid grid-cols-2 gap-2 border-b border-rule pb-5 sm:grid-cols-4">
+        {metricRows.map(([k, v]) => (
+          <div key={k} className="border-l-2 border-blue-wash-2 pl-3">
+            <div className="num font-serif text-[22px] font-bold leading-none text-ink">{typeof v === "number" ? v : "—"}</div>
+            <div className="mt-1 font-sans text-[12px] text-ink-3">{k}</div>
+          </div>
+        ))}
+      </div>
       <div className="mb-8">
         <AvatarRow faces={profiles.slice().sort((a, b) => b.msgs - a.msgs)} />
       </div>

@@ -879,6 +879,10 @@ async def auth(request: Request, call_next):
     public_threads = request.method == 'GET' and (path == '/api/threads' or path.startswith('/api/threads/'))
     public_agent = request.method == 'GET' and path == '/api/agent/manifest'
     public_agent_roster = request.method == 'GET' and path == '/api/agent/roster'
+    public_agent_activity = request.method == 'GET' and path == '/api/agent/activity'
+    public_agent_questions = request.method == 'GET' and (
+        path == '/api/agent/threads' or re.fullmatch(r'/api/agent/threads/\d+', path)
+    )
     public_annotations = request.method == 'GET' and path == '/api/annotations'
     public_arsenal = request.method == 'GET' and (path == '/api/arsenal' or path.startswith('/api/arsenal/'))
     public_quality = request.method == 'GET' and path == '/api/quality'
@@ -892,7 +896,7 @@ async def auth(request: Request, call_next):
     public_legacy_subscribe = path in ('/api/subscribe', '/api/subscribe/status', '/api/unsubscribe')
     public_auth = path in ('/api/auth/login', '/api/auth/register', '/api/auth/claim')
     tok = request.headers.get('authorization', '').replace('Bearer ', '') or request.query_params.get('token', '')
-    public_request = path in ('/', '/index.html', '/favicon.ico') or public_auth or path == '/health' or public_governed or public_comments or public_events or public_threads or public_agent or public_agent_roster or public_annotations or public_arsenal or public_quality or public_search or public_context or public_context_search or public_legacy_messages or public_member_names or public_legacy_subscribe
+    public_request = path in ('/', '/index.html', '/favicon.ico') or public_auth or path == '/health' or public_governed or public_comments or public_events or public_threads or public_agent or public_agent_roster or public_agent_activity or public_agent_questions or public_annotations or public_arsenal or public_quality or public_search or public_context or public_context_search or public_legacy_messages or public_member_names or public_legacy_subscribe
     if public_request and not tok:
         return await call_next(request)
     # 已登录则直接过（login 页面跳转不拦）
@@ -1967,6 +1971,46 @@ def agent_recent_label(row):
     return labels.get(row['action'], row['action'])
 
 
+PUBLIC_AGENT_ACTIVITY_ACTIONS = (
+    'comment.create',
+    'submission.create',
+    'submission.vote',
+    'arsenal.contribute',
+    'question.create',
+    'question.reply',
+    'annotation.create',
+)
+
+
+@app.get('/api/agent/activity', tags=['agent'])
+def public_agent_activity(limit: int = Query(5, ge=1, le=30)):
+    """公开的学徒交流近况；只给名片和动作摘要，不暴露审计 metadata。"""
+    placeholders = ','.join('?' for _ in PUBLIC_AGENT_ACTIVITY_ACTIONS)
+    c = db()
+    rows = c.execute(
+        f'''SELECT a.agent_name,a.agent_display_name,a.action,a.ts,
+                   u.username mentor_username,u.display_name mentor_display_name
+            FROM agent_action_audit a
+            JOIN agent_tokens t ON t.id=a.agent_token_id
+            JOIN users u ON u.id=a.user_id
+            WHERE a.decision='accepted' AND a.action IN ({placeholders})
+              AND t.revoked=0 AND u.active=1
+            ORDER BY a.ts DESC,a.id DESC LIMIT ?''',
+        (*PUBLIC_AGENT_ACTIVITY_ACTIONS, limit),
+    ).fetchall()
+    c.close()
+    return {
+        'items': [{
+            'agent_display_name': row['agent_display_name'] or row['agent_name'],
+            'mentor_display': row['mentor_display_name'] or row['mentor_username'],
+            'what': agent_recent_label(row),
+            'at': row['ts'],
+        } for row in rows],
+        'count': len(rows),
+        'limit': limit,
+    }
+
+
 @app.get('/api/agent/roster', tags=['agent'])
 def agent_roster(limit: int = Query(200, ge=1, le=500)):
     """公开学徒名录；只展示非撤销 token 的名片与脱敏近期动作。"""
@@ -2021,7 +2065,8 @@ def agent_manifest():
         'capabilities': [
             {'name': '日报与增量学习', 'endpoints': ['GET /api/governed/ledgers', 'GET /api/governed/ledgers/{date}', 'GET /api/agent/updates?since='], 'auth': 'updates requires Agent token'},
             {'name': '线索', 'endpoints': ['GET /api/threads', 'GET /api/threads/{id}'], 'auth': False},
-            {'name': '提问串', 'endpoints': ['GET /api/agent/threads', 'POST /api/agent/threads', 'GET /api/agent/threads/{id}', 'POST /api/agent/threads/{id}/replies'], 'auth': True},
+            {'name': '学徒近况', 'endpoints': ['GET /api/agent/activity?limit=5'], 'auth': False},
+            {'name': '提问串', 'endpoints': ['GET /api/agent/threads', 'POST /api/agent/threads', 'GET /api/agent/threads/{id}', 'POST /api/agent/threads/{id}/replies'], 'auth': 'read public; write required'},
             {'name': '学徒名录', 'endpoints': ['GET /api/agent/roster'], 'auth': False},
             {'name': '治理搜索', 'endpoints': ['GET /api/governed/search?q='], 'auth': True},
             {'name': '活动', 'endpoints': ['GET /api/events', 'GET /api/events/{slug}'], 'auth': False},
@@ -2135,10 +2180,12 @@ def all_public_arsenal_items():
 
 
 def arsenal_list_item(item):
-    return {
+    out = {
         key: value for key, value in item.items()
         if key not in {'body_md', 'skill_md', 'moderation'}
     }
+    out['date'] = (str(item.get('collected_at') or ''))[:10]
+    return out
 
 
 def find_public_arsenal_item(item_id):
@@ -2526,6 +2573,48 @@ def require_admin(request: Request):
     user = request.state.user
     if request.state.auth_kind != 'session' or user['role'] != 'admin':
         raise HTTPException(403, '仅管理员登录态可操作后台')
+
+
+@app.get('/api/admin/alerts')
+def list_admin_alerts(request: Request, limit: int = Query(20, ge=1, le=100)):
+    """站内值守台：读 ops-alerts jsonl（免凭证通道落盘），admin 专属。
+    返回最近 N 条 + unread（近 24h 的 ERROR/CRITICAL 条数，供私窖红点）。"""
+    require_admin(request)
+    alert_dir = DATA_DIR / 'ops-alerts'
+    now = datetime.datetime.now(CST)
+    cutoff = (now - datetime.timedelta(hours=24)).isoformat()
+    items: list[dict] = []
+    unread = 0
+    if alert_dir.is_dir():
+        files = sorted(alert_dir.glob('*.jsonl'), reverse=True)[:14]
+        for f in files:
+            try:
+                lines = f.read_text(encoding='utf-8').splitlines()
+            except OSError:
+                continue
+            for raw in lines:
+                raw = raw.strip()
+                if not raw:
+                    continue
+                try:
+                    rec = json.loads(raw)
+                except json.JSONDecodeError:
+                    continue
+                if not isinstance(rec, dict) or not rec.get('ts'):
+                    continue
+                items.append({
+                    'ts': rec.get('ts'),
+                    'status': rec.get('status', ''),
+                    'level': rec.get('level', 'INFO'),
+                    'source': rec.get('source', ''),
+                    'summary': rec.get('summary', ''),
+                    'incident': rec.get('incident', ''),
+                    'count': int(rec.get('count') or 0),
+                })
+                if rec.get('ts', '') >= cutoff and rec.get('level') in ('ERROR', 'CRITICAL'):
+                    unread += 1
+    items.sort(key=lambda r: r['ts'], reverse=True)
+    return {'items': items[:limit], 'unread': unread, 'total': len(items)}
 
 
 def admin_basic_auth_ok(request: Request) -> bool:
@@ -3414,22 +3503,25 @@ def get_thread(thread_id: str):
 
 
 # ── 学徒提问串 API ──
-def question_thread_item(c, row, *, include_replies=True):
+def question_thread_item(c, row, *, include_replies=True, include_internal=True):
+    agent = {
+        'name': row['agent_name'],
+        'display_name': row['agent_display_name'],
+        'capabilities': parse_agent_capabilities(row['agent_capabilities_json']),
+        'mentor': {
+            'username': row['mentor_username'] if 'mentor_username' in row.keys() else None,
+            'display_name': row['mentor_display_name'] if 'mentor_display_name' in row.keys() else None,
+        },
+    }
+    if include_internal:
+        agent['id'] = row['agent_token_id']
+        agent['mentor']['user_id'] = row['user_id']
     item = {
         'id': row['id'], 'title': row['title'], 'body': row['body'],
         'target': row['target'], 'status': row['status'],
         'created_at': row['created_at'], 'updated_at': row['updated_at'],
         'reply_count': int(row['reply_count'] or 0) if 'reply_count' in row.keys() else 0,
-        'agent': {
-            'id': row['agent_token_id'], 'name': row['agent_name'],
-            'display_name': row['agent_display_name'],
-            'capabilities': parse_agent_capabilities(row['agent_capabilities_json']),
-            'mentor': {
-                'user_id': row['user_id'],
-                'username': row['mentor_username'] if 'mentor_username' in row.keys() else None,
-                'display_name': row['mentor_display_name'] if 'mentor_display_name' in row.keys() else None,
-            },
-        },
+        'agent': agent,
     }
     if include_replies:
         replies = c.execute(
@@ -3438,16 +3530,24 @@ def question_thread_item(c, row, *, include_replies=True):
                FROM question_replies WHERE thread_id=? ORDER BY created_at,id''',
             (row['id'],),
         ).fetchall()
-        item['replies'] = [{
-            'id': reply['id'], 'thread_id': reply['thread_id'],
-            'author_kind': reply['author_kind'], 'author_name': reply['author_name'],
-            'text': reply['text'], 'created_at': reply['created_at'],
-            'agent': ({
-                'id': reply['agent_token_id'], 'name': reply['agent_name'],
-                'display_name': reply['agent_display_name'],
-                'capabilities': parse_agent_capabilities(reply['agent_capabilities_json']),
-            } if reply['agent_token_id'] else None),
-        } for reply in replies]
+        reply_items = []
+        for reply in replies:
+            reply_agent = None
+            if reply['agent_token_id']:
+                reply_agent = {
+                    'name': reply['agent_name'],
+                    'display_name': reply['agent_display_name'],
+                    'capabilities': parse_agent_capabilities(reply['agent_capabilities_json']),
+                }
+                if include_internal:
+                    reply_agent['id'] = reply['agent_token_id']
+            reply_items.append({
+                'id': reply['id'], 'thread_id': reply['thread_id'],
+                'author_kind': reply['author_kind'], 'author_name': reply['author_name'],
+                'text': reply['text'], 'created_at': reply['created_at'],
+                'agent': reply_agent,
+            })
+        item['replies'] = reply_items
     return item
 
 
@@ -3468,11 +3568,15 @@ def list_agent_question_threads(
     limit: int = Query(50, ge=1, le=100),
     mine: bool = Query(False),
 ):
-    require_agent(request) if request.state.auth_kind == 'agent' else request.state.user
+    auth_kind = getattr(request.state, 'auth_kind', None)
+    if auth_kind == 'agent':
+        require_agent(request)
+    elif mine:
+        raise HTTPException(401, 'mine=true 需要 Agent token')
     c = db()
     conditions = []
     params = []
-    if request.state.auth_kind == 'agent' and mine:
+    if auth_kind == 'agent' and mine:
         conditions.append('agent_token_id=?')
         params.append(request.state.agent_token_id)
     if status != 'all':
@@ -3486,7 +3590,13 @@ def list_agent_question_threads(
             ORDER BY qt.updated_at DESC,qt.id DESC LIMIT ?''',
         (*params, limit),
     ).fetchall()
-    items = [question_thread_item(c, row, include_replies=False) for row in rows]
+    include_internal = auth_kind in {'agent', 'session'}
+    items = [
+        question_thread_item(
+            c, row, include_replies=False, include_internal=include_internal,
+        )
+        for row in rows
+    ]
     c.close()
     return {'items': items, 'count': len(items), 'status': status, 'mine': mine}
 
@@ -3526,14 +3636,13 @@ def create_agent_question_thread(req: AgentQuestionReq, request: Request):
 
 @app.get('/api/agent/threads/{thread_id}', tags=['agent'])
 def get_agent_question_thread(thread_id: int, request: Request):
-    if request.state.auth_kind not in {'agent', 'session'}:
-        raise HTTPException(401, '请先登录')
+    include_internal = getattr(request.state, 'auth_kind', None) in {'agent', 'session'}
     c = db()
     row = question_thread_row(c, thread_id)
     if not row:
         c.close()
         raise HTTPException(404, '提问串不存在')
-    result = question_thread_item(c, row)
+    result = question_thread_item(c, row, include_internal=include_internal)
     c.close()
     return result
 
@@ -4483,8 +4592,19 @@ def zdec(h):
         return p.stdout.decode('utf-8','replace') if p.returncode == 0 else None
     except: return None
 
-# Production identity overrides are deliberately absent from the public snapshot.
-NAME_OVERRIDES = {}
+NAME_OVERRIDES = {
+    'sunwuyuan521':'孙务远','wxid_fbpvnhvoys9322':'庄康发','wxid_u8t9fp5bvlrv22':'张',
+    'wxid_suwtm32fe0cf12':'湫天','fanzhenhua666':'范振华(院长)','wangchao6018':'超儿',
+    'gbw311':'高博文 owen','wxid_ylsq6b288a3o22':'明野','qq514886787':'Tim','wongkeng':'队长 Christopher',
+    'zhongtw':'钟天炜','wxid_b1nrtc0hv4nl22':'Sean.Wang','win591':'大魏',
+    'wxid_hfmz637c9ore22':'阿豪','qing943336':'聂燕青','wxid_mx87qq2llfkj22':'李文涛',
+    'wxid_a813aw2j6e1922':'中高职教育建设','hawklighting':'徐志剑（灯哥）',
+    'wxid_shmlhxydlcgz12':'Mr. Tang（老唐）','wxid_m4tfwawxaheh22':'阿彬SEO-GEO',
+    'wxid_nowlwctf8h0n22':'广州-Anna','wxid_57ey8radnixo11':'江飞',
+    'wxid_vxu127p2u7qz22':'丁玄','wxid_rutwda2ixdfq22':'星星之火',
+    # Sun 已核验的称呼画像样例；仍以 wxid 为身份锚，不与其他账号自动归户。
+    'wxid_09cec05iemwv12':'泽老师',
+}
 
 MEMBER_RAW_RE = re.compile(
     r'^(?:wxid_[A-Za-z0-9_-]+|QQ\d{5,}|q\d{6,}|gh_[A-Za-z0-9_-]+|[0-9]{5,})$',
@@ -4655,6 +4775,12 @@ def _member_collect_called_names(rows: list) -> tuple[dict[str, list[dict]], dic
                 _member_called_add(called, next(iter(candidates)), term, row, '回复/角色称呼')
             elif not candidates:
                 unresolved[term].append({'sender': sender, 'at': _member_iso(row['create_time']), 'text': text[:500], 'reason': '稳定称呼尚无唯一 wxid'})
+    # Sun 已验证的阿泽样例先作为可审计事实落在该 wxid 上，不触发别名归户。
+    for row in rows:
+        if _member_clean(row['sender']) == 'wxid_09cec05iemwv12':
+            _member_called_add(called, 'wxid_09cec05iemwv12', '泽老师', row, 'Sun 已验证样例')
+            _member_called_add(called, 'wxid_09cec05iemwv12', '阿泽', row, 'Sun 已验证样例')
+            break
     normalized = {}
     for sender, values in called.items():
         normalized[sender] = sorted(values.values(), key=lambda item: (-int(item['count']), item['name']))
@@ -4668,6 +4794,117 @@ _BLOCK_TAG_RE = re.compile(
 )
 _LONG_REPEAT_MIN_CHARS = 80
 _CHAT_RECORD_TITLES = ('群聊的聊天记录', '聊天记录', '收藏的聊天记录')
+
+_WECHAT_PLACEHOLDER_RE = re.compile(
+    r'\[(?:图片|表情|动画表情|视频|语音|链接|文件|小程序|音乐|位置|转账|红包|名片|引用|聊天记录|接龙|拍一拍[^\]]*|表情包[^\]]*)\]\s*'
+)
+_WECHAT_URL_RE = re.compile(r'https?://\S+')
+# 纯计数+URL 残渣行：数字簇开头，至多跟一段 12 字内的无标点文字（如「51 0 0 0 0 4 大麦AI笔记」）
+_WECHAT_NOISE_LINE_RE = re.compile(r'^\s*\d+(?:[\s\d]*\d)?(?:\s+[^\s。！？!?，,；;]{1,12})?\s*$')
+_WECHAT_NOISE_SPEAKER_RE = re.compile(r'^[@＠.+\-]{1,3}$')
+# 行首计数残渣 + 行尾数字/ID 残渣（微信视频号/文件元数据尾巴）
+_WECHAT_LEAD_COUNT_RE = re.compile(r'^\s*\d+(?:[\s\d_]*\d)?(?:\s+[^\s。！？!?，,；;]{1,12})?\s+')
+_WECHAT_TRAIL_NOISE_RE = re.compile(r'(?:\s+(?:[\d.\-]+|[a-z0-9_]{2,})){2,}$')
+# 行内计数/ID 簇（51 0 0 0 0 4 大麦AI笔记 → 大麦AI笔记；不锚行尾，防中文日期正文）
+_WECHAT_INLINE_COUNT_RE = re.compile(r'(?:\s+(?:[\d.\-]+|[a-z0-9_]{2,})){2,}')
+# 日期/时间戳残渣
+_WECHAT_DATE_RE = re.compile(r'\s+\d{4}-\d{2}-\d{2}(?:\s+\d{2}:\d{2}(?::\d{2})?)?')
+# 重复说话人前缀（转发链：星星之火: 庄康发: 正文 → 庄康发: 正文；任意位置）
+_WECHAT_LEAD_SPEAKER_DUP_RE = re.compile(r'[^\s:：]{1,14}[:：]\s*(?=[^\s:：]{1,14}[:：])')
+# 行内对话流残渣（微信引用投影：高博文😈: 要 超儿: ！！！要 → 保留最后说话人）
+_WECHAT_DIALOG_FLOW_RE = re.compile(r'[^\s:：]{1,14}[:：]\s*[^\s:：]{1,16}\s+(?=[^\s:：]{1,14}[:：])')
+# 纯标点说话人（。: 别人 fork 被你找到了吗）
+_WECHAT_PUNCT_SPEAKER_RE = re.compile(r'[。，、；：]\s*[:：]\s*')
+# @chatroom 引用元数据（@chatroom wxid 名字）
+_WECHAT_CHATROOM_RE = re.compile(r'@chatroom\s+\S+\s+[^\s。！？]{1,20}')
+# 消息尾部元数据（时间戳 名字 session@chatroom）
+_WECHAT_CHATROOM_TAIL_RE = re.compile(r'\s+\d{9,11}\s+[^\s]+?\s+\S+@chatroom\s*$')
+# openim 系统公告前缀 + @所有人
+_WECHAT_OPENIM_RE = re.compile(r'\d+@openim[:：]?\s*|@所有人')
+# 管道分隔短 base64 变体（N0_V1_ZciLzZEK|v1_kXHN63Ds）
+_WECHAT_PIPE_TOKEN_RE = re.compile(r'\S{10,}\|\S{2,}')
+# 长 hash 尾 token（bd53fc470ca0d573...）
+_WECHAT_HASH_TAIL_RE = re.compile(r'\s+[a-z0-9]{16,}\s*$')
+# 裸图片扩展名段（宰治: jpg）
+_WECHAT_BARE_IMG_SEG_RE = re.compile(r'[^\s:：]{1,14}[:：]\s*(?:jpe?g|png|gif|webp)\s*')
+# view 计数残渣（view 51 / view 57 false -1 ...）
+_WECHAT_VIEW_COUNT_RE = re.compile(r'\s*view\s+\d+(?:\s+[\d\-]+)*')
+# base64 残渣（eyJ... 微信消息包）
+_WECHAT_B64_RE = re.compile(r'\beyJ[A-Za-z0-9+/=_]{20,}\b')
+# 「当前版本不支持展示该内容」
+_WECHAT_UNSUPPORTED_RE = re.compile(r'当前(?:微信)?版本不支持展示该内容，请升级至最新版本。?')
+# 文本转发头「群聊的聊天记录」（排除「（引用 X）」引用上下文）
+_WECHAT_CHATRECORD_HEAD_RE = re.compile(r'(?<![\u4e00-\u9fff）)」】"])群聊的聊天记录\s*')
+# 文件转发链行：名: 文件名.扩展名（无正文）
+_WECHAT_FILE_FWD_LINE_RE = re.compile(r'^.{1,14}[:：]\s*[^\s。]{2,50}\.(?:html?|pdf|epub|zip|docx?|pptx?|md|xlsx?|txt|jpe?g|png|gif|webp)(?:\s|$)')
+# 行内连续文件转发段（同一行多段「名: 文件.ext」）
+_WECHAT_FILE_FWD_SEG_RE = re.compile(r'(?:[^\s:：]{1,14}[:：]\s*[^\s。]{2,50}\.(?:html?|pdf|epub|zip|docx?|pptx?|md|xlsx?|txt|jpe?g|png|gif|webp)\s*)+')
+# 长 base64 特征 token（含数字+小写，URL 已剥后；纯字母/中文长文不受影响）
+_WECHAT_LONG_TOKEN_RE = re.compile(r'(?=.*\d)(?=.*[a-z])[A-Za-z0-9+/=_|.-]{40,}')
+# 行首 uuid / 下划线数字 ID 残渣
+_WECHAT_LEAD_ID_RE = re.compile(r'^\s*(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|_\d[\d_]*)\s*')
+# 说话人 + 纯计数段（宰治: 19 0 0 0 0 0 1788003815 0）
+_WECHAT_SPEAKER_COUNT_SEG_RE = re.compile(r'[^\s:：]{1,14}[:：]\s*\d[\d\s]*')
+# 手机号残渣
+_WECHAT_PHONE_RE = re.compile(r'1[3-9]\d{9}')
+
+
+def _scrub_wechat_artifacts(value):
+    """剥收藏转发的三类变体残渣：图片/表情占位、URL、纯计数行；剥后空行丢弃。
+
+    覆盖真实线上形态：文件转发链（星星之火: xxx.html）、行首计数（51 0 0 0 0 4 大麦AI笔记）、
+    view 计数（view 51 / view 57 false -1）、base64 消息包（eyJ...）、
+    「当前版本不支持展示该内容」、尾部数字/ID 残渣、手机号。
+    """
+    text = str(value or '')
+    text = _WECHAT_URL_RE.sub(' ', text)
+    text = _WECHAT_PLACEHOLDER_RE.sub('', text)
+    text = _WECHAT_CHATRECORD_HEAD_RE.sub('', text)
+    text = _WECHAT_B64_RE.sub(' ', text)
+    text = _WECHAT_LONG_TOKEN_RE.sub(' ', text)
+    text = _WECHAT_PIPE_TOKEN_RE.sub(' ', text)
+    text = _WECHAT_CHATROOM_RE.sub(' ', text)
+    text = _WECHAT_CHATROOM_TAIL_RE.sub(' ', text)
+    text = _WECHAT_OPENIM_RE.sub(' ', text)
+    text = _WECHAT_UNSUPPORTED_RE.sub('', text)
+    text = _WECHAT_VIEW_COUNT_RE.sub(' ', text)
+    text = _WECHAT_FILE_FWD_SEG_RE.sub(' ', text)
+    text = _WECHAT_BARE_IMG_SEG_RE.sub(' ', text)
+    lines = [' '.join(line.split()) for line in text.split('\n')]
+    kept = []
+    for line in lines:
+        if not line:
+            continue
+        had_cluster = bool(_WECHAT_INLINE_COUNT_RE.search(line))
+        line = _WECHAT_INLINE_COUNT_RE.sub(' ', line)
+        line = _WECHAT_LEAD_SPEAKER_DUP_RE.sub('', line)
+        line = _WECHAT_DIALOG_FLOW_RE.sub('', line)
+        line = _WECHAT_PUNCT_SPEAKER_RE.sub('', line)
+        line = _WECHAT_LEAD_ID_RE.sub('', line)
+        line = _WECHAT_LEAD_COUNT_RE.sub('', line)
+        line = _WECHAT_SPEAKER_COUNT_SEG_RE.sub('', line)
+        line = _WECHAT_TRAIL_NOISE_RE.sub('', line)
+        line = _WECHAT_HASH_TAIL_RE.sub('', line)
+        line = _WECHAT_DATE_RE.sub('', line)
+        line = _WECHAT_PHONE_RE.sub('', line)
+        line = ' '.join(line.split())
+        if had_cluster and len(line) <= 14 and not re.search(r'[，。！？；：、]', line):
+            continue  # 剥计数簇后只剩短名（转发元数据残留），整行丢弃
+        if not line or _WECHAT_NOISE_LINE_RE.match(line):
+            continue
+        if _WECHAT_FILE_FWD_LINE_RE.match(line):
+            continue  # 文件转发链行（名: 文件.ext）无正文，整体丢弃
+        kept.append(line)
+    return '\n'.join(kept).strip()
+
+
+def _scrub_speaker(value):
+    """匿名转发说话人（@/空/纯符号）不输出「@: 」前缀。"""
+    speaker = str(value or '').strip()
+    if not speaker or _WECHAT_NOISE_SPEAKER_RE.match(speaker):
+        return ''
+    return speaker
+
 
 
 def _decode_wechat_envelope(value):
@@ -4802,6 +5039,7 @@ def _is_favorite_record_xml(xml):
 def _favorite_record_summary(xml):
     summary = re.search(r'<des>([\s\S]*?)</des>', xml, re.I)
     summary = _plain_wechat_text(summary.group(1), keep_newlines=True) if summary else ''
+    summary = _scrub_wechat_artifacts(summary)
     match = re.match(r'^([^：:\n]{1,40})[：:]\s*(.+)$', summary, re.S)
     return match.group(2).strip() if match else summary
 
@@ -4822,15 +5060,17 @@ def _favorite_record_body(xml):
         if _xml_local_name(node) != 'dataitem':
             continue
         body = _xml_child_text(node, 'datadesc') or _xml_child_text(node, 'datatitle')
-        body = _dedupe_long_paragraphs(_plain_wechat_text(body, keep_newlines=True))
+        body = _scrub_wechat_artifacts(_plain_wechat_text(body, keep_newlines=True))
+        body = _dedupe_long_paragraphs(body)
         if not body:
             continue
-        speaker = _plain_wechat_text(_xml_child_text(node, 'sourcename'))
+        speaker = _scrub_speaker(_plain_wechat_text(_xml_child_text(node, 'sourcename')))
         items.append((speaker, body))
     if not items:
-        summary = _dedupe_long_paragraphs(
+        summary = _scrub_wechat_artifacts(
             _plain_wechat_text(_xml_child_text(root, 'desc'), keep_newlines=True)
         )
+        summary = _dedupe_long_paragraphs(summary)
         if not summary:
             return ''
         match = re.match(r'^([^：:\n]{1,40})[：:]\s*(.+)$', summary, re.S)
@@ -4852,7 +5092,7 @@ def _legacy_favorite_record_body(value):
     )
     if not marker:
         return ''
-    summary = text[:marker.start()].strip()
+    summary = _scrub_wechat_artifacts(text[:marker.start()].strip())
     title_pattern = '|'.join(re.escape(title) for title in _CHAT_RECORD_TITLES)
     summary = re.sub(rf'^\s*(?:{title_pattern})\s*', '', summary, count=1).strip()
     speaker = re.match(r'^([^：:\n]{1,40})[：:]\s*(.+)$', summary, re.S)
@@ -4982,7 +5222,7 @@ def clean_wechat_content(text):
         legacy_record = _legacy_favorite_record_body(s)
         if legacy_record:
             return legacy_record
-        return _dedupe_long_paragraphs(_plain_wechat_text(s, keep_newlines=True))
+        return _dedupe_long_paragraphs(_scrub_wechat_artifacts(_plain_wechat_text(s, keep_newlines=True)))
     head, _sep, rest = s.partition('<msg')
     xml = '<msg' + rest
     own = _strip_tail_digits(_plain_wechat_text(head))
@@ -5010,6 +5250,7 @@ def clean_wechat_content(text):
         parts.append(f'（引用{(" " + quoted_name) if quoted_name else ""}）{quoted_text}')
     out = '\n'.join(parts).strip()
     out = out or _plain_wechat_text(s, keep_newlines=True)
+    out = _scrub_wechat_artifacts(out)
     return _dedupe_long_paragraphs(out)
 
 def migrate_clean_wechat_xml(connection=None, *, commit=True):
@@ -5473,7 +5714,10 @@ def refresh_members(c):
         ]
         source = 'room_nickname'
         base_name = room_name
-        if not base_name and stable_called:
+        if sender == 'wxid_09cec05iemwv12' and stable_called:
+            base_name = stable_called[0]['name']
+            source = 'called_name'
+        elif not base_name and stable_called:
             base_name = stable_called[0]['name']
             source = 'called_name'
         if not base_name:
@@ -5927,13 +6171,124 @@ def governed_ledger(date: str):
 
 
 @app.get('/api/governed/members')
-def governed_members():
+def governed_members(live: int = Query(0, ge=0, le=1)):
     if not GOVERNED_MEMBER_FILE.is_file():
         raise HTTPException(404, '未找到治理后的群像档案')
     try:
-        return json.loads(GOVERNED_MEMBER_FILE.read_text(encoding='utf-8'))
+        static = json.loads(GOVERNED_MEMBER_FILE.read_text(encoding='utf-8'))
     except (OSError, json.JSONDecodeError) as exc:
         raise HTTPException(500, '治理后的群像档案不可读') from exc
+    if not live:
+        return static
+    return _live_members(static)
+
+
+def _live_members(static):
+    """群像实时聚合：DB 当日/历史发言真值 + 静态治理富字段（语气/一句话/标签）。
+
+    去重：归一化（NFKC+去emoji+去空白+小写）合并同名变体（剑峰/剑峰🐳 → 剑峰🐳），
+    剔除纯符号非人行（@/ⁿ）。metrics 数字全部接 DB 真值，不写死。
+    """
+    try:
+        static_profiles = static.get('profiles', []) if isinstance(static, dict) else []
+    except Exception:
+        static_profiles = []
+    static_by_norm = {}
+    for p in static_profiles:
+        key = _member_norm(p.get('name') or '')
+        if key and key not in static_by_norm:
+            static_by_norm[key] = p
+    c = db()
+    today = datetime.datetime.now(CST).strftime('%Y-%m-%d')
+    yesterday = (datetime.datetime.now(CST) - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+    try:
+        identity = "COALESCE(NULLIF(sender_name,'?'),sender)"
+        rows = c.execute(
+            f'''SELECT {identity} AS ident,
+                       COUNT(*) AS n,
+                       MIN(cst) AS first_cst,
+                       MAX(cst) AS last_cst
+                FROM messages GROUP BY {identity}'''
+        ).fetchall()
+        today_rows = c.execute(
+            f'''SELECT {identity} AS ident FROM messages
+                WHERE substr(COALESCE(cst,''),1,10)=? GROUP BY {identity}''',
+            (today,),
+        ).fetchall()
+    except sqlite3.Error:
+        return static
+    finally:
+        c.close()
+    today_ident = {str(r['ident']) for r in today_rows}
+    merged = {}
+    for r in rows:
+        ident = str(r['ident'] or '')
+        if ident in ('系统公告', '群友·未知'):
+            continue  # 系统事件/未解析占位：不计成员
+        key = _member_norm(ident)
+        if not key:
+            continue  # 空/纯符号非人行
+        base = merged.get(key, {'name': ident, 'msgs': 0, 'first_cst': None, 'last_cst': None, 'today': False})
+        base['msgs'] += int(r['n'])
+        base['first_cst'] = min(base['first_cst'] or r['first_cst'] or '', r['first_cst'] or base['first_cst'] or '')
+        base['last_cst'] = max(base['last_cst'] or r['last_cst'] or '', r['last_cst'] or base['last_cst'] or '')
+        base['today'] = base['today'] or ident in today_ident
+        # 展示名优先用静态治理名（去重后保留最长/带 emoji 的变体）
+        if len(ident) > len(base['name']) or base['name'] == base.get('_orig'):
+            base['name'] = ident
+        merged[key] = base
+    profiles = []
+    for key, m in merged.items():
+        p = static_by_norm.get(key) or {}
+        profiles.append({
+            'name': m['name'],
+            'role': p.get('role', ''),
+            'msgs': m['msgs'],
+            'ct': f"{m['msgs']} 条",
+            'tags': p.get('tags', []),
+            'tone': p.get('tone', 's'),
+            'quote': p.get('quote', ''),
+            'deep': p.get('deep', ''),
+            'filter': p.get('filter', ['all']),
+            'thin': p.get('thin', m['msgs'] <= 2),
+            'avatar': p.get('avatar', ''),
+            'last_active': (m['last_cst'] or '')[:10],
+            'first_active': (m['first_cst'] or '')[:10],
+            'today': m['today'],
+        })
+    profiles.sort(key=lambda x: (-x['msgs'], x['name']))
+    today_active = sum(1 for p in profiles if p['today'])
+    new_today = sum(1 for p in profiles if (p['first_active'] or '') == today)
+    recent_active = sum(1 for p in profiles if (p['last_active'] or '') >= yesterday)
+    return {
+        'generated': datetime.datetime.now(CST).isoformat(timespec='seconds'),
+        'count': len(profiles),
+        'live': True,
+        'metrics': {
+            'today_active': today_active,
+            'new_today': new_today,
+            'recent_active': recent_active,
+            'total': len(profiles),
+        },
+        'profiles': profiles,
+    }
+
+
+def _member_norm(value):
+    """归一化成员名：NFKC + 去 emoji/变体选择符 + 去空白 + 小写；纯符号返回空（非人行剔除）。"""
+    text = unicodedata.normalize('NFKC', str(value or ''))
+    chars = []
+    for ch in text:
+        code = ord(ch)
+        if 0x1F000 <= code <= 0x1FAFF or 0x2600 <= code <= 0x27BF or code in (0xFE0F, 0x200D, 0x20E3):
+            continue
+        if ch.isspace():
+            continue
+        chars.append(ch)
+    key = ''.join(chars).lower()
+    if not key or not any('\u3400' <= c <= '\u9fff' or c.isalnum() for c in key):
+        return ''
+    return key
 
 
 def essay_title(name, author, content):

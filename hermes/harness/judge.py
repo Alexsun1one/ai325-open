@@ -21,6 +21,8 @@ HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parents[1]
 PROMPT_PATH = Path(os.environ.get("HERMES_PROMPTS_DIR", REPO_ROOT / "hermes/prompts")) / "judge-v1.md"
 PROMPT_VERSION = "judge-v1"
+MIN_LEDGER_QUOTES = 6
+MAX_LEDGER_QUOTES = 12
 TONE_CLASSES = {"s", "j", "h"}
 ARSENAL_KINDS = {"提示词", "方法", "拆书", "工具", "论文", "文章", "案例"}
 ENGINEERING_SLOP = ("口径", "治理产物", "端点", "静态", "渲染", "数据层", "接线", "缺口", "闭环", "赋能")
@@ -172,7 +174,7 @@ def ledger_mechanical(
         "members": isinstance(artifact.get("members_focus"), list) and bool(artifact.get("members_focus")),
         "themes": isinstance(artifact.get("themes"), list) and bool(artifact.get("themes")),
         "tone": isinstance(artifact.get("tone_notes"), list) and bool(artifact.get("tone_notes")),
-        "quotes": isinstance(artifact.get("quotes"), list) and bool(artifact.get("quotes")),
+        "quotes": isinstance(artifact.get("quotes"), list),
         "growth": isinstance(artifact.get("growth"), dict) and bool(artifact.get("growth")),
     }
     missing_sections = [name for name, present in sections.items() if not present]
@@ -180,8 +182,12 @@ def ledger_mechanical(
         hard.append(f"八段缺失：{', '.join(missing_sections)}")
 
     quotes = artifact.get("quotes", []) if isinstance(artifact.get("quotes"), list) else []
-    if len(quotes) < 5:
-        hard.append(f"金句少于 5 条：{len(quotes)}")
+    if len(quotes) > MAX_LEDGER_QUOTES:
+        hard.append(f"金句超过上限 {MAX_LEDGER_QUOTES} 条：{len(quotes)}")
+    elif len(quotes) < MIN_LEDGER_QUOTES:
+        soft.append(
+            f"金句 {len(quotes)} 条，不足下限 {MIN_LEDGER_QUOTES}——宁缺毋滥，当天有几条算几条，不硬凑"
+        )
     quote_verified = 0
     quote_failures: list[int] = []
     for index, quote in enumerate(quotes):
@@ -199,8 +205,8 @@ def ledger_mechanical(
         hard.append(f"金句未在 transcript 逐字定位：{quote_failures}")
 
     themes = artifact.get("themes", []) if isinstance(artifact.get("themes"), list) else []
-    if len(themes) < 3:
-        hard.append(f"themes 少于 3 幕：{len(themes)}")
+    if 0 < len(themes) < 3:
+        soft.append(f"themes {len(themes)} 幕，少于常规 3 幕——当天话题撑不起就减幕，不硬凑")
     deep_pass = 0
     voices_total = 0
     voices_verified = 0
@@ -251,8 +257,10 @@ def ledger_mechanical(
             text = plain(action)
             if len(text) > 40 or not text.startswith(ACTION_PREFIXES):
                 bad_actions.append(text[:60])
-    if not 3 <= action_total <= 12:
-        hard.append(f"行动清单数量异常：{action_total}")
+    if action_total > 12:
+        hard.append(f"行动清单超过上限 12 条：{action_total}")
+    elif action_total < 3:
+        soft.append(f"行动清单 {action_total} 条，少于常规 3 条——当天没几条可执行动作就不硬凑")
     if bad_phases:
         hard.append(f"行动阶段未标今天/本周/本月：{bad_phases}")
     if bad_actions:
@@ -316,7 +324,7 @@ def ledger_mechanical(
         "lead": artifact.get("lead"),
         "themes": themes,
         "tone_notes": artifact.get("tone_notes", []),
-        "quotes": quotes[:10],
+        "quotes": quotes[:MAX_LEDGER_QUOTES],
         "previous_threads": list(previous_threads),
         "current_threads": list(current_threads),
         "transcript_context": tone_contexts(artifact, transcript_lines),
