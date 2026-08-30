@@ -1,6 +1,7 @@
 # Hermes Ledger Distiller
 
-把 `/opt/hermes-ledger/materials/YYYY-MM-DD/` 中的群聊全文蒸馏为同目录的 `content.json`。输出遵循 `_hermes_spec.md` 的八段结构、三档语气、深潜写法、原文纪律和网站扩展字段。
+> 路径变量：`$HERMES_ROOT` = 材料根目录（如 `/srv/hermes-ledger`）；`$HERMES_ENV` = 密钥文件（`DEEPSEEK_API_KEY`，不入仓）。
+把 `$HERMES_ROOT/materials/YYYY-MM-DD/` 中的群聊全文蒸馏为同目录的 `content.json`。输出遵循 `_hermes_spec.md` 的八段结构、三档语气、深潜写法、原文纪律和网站扩展字段。
 
 ## 处理链路
 
@@ -50,23 +51,23 @@ python3 distill_ledger.py sample \
 蒸馏器只用 Python 标准库，不需要额外 pip 依赖：
 
 ```bash
-sudo install -d -m 0755 /opt/hermes-ledger
-sudo rsync -a hermes/ledger/ /opt/hermes-ledger/
-sudo chmod +x /opt/hermes-ledger/run.sh /opt/hermes-ledger/distill_ledger.py
+sudo install -d -m 0755 $HERMES_ROOT
+sudo rsync -a hermes/ledger/ $HERMES_ROOT/
+sudo chmod +x $HERMES_ROOT/run.sh $HERMES_ROOT/distill_ledger.py
 ```
 
-`run.sh` 默认从 `/data/second-brain/hermes/.env` 加载 `DEEPSEEK_API_KEY`，不会打印密钥。材料根目录默认 `/opt/hermes-ledger/materials`，站点仓库用 `XF_REPO` 指定：
+`run.sh` 默认从 `$HERMES_ENV` 加载 `DEEPSEEK_API_KEY`，不会打印密钥。材料根目录默认 `$HERMES_ROOT/materials`，站点仓库用 `XF_REPO` 指定：
 
 ```bash
-export XF_REPO=/opt/xfsite/repo
-/opt/hermes-ledger/run.sh 2026-08-23
+export XF_REPO=$XF_REPO/repo
+$HERMES_ROOT/run.sh 2026-08-23
 ```
 
 单独在每天 23:38 CST 蒸馏：
 
 ```cron
 CRON_TZ=Asia/Shanghai
-38 23 * * * /bin/bash -lc 'export XF_REPO=/opt/xfsite/repo; /opt/hermes-ledger/run.sh' >> /var/log/hermes-ledger-distill.log 2>&1
+38 23 * * * /bin/bash -lc 'export XF_REPO=$XF_REPO/repo; $HERMES_ROOT/run.sh' >> /var/log/hermes-ledger-distill.log 2>&1
 ```
 
 `scripts/server-daily.sh` 也有兜底：第 3 步转换前如果已有 transcript、尚无 content.json，就先调用本蒸馏器；失败只记 warning，站点继续沿用上一期日报。
