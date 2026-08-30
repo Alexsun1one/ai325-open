@@ -15,6 +15,7 @@ shot-*.png
 # 密钥类（从不入仓）
 .env
 .env.*
+!.env.example
 *.pem
 *.key
 # python

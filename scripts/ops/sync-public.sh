@@ -54,7 +54,7 @@ done
 echo "→ 同步 site 配置"
 
 # 根配置与文档（README.md 不在白名单：公开仓独立维护门面）
-for f in .gitignore Dockerfile CODEX-VISUAL-SPEC.md DESIGN.md; do
+for f in .gitignore .env.example Dockerfile CODEX-VISUAL-SPEC.md DESIGN.md; do
   if [ -f "$MAIN_REPO/$f" ]; then cp "$MAIN_REPO/$f" "$WORK/public/$f"; fi
 done
 
