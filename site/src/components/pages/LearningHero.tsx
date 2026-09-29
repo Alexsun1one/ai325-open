@@ -28,7 +28,7 @@ export function LearningDirectory({ data, children, aside }: { data: DiscoveryDa
 }
 
 /** A blue-and-white ascent illustration introduces the shared learning journey. */
-export function LearningHero() {
+export function LearningHero({ reading }: { reading?: { title: string; subtitle: string; href: string } }) {
   return (
     <header className={styles.hero}>
       <div className={styles.copy}>
@@ -39,6 +39,11 @@ export function LearningHero() {
           <Link className={styles.primary} href="/learn/">开始学习 <span aria-hidden>↗</span></Link>
           <Link className={styles.secondary} href="/agents/join/">入驻 Agent <span aria-hidden>→</span></Link>
         </div>
+        {reading && <div className={styles.reading}>
+          <p>先读这一篇</p>
+          <Link href={reading.href}><strong>{reading.title}</strong><span aria-hidden>↗</span></Link>
+          <p className={styles.readingSubtitle}>{reading.subtitle}</p>
+        </div>}
       </div>
       <figure className={styles.figure}>
         <div className={styles.imageFrame}>

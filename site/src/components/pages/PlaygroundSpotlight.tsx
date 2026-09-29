@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import playground from "../../../content/playground.json";
 import styles from "./PlaygroundSpotlight.module.css";
 
@@ -65,6 +65,21 @@ function readObservation(value: unknown): Observation {
 }
 
 export function PlaygroundSpotlight() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [artReady, setArtReady] = useState(false);
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    if (!("IntersectionObserver" in window)) { setArtReady(true); return; }
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        setArtReady(true);
+        observer.disconnect();
+      }
+    }, { rootMargin: "300px" });
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
   const [observation, setObservation] = useState<Observation>({ state: "loading" });
   const [demoScene, setDemoScene] = useState<number | null>(null);
   const [reaction, setReaction] = useState(false);
@@ -98,7 +113,7 @@ export function PlaygroundSpotlight() {
   const unknown = demoScene === null && (observation.state === "unknown" || observation.state === "loading");
   const status = { loading: "正在核对最新公告…", unknown: "暂时无法确认当前状态", waiting: "暂无新的有效重置预告", soon: "已公开预告 · 等待完成确认", reset: "本轮重置已公告完成" }[observation.state];
   return (
-    <section id="playground" className={styles.lab} aria-labelledby="playground-title">
+    <section ref={sectionRef} id="playground" className={styles.lab} aria-labelledby="playground-title" onFocusCapture={() => setArtReady(true)}>
       <div className={styles.heading}>
         <h2 id="playground-title">摸鱼实验室 <span>认真玩一下。</span></h2>
         <span className={styles.note}>社区趣味作品</span>
@@ -119,7 +134,7 @@ export function PlaygroundSpotlight() {
           <p className={styles.disclaimer}>人物随公开公告更新；手动切换仅为漫画试玩。公告不代表你的账户额度。</p>
         </div>
         <div className={styles.comic}>
-          <div key={scene} className={`${styles.illustration} ${scene === 2 ? styles.god : ""}`} style={{ backgroundPosition: `50% ${scene * 50}%` }} role="img" aria-label={unknown ? "等待核验公开消息的漫画 Tibo" : `${current.name}：${current.line}`} />
+          <div key={scene} className={`${styles.illustration} ${artReady ? styles.artReady : ""} ${scene === 2 ? styles.god : ""}`} style={{ backgroundPosition: `50% ${scene * 50}%` }} role="img" aria-label={unknown ? "等待核验公开消息的漫画 Tibo" : `${current.name}：${current.line}`} />
           <p className={styles.speech} aria-live="polite">{reaction ? ["咖啡收下，按钮再说。", "别戳了，手已经在路上了。", "别拜了，快去写代码！"][scene] : unknown ? "我先看看他刚说了什么。" : current.speech}<small>本站配文 · {demoScene === null ? "形象跟随公告" : "漫画试玩"}</small></p>
           <button className={styles.react} type="button" onClick={() => setReaction(!reaction)}>{current.action}</button>
         </div>

@@ -22,7 +22,7 @@
 .demo { display:flex; align-items:center; gap:12px; color:var(--ink-3); font:12px/1.6 var(--font-sans); }
 .demo button { min-height:44px; color:var(--blue-text); text-decoration:underline; cursor:pointer; }
 .comic { position:relative; align-self:stretch; min-height:320px; overflow:hidden; border-left:1px solid var(--rule); background:#f5f4f0; isolation:isolate; }
-.illustration { position:absolute; inset:0; background-image:url('/tibo/assets/scenes-wide.png'); background-size:auto 300%; background-repeat:no-repeat; animation:arrive 380ms ease-out both; }
+.illustration { position:absolute; inset:0; background-size:auto 300%; background-repeat:no-repeat; animation:arrive 380ms ease-out both; }
 .god::after { content:""; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 35%,#ffd87544,transparent 65%); animation:halo 3s ease-in-out infinite alternate; pointer-events:none; }
 .speech { position:absolute; top:20px; left:20px; right:20px; width:fit-content; max-width:calc(100% - 40px); background:#fffef8; border:2px solid #20211f; border-radius:14px 14px 14px 2px; padding:10px 14px; color:#20211f; box-shadow:3px 3px 0 #20211f; font:600 14px/1.6 var(--font-sans); transform:rotate(-2deg); }
 .speech small { display:block; margin-top:4px; color:#66675f; font-size:10px; font-weight:400; }
@@ -33,3 +33,6 @@
 @keyframes halo { to { opacity:.3; } }
 @media (max-width:700px) { .stage { grid-template-columns:1fr; } .copy { padding:24px; } .comic { border-left:0; border-top:1px solid var(--rule); min-height:0; aspect-ratio:2/1; } .speech { top:12px; left:12px; font-size:12px; padding:7px 10px; } .react { bottom:12px; right:12px; } .line { min-height:0; } }
 @media (prefers-reduced-motion:reduce) { .lab *, .god::after { animation:none!important; transition:none!important; } }
+
+.artReady { background-image:url('/tibo/assets/scenes-home-1024.webp'); }
+@media (max-width:700px) { .artReady { background-image:url('/tibo/assets/scenes-home-768.webp'); } }

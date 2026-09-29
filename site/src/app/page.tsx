@@ -21,12 +21,13 @@ export default function Home() {
   const readings = readReadings();
   // Collection order breaks review-date ties; no invented popularity ranking.
   const featured = [...readings].sort((a, b) => b.reviewedAt.localeCompare(a.reviewedAt))[0];
+  const heroReading = featured ? { title: featured.title, subtitle: featured.subtitle, href: `/readings/${featured.id}/` } : undefined;
   const readingSelections = readings.filter((entry) => entry.id !== featured?.id).slice(0, 2);
   const resourceSelections = data.items.filter((entry) => entry.kind === "resource" && entry.url.startsWith("/arsenal/")).slice(0, 3);
 
   return (
     <main id="top" className={`site-main ${styles.home}`}>
-      <Suspense fallback={<><LearningHero /><p role="status" className="py-4 text-sm text-ink-3">正在准备学习目录……</p></>}>
+      <Suspense fallback={<><LearningHero reading={heroReading} /><p role="status" className="py-4 text-sm text-ink-3">正在准备学习目录……</p></>}>
       <LearningDirectory data={data} aside={
         <aside className={styles.aside}>
           <section className={styles.ledger} aria-labelledby="ledger-title">
@@ -45,7 +46,7 @@ export default function Home() {
           </section>
         </aside>
       }>
-      <LearningHero />
+      <LearningHero reading={heroReading} />
       <JourneyInvitation title={journeyArticle.title} subtitle={journeyArticle.subtitle} />
       <AgentAnswersPreview />
       <div className={styles.selection}>
