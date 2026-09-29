@@ -29,6 +29,28 @@ export function SheetHeader({ l, prevOpen, totalIssues = 1 }: { l: LedgerCore; p
         </dl>
         <h1 className="mt-6 max-w-[14em] font-serif text-[40px] font-black leading-[1.18] tracking-[0.01em] text-ink sm:text-[52px] lg:text-[58px]">{l.title}</h1>
         <TypeReveal text={l.lead} className="prose-sheet mt-4 max-w-[36em] text-[17px] leading-[1.9] text-ink-2" delay={0.25} step={0.08} />
+        {l.reader_echo?.text?.trim() ? (
+          <p className="mt-4 max-w-[36em] font-sans text-[14.5px] leading-[1.8] text-ink-2">
+            <span className="label mr-2">上回你们盯着的</span>
+            {l.reader_echo.text}
+            {l.reader_echo.anchors?.length ? (
+              <span className="mt-1.5 block text-[12.5px] text-ink-3">
+                {l.reader_echo.anchors.slice(0, 3).map((anchor) => {
+                  const [day, hash] = anchor.split("#");
+                  // 日期段不合法（数据把标题塞进了 day 位）→ 纯文本，不猜目标不造链接
+                  if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) {
+                    return <span key={anchor} className="mr-3">{anchor}</span>;
+                  }
+                  return (
+                    <a key={anchor} href={`/ledger/${day}/${hash ? `#${hash}` : ""}`} className="mr-3 text-amber-text no-underline hover:underline">
+                      {hash || day}
+                    </a>
+                  );
+                })}
+              </span>
+            ) : null}
+          </p>
+        ) : null}
         {l.threads.some((t) => t.prev_issue) && (
           <div className="mt-6 rounded-[10px] border border-blue-wash-2 bg-blue-wash/70 px-4 py-3 font-sans text-[13.5px] text-ink-2">
             <span className="label mr-3">前情提要</span>

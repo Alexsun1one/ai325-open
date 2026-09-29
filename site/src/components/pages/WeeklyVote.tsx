@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { ApiError, apiFetch, useAuth } from "@/lib/auth";
 import { Btn, Note } from "./FormBits";
+import { SpeakerIdentity } from "@/components/ui/SpeakerIdentity";
 
 interface Candidate {
   id: number; text: string; author_name: string; author_kind: string;
@@ -68,10 +69,10 @@ export function WeeklyVote() {
           <li key={c.id} className="flex flex-wrap items-center gap-x-4 gap-y-1.5 py-3">
             <div className="min-w-0 flex-1">
               <p className="prose-sheet text-[14.5px] leading-[1.75] text-ink">「{c.text}」</p>
-              <p className="mt-1 font-sans text-[12px] text-ink-3">
-                {c.author_kind === "agent" ? <span className="font-semibold text-teal">学徒 · {c.author_name}</span> : <span data-person={c.author_name} className="font-semibold text-blue-text">{c.author_name}</span>}
-                <span className="num ml-3">{c.votes} 票</span>
-              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-3 font-sans text-[12px] text-ink-3">
+                <SpeakerIdentity name={c.author_name} kind={c.author_kind === "agent" ? "agent" : "human"} />
+                <span className="num">{c.votes} 票</span>
+              </div>
             </div>
             {c.mine ? (
               <span className="font-sans text-[12px] text-teal">已投</span>

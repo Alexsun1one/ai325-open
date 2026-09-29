@@ -10,10 +10,15 @@
 | `run_arsenal(date)` | 采集、蒸馏到 quality staging 并 judge；失败后的第二次调用自动带上一轮建议重蒸一次 | 否 |
 | `redistill_theme(date, idx, feedback)` | 只把候选成品的 `themes[idx]` 合回原日报，校验失败自动恢复，再 judge | 否 |
 | `publish(date)` | 双 judge 与 `complete=true` 预检后调用 `server-daily.sh --publish-only`；输入指纹相同则直接返回。MCP annotation 明确标为 destructive/open-world 生产写操作 | 是 |
+| `diagnose_publish(date)` | 出刊后检查治理 Ledger、度数、transcript/数据库覆盖率和 `/ledger/<date>/` 页面 HTTP 200 | 否 |
+| `self_heal(date, trigger)` | 按数据不足、judge 门禁、产物缺失、脚本崩溃、采集断链和页面故障剧本定向修复；同一故障最多两次 | 可能 |
+| `report_incident(...)` | 以“一一发现X→尝试Y→结果Z”写入既有 JSONL/admin 告警台 | 否 |
 | `status(date)` | 汇总 artifact、judge、quality、ALERT 和发布标记 | 否 |
 | `alert(text)` | 覆盖写 ALERT、追加 export.log，并调用 `scripts/ops/alert.sh` 进入统一邮件/outbox | 否 |
 
-所有写工具与 `scripts/server-daily.sh` 共用 `${AI325_EDITOR_LOCK_FILE:-/opt/xfsite/logs/ai325-editor.lock}`。MCP 持锁调用发布脚本时传 `AI325_EDITOR_LOCK_HELD=1`，避免自身二次加锁。23:55 fallback 最多等锁 1800 秒；若当日 Agent 已成功发布则退出，否则跑原纯脚本全流程。
+所有写工具与 `scripts/server-daily.sh` 共用 `${AI325_EDITOR_LOCK_FILE:-/opt/xfsite/logs/ai325-editor.lock}`。MCP 持锁调用发布脚本时传 `AI325_EDITOR_LOCK_HELD=1`，避免自身二次加锁；自愈子进程会设置递归保护并在持锁流程结束后执行。出刊成功后 shell 入口和 MCP `publish` 都立即跑交付面自检；北京时间 08:30 dead-man cron 通过同一 `scripts/ops/hermes-selfheal.sh` 入口复检。23:55 fallback 最多等锁 1800 秒；若当日 Agent 已成功发布则退出，否则跑原纯脚本全流程。
+
+自愈状态保存在 `${AI325_SELF_HEAL_STATE_DIR:-/opt/xfsite/logs/self-heal}`。生产默认要求覆盖率闸（`XF_TRANSCRIPT_COVERAGE_MIN=0.70`）和页面探测；本地测试可显式关闭 `AI325_SELF_CHECK_ENABLED`。微信重新导出命令由 `AI325_SELF_HEAL_EXPORT_CMD` 配置，默认复用 `scripts/morning-chain.sh`，不会猜测或盲目重试外部采集。
 
 ## 本地验证
 
@@ -23,6 +28,10 @@
 python3 -m py_compile hermes/editor_mcp/server.py
 uv run --with 'mcp[cli]>=1.12,<2' \
   python -m unittest -v hermes/editor_mcp/test_server.py
+uv run --with 'mcp[cli]>=1.12,<2' \
+  python -m unittest -v hermes/editor_mcp/test_selfheal.py
+uv run --with 'mcp[cli]>=1.12,<2' \
+  python scripts/ops/test-hermes-selfheal-e2e.py
 uv run --with 'mcp[cli]>=1.12,<2' \
   python hermes/editor_mcp/server.py --list-tools
 ```

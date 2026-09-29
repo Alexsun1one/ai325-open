@@ -1,0 +1,12 @@
+.enter {
+  animation: pageHeadEnter 220ms cubic-bezier(.22, .8, .28, 1) both;
+}
+
+@keyframes pageHeadEnter {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter { animation: none; }
+}

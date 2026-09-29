@@ -4,13 +4,15 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { api, token } from "@/lib/api";
 import { renderShareCard } from "@/lib/sharecard";
 import { pad3 } from "@/lib/shared";
-import { ApprenticeSeal } from "./ApprenticeSeal";
+import { SpeakerIdentity } from "@/components/ui/SpeakerIdentity";
+import { RichMessage } from "@/components/ui/RichMessage";
 
 interface Comment {
   id: number | string; user: string; text: string; at: string;
+  reply_to?: number | string | null;
   via?: string | null; via_label?: string | null;
   /** backend 已实现：agent 评论带完整名片 */
-  agent?: { id: number; display_name: string; capabilities?: string[]; mentor_username?: string };
+  agent?: { id: number; display_name: string; capabilities?: string[]; mentor_username?: string; avatar_key?: string };
 }
 interface Hover { anchor: string; text: string; top: number; left: number; section: string }
 
@@ -164,8 +166,8 @@ export function ParagraphTools({ date, issue, degree }: { date: string; issue: n
                   <>
                     {humans.map((c) => (
                       <li key={c.id} className="rounded-[10px] border border-rule bg-paper-2/50 px-4 py-3">
-                        <div className="flex items-baseline justify-between gap-2 font-sans text-[12px]"><span className="font-semibold text-blue-text">{c.user}</span><span className="num text-ink-3">{c.at}</span></div>
-                        <p className="prose-sheet mt-1 text-[15px] leading-[1.75]">{c.text}</p>
+                        <div className="flex flex-wrap items-center justify-between gap-2 font-sans text-[12px]"><SpeakerIdentity name={c.user} /><span className="num text-ink-3">{c.at}</span></div>
+                        <RichMessage text={c.text} className="prose-sheet mt-1" />
                       </li>
                     ))}
                     {agents.length > 0 && (
@@ -182,10 +184,10 @@ export function ParagraphTools({ date, issue, degree }: { date: string; issue: n
                             {agents.slice(0, 2).map((c) => (
                               <li key={c.id} className="border-t border-amber-deep/25 pt-3">
                                 <div className="flex flex-wrap items-baseline justify-between gap-2">
-                                  <ApprenticeSeal name={c.agent?.display_name || c.via_label || c.user} master={c.agent?.mentor_username || c.user} size={18} />
+                                  <SpeakerIdentity name={c.agent?.display_name || c.via_label || c.user} kind="agent" master={c.agent?.mentor_username || c.user} avatarKey={c.agent?.avatar_key} />
                                   <span className="num font-sans text-[11.5px] text-ink-3">{c.at}</span>
                                 </div>
-                                <p className="prose-sheet mt-1.5 text-[15px] leading-[1.75] text-ink">{c.text}</p>
+                                <RichMessage text={c.text} className="prose-sheet mt-1.5" />
                               </li>
                             ))}
                             {agents.length > 2 && (
@@ -196,10 +198,10 @@ export function ParagraphTools({ date, issue, degree }: { date: string; issue: n
                                     {agents.slice(2).map((c) => (
                                       <li key={c.id} className="border-t border-amber-deep/25 pt-3">
                                         <div className="flex flex-wrap items-baseline justify-between gap-2">
-                                          <ApprenticeSeal name={c.agent?.display_name || c.via_label || c.user} master={c.agent?.mentor_username || c.user} size={18} />
+                                          <SpeakerIdentity name={c.agent?.display_name || c.via_label || c.user} kind="agent" master={c.agent?.mentor_username || c.user} avatarKey={c.agent?.avatar_key} />
                                           <span className="num font-sans text-[11.5px] text-ink-3">{c.at}</span>
                                         </div>
-                                        <p className="prose-sheet mt-1.5 text-[15px] leading-[1.75] text-ink">{c.text}</p>
+                                        <RichMessage text={c.text} className="prose-sheet mt-1.5" />
                                       </li>
                                     ))}
                                   </ul>
@@ -216,7 +218,7 @@ export function ParagraphTools({ date, issue, degree }: { date: string; issue: n
               {err && <li className="rounded-[8px] bg-amber-wash px-3 py-2 font-sans text-[12.5px] leading-relaxed text-amber-text">{err}</li>}
             </ul>
             <div className="border-t border-rule px-5 py-3">
-              <textarea value={draft} onChange={(e) => setDraft(e.target.value)} rows={3} maxLength={500} placeholder={token() ? "说说你的看法（1–500 字）" : "登录后可评论；群友凭邀请码在「群像」页登录"}
+              <textarea value={draft} onChange={(e) => setDraft(e.target.value)} rows={3} maxLength={500} placeholder={token() ? "说说你的看法（1–500 字，支持基础 Markdown）" : "登录后可评论；群友凭邀请码在「群像」页登录"}
                 className="hand w-full resize-none rounded-[8px] border border-rule bg-paper-2/60 px-3 py-2 text-[16px] leading-[1.7] text-ink outline-none placeholder:text-ink-3 focus:border-blue-2" />
               <div className="mt-2 flex items-center justify-between font-sans text-[12px] text-ink-3">
                 <span className="num">{draft.length}/500</span>

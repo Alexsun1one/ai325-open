@@ -1,0 +1,103 @@
+{
+  "name": "先锋小蓝",
+  "theme": "人民需要AI · 智能体先锋队",
+  "format": "static",
+  "items": [
+    {
+      "id": "ready",
+      "label": "收到",
+      "token": ":xf-ready:",
+      "source_sha256": "d6315c7bb494094cc999ee171f0288e884412ffd25a09d4875ebc716e46a5aa6",
+      "path": "pioneer-ready.webp",
+      "width": 320,
+      "height": 320,
+      "bytes": 19970,
+      "sha256": "84548bbe1c3bb0d68538155262c452a38b24be354d90efe09e3b33b665b71218",
+      "generation": "OpenAI Image Gen, original project artwork, 2026-09-24"
+    },
+    {
+      "id": "start",
+      "label": "开干",
+      "token": ":xf-start:",
+      "source_sha256": "dea494cf5ea894a165c654349f7f776639bd146b170f5051bf2c178b35d0435f",
+      "path": "pioneer-start.webp",
+      "width": 320,
+      "height": 320,
+      "bytes": 25804,
+      "sha256": "f8b467d2d1535f746684ed554ed58aee999886b03a06516623edf19eb8c2d9d2",
+      "generation": "OpenAI Image Gen, original project artwork, 2026-09-24"
+    },
+    {
+      "id": "learned",
+      "label": "学到了",
+      "token": ":xf-learned:",
+      "source_sha256": "ff8fe705c9f3fb8b4be1361c925d1385c78fbe6c6d3a7ca502b636aee39eb8bd",
+      "path": "pioneer-learned.webp",
+      "width": 320,
+      "height": 320,
+      "bytes": 20848,
+      "sha256": "defb4524c1eb6395aad78dc7e9ed9bdec49087485725b8117093fc50ceab64cf",
+      "generation": "OpenAI Image Gen, original project artwork, 2026-09-24"
+    },
+    {
+      "id": "evidence",
+      "label": "求证据",
+      "token": ":xf-evidence:",
+      "source_sha256": "9a5e21f52906a614f0487b3921c17ea35071ff86c27be9f70e62d58999849548",
+      "path": "pioneer-evidence.webp",
+      "width": 320,
+      "height": 320,
+      "bytes": 19190,
+      "sha256": "fee829bb65434b1c46540f9b9687f5d04e56ea96e912ef80342b487b79fade38",
+      "generation": "OpenAI Image Gen, original project artwork, 2026-09-24"
+    },
+    {
+      "id": "retry",
+      "label": "再试一次",
+      "token": ":xf-retry:",
+      "source_sha256": "1e25e4de71a9f6cbaf0b75ff4c13170ef9472a5684dd020234a635389bedb20d",
+      "path": "pioneer-retry.webp",
+      "width": 320,
+      "height": 320,
+      "bytes": 23472,
+      "sha256": "b58c44c1dea7769be58776776cc9c844ebabfba1085cc4a87a0b46f95d6d3c3d",
+      "generation": "OpenAI Image Gen, original project artwork, 2026-09-24"
+    },
+    {
+      "id": "together",
+      "label": "一起向前",
+      "token": ":xf-together:",
+      "source_sha256": "4b9ea31b6d0c0e1664ac625d509ee6ea2a7eb83b6d803370a09132e72d062a84",
+      "path": "pioneer-together.webp",
+      "width": 320,
+      "height": 320,
+      "bytes": 20850,
+      "sha256": "779ee31b0852f8a195d36302989446a31cf55ce8bfd9038ed7745bb9099224e4",
+      "generation": "OpenAI Image Gen, original project artwork, 2026-09-24"
+    },
+    {
+      "id": "distilled",
+      "label": "蒸馏好了",
+      "token": ":xf-distilled:",
+      "source_sha256": "af35ccfeae34155aec4255113929ea0cbb8475d7f5a055e2b6224cdd3b660db2",
+      "path": "pioneer-distilled.webp",
+      "width": 320,
+      "height": 320,
+      "bytes": 21378,
+      "sha256": "6c2c2ca176009109f74aa70e0d89892f29589a96fa702b341c425005f3ca22e1",
+      "generation": "OpenAI Image Gen, original project artwork, 2026-09-24"
+    },
+    {
+      "id": "salute",
+      "label": "向实干者致敬",
+      "token": ":xf-salute:",
+      "source_sha256": "05fa1f5cc5dc101316ff74f2925fcd597f331f21124586f1d7a1447f2e256e45",
+      "path": "pioneer-salute.webp",
+      "width": 320,
+      "height": 320,
+      "bytes": 18510,
+      "sha256": "4c4d3e0a8f2a3e65ea3fb7b616af62d96774d50a80ef0d5f96e427526f9e7d43",
+      "generation": "OpenAI Image Gen, original project artwork, 2026-09-24"
+    }
+  ]
+}

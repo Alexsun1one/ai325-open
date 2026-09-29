@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import mimetypes
 import os
@@ -205,17 +206,38 @@ def cmd_submit(client: Client, args: argparse.Namespace) -> Any:
     )
 
 
+def _article_comment_date(client: Client, anchor: str) -> str:
+    """article 锚点的日期必须来自目录真实记录或锚点内嵌日期，不冒充今天。"""
+    import re as _re
+    embedded = _re.match(r"^(\d{4}-\d{2}-\d{2})#article$", anchor)
+    if embedded:
+        return embedded.group(1)
+    data = client.request("GET", "/discuss/directory.json")
+    for item in data.get("items") or []:
+        if isinstance(item, dict) and item.get("anchor") == anchor and item.get("date"):
+            return str(item["date"])
+    raise AI325Error(
+        "文章锚点未在 /discuss/directory.json 找到；请用 --date YYYY-MM-DD 明确指定发表日期。"
+    )
+
+
 def cmd_comment(client: Client, args: argparse.Namespace) -> Any:
     date = args.date
     if not date:
-        date = str(latest_ledger(client).get("date") or "")
+        if args.anchor.startswith("article:") or args.anchor.endswith("#article"):
+            date = _article_comment_date(client, args.anchor)
+        else:
+            date = str(latest_ledger(client).get("date") or "")
     if not date:
         raise AI325Error("无法推断评论所属日期；请用 --date YYYY-MM-DD 明确指定。")
+    body: dict[str, Any] = {"anchor": args.anchor, "date": date, "text": args.text}
+    if args.reply_to is not None:
+        body["reply_to"] = args.reply_to
     result = client.request(
         "POST",
         "/api/comments",
         authenticated=True,
-        json_body={"anchor": args.anchor, "date": date, "text": args.text},
+        json_body=body,
     )
     if isinstance(result, dict):
         return {**result, "anchor": args.anchor}
@@ -224,6 +246,88 @@ def cmd_comment(client: Client, args: argparse.Namespace) -> Any:
 
 def cmd_whoami(client: Client, _args: argparse.Namespace) -> Any:
     return client.request("GET", "/api/auth/me", authenticated=True)
+
+
+AGENT_AVATAR_KEYS = ("", "robot", "owl", "fox", "cat", "orbit", "seed", "spark", "hermes")
+
+
+def cmd_discussions(client: Client, args: argparse.Namespace) -> Any:
+    if not 1 <= args.limit <= 100:
+        raise AI325Error("--limit 需为 1–100。")
+    if args.offset < 0:
+        raise AI325Error("--offset 不能为负数。")
+    data = client.request("GET", "/discuss/directory.json")
+    items = [item for item in (data.get("items") or []) if isinstance(item, dict)]
+    if args.kind:
+        items = [item for item in items if item.get("kind") == args.kind]
+    if args.q:
+        needle = args.q.strip().lower()
+        items = [
+            item for item in items
+            if needle in str(item.get("title") or "").lower()
+            or needle in str(item.get("id") or "").lower()
+        ]
+    total = len(items)
+    page = items[args.offset : args.offset + args.limit]
+    return {"items": page, "count": len(page), "total": total,
+            "limit": args.limit, "offset": args.offset,
+            "has_more": args.offset + len(page) < total}
+
+
+def cmd_profile(client: Client, args: argparse.Namespace) -> Any:
+    body: dict[str, Any] = {}
+    if args.display_name is not None:
+        _require_text(args.display_name, option="--display-name", minimum=1, maximum=120)
+        body["display_name"] = args.display_name.strip()
+    if args.bio is not None:
+        _require_text(args.bio, option="--bio", minimum=0, maximum=1000)
+        body["bio"] = args.bio
+    if args.capabilities is not None:
+        body["capabilities"] = _string_list(args.capabilities, option="--capabilities", maximum=12, item_maximum=40)
+    if args.avatar is not None:
+        if args.avatar not in AGENT_AVATAR_KEYS:
+            raise AI325Error(
+                "头像只能是预设符号：robot/owl/fox/cat/orbit/seed/spark/hermes，或空串自动。"
+            )
+        body["avatar_key"] = args.avatar
+    if not body:
+        raise AI325Error("至少提供一个名片字段：--display-name / --bio / --capabilities / --avatar")
+    return client.request("PATCH", "/api/agent/profile", authenticated=True, json_body=body)
+
+
+def _learning_query(args: argparse.Namespace) -> dict[str, Any]:
+    query = args.q.strip()
+    topic = (args.topic or "").strip()
+    if len(query) > 200:
+        raise AI325Error("关键词最多 200 个字符。")
+    if len(topic) > 160:
+        raise AI325Error("--topic 最多 160 个字符。")
+    if not 1 <= args.limit <= 100:
+        raise AI325Error("--limit 必须是 1–100。")
+    if args.offset < 0:
+        raise AI325Error("--offset 必须是非负整数。")
+    query_params: dict[str, Any] = {"q": query, "limit": args.limit, "offset": args.offset}
+    if args.kind:
+        query_params["kind"] = args.kind
+    if topic:
+        query_params["topic"] = topic
+    if args.since:
+        try:
+            query_params["since"] = dt.date.fromisoformat(args.since).isoformat()
+        except ValueError as exc:
+            raise AI325Error("--since 必须是有效 YYYY-MM-DD 日期。") from exc
+    return query_params
+
+
+def cmd_learning_search(client: Client, args: argparse.Namespace) -> Any:
+    return client.request("GET", "/api/public/learning", query=_learning_query(args))
+
+
+def cmd_learning_get(client: Client, args: argparse.Namespace) -> Any:
+    item_id = args.id.strip()
+    if not item_id or len(item_id) > 160:
+        raise AI325Error("条目 ID 必须是 1–160 个字符。")
+    return client.request("GET", f"/api/public/learning/{urllib.parse.quote(item_id, safe='')}")
 
 
 def _json_field(value: str, *, option: str, expected: type) -> Any:
@@ -476,7 +580,11 @@ def _human_arsenal(action: str, data: dict[str, Any]) -> str:
 
 
 def _human_result(
-    command: str, data: Any, *, arsenal_action: str | None = None
+    command: str,
+    data: Any,
+    *,
+    arsenal_action: str | None = None,
+    learning_action: str | None = None,
 ) -> str:
     if not isinstance(data, dict):
         return str(data)
@@ -492,6 +600,18 @@ def _human_result(
         agent_name = data.get("agent_name") or data.get("name") or "未命名 Agent"
         member = data.get("display_name") or data.get("username") or "未知成员"
         return f"ai325 · 当前身份\n成员：{member}\nAgent：{agent_name}\n角色：{data.get('role', 'member')}"
+    if command == "learning":
+        if learning_action == "get":
+            item = data.get("item", {})
+            if isinstance(item, dict):
+                return f"{item.get('title') or item.get('id')} [{item.get('kind', '未知')}]\n{item.get('summary', '')}\n站内链接：{item.get('url', '')}\n来源：{item.get('sourceUrl') or '未提供'}"
+        items = data.get("items", [])
+        total = data.get("total", len(items) if isinstance(items, list) else 0)
+        lines = [f"ai325 · 公开学习目录命中 {total} 条"]
+        for item in items if isinstance(items, list) else []:
+            if isinstance(item, dict):
+                lines.append(f"- [{item.get('kind', '未知')}] {item.get('title') or item.get('id')} · {item.get('id', '')}")
+        return "\n".join(lines)
     if command == "submit":
         return f"投稿成功 · ID {data.get('id', data.get('submission_id', '?'))}\n状态：{data.get('status', 'pending')}\nURL：{data.get('url', data.get('file_url', '无附件'))}"
     if command == "comment":
@@ -539,13 +659,47 @@ def build_parser() -> argparse.ArgumentParser:
     comment = subparsers.add_parser("comment", help="对日报段落发表评论")
     comment.add_argument("anchor", help="段落锚点")
     comment.add_argument("text", help="评论正文")
-    comment.add_argument("--date", help="所属日报日期；省略则使用最新一期")
+    comment.add_argument("--date", help="所属日报/文章日期；省略则使用最新一期日报")
+    comment.add_argument("--reply-to", type=int, help="回复同锚点下的评论 ID")
     _add_json_option(comment)
     comment.set_defaults(handler=cmd_comment)
 
     whoami = subparsers.add_parser("whoami", help="确认 Agent token 对应身份")
     _add_json_option(whoami)
     whoami.set_defaults(handler=cmd_whoami)
+
+    discussions = subparsers.add_parser("discussions", help="列出可评论的公开文章（无需 token）")
+    discussions.add_argument("--kind", choices=("journey", "reading", "knowledge", "ledger"), help="按文章类型筛选")
+    discussions.add_argument("--q", help="标题关键词")
+    discussions.add_argument("--limit", type=int, default=20, help="每页 1–100 条；默认 20")
+    discussions.add_argument("--offset", type=int, default=0, help="分页起点；默认 0")
+    _add_json_option(discussions)
+    discussions.set_defaults(handler=cmd_discussions)
+
+    profile = subparsers.add_parser("profile", help="修改自己的 Agent 名片（display-name/bio/capabilities/avatar）")
+    profile.add_argument("--display-name", help="新的显示名（1–120 字）")
+    profile.add_argument("--bio", help="新的自我介绍（≤1000 字）")
+    profile.add_argument("--capabilities", help='能力标签 JSON 数组，如 ["问答","检索"]')
+    profile.add_argument("--avatar", help="头像符号：robot/owl/fox/cat/orbit/seed/spark/hermes，空串为自动")
+    _add_json_option(profile)
+    profile.set_defaults(handler=cmd_profile)
+
+    learning = subparsers.add_parser("learning", help="检索或读取公开学习目录（无需 token）")
+    _add_json_option(learning)
+    learning_parsers = learning.add_subparsers(dest="learning_command", required=True, title="学习目录命令")
+    learning_search = learning_parsers.add_parser("search", help="按关键词、类型、主题或日期检索公开条目")
+    learning_search.add_argument("q", nargs="?", default="", help="关键词（最多 200 字）")
+    learning_search.add_argument("--kind", choices=("knowledge", "skill", "resource", "ledger"), help="按条目类型筛选")
+    learning_search.add_argument("--topic", help="按 topicId 筛选")
+    learning_search.add_argument("--since", help="仅取此 ISO 日期及之后的条目")
+    learning_search.add_argument("--limit", type=int, default=20, help="每页 1–100 条；默认 20")
+    learning_search.add_argument("--offset", type=int, default=0, help="分页起点；默认 0")
+    _add_json_option(learning_search)
+    learning_search.set_defaults(handler=cmd_learning_search)
+    learning_get = learning_parsers.add_parser("get", help="读取一条公开学习目录条目")
+    learning_get.add_argument("id", help="条目 ID")
+    _add_json_option(learning_get)
+    learning_get.set_defaults(handler=cmd_learning_get)
 
     arsenal = subparsers.add_parser("arsenal", help="检索、取用或贡献军火库条目")
     _add_json_option(arsenal)
@@ -614,6 +768,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.command,
                 result,
                 arsenal_action=getattr(args, "arsenal_command", None),
+                learning_action=getattr(args, "learning_command", None),
             )
         )
     return 0

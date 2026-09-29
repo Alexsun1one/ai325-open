@@ -1,0 +1,75 @@
+/* 家园「我的护法与图鉴」：蓝白纸面语法，内容区，单列纵向（护法→图鉴→成就→足迹）。
+   无卡片墙、无无限动画；只有 hover 颜色过渡，reduce-motion 下关闭。 */
+
+.box{margin:0}
+.body{padding:.2rem 0 1.2rem}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.2rem .8rem}
+.hint{margin:.3rem 0 0;font:400 .7rem/1.65 var(--font-sans);color:var(--color-ink-3);overflow-wrap:anywhere}
+.toolbar .hint{margin:0}
+.linkBtn{min-height:44px;padding:0 .4rem;border:0;background:none;color:var(--color-blue-text);font:700 .78rem var(--font-sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.linkBtn:disabled{opacity:.55;cursor:default}
+.linkBtn:focus-visible{outline:2px solid var(--color-blue-text);outline-offset:2px}
+.state{margin-top:.8rem;padding:1rem;border:1px dashed var(--color-rule);font-size:.82rem;line-height:1.7;color:var(--color-ink-3);text-align:center}
+.err{margin:.5rem 0 0;font-size:.76rem;line-height:1.6;color:var(--color-cinnabar-text)}
+.empty{margin:0 0 1rem;padding:.6rem .8rem;border-left:3px solid var(--color-blue-text);background:var(--color-blue-wash);font:400 .78rem/1.7 var(--font-sans);color:var(--color-ink-2)}
+
+.layout{margin-top:.6rem;display:grid;gap:1.4rem}
+/* 组件常住 ~296px 侧栏：永远单列，不依据 viewport 分两列 */
+.side,.main{min-width:0}
+.main section{margin-top:1.4rem}
+.main section:first-child,.main .empty+section{margin-top:0}
+.h3{margin:0 0 .4rem;font:800 .92rem var(--font-serif);color:var(--color-ink)}
+.h3 small{margin-left:.3rem;font:600 .7rem var(--font-sans);color:var(--color-ink-3)}
+
+/* 护法 */
+.watch{display:flex;align-items:center;gap:.7rem;padding:.6rem .7rem;border:1px solid var(--color-blue-wash-2);border-left:3px solid var(--color-blue-text);background:var(--color-blue-wash)}
+.watchImg{flex:0 0 auto;width:64px;height:64px;object-fit:contain;image-rendering:pixelated}
+.watchText{margin:0;font:400 .8rem/1.7 var(--font-sans);color:var(--color-ink);overflow-wrap:anywhere}
+.watchText small{display:block;margin-top:.1rem;font-size:.68rem;color:var(--color-ink-3)}
+.picker{margin:.7rem 0 0;padding:0;border:0;min-width:0}
+.legend{padding:0;font:700 .72rem var(--font-sans);color:var(--color-ink-3)}
+.pick{position:relative;display:flex;align-items:center;gap:.6rem;min-height:56px;padding:.35rem .4rem;border-bottom:1px solid var(--color-rule-soft);cursor:pointer;transition:background-color .15s}
+.pick:hover{background:var(--color-blue-wash)}
+.pick:has(.pickInput:checked){background:var(--color-blue-wash)}
+.pick:has(.pickInput:focus-visible){outline:2px solid var(--color-blue-text);outline-offset:-2px}
+.pickInput{position:absolute;width:1px;height:1px;opacity:0}
+.pickImg{flex:0 0 auto;width:48px;height:48px;object-fit:contain;image-rendering:pixelated}
+.pickText{flex:1;min-width:0;font:400 .8rem/1.5 var(--font-sans);color:var(--color-ink)}
+.pickText strong{font-weight:700}
+.pickText small{color:var(--color-ink-3)}
+.pickTag{display:block;font-size:.68rem;color:var(--color-ink-3)}
+.pickMark{flex:0 0 auto;font:700 .7rem var(--font-sans);color:var(--color-blue-text)}
+.picker:disabled{opacity:.7}
+
+/* 图鉴 / 成就：行列表 */
+.list{margin:0;padding:0;list-style:none;border-top:1px solid var(--color-rule)}
+.row{padding:.55rem .1rem;border-bottom:1px solid var(--color-rule-soft)}
+.rowMain{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem}
+.rowName{font:700 .84rem var(--font-sans);color:var(--color-ink);overflow-wrap:anywhere}
+.rowNum{flex:0 0 auto;font:600 .72rem var(--font-sans);font-variant-numeric:tabular-nums;color:var(--color-ink-3)}
+.rowSub{margin:.1rem 0 0;font:400 .72rem/1.65 var(--font-sans);color:var(--color-ink-3);overflow-wrap:anywhere}
+.rowLocked .rowName{color:var(--color-ink-3)}
+.rowDone .rowNum{color:var(--color-teal-text)}
+.badge{flex:0 0 auto;border:1px solid var(--color-rule);border-radius:4px;padding:0 .35rem;font:600 .64rem/1.6 var(--font-sans);color:var(--color-ink-3)}
+.badge_planted{border-color:var(--color-blue-2);color:var(--color-blue-text)}
+.badge_harvested{border-color:var(--color-amber);color:var(--color-amber-text)}
+.meter{margin-top:.35rem;height:4px;background:var(--color-rule-soft);border-radius:2px;overflow:hidden}
+.meter span{display:block;height:100%;background:var(--color-blue-2)}
+.rowDone .meter span{background:var(--color-teal)}
+
+/* 足迹：7 列，静态柱 */
+.days{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.3rem;align-items:end}
+.day{display:flex;flex-direction:column;align-items:center;gap:.2rem;min-width:0}
+.dayNum{font:700 .7rem var(--font-sans);font-variant-numeric:tabular-nums;color:var(--color-ink-2)}
+.dayBar{display:flex;flex-direction:column;justify-content:flex-end;width:100%;max-width:34px;height:64px;border-bottom:2px solid var(--color-rule)}
+.dayBar i{display:block;width:100%}
+.dayPlant{background:var(--color-blue-2)}
+.dayHarvest{background:var(--color-amber)}
+.dayLabel{font:400 .64rem var(--font-sans);color:var(--color-ink-3);white-space:nowrap}
+.legendLine{margin:.5rem 0 0;font:400 .7rem/1.7 var(--font-sans);color:var(--color-ink-3);overflow-wrap:anywhere}
+.keyPlant,.keyHarvest{display:inline-flex;align-items:center;gap:.25rem;font-weight:600;color:var(--color-ink-2)}
+.keyPlant::before,.keyHarvest::before{content:"";width:.6rem;height:.6rem;border-radius:2px}
+.keyPlant::before{background:var(--color-blue-2)}
+.keyHarvest::before{background:var(--color-amber)}
+
+@media(prefers-reduced-motion:reduce){.pick{transition:none}}

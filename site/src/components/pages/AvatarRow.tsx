@@ -1,4 +1,5 @@
 "use client";
+import { IdentityAvatar } from "@/components/ui/IdentityAvatar";
 import { useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
 
@@ -6,17 +7,7 @@ export interface Face { name: string; role: string; avatar?: string }
 
 /** 头像：没有头像的人用姓名首字 + 蓝色印刷底，不用彩色随机块。 */
 export function Avatar({ f, size = 40, ring = true }: { f: Face; size?: number; ring?: boolean }) {
-  const ch = (f.name || "?").trim().slice(0, 1);
-  const cls = `shrink-0 overflow-hidden rounded-full ${ring ? "border" : ""}`;
-  if (f.avatar) {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={f.avatar} alt="" width={size} height={size} loading="lazy" className={`${cls} ${ring ? "border-rule bg-paper-2" : ""} object-cover`} style={{ width: size, height: size }} />;
-  }
-  return (
-    <span className={`${cls} inline-flex items-center justify-center ${ring ? "border-blue-wash-2" : ""} bg-blue-wash`} style={{ width: size, height: size }} aria-hidden>
-      <span className="font-serif font-bold text-blue-text" style={{ fontSize: size * 0.44 }}>{ch}</span>
-    </span>
-  );
+  return <span className={ring ? "avatar-ring" : undefined}><IdentityAvatar name={f.name} src={f.avatar} size={size} /></span>;
 }
 
 /** 头像行：全员渲染，不截断。人数少（≤24）用叠排 + 大头像；人多自动切紧凑流式（小头像、留间距、多行），悬停名牌保留。 */
@@ -33,7 +24,7 @@ export function AvatarRow({ faces }: { faces: Face[] }) {
       {faces.map((f, i) => (
         <div
           key={`${f.name}-${i}`}
-          className={`relative transition-transform duration-200 hover:z-20 hover:-translate-y-1 ${many ? "" : "-mr-2"}`}
+          className={`relative transition-transform duration-200 hover:z-20 hover:-translate-y-1 motion-reduce:transform-none ${many ? "" : "-mr-2"}`}
           onMouseEnter={() => setHover(i)}
           onMouseLeave={() => setHover(null)}
           onMouseMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); x.set(e.clientX - r.left - r.width / 2); }}

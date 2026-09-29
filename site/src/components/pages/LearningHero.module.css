@@ -1,0 +1,40 @@
+.hero { display:grid; grid-template-columns:minmax(0,.94fr) minmax(0,1.16fr); align-items:center; gap:40px; padding:36px 0 32px; }
+.copy { min-width:0; }
+.eyebrow { color:var(--ink-3); font:12px/1.6 var(--font-sans); margin:0 0 22px; }
+.copy h1 { font-size:clamp(40px,4.7vw,60px); font-weight:800; line-height:1.23; letter-spacing:-.025em; margin:0; text-wrap:balance; }
+.copy h1 span { color:var(--blue-text); }
+.lead { max-width:29em; margin:22px 0 24px; color:var(--ink-2); font:15px/1.85 var(--font-sans); text-wrap:pretty; }
+.actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px 24px; font:500 14px/1.4 var(--font-sans); }
+.primary,.secondary { display:inline-flex; min-height:48px; align-items:center; justify-content:center; gap:24px; text-decoration:none !important; }
+.primary { background:var(--blue-text); color:var(--paper); padding:0 22px; border-radius:6px; }
+.secondary { color:var(--ink); }
+.primary:focus-visible,.secondary:focus-visible,.caption a:focus-visible { outline:2px solid var(--blue); outline-offset:5px; }
+.figure { margin:0; min-width:0; }
+.imageFrame { width:100%; aspect-ratio:3 / 2; }
+.ascentImage { display:block; width:100%; height:auto; aspect-ratio:3 / 2; }
+.caption { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0 12px; padding:8px 0 0; font:12px/1.7 var(--font-sans); }
+.caption a { display:inline-flex; gap:10px; align-items:center; min-height:44px; color:var(--blue-text); }
+@media (prefers-reduced-motion:no-preference) {
+ .ascentImage { animation:ascentArrival 4s cubic-bezier(.23,1,.32,1) both; }
+}
+@keyframes ascentArrival {
+ from { opacity:.45; transform:translateY(6px); }
+ to { opacity:1; transform:translateY(0); }
+}
+@media (hover:hover) and (pointer:fine) {
+ .actions .primary:hover { background:var(--ink); color:var(--paper); }
+ .secondary:hover,.caption a:hover { text-decoration:underline !important; text-underline-offset:5px; }
+}
+@media (max-width:900px) { .hero { gap:24px; } }
+@media (max-width:700px) {
+ .hero { grid-template-columns:1fr; gap:28px; padding:28px 0; }
+ .eyebrow { margin-bottom:14px; font-size:11px; }
+ .copy h1 { font-size:42px; }
+ .lead { font-size:14px; line-height:1.75; margin:16px 0 20px; }
+ .figure { margin-inline:-20px; }
+ .caption { padding-inline:20px; font-size:12px; }
+ .actions { gap:20px; }
+}
+@media (prefers-reduced-motion:reduce) {
+ .ascentImage { animation:none; opacity:1; transform:none; }
+}

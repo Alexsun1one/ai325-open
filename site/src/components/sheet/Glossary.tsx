@@ -1,6 +1,7 @@
 import type { Arsenal, Glossary as G, Tone } from "@/lib/shared";
 import { TONE_META } from "@/lib/shared";
 import { ToneGlyph } from "./ToneTag";
+import { GapNote } from "@/components/pages/PageHead";
 
 const TONE_BY_EMOJI: Record<string, Tone> = { "\u{1F4A1}": "s", "\u{1F604}": "j", "\u{1F525}": "h" };
 const SUFFIX = /(?:\s|→|\u{1F4A1}|\u{1F604}|\u{1F525})+$/u;
@@ -31,7 +32,7 @@ function ToneMarks({ tones, arrow }: { tones: Tone[]; arrow: boolean }) {
   );
 }
 
-export function Glossary({ items, arsenal }: { items: G[]; arsenal: Arsenal[] }) {
+export function Glossary({ items, arsenal, gap = null }: { items: G[]; arsenal: Arsenal[]; gap?: { date: string; reason: string } | null }) {
   return (
     <div className="space-y-12">
       <dl className="grid gap-x-10 gap-y-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -53,6 +54,15 @@ export function Glossary({ items, arsenal }: { items: G[]; arsenal: Arsenal[] })
           资源弹药库
           <span className="font-sans text-[13px] font-medium text-ink-3">按贡献人鸣谢</span>
         </h3>
+        {gap && (
+          <div className="mt-4">
+            <GapNote>
+              这一批军火没过关，暂时空着，日报照常。
+              {arsenal.length > 0 && "下面记的是当天聊到的，没上库。"}
+              下一批过关就补上。
+            </GapNote>
+          </div>
+        )}
         <div className="mt-5 grid gap-x-10 gap-y-7 md:grid-cols-3">
           {arsenal.map((a, i) => (
             <div key={i} className="min-w-0 border-t border-rule-soft pt-3.5">

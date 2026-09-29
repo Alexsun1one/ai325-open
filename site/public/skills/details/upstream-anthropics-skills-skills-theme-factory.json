@@ -1,0 +1,35 @@
+{
+  "skillMarkdown": "---\nname: theme-factory\ndescription: Toolkit for styling artifacts with a theme. These artifacts can be slides, docs, reportings, HTML landing pages, etc. There are 10 pre-set themes with colors/fonts that you can apply to any artifact that has been creating, or can generate a new theme on-the-fly.\nlicense: Complete terms in LICENSE.txt\n---\n\n\n# Theme Factory Skill\n\nThis skill provides a curated collection of professional font and color themes themes, each with carefully selected color palettes and font pairings. Once a theme is chosen, it can be applied to any artifact.\n\n## Purpose\n\nTo apply consistent, professional styling to presentation slide decks, use this skill. Each theme includes:\n- A cohesive color palette with hex codes\n- Complementary font pairings for headers and body text\n- A distinct visual identity suitable for different contexts and audiences\n\n## Usage Instructions\n\nTo apply styling to a slide deck or other artifact:\n\n1. **Show the theme showcase**: Display the `theme-showcase.pdf` file to allow users to see all available themes visually. Do not make any modifications to it; simply show the file for viewing.\n2. **Ask for their choice**: Ask which theme to apply to the deck\n3. **Wait for selection**: Get explicit confirmation about the chosen theme\n4. **Apply the theme**: Once a theme has been chosen, apply the selected theme's colors and fonts to the deck/artifact\n\n## Themes Available\n\nThe following 10 themes are available, each showcased in `theme-showcase.pdf`:\n\n1. **Ocean Depths** - Professional and calming maritime theme\n2. **Sunset Boulevard** - Warm and vibrant sunset colors\n3. **Forest Canopy** - Natural and grounded earth tones\n4. **Modern Minimalist** - Clean and contemporary grayscale\n5. **Golden Hour** - Rich and warm autumnal palette\n6. **Arctic Frost** - Cool and crisp winter-inspired theme\n7. **Desert Rose** - Soft and sophisticated dusty tones\n8. **Tech Innovation** - Bold and modern tech aesthetic\n9. **Botanical Garden** - Fresh and organic garden colors\n10. **Midnight Galaxy** - Dramatic and cosmic deep tones\n\n## Theme Details\n\nEach theme is defined in the `themes/` directory with complete specifications including:\n- Cohesive color palette with hex codes\n- Complementary font pairings for headers and body text\n- Distinct visual identity suitable for different contexts and audiences\n\n## Application Process\n\nAfter a preferred theme is selected:\n1. Read the corresponding theme file from the `themes/` directory\n2. Apply the specified colors and fonts consistently throughout the deck\n3. Ensure proper contrast and readability\n4. Maintain the theme's visual identity across all slides\n\n## Create your Own Theme\nTo handle cases where none of the existing themes work for an artifact, create a custom theme. Based on provided inputs, generate a new theme similar to the ones above. Give the theme a similar name describing what the font/color combinations represent. Use any basic description provided to choose appropriate colors/fonts. After generating the theme, show it for review and verification. Following that, apply the theme as described above.\n",
+  "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/theme-factory/SKILL.md",
+  "repositoryUrl": "https://github.com/anthropics/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 178790,
+  "starsCheckedAt": "2026-09-28T18:57:01Z",
+  "editorial": {
+    "overview": "这项技能为已有幻灯片、文档或 HTML 选择统一的颜色和字体主题。它先展示随包主题样例，让使用者看到组合效果，再读取选中主题的具体规范，将标题、正文和配色一致地应用到材料中。这里的选择基于视觉预览，而不是只凭一个主题名字猜测风格。\n\n如果已有主题无法满足需求，公开版本允许根据输入创建新的主题，但仍需先让使用者查看，再应用到正式材料。它适合内容结构已经较清楚、主要缺少视觉一致性的任务；同一套主题可以帮助多页材料保持关联，却不会自动解决论证顺序、错误图表或冗长文案。本条按所链版本归纳，没有把主题数量写成长期保证，也未将其审美描述当作实测。使用时应提供现有品牌限制和字体可用条件，应用后检查每页对比度、换行与强调色用途。若已有成熟设计系统，应优先尊重它，不为换主题而改变已经有效的规则。",
+    "useCases": [
+      "统一一份演示稿的配色字体",
+      "为跨文档材料选择一致主题"
+    ],
+    "inputs": [
+      "已完成内容的文件或页面",
+      "品牌约束、场景与字体条件"
+    ],
+    "outputs": [
+      "选定或定制的主题说明",
+      "应用主题后的材料及检查项"
+    ],
+    "steps": [
+      "查看主题样例并选定方向，不直接凭名字套用。",
+      "读取相应主题规范，映射到标题、正文和图表。",
+      "检查跨页一致性与可读性，必要时调整或定制主题。"
+    ],
+    "limitations": [
+      "本站未应用主题或检查输出，视觉效果需另行验收。",
+      "主题主要约束颜色字体，不负责重写内容结构或修正数据。"
+    ],
+    "reviewedAt": "2026-09-22",
+    "sourceUrl": "https://github.com/anthropics/skills/blob/34040c9c568585f6929bedeaad110ad08f079624/skills/theme-factory/SKILL.md"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "skillMarkdown": "---\nname: remotion-maps\ndescription: Remotion Map animation knowledge\nversion: 4.0.529\n---\n\n# Remotion Maps\n\nChoose exactly one technique from the intended shot, then load only that technique's `TECHNIQUE.md`.\nEvery technique directory is self-contained and may be removed without breaking the others.\n\n## [Static map](techniques/static-map/TECHNIQUE.md)\n\n- Requires you grab a satellite image and mount it in a `<Img>` tag, and animate on top\n\n## [Mapbox](techniques/mapbox/TECHNIQUE.md)\n\n- Requires a Mapbox key\n- Nicer styles by default\n- Map can display a round globe when zoomed out\n- Includes nice 3D buildings such as the Eiffel tower\n\n## [MapLibre](techniques/maplibre/TECHNIQUE.md)\n\n- Requires no API key, fully free\n- Does not include 3D building\n\n## [MapTiler](techniques/maptiler/TECHNIQUE.md)\n\n- Uses MapTiler\n- Annotations can be drawn on top of geographic features: borders, rivers, labels\n\n## [CesiumJS](techniques/cesium/TECHNIQUE.md)\n\n- Flythroughs through terrain and mountains\n- \"Flight simulator\" perspective\n",
+  "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-maps/SKILL.md",
+  "repositoryUrl": "https://github.com/remotion-dev/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 4754,
+  "starsCheckedAt": "2026-09-28T18:57:03Z"
+}

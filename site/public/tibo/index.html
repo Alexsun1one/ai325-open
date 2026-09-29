@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4f0">
+  <meta name="description" content="Tibo，今天按了吗？一个有点着急的重置观测站。漫画互动与公开动态观测。">
+  <title>Tibo，今天按了吗？ · aitibo.cn</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5f4f0'/%3E%3Ccircle cx='32' cy='30' r='21' fill='%23d83b2b'/%3E%3Cpath d='M24 30h16M32 22v16' stroke='white' stroke-width='5'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="motion.css"><link rel="stylesheet" href="live.css"><link rel="stylesheet" href="intent.css"><link rel="stylesheet" href="prediction.css"><link rel="stylesheet" href="timeline.css"><script src="i18n.js" defer></script><script src="app.js" defer></script><script src="motion.js" defer></script><script src="intent.js" defer></script><script src="prediction.js" defer></script><script src="timeline.js" defer></script><script src="live.js" defer></script><script src="ai325.js" defer></script>
+</head>
+<body>
+<div class="ai325-return"><a href="/#playground" id="ai325-return">← ai325 · 摸鱼实验室</a><span>ai tibo !</span></div>
+<a class="skip" href="#radar">跳到主要内容</a>
+<header class="header"><div class="nav-wrap">
+  <a class="brand" href="#radar" aria-label="aitibo 首页">ai tibo<span class="brand-mark">!</span><span class="brand-dot">●</span></a>
+  <nav aria-label="主导航"><a href="#radar" class="active">重置雷达</a><a href="#feed">他的动态</a><a href="#history">重置日历</a><button class="nav-about" data-about>关于</button></nav>
+  <select id="language-select" class="language-select" aria-label="选择语言"></select>
+  <button class="subscribe outline" data-subscribe><span aria-hidden="true">♧</span> <span>订阅提醒</span></button>
+</div></header>
+<main class="page">
+  <div class="preview-bar"><span><i></i> 本地交互原型</span><span>X 尚未接入 · 切换下方状态体验</span></div>
+  <section class="hero" id="radar" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="eyebrow">一个有点着急的重置观测站</p>
+      <h1 id="hero-title"><span class="tibo-word">Tibo<span>,</span></span><br>今天按了吗<span class="question">?</span></h1>
+      <div class="status" id="status">还在等他</div>
+      <p class="hero-line" id="hero-line">胡子又长了，按钮还没动。</p>
+      <div class="timer-block"><p id="timer-label">距离上次重置 <span class="demo-tag">演示计时</span></p><div class="timer" aria-live="off"><span id="days">02</span><small>天</small><span id="hours">14</span><small>时</small><span id="minutes">36</span><small>分</small></div></div>
+      <div class="hero-actions"><button class="primary" data-subscribe>重置了叫我 <span>↗</span></button><a class="text-link" href="#forecast" id="evidence-link">查看预测依据 <span>↓</span></a></div>
+      <p class="hero-note">你负责创造，剩下的等他按。</p>
+    </div>
+    <div class="hero-scene">
+      <div class="speech" id="speech">别急，<br>我就刷会儿 X<span>本站配文</span></div>
+      <div class="artwork" id="artwork" role="img" aria-label="胡子拉碴的漫画 Tibo 趴在重置按钮旁，等待重置"><div class="sprite" id="hero-sprite"></div></div>
+      <button class="nudge" id="nudge">戳一下他 <span>↖</span><small>只是玩梗，不会触发重置</small></button>
+      <div class="state-picker" role="group" aria-label="预览角色状态">
+        <button class="state-button selected" data-state="waiting" aria-pressed="true"><span class="thumb thumb-0"></span><span>苦等中</span><small>按钮还没动</small></button>
+        <button class="state-button" data-state="soon" aria-pressed="false"><span class="thumb thumb-1"></span><span>准备按</span><small>他有话说</small></button>
+        <button class="state-button" data-state="reset" aria-pressed="false"><span class="thumb thumb-2"></span><span>封神了</span><small>重置，开工！</small></button>
+      </div>
+      <p class="scene-caption">同一个 Tibo，不同的精神状态。 <span>↗</span></p>
+      <div class="offerings" role="group" aria-label="和漫画 Tibo 互动"><button data-gift="coffee">☕ 续一杯</button><button data-gift="razor">🪒 该刮胡子了</button><button data-gift="pray">🙏 义父救我</button></div>
+      <p class="offerings-note">纯属玩梗，义父收不到。</p>
+    </div>
+  </section>
+  <div class="info-grid">
+    <section class="feed" id="feed" aria-labelledby="feed-title">
+      <div class="section-heading"><h2 id="feed-title">他刚刚说了什么 <span class="x-mark">𝕏</span></h2><span class="section-note">历史内容演示</span></div>
+      <article class="post featured-post"><div class="avatar" aria-hidden="true"></div><div class="post-content"><div class="post-meta"><b>Tibo</b><span>@thsottiaux</span><span class="post-badge" id="post-badge">调侃</span></div><p class="post-quote" id="post-quote">“你以为我要宣布重置？我只是来刷刷推。”</p><p class="post-context" id="post-context">历史帖意译 · 2026 年 7 月 15 日</p><div class="post-bottom"><span id="post-disclaimer">公开发言，不代表当前状态</span><a id="post-source" href="https://x.com/thsottiaux/status/2077212009071075330" target="_blank" rel="noopener noreferrer">查看出处 ↗</a></div><div class="semantic"><span aria-hidden="true">⌁</span><span id="semantic-text">语义判断：调侃，未承诺重置</span></div></div></article>
+      <article class="post second-post"><div class="avatar" aria-hidden="true"></div><div class="post-content"><div class="post-meta"><b>Tibo</b><span>采访摘意</span><span class="post-badge neutral">背景资料</span></div><p class="post-quote">有时是为体验问题补偿，有时是想和大家一起庆祝。</p><p class="post-context">重置按钮是真的。期待，也是真的。</p><div class="post-bottom"><span>Matthew Berman 采访 · 23:37 起</span><a href="https://www.buzzsprout.com/2640889/episodes/19696913-how-to-understand-the-next-wave-of-ai-before-everyone-else-tibo-interview" target="_blank" rel="noopener noreferrer">听他说 ↗</a></div></div></article>
+      <a class="feed-follow" href="https://x.com/thsottiaux" target="_blank" rel="noopener noreferrer">去 X 看 Tibo 的最新动态 <span>↗</span></a>
+    </section>
+    <section class="forecast" id="forecast" aria-labelledby="forecast-title">
+      <div class="section-heading"><h2 id="forecast-title">下一次，有戏吗？</h2><span class="section-note">演示判断</span></div>
+      <p class="forecast-state" id="forecast-state">暂无线索<span>…</span></p>
+      <p class="forecast-description" id="forecast-description">当前示例内容没有构成明确的重置承诺。<br>别急，先把想做的事记下来。</p>
+      <dl class="signals"><div><dt><span>⚑</span> 明确预告</dt><dd id="signal-promise">未发现</dd></div><div><dt><span>☏</span> 近期动态</dt><dd id="signal-activity">日常互动</dd></div><div><dt><span>✓</span> 完成公告</dt><dd id="signal-completion">待确认</dd></div></dl>
+      <details id="reasoning"><summary>看看是怎么判断的 <span>＋</span></summary><div class="reasoning-body"><p id="reasoning-text">示例中虽然出现了“重置”，但句子明确否定了重置预告。关键词命中不等于承诺。</p><p>正式版本将结合原帖、回复上文、时间和适用范围判断；本页尚未运行自动采集或预测模型。</p></div></details>
+      <p class="forecast-footnote">有来源才有依据，有承诺也要等确认。</p>
+    </section>
+  </div>
+  <section class="history" id="history" aria-labelledby="history-title"><div class="section-heading history-heading"><div><h2 id="history-title">每一次，重新开工</h2><p>把惊喜记下来，也把不同的重置分清楚。</p></div><div class="filters" role="group" aria-label="筛选历史类型"><button class="selected" data-filter="all" aria-pressed="true">全部</button><button data-filter="reset" aria-pressed="false">直接重置</button><button data-filter="banked" aria-pressed="false">重置券</button></div></div>
+    <div class="timeline" id="timeline">
+      <article data-kind="reset" data-event="0"><span class="event-icon">↻</span><div><span class="event-label">历史类型示意 · 01</span><h3>故障补偿</h3><p>修好问题，也让大家重新开始。</p><a href="https://www.buzzsprout.com/2640889/episodes/19696913-how-to-understand-the-next-wave-of-ai-before-everyone-else-tibo-interview" target="_blank" rel="noopener noreferrer">来源：采访 ↗</a></div></article>
+      <article data-kind="banked" data-event="1"><span class="event-icon ticket">✉</span><div><span class="event-label">历史类型示意 · 02</span><h3>发放重置券</h3><p>留到需要的时候，自己选择使用。</p><a href="https://whenresets.net/" target="_blank" rel="noopener noreferrer">来源：历史索引 ↗</a></div></article>
+      <article data-kind="reset" data-event="2"><span class="event-icon gold">☀</span><div><span class="event-label">历史类型示意 · 03</span><h3>庆祝重置</h3><p>好日子，值得多写一点代码。</p><a href="https://community.openai.com/t/codex-rate-limits-reset-for-all-paid-plans-april-28-2026/1379921" target="_blank" rel="noopener noreferrer">来源：社区转载 ↗</a></div></article>
+    </div>
+  </section>
+  <section class="fortune-section" aria-labelledby="fortune-title"><div><p class="eyebrow">等待期间 · 自娱自乐</p><h2 id="fortune-title">今日求重置签</h2><p>代码可以等，仪式感不能少。</p></div><div class="fortune-ticket"><span id="fortune-rank">待抽签</span><p id="fortune-line">心诚则灵，额度另说。</p><small id="fortune-detail">本站娱乐文案，与真实重置无关</small></div><div class="fortune-actions"><button class="primary" id="draw-fortune">抽一签 <span>↗</span></button><button class="text-link" id="copy-fortune" hidden>复制我的签文 ↗</button></div></section>
+  <section class="bottom-note"><span class="note-star">✳</span><p id="bottom-note">愿你的灵感，<br><b>永远比额度多一点。</b></p><button class="text-link" data-subscribe>下次重置，叫上我 ↗</button></section>
+</main>
+<footer><a class="footer-brand" href="#radar">aitibo.cn</a><p>独立社区二创，与 OpenAI 无隶属关系</p><span>保持热爱，多点耐心。<span class="heart">♡</span></span></footer>
+<dialog id="subscribe-dialog"><form id="subscribe-form"><button type="button" class="dialog-close" data-close aria-label="关闭">×</button><span class="dialog-icon">↗</span><p class="eyebrow">下次重置，叫上我</p><h2>把期待留在这里。</h2><p class="dialog-description">这是提醒功能的交互预览。偏好仅保存在当前浏览器，尚未接入通知服务，不会发送邮件或推送。</p><label class="check-row"><input id="notice-promise" type="checkbox" checked><span>他明确预告时<small>先听到风声</small></span></label><label class="check-row"><input id="notice-reset" type="checkbox" checked><span>他宣布重置时<small>该开工了</small></span></label><p class="form-message" id="form-message" role="status"></p><button type="submit" class="primary full-width">保存本机偏好 <span>↗</span></button></form></dialog>
+<dialog id="about-dialog"><button class="dialog-close" data-close aria-label="关闭">×</button><p class="eyebrow">关于这个小站</p><h2>等一个按钮，<br>也等一点惊喜。</h2><p class="dialog-description">aitibo.cn 是围绕 Tibo 公开重置动态构思的独立社区项目。这一版是可交互的本地原型：人物状态、计时和判断均为演示，历史资料附出处。</p><p class="dialog-description">下一步是接入他的公开 X 动态，区分调侃、预告、直接重置与重置券，让每个判断都能回到原文。漫画台词属于本站二创。</p><button class="primary full-width" data-close>知道了 <span>↗</span></button></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body></html>

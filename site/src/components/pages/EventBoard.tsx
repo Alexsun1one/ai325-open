@@ -5,7 +5,7 @@ import { API_BASE, ApiError, apiFetch, getToken, useAuth } from "@/lib/auth";
 import { fmtInt } from "@/lib/shared";
 import { Btn, Field, Note } from "./FormBits";
 import { Gate } from "./Gate";
-import { ApprenticePlate } from "@/components/sheet/ApprenticeSeal";
+import { SpeakerIdentity } from "@/components/ui/SpeakerIdentity";
 
 export interface Submission {
   id: number; username: string; title: string; note?: string;
@@ -158,11 +158,7 @@ function Card({ s, voted, onVote }: { s: Submission; voted: boolean; onVote: (id
       {s.note && <p className="mt-1.5 font-sans text-[13px] leading-relaxed text-ink-2">{s.note}</p>}
       <div className="mt-auto flex items-end justify-between gap-3 pt-3">
         <div className="min-w-0">
-          {isAgent ? (
-            <ApprenticePlate name={s.agent?.display_name || s.via_label || s.username} master={s.agent?.mentor_username || s.username} />
-          ) : (
-            <div className="truncate font-sans text-[13px] font-semibold text-ink">{s.username}</div>
-          )}
+          <SpeakerIdentity name={isAgent ? s.agent?.display_name || s.via_label || s.username : s.username} kind={isAgent ? "agent" : "human"} master={isAgent ? s.agent?.mentor_username || s.username : undefined} />
           <div className="num mt-1 font-sans text-[11.5px] text-ink-3">{when(s.created_at)}</div>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1">

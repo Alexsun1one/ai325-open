@@ -1,0 +1,31 @@
+/* BookNoteBody：书籍 Markdown 正文的纸面排版。蓝白 token、17–18px、行高约 1.9；
+ * 表格/代码局部横滑，不让页面横向溢出；重点靠字重与蓝链接，不满页蓝。 */
+.body{font:400 1.08rem/1.9 var(--font-serif);color:var(--color-ink-2);overflow-wrap:anywhere}
+.body p{margin:0 0 1.1rem}
+.head{color:var(--color-ink);line-height:1.5;margin:1.7rem 0 .7rem;font-weight:700}
+h2.head{font-size:1.32rem}
+h3.head{font-size:1.16rem}
+h4.head,h5.head,h6.head{font-size:1.05rem;color:var(--color-ink-2)}
+.body strong{color:var(--color-blue-text);font-weight:700}
+.body em{font-style:italic}
+.ic{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.86em;background:var(--color-paper-2);border:1px solid var(--color-rule);border-radius:4px;padding:.08em .34em;color:var(--color-ink)}
+.code{overflow-x:auto;background:var(--color-paper-2);border:1px solid var(--color-rule);border-radius:8px;padding:.9rem 1rem;margin:0 0 1.1rem;font-size:.85rem;line-height:1.65}
+.code code{display:block;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;color:var(--color-ink-2);white-space:pre}
+.codeLang{display:block;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.7rem;color:var(--color-ink-3);letter-spacing:.04em;margin:0 0 .45rem}
+.link{color:var(--color-blue-text);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.link:hover{color:var(--color-blue)}
+.fig{display:inline-block;font-size:.8rem;color:var(--color-ink-3);border:1px dashed var(--color-rule);border-radius:6px;padding:.12rem .55rem;background:var(--color-paper-2)}
+.quote{border-left:3px solid var(--color-blue-wash-2);padding:.15rem 0 .15rem .95rem;margin:0 0 1.1rem;color:var(--color-ink-3)}
+.quote p{margin:0 0 .5rem}
+.hr{border:none;border-top:1px solid var(--color-rule);margin:1.9rem 0}
+.tableWrap{overflow-x:auto;margin:0 0 1.2rem;border:1px solid var(--color-rule);border-radius:8px}
+.tableWrap table{border-collapse:collapse;min-width:100%;font-family:var(--font-sans);font-size:.9rem;line-height:1.7}
+.tableWrap th{background:var(--color-paper-2);border-bottom:2px solid var(--color-rule);padding:.5rem .75rem;text-align:left;font-weight:700;color:var(--color-ink);white-space:nowrap}
+.tableWrap td{border-bottom:1px solid var(--color-rule-soft);padding:.5rem .75rem;vertical-align:top;color:var(--color-ink-2)}
+.tableWrap tr:last-child td{border-bottom:none}
+/* 窄屏首列约 5em 最小宽——320px 下不被挤成逐字竖排；宽表仍由容器局部横滑 */
+@media (max-width:639px){.tableWrap th:first-child,.tableWrap td:first-child{min-width:5em}}
+.body ul{list-style:disc;padding-left:1.5rem;margin:0 0 1.1rem}
+.body ol{list-style:decimal;padding-left:1.5rem;margin:0 0 1.1rem}
+.body li{margin:.28rem 0}
+.body li>ul,.body li>ol{margin:.2rem 0 .35rem}

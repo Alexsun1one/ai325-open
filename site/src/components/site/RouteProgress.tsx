@@ -14,6 +14,7 @@ export function RouteProgress() {
   useEffect(() => {
     if (prev.current !== path) {
       prev.current = path;
+      timers.current.forEach(clearTimeout); timers.current = [];
       setW(100);
       timers.current.push(setTimeout(() => { setShow(false); setW(0); }, 300));
     }
@@ -21,10 +22,15 @@ export function RouteProgress() {
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
-      const a = (e.target as HTMLElement).closest?.('a[href]') as HTMLAnchorElement | null;
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target instanceof Element ? e.target.closest<HTMLAnchorElement>('a[href]') : null;
       if (!a) return;
       const href = a.getAttribute("href") || "";
-      if (!href || href.startsWith("http") || href.startsWith("mailto") || href.startsWith("tel") || href.startsWith("#") || href.startsWith("/uploads")) return;
+      if (!href) return;
+      const url = new URL(href, window.location.href);
+      if (url.origin !== window.location.origin || !/^https?:$/.test(url.protocol)) return;
+      if (url.pathname.replace(/\/$/, "") === window.location.pathname.replace(/\/$/, "")) return;
+      if (url.pathname.startsWith("/uploads/") || url.pathname.startsWith("/api/")) return;
       if (a.target && a.target !== "_self") return;
       if (a.hasAttribute("download")) return;
       // 站内导航：启动伪进度（导航完成由 usePathname 收尾）
@@ -32,6 +38,8 @@ export function RouteProgress() {
       setShow(true); setW(8);
       timers.current.push(setTimeout(() => setW(55), 60));
       timers.current.push(setTimeout(() => setW(88), 420));
+      // 取消导航或路由失败时也要收尾，避免留下永久进度条。
+      timers.current.push(setTimeout(() => { setShow(false); setW(0); }, 15000));
     };
     document.addEventListener("click", onClick, true);
     return () => { document.removeEventListener("click", onClick, true); timers.current.forEach(clearTimeout); };

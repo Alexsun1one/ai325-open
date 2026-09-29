@@ -1,0 +1,101 @@
+.page {
+  width: 100%;
+  --reading-width: 760px;
+  max-width: 824px;
+  margin-inline: auto;
+  padding: 24px 32px 96px;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.page a { text-underline-offset: 5px; }
+.article { position: relative; min-width: 0; max-width: var(--reading-width); margin-inline: auto; }
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  max-width: var(--reading-width);
+  margin: 0 auto 36px;
+  color: var(--ink-3);
+  font: 13px/1.6 var(--font-sans);
+}
+
+.breadcrumb a { display: inline-flex; align-items: center; min-height: 44px; color: var(--blue-text); }
+.header { max-width: var(--reading-width); margin-inline: auto; padding-block: 8px 4px; }
+.kicker { color: var(--blue-text); font: 500 13px/1.7 var(--font-sans); }
+.header h1 { margin: 16px 0 24px; color: var(--blue-text); font: 800 clamp(36px, 5vw, 56px)/1.35 var(--font-serif); letter-spacing: .025em; text-wrap: balance; }
+.subtitle { max-width: 30em; color: var(--ink-2); font-size: 20px; line-height: 1.8; text-wrap: pretty; }
+.byline { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 24px; color: var(--ink-3); font: 13px/1.7 var(--font-sans); }
+.byline time { font-variant-numeric: tabular-nums; }
+.cover { max-width: var(--reading-width); margin: 28px auto 0; }
+
+/* Keep native anchor targets clear of the responsive site header. */
+.page .article [id] { scroll-margin-top: calc(var(--nav-h, 110px) + 24px); }
+
+/* The extra rail gets its own space; it never takes width from the article. */
+@media (min-width: 1200px) {
+  .page { max-width: 1084px; padding-inline: 32px 292px; }
+  .article { width: var(--reading-width); }
+  .intro { margin-top: 44px; }
+}
+
+.prose { max-width: var(--reading-width); margin-inline: auto; font: 400 18px/2 var(--font-serif); line-break: strict; text-wrap: pretty; }
+.prose p + p { margin-top: 1.35em; }
+.prose strong { color: var(--blue-text); font-weight: 700; }
+.intro p:first-child { font-size: 20px; line-height: 1.95; }
+.section { margin-top: 60px; }
+.sectionHeader { max-width: var(--reading-width); margin: 0 auto 28px; padding-top: 24px; border-top: 1px solid var(--rule); }
+.chapterLine { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 20px; }
+.chapterNumber { color: var(--blue-text); font: 500 13px/1.7 var(--font-sans); font-variant-numeric: tabular-nums; }
+.chapterNumber span { color: var(--ink-3); font-size: 11px; }
+.section:target .chapterNumber { color: var(--amber-text); }
+.sectionHeader h2, .ending h2 { color: var(--blue-text); margin-top: 12px; font: 700 28px/1.6 var(--font-serif); text-wrap: pretty; }
+.pullquote { max-width: var(--reading-width); margin: 28px auto 0; padding: 24px 0; border-block: 1px solid var(--rule); color: var(--blue-text); font: 600 24px/1.8 var(--font-kai); text-wrap: pretty; }
+.figure { max-width: var(--reading-width); margin: 40px auto; }
+.imageLink { display: block; cursor: zoom-in; }
+.image { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: var(--paper-2); }
+.figure figcaption, .cover figcaption { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 24px; max-width: var(--reading-width); margin: 14px auto 0; color: var(--ink-3); font: 13px/1.8 var(--font-sans); }
+.figure figcaption p { flex: 1 1 28em; }
+.imageHint { font-size: 11px; }
+.sectionNavigation { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; max-width: var(--reading-width); margin: 20px auto 0; color: var(--ink-3); font: 12px/1.7 var(--font-sans); }
+.sectionNavigation a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
+.ending { max-width: var(--reading-width); margin: 64px auto 0; padding-top: 32px; border-top: 1px solid var(--rule); }
+.ending h2 { margin: 0 0 24px; }
+.source { max-width: var(--reading-width); margin: 36px auto 0; color: var(--ink-3); font: 13px/1.85 var(--font-sans); }
+.source a { display: inline-flex; align-items: center; min-height: 44px; margin-top: 12px; color: var(--blue-text); }
+.sourceActions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0 24px; }
+
+.nextSteps { max-width: var(--reading-width); margin: 44px auto 0; padding-top: 28px; border-top: 1px solid var(--rule); }
+.nextSteps ul { margin-top: 12px; }
+.nextSteps li + li { border-top: 1px solid var(--rule-soft); }
+.nextSteps a { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 44px; padding-block: 18px; color: var(--blue-text); font: 600 16px/1.7 var(--font-sans); }
+.nextSteps a > span:first-child { min-width: 0; }
+.nextSteps a > span:last-child { flex-shrink: 0; }
+.nextSteps small { display: block; margin-top: 4px; color: var(--ink-2); font-size: 13px; font-weight: 400; }
+
+@media (hover: hover) and (pointer: fine) {
+  .page a:hover { color: var(--blue-text); text-decoration: underline; }
+}
+
+@media (max-width: 700px) {
+  .page { padding: 16px 20px 56px; }
+  .breadcrumb { margin-bottom: 12px; }
+  .header { padding-block: 0; }
+  .header h1 { margin-block: 12px 16px; }
+  .byline { margin-top: 16px; }
+  .cover { margin-top: 20px; }
+  .subtitle { font-size: 18px; }
+  .prose { font-size: 17px; }
+  .intro p:first-child { font-size: 18px; }
+  .section { margin-top: 44px; }
+  .sectionHeader { margin-bottom: 20px; padding-top: 20px; }
+  .sectionHeader h2, .ending h2 { font-size: 23px; }
+  .pullquote { padding-block: 20px; font-size: 21px; }
+  .figure { margin-block: 28px; }
+  .figure figcaption { gap: 4px; }
+  .sectionNavigation { margin-top: 16px; }
+  .ending { margin-top: 44px; padding-top: 28px; }
+  .nextSteps { margin-top: 32px; }
+}

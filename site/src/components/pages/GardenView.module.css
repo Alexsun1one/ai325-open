@@ -1,0 +1,142 @@
+/* 家园视图：蓝白纸面站点里的温暖像素小院。
+   地块内景 = brand/garden/survival-crops-v1.png（1774×887）左右半幅 sprite 定位，不改图。
+   状态本体是 DOM 按钮；图片只是插画层，不冒充实时地图。 */
+
+.garden {
+  --garden-ground: #e8e0c6;
+  --garden-furrow: rgba(122,84,52,.12);
+  --garden-edge: #b3a67f;
+  --garden-leaf: #3f7a34;
+  --garden-leaf-text: #2f6128;
+}
+[data-theme="dark"] .garden {
+  --garden-ground: #1b231a;
+  --garden-furrow: rgba(200,180,140,.12);
+  --garden-edge: #3d4634;
+  --garden-leaf: #7fb069;
+  --garden-leaf-text: #9cc98b;
+}
+
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;border-top:2px solid var(--color-ink);padding-top:.9rem}
+.kicker{margin:0;font-size:.68rem;font-weight:700;color:var(--color-blue-text)}
+.h2{margin:.15rem 0 .1rem;font-family:var(--font-serif);font-size:1.3rem;font-weight:800;color:var(--color-ink)}
+.sub{margin:0;font-size:.75rem;color:var(--color-ink-3);line-height:1.6}
+.block{margin-top:1.6rem}
+.blockTight{margin-top:.8rem}
+
+/* ---------- 未开通 ---------- */
+.hero{display:grid;gap:1.4rem;margin-top:1.2rem;align-items:center}
+@media(min-width:900px){.hero{grid-template-columns:minmax(0,1fr) minmax(0,330px)}}
+.heroCopy p{margin:.5rem 0 0;font:400 .86rem/1.8 var(--font-sans);color:var(--color-ink-2);overflow-wrap:anywhere}
+.heroImg{margin:0;border:1px solid var(--color-rule);border-radius:8px;overflow:hidden;aspect-ratio:1/1;background:#1b2338}
+.heroImg img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* ---------- 园景 ---------- */
+.layout{margin-top:1.4rem;display:grid;gap:1.6rem}
+@media(min-width:1024px){.layout{grid-template-columns:minmax(0,1fr) 296px;gap:2.2rem;align-items:start}}
+.scene{min-width:0}
+.banner{margin:0 0 .8rem;border:1px solid var(--color-rule);border-radius:8px;overflow:hidden;height:104px;background:#1b2338}
+.banner img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 72%}
+@media(max-width:768px){.banner{height:76px}}
+.visitBar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.4rem .8rem;margin-bottom:.9rem;border:1px solid var(--color-blue-wash-2);border-left:3px solid var(--color-blue-text);background:var(--color-blue-wash);padding:.55rem .8rem}
+.visitBar>span:last-child{font-size:.72rem;color:var(--color-ink-3)}
+
+.plotGrid{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem}
+@media(max-width:768px){.plotGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.plot{position:relative;display:block;width:100%;aspect-ratio:4/3;padding:0;border:1px solid var(--garden-edge);border-radius:8px;overflow:hidden;cursor:pointer;background-color:var(--garden-ground);color:var(--color-ink);text-align:left;transition:border-color .18s,box-shadow .18s}
+.plot:not(:disabled):hover{border-color:var(--color-blue-2);box-shadow:var(--shadow-sheet)}
+.plot:focus-visible{outline:2px solid var(--color-blue-text);outline-offset:2px}
+.plot:disabled{cursor:default}
+/* 空地：浅垄虚线种植位，不再铺大片土纹 */
+.plotEmpty{border-style:dashed;background-image:repeating-linear-gradient(180deg,transparent 0 11px,var(--garden-furrow) 11px 13px)}
+.plotArt{position:absolute;inset:0;background-repeat:no-repeat;background-size:200% auto;pointer-events:none}
+.plotGrowing .plotArt{background-image:url("/brand/garden/survival-crops-v1.png");background-position:left center}
+.plotRipe .plotArt{background-image:url("/brand/garden/survival-crops-v1.png");background-position:right center}
+.plotRipe{border-color:var(--color-amber)}
+.plotRipe{outline:2px solid transparent;outline-offset:2px}
+@media(prefers-reduced-motion:no-preference){
+  /* 成熟提示：琥珀边框 + 有限两次 outline 呼吸，不跑无限 box-shadow 重绘 */
+  .plotRipe{animation:ripePulse 1.8s ease-in-out 2}
+}
+@keyframes ripePulse{0%,100%{outline-color:rgba(195,122,20,0)}50%{outline-color:rgba(195,122,20,.9)}}
+
+.plotTop{position:absolute;top:.35rem;left:.35rem;right:.35rem;display:flex;flex-wrap:wrap;gap:.3rem;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:.3rem;max-width:100%;border:1px solid var(--color-rule);border-radius:4px;background:var(--color-paper);padding:.12rem .4rem;font:600 .68rem/1.5 var(--font-sans);color:var(--color-ink)}
+.chipAmber{border-color:var(--color-amber);color:var(--color-amber-text)}
+.chipCin{border-color:var(--color-cinnabar);color:var(--color-cinnabar-text)}
+.plotFoot{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:.4rem;min-height:34px;padding:.15rem .5rem;border-top:1px solid var(--color-rule-soft);background:var(--color-paper);font:600 .7rem var(--font-sans);color:var(--color-ink)}
+.plotFoot small{flex-shrink:0;font:400 .62rem var(--font-sans);color:var(--color-ink-3)}
+.plotFoot .go{color:var(--color-blue-text)}
+.plotFoot .steal{color:var(--color-cinnabar-text)}
+.plotNum{position:absolute;top:.35rem;right:.35rem;font:700 .62rem var(--font-sans);color:var(--color-ink-3);background:var(--color-paper);border:1px solid var(--color-rule);border-radius:4px;padding:.1rem .3rem}
+
+/* ---------- 侧栏 ---------- */
+.ops{min-width:0}
+.opsBlock{margin-top:1.2rem;border-top:1px solid var(--color-rule);padding-top:.9rem}
+.opsBlock:first-child{margin-top:0;border-top:0;padding-top:0}
+.opsTitle{margin:0;font:700 .82rem var(--font-sans);color:var(--color-ink)}
+.opsSub{margin:.25rem 0 0;font:400 .72rem/1.65 var(--font-sans);color:var(--color-ink-3)}
+.harvestNum{margin:.15rem 0 0;font:800 1.05rem/1.3 var(--font-sans);font-variant-numeric:tabular-nums;color:var(--color-ink-2)}
+
+/* 选种横条：地块正上方，先于点地可见可选 */
+.seedStrip{margin:0 0 .7rem;padding:0;border:0;display:flex;flex-wrap:wrap;align-items:center;gap:.45rem}
+.seedCap{flex:0 0 auto;font:700 .78rem var(--font-sans);color:var(--color-ink-3)}
+.seedChip{position:relative;display:inline-flex;align-items:center;gap:.45rem;min-height:44px;padding:.3rem .6rem;border:1px solid var(--color-rule);border-radius:6px;background:var(--color-paper);cursor:pointer}
+.seedChip:hover{border-color:var(--color-blue-2)}
+.seedInput{position:absolute;width:1px;height:1px;opacity:0}
+.seedChip:has(.seedInput:checked){border-color:var(--color-blue-text);background:var(--color-blue-wash)}
+.seedChip:has(.seedInput:focus-visible){outline:2px solid var(--color-blue-text);outline-offset:2px}
+.seedIco{display:inline-flex;flex:0 0 auto}
+.seedName{font:700 .78rem var(--font-sans);color:var(--color-ink)}
+.seedName small{display:block;margin-top:.02rem;font:400 .64rem var(--font-sans);color:var(--color-ink-3)}
+.seedCheck{font:700 .72rem var(--font-sans);color:var(--color-blue-text)}
+
+/* 情境提示行：普通行内元素，不再 sticky 遮内容 */
+.sceneHint{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin:.65rem 0 0;min-height:44px;font:600 .76rem var(--font-sans);color:var(--color-ink-2)}
+.sceneHint button{min-height:44px;border:0;background:none;color:var(--color-blue-text);font:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+.switchRow{display:flex;align-items:center;justify-content:space-between;gap:.8rem;min-height:44px;margin-top:.5rem}
+.switchLabel{font:600 .82rem var(--font-sans);color:var(--color-ink)}
+.switch{position:relative;flex:0 0 auto;width:52px;min-height:44px;border:0;background:none;cursor:pointer;padding:0}
+.switch::before{content:"";position:absolute;left:2px;right:2px;top:50%;height:26px;transform:translateY(-50%);border:1px solid var(--color-rule);border-radius:999px;background:var(--color-paper);transition:background-color .2s,border-color .2s}
+.switch::after{content:"";position:absolute;top:50%;left:6px;width:20px;height:20px;border-radius:50%;background:var(--color-paper);border:1px solid var(--color-rule-soft);box-shadow:0 1px 2px rgba(0,0,0,.25);transform:translateY(-50%);transition:left .25s var(--ease-out-expo)}
+.switch[aria-checked="true"]::before{background:var(--color-amber);border-color:var(--color-amber-deep)}
+.switch[aria-checked="true"]::after{left:26px}
+.switch:disabled{opacity:.55;cursor:not-allowed}
+.switch:focus-visible{outline:2px solid var(--color-blue-text);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.switch::before,.switch::after{transition:none}}
+
+.rows{margin:.7rem 0 0;padding:0;list-style:none;border-top:1px solid var(--color-rule)}
+.nbRow{display:flex;align-items:center;gap:.6rem;min-height:48px;padding:.5rem .2rem;border-bottom:1px solid var(--color-rule-soft)}
+.nbName{flex:1;min-width:0;display:flex;align-items:center;gap:.4rem;overflow-wrap:anywhere}
+.rowMeta{white-space:nowrap;font-size:.68rem;color:var(--color-ink-3)}
+.visitWho{display:inline-flex;align-items:center;gap:.3rem;font-family:var(--font-serif);font-weight:700;color:var(--color-ink)}
+.ripeTag{display:inline-block;margin-left:.35rem;border:1px solid var(--color-amber);border-radius:4px;padding:0 .3rem;font:600 .62rem var(--font-sans);color:var(--color-amber-text)}
+.evRow{padding:.5rem .1rem;border-bottom:1px solid var(--color-rule-soft);font:400 .78rem/1.65 var(--font-sans);color:var(--color-ink-2);overflow-wrap:anywhere}
+.evTime{font-size:.66rem;color:var(--color-ink-3)}
+
+/* ---------- 护法与图鉴 details（内容归 GardenCompanion 组件） ---------- */
+.details>summary{display:flex;align-items:center;gap:.4rem;min-height:44px;cursor:pointer;list-style:none;font:700 .82rem var(--font-sans);color:var(--color-ink)}
+.details>summary::-webkit-details-marker{display:none}
+.details>summary::before{content:"›";font:700 .9rem var(--font-sans);color:var(--color-ink-3)}
+.details>summary:focus-visible{outline:2px solid var(--color-blue-text);outline-offset:2px}
+@media(prefers-reduced-motion:no-preference){.details>summary::before{transition:transform .16s}}
+.details[open]>summary::before{transform:rotate(90deg)}
+.detailsBody{padding:.1rem 0 .4rem}
+
+/* ---------- 通用件 ---------- */
+.state{margin-top:.9rem;padding:1.1rem;border:1px dashed var(--color-rule);font-size:.82rem;color:var(--color-ink-3);text-align:center;line-height:1.7}
+.state button,.textBtn{min-height:44px;border:0;background:none;color:var(--color-blue-text);font:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0 .3rem}
+.notice{margin:.7rem 0 0;font-size:.75rem;color:var(--color-amber-text);line-height:1.6}
+.notice button{min-height:44px;border:0;background:none;color:var(--color-blue-text);font:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.err{margin:.6rem 0 0;font-size:.78rem;color:var(--color-cinnabar-text);line-height:1.6}
+.ok{margin:.6rem 0 0;font-size:.78rem;color:var(--color-teal-text);line-height:1.6}
+.hint{margin:.3rem 0 0;font-size:.68rem;color:var(--color-ink-3);line-height:1.6}
+.primary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 1.1rem;border:1px solid var(--color-blue);border-radius:6px;background:var(--color-blue);color:var(--color-paper);font:700 .85rem var(--font-sans);cursor:pointer}
+.primary:disabled{opacity:.55;cursor:not-allowed}
+.ghost{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 .9rem;border:1px solid var(--color-rule);border-radius:6px;background:var(--color-paper);color:var(--color-blue-text);font:600 .82rem var(--font-sans);cursor:pointer}
+.ghost:disabled{opacity:.55;cursor:not-allowed}
+.acts{margin-top:1rem;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.nudge{animation:nudgeRing 1.6s ease-out 2}
+@keyframes nudgeRing{0%,100%{box-shadow:0 0 0 0 rgba(28,71,163,0)}50%{box-shadow:0 0 0 5px rgba(28,71,163,.25)}}
+@media(prefers-reduced-motion:reduce){.nudge{animation:none;outline:2px solid var(--color-blue-text)}.plot{transition:none}}

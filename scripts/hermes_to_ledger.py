@@ -31,7 +31,18 @@ date = c['date']
 
 prev_files = sorted(f for f in glob.glob(os.path.join(out_dir, '*.json')) if os.path.basename(f) < f'{date}.json')
 prev = json.load(open(prev_files[-1], encoding='utf-8')) if prev_files else None
-issue = (prev['issue'] + 1) if prev else 1
+# 批次号按「日期在全部期里的排位」算，不用 prev+1：
+# 补发一期旧刊（如 2026-09-15 事后补出）时，prev+1 会和后面已发的那期撞号
+# （实测 09-15 与 09-16 双双成了第 025 批）。按排位算则补期自动把后续顶下去。
+_all_dates = sorted(
+    os.path.basename(f)[:-5]
+    for f in glob.glob(os.path.join(out_dir, '*.json'))
+    if re.fullmatch(r'\d{4}-\d{2}-\d{2}', os.path.basename(f)[:-5])
+)
+if date not in _all_dates:
+    _all_dates.append(date)
+    _all_dates.sort()
+issue = _all_dates.index(date) + 1
 
 def slug(s, fallback): return re.sub(r'[^a-z0-9]+', '-', s.lower()).strip('-') or fallback
 def grams(s):
@@ -372,6 +383,14 @@ ledger = {
   'credits': {'distilled_by': c.get('distilled_by', '一一（Hermes × DeepSeek）'), 'reviewed_by': c.get('reviewed_by', '待复核'), 'generated_at': datetime.date.today().isoformat()},
   'footer': c.get('footer', []),
 }
+echo = c.get('reader_echo') if isinstance(c.get('reader_echo'), dict) else {}
+echo_text = str(echo.get('text') or '').strip()
+if echo_text:
+    ledger['reader_echo'] = {
+        'of_window': str(echo.get('of_window') or ''),
+        'anchors': [str(a) for a in (echo.get('anchors') or []) if a],
+        'text': echo_text,
+    }
 # 署名是展示层；身份判断仍以 sender/wxid 证据为锚。
 for quote in ledger['quotes']:
     if isinstance(quote, dict) and quote.get('a'):

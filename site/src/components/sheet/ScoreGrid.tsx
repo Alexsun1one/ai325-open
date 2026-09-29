@@ -6,7 +6,7 @@ import type { Dimension } from "@/lib/shared";
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 /** 五维打分：每行 10 格，按分数注入琥珀；右侧度数。悬停/点按看证据。 */
-export function ScoreGrid({ dims, overall, grade, basis }: { dims: Dimension[]; overall: number; grade: string; basis: string }) {
+export function ScoreGrid({ dims, overall, grade, basis, caliberHref = "#caliber" }: { dims: Dimension[]; overall: number; grade: string; basis: string; caliberHref?: string }) {
   const [active, setActive] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -65,7 +65,7 @@ export function ScoreGrid({ dims, overall, grade, basis }: { dims: Dimension[]; 
             <span className="num">{grade}</span> 级
           </div>
         </div>
-        <p className="mt-6 font-sans text-[12.5px] leading-relaxed text-ink-3">{basis}（按评分当时的统计 · <a href="#caliber" className="text-blue-text">怎么数的</a>）。度数是给这一锅内容打的，不是给人打的：五维取平均，A≥80 · B≥60 · C≥40。</p>
+        <p className="mt-6 font-sans text-[12.5px] leading-relaxed text-ink-3">{basis}（按评分当时的统计 · <a href={caliberHref} className="text-blue-text">怎么数的</a>）。度数是给这一锅内容打的，不是给人打的：五维取平均，A≥80 · B≥60 · C≥40。</p>
       </div>
     </div>
   );

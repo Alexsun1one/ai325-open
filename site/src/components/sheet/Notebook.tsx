@@ -21,7 +21,7 @@ function fromCloud(a: CloudAnno): Note {
   return {
     id: `c${a.id}`, quote: a.quote ?? "", note: a.note ?? "", section: a.section,
     at: a.at ? Date.parse(a.at) || Date.now() : Date.now(),
-    where: "cloud", visibility: a.visibility ?? "public", anchor: a.anchor,
+    where: "cloud", visibility: a.visibility ?? "private", anchor: a.anchor,
     status: a.status ?? "accepted", reason: a.moderation?.reason ?? "",
   };
 }
@@ -86,7 +86,7 @@ export function Notebook({ date, issue, title }: { date: string; issue: number; 
   const add = async () => {
     if (!sel) return;
     const anchor = sel.anchor;
-    const tmp: Note = { id: `${Date.now()}`, quote: sel.text, note: "", section: sel.section, at: Date.now(), where: signedIn ? "cloud" : "local", visibility: "public", anchor, syncing: signedIn };
+    const tmp: Note = { id: `${Date.now()}`, quote: sel.text, note: "", section: sel.section, at: Date.now(), where: signedIn ? "cloud" : "local", visibility: "public", anchor, syncing: signedIn }; // 纯划线公开；写下笔记后后端默认改 private
     const next = [tmp, ...notes];
     persist(next);
     setSel(null); window.getSelection()?.removeAllRanges(); setOpen(true);
@@ -103,7 +103,7 @@ export function Notebook({ date, issue, title }: { date: string; issue: number; 
       setCloudErr("这条没能存到账号里，先留在这台设备上。");
     }
   };
-  const addFree = () => { if (!draft.trim()) return; persist([{ id: `${Date.now()}`, quote: "", note: draft.trim(), at: Date.now() }, ...notes]); setDraft(""); };
+  const addFree = () => { if (!draft.trim()) return; persist([{ id: `${Date.now()}`, quote: "", note: draft.trim(), at: Date.now(), visibility: "private" }, ...notes]); setDraft(""); };
   const update = (id: string, note: string) => persist(notes.map((n) => (n.id === id ? { ...n, note } : n)));
   /** 改批注 / 改可见性都走 PATCH；失败就把话说明白，不假装保存成功。 */
   const pushEdit = async (n: Note, patch: { note?: string; visibility?: "public" | "private" }) => {
@@ -199,7 +199,7 @@ export function Notebook({ date, issue, title }: { date: string; issue: number; 
             </div>
             {!signedIn && (
               <p className="border-b border-rule bg-blue-wash/60 px-5 py-2.5 font-sans text-[12.5px] leading-relaxed text-ink-2">
-                现在写的东西<b>只留在这台设备上</b>。登录之后会永久保存，划过的句子还会对群友可见——群友凭邀请码在<a href="/members/" className="text-blue-text underline underline-offset-2">群像</a>页进门。
+                现在写的东西<b>只留在这台设备上</b>。登录之后划线对群友可见，笔记默认只有你看得见。群友凭邀请码在<a href="/members/" className="text-blue-text underline underline-offset-2">群像</a>页进门。
               </p>
             )}
             {cloudErr && (

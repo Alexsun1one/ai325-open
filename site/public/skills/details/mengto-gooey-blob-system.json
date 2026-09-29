@@ -1,0 +1,9 @@
+{
+  "skillMarkdown": "---\nname: gooey-blob-system\ndescription: \"Create a gooey blob system using SVG filters where multiple shapes merge into a single fluid form. Use overlapping circles combined with a Gaussian blur and color matrix filter to produce a continuous, organic mass. The forms should visually fuse and separate based on proximity. Focus on filter-driven merging (blur + threshold effect), soft organic boundaries with no hard edges, multiple independent shapes behaving as one system, and smooth continuous motion that feels fluid and cohesive.\"\n---\n\n# Gooey Blob System Skill\n\n## Use When\n- A page needs organic fluid shapes that visually merge, separate, and move as one soft system.\n\n## Workflow\n1. Build the effect with SVG filters: Gaussian blur followed by a color matrix threshold.\n2. Animate multiple overlapping circles or blobs so they approach and separate naturally.\n3. Keep boundaries soft and continuous; the visual should feel fluid rather than like separate circles.\n4. Use the blob system as a background accent, loader, cursor field, or hero atmosphere.\n5. Tune blur, contrast, and shape spacing together so merging remains visible.\n\n## Guardrails\n- Do not fake gooey behavior with plain blurred circles that never merge.\n- Do not add fast jittery motion; keep it smooth and cohesive.\n- Provide a static or simplified fallback for low-motion contexts.\n",
+  "sourceUrl": "https://github.com/MengTo/skills/blob/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/gooey-blob-system/SKILL.md",
+  "repositoryUrl": "https://github.com/MengTo/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 6367,
+  "starsCheckedAt": "2026-09-28T18:57:00Z"
+}

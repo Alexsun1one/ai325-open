@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore, useRef } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Markdown, CodeBlock } from "./Markdown";
@@ -7,6 +7,14 @@ import { apiFetch } from "@/lib/auth";
 import { byName } from "./PageHead";
 import type { ArsenalItem } from "./arsenaldata";
 
+function subscribeHash(listener: () => void) {
+  window.addEventListener("hashchange", listener);
+  return () => window.removeEventListener("hashchange", listener);
+}
+function hashItem(hash: string) {
+  const match = hash.match(/^#kb-(.+)$/);
+  try { return match ? decodeURIComponent(match[1]) : null; } catch { return null; }
+}
 const KIND_STYLE: Record<string, string> = {
   技能: "border-cinnabar/40 bg-cinnabar-wash text-cinnabar-text",
   提示词: "border-amber-deep/45 bg-amber-wash text-amber-text",
@@ -14,6 +22,7 @@ const KIND_STYLE: Record<string, string> = {
   文章: "border-teal/45 bg-teal-wash text-teal-text",
   案例: "border-rule bg-paper-2 text-ink-2",
   工具: "border-blue-wash-2 bg-blue-wash text-blue-text",
+  产品: "border-teal/45 bg-teal-wash text-teal-text",
   论文: "border-rule bg-paper-2 text-ink-2",
   拆书: "border-teal/45 bg-teal-wash text-teal-text",
 };
@@ -40,13 +49,13 @@ function Source({ s }: { s: ArsenalItem["source"] }) {
   );
 }
 
-function Row({ it: base, i, open, onToggle, threadTitle }: { it: ArsenalItem; i: number; open: boolean; onToggle: () => void; threadTitle: (id: string) => string }) {
+function Row({ it: base, open, onToggle, threadTitle }: { it: ArsenalItem; open: boolean; onToggle: () => void; threadTitle: (id: string) => string }) {
   const reduce = useReducedMotion();
   const [detail, setDetail] = useState<ArsenalItem | null>(null);
   const it = detail ? { ...base, ...detail } : base;
   // 全文与 SKILL.md 只在详情里给，点开再取——列表不用背这些内容
   useEffect(() => {
-    if (!open || detail || (base.body_md && base.kind !== "技能")) return;
+    if (!open || detail || base.by === "联网精选" || (base.body_md && base.kind !== "技能")) return;
     let alive = true;
     apiFetch<{ item?: ArsenalItem } & ArsenalItem>(`/api/arsenal/${encodeURIComponent(base.id)}`)
       .then((d) => { if (alive) setDetail((d.item ?? d) as ArsenalItem); })
@@ -54,9 +63,9 @@ function Row({ it: base, i, open, onToggle, threadTitle }: { it: ArsenalItem; i:
     return () => { alive = false; };
   }, [open, detail, base]);
   return (
-    <article id={`kb-${it.id}`} className="scroll-mt-24 border-b border-rule-soft">
+    <article id={`kb-${it.id}`} className={`min-w-0 self-start scroll-mt-28 border-b border-rule bg-paper px-2 ${open ? "sm:col-span-2 lg:col-span-3" : ""}`}>
       <button type="button" onClick={onToggle} aria-expanded={open}
-        className={`grid w-full grid-cols-[16px_minmax(0,1fr)] items-start gap-x-3 py-4 text-left transition-colors sm:grid-cols-[16px_minmax(0,1fr)_auto] ${open ? "bg-paper-2/60" : "hover:bg-paper-2/35"}`}>
+        className={`grid w-full grid-cols-[16px_minmax(0,1fr)] items-start gap-x-3 py-4 text-left transition-colors ${open ? "bg-paper-2/60" : "hover:bg-paper-2/35"}`}>
         <svg aria-hidden width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"
           className={`mt-[7px] text-ink-3 transition-transform ${open ? "rotate-90" : ""}`}><path d="M9 6l6 6-6 6" /></svg>
         <span className="min-w-0">
@@ -69,16 +78,17 @@ function Row({ it: base, i, open, onToggle, threadTitle }: { it: ArsenalItem; i:
               <span className="rounded-[3px] border border-teal/45 bg-teal-wash px-1.5 py-[1px] font-sans text-[10.5px] font-semibold text-teal-text">{byName(it.via) || "群友"} 上架</span>
             )}
           </span>
-          <span className="mt-1 block font-sans text-[13.5px] leading-relaxed text-ink-2">{it.one_line}</span>
+          <span className={`mt-1 block font-sans text-[13.5px] leading-relaxed text-ink-2 ${open ? "" : "line-clamp-3"}`}>{it.one_line}</span>
           <span className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
-            <Source s={it.source} />
+            <span className="text-ink-3">{it.source.name}</span>
             {it.tags.slice(0, 4).map((t) => (
               <span key={t} className="rounded-[3px] border border-rule px-1.5 py-[1px] font-sans text-[11px] text-ink-3">{t}</span>
             ))}
           </span>
         </span>
-        <span className="num hidden shrink-0 pt-1 font-sans text-[11.5px] text-ink-3 sm:block">{it.collected_at.slice(5)} 收</span>
+        <span className="num col-start-2 pt-2 font-sans text-[11.5px] text-ink-3">{it.collected_at.slice(5)} 收</span>
       </button>
+      <div className="border-t border-rule-soft py-2 pl-7"><Source s={it.source} /></div>
 
       <AnimatePresence initial={false}>
         {open && (
@@ -87,6 +97,11 @@ function Row({ it: base, i, open, onToggle, threadTitle }: { it: ArsenalItem; i:
             animate={{ height: "auto", opacity: 1 }}
             exit={reduce ? { opacity: 0 } : { height: 0, opacity: 0 }}
             transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+            onAnimationComplete={() => {
+              if (open && hashItem(window.location.hash) === it.id) {
+                document.getElementById(`kb-${it.id}`)?.scrollIntoView({ block: "start", behavior: "instant" });
+              }
+            }}
             className="overflow-hidden">
             <div className="grid gap-x-10 gap-y-7 pb-9 pl-7 pr-1 pt-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,280px)]">
               <div className="min-w-0">
@@ -183,16 +198,33 @@ function Row({ it: base, i, open, onToggle, threadTitle }: { it: ArsenalItem; i:
 export function ArsenalShelf({ items: seeded, shelves, threads }: { items: ArsenalItem[]; shelves: string[]; threads: Record<string, string> }) {
   const [live, setLive] = useState<ArsenalItem[]>([]);
   const [q, setQ] = useState("");
+  const [webOnly, setWebOnly] = useState(false);
+  const [shown, setShown] = useState<Record<string, number>>({});
   const [kind, setKind] = useState("");
   const [tag, setTag] = useState("");
   const [thread, setThread] = useState("");
-  const [open, setOpen] = useState<string | null>(null);
+  const hash = useSyncExternalStore(subscribeHash, () => window.location.hash, () => "");
+  const open = hashItem(hash);
+  const pendingFocus = useRef<string | null>(null);
+  const setOpen = (id: string | null) => {
+    history.replaceState(null, "", `${location.pathname}${location.search}${id ? `#kb-${encodeURIComponent(id)}` : ""}`);
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+  };
+  useEffect(() => {
+    const id = pendingFocus.current;
+    if (id) { document.getElementById(`kb-${id}`)?.querySelector<HTMLButtonElement>("button")?.focus(); pendingFocus.current = null; }
+  }, [shown]);
+  useEffect(() => {
+    if (!open) return;
+    // Align after the native anchor navigation; smooth scrolling can retain a
+    // stale destination while the previous detail collapses and this one opens.
+    const frame = requestAnimationFrame(() => {
+      document.getElementById(`kb-${open}`)?.scrollIntoView({ block: "start", behavior: "instant" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [open]);
   const reduce = useReducedMotion();
 
-  useEffect(() => {
-    const m = location.hash.match(/^#kb-(.+)$/);
-    if (m) setOpen(decodeURIComponent(m[1]));
-  }, []);
 
   // 群友上架的那一批：取不到就只显示静态架，不打扰读者
   useEffect(() => {
@@ -227,12 +259,13 @@ export function ArsenalShelf({ items: seeded, shelves, threads }: { items: Arsen
     const k = q.trim().toLowerCase();
     return items.filter((it) => {
       if (kind && it.kind !== kind) return false;
+      if (webOnly && it.by !== "联网精选") return false;
       if (tag && !it.tags.includes(tag)) return false;
       if (thread && !(it.threads ?? []).includes(thread)) return false;
       if (!k) return true;
       return (it.title + it.one_line + it.tags.join(" ") + it.for_whom).toLowerCase().includes(k);
     });
-  }, [items, q, kind, tag, thread]);
+  }, [items, q, kind, tag, thread, webOnly]);
 
   const grouped = useMemo(() => {
     const order = [...shelves, ...[...new Set(list.map((i) => i.kind))].filter((k) => !shelves.includes(k))];
@@ -241,7 +274,8 @@ export function ArsenalShelf({ items: seeded, shelves, threads }: { items: Arsen
       .filter((g) => g.rows.length);
   }, [list, shelves]);
 
-  const filtering = !!(q || kind || tag || thread);
+  const filtering = !!(q || kind || tag || thread || webOnly);
+  const visibleCount = (rows: ArsenalItem[], kind: string) => Math.max(shown[kind] ?? 12, rows.findIndex((item) => item.id === open) + 1);
   const threadTitle = (id: string) => threads[id] ?? id;
 
   return (
@@ -267,6 +301,10 @@ export function ArsenalShelf({ items: seeded, shelves, threads }: { items: Arsen
           </div>
         </div>
 
+        <label className="mt-3 flex min-h-11 items-center gap-2 font-sans text-[13px] text-ink-2">
+          <input type="checkbox" checked={webOnly} onChange={(event) => setWebOnly(event.target.checked)} className="h-4 w-4 accent-blue" />
+          只看联网精选工具与产品
+        </label>
         <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1.5">
           <span className="label mr-1">标签</span>
           {allTags.map(([t, n]) => (
@@ -292,7 +330,7 @@ export function ArsenalShelf({ items: seeded, shelves, threads }: { items: Arsen
         {filtering && (
           <div className="mt-3 flex items-center gap-3 font-sans text-[12.5px] text-ink-3">
             <span className="num">找到 <b className="text-ink">{list.length}</b> 件</span>
-            <button type="button" onClick={() => { setQ(""); setKind(""); setTag(""); setThread(""); }} className="text-blue-text hover:underline">全部看回来</button>
+            <button type="button" onClick={() => { setQ(""); setKind(""); setTag(""); setThread(""); setWebOnly(false); }} className="text-blue-text hover:underline">全部看回来</button>
           </div>
         )}
       </div>
@@ -301,7 +339,7 @@ export function ArsenalShelf({ items: seeded, shelves, threads }: { items: Arsen
       {grouped.length === 0 ? (
         <p className="py-14 text-center font-serif text-[18px] text-ink-3">架上没有对得上的。换个词试试。</p>
       ) : (
-        <div className="mt-10 space-y-12">
+        <div className="mt-6 space-y-8">
           {grouped.map((g, gi) => (
             <motion.section key={g.kind}
               initial={reduce ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }}
@@ -310,12 +348,18 @@ export function ArsenalShelf({ items: seeded, shelves, threads }: { items: Arsen
                 <h2 className="font-serif text-[22px] font-black text-ink">{g.kind}</h2>
                 <span className="num font-sans text-[12.5px] text-ink-3">{g.rows.length} 件</span>
               </div>
-              <div>
-                {g.rows.map((it, i) => (
-                  <Row key={it.id} it={it} i={i} open={open === it.id} threadTitle={threadTitle}
-                    onToggle={() => { const next = open === it.id ? null : it.id; setOpen(next); if (next) history.replaceState(null, "", `#kb-${next}`); }} />
+              <div className="mt-4 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {g.rows.slice(0, visibleCount(g.rows, g.kind)).map((it) => (
+                  <Row key={it.id} it={it} open={open === it.id} threadTitle={threadTitle}
+                    onToggle={() => { const next = open === it.id ? null : it.id; setOpen(next); }} />
                 ))}
               </div>
+              {visibleCount(g.rows, g.kind) < g.rows.length && (
+                <button type="button" onClick={() => { pendingFocus.current = g.rows[visibleCount(g.rows, g.kind)]?.id ?? null; setShown((old) => ({ ...old, [g.kind]: visibleCount(g.rows, g.kind) + 12 })); }}
+                  className="mt-4 inline-flex min-h-11 items-center rounded-md border border-rule px-4 font-sans text-[13px] text-blue-text hover:bg-paper-2">
+                  已显示 {visibleCount(g.rows, g.kind)} / {g.rows.length} 件 · 再看更多
+                </button>
+              )}
             </motion.section>
           ))}
         </div>

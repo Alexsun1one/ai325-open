@@ -1,26 +1,28 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { api } from "@/lib/api";
+import { api, token } from "@/lib/api";
 
-/** 形状照 backend 2026-08-23 10:56 报告：user 已经是显示名，时间字段叫 at，
- *  公开列表本身只含 accepted + public，所以不再自己过滤 visibility。 */
-export interface Anno {
-  id: number | string;
+/** 公开热区：只有段+人数+用于定位的原文；没有人、没有笔记。 */
+interface HeatItem { anchor: string; count: number; quote?: string }
+interface MineMark { anchor: string; quote: string }
+
+interface Stroke {
+  key: string;
+  top: number;
+  left: number;
+  width: number;
+  band: 1 | 3 | 6;
+  mine: boolean;
+  n: number;
   anchor: string;
   quote: string;
-  note?: string;
-  user?: string;
-  avatar?: string | null;
-  kind?: string;
-  at?: string;
-  is_admin?: boolean;
+  dot?: boolean;
 }
 
-interface Bar { key: string; top: number; left: number; width: number; depth: number; anchor: string; quote: string }
+const DENSITY_RATIO = 0.3; // 超过此比例段落被划 → 只显 TOP
 
-/** 在段落里找到这句话的位置。段落是 innerHTML 渲染的，所以只读不改 DOM——用 Range 量出坐标，划线画在覆盖层上。 */
 function rangeOf(el: HTMLElement, quote: string): Range | null {
   const q = quote.replace(/\s+/g, "").trim();
   if (q.length < 4) return null;
@@ -41,7 +43,6 @@ function rangeOf(el: HTMLElement, quote: string): Range | null {
     for (let k = map.length - 1; k >= 0; k--) {
       if (map[k].start <= pos) {
         const raw = map[k].node.data ?? "";
-        // 把「去掉空白后的位置」还原回原始文本的位置
         let seen = map[k].start, off = 0;
         for (; off < raw.length && seen < pos; off++) if (!/\s/.test(raw[off])) seen++;
         return { node: map[k].node, offset: Math.min(off, raw.length) };
@@ -58,57 +59,115 @@ function rangeOf(el: HTMLElement, quote: string): Range | null {
   } catch { return null; }
 }
 
-/** 公共划线层：谁在这一锅里划过哪一句，全群都看得见。划得越多，琥珀越深。 */
+function bandOf(n: number): 1 | 3 | 6 {
+  if (n >= 6) return 6;
+  if (n >= 3) return 3;
+  return 1;
+}
+
+function strokeStyle(band: 1 | 3 | 6, mine: boolean, dark: boolean): CSSProperties {
+  const amber = dark ? "#d79a3a" : "#c37a14";
+  const color =
+    band === 6 ? (dark ? "#eab45a" : amber) :
+    band === 3 ? (dark ? "#e0a84a" : amber) :
+    amber;
+  const opacity = band === 1 ? (dark ? 0.84 : 0.58) : band === 3 ? (dark ? 0.92 : 0.82) : 1;
+  const height = band === 1 ? 1.5 : band === 3 ? 2.25 : 3;
+  if (mine) {
+    return { background: color, opacity, height };
+  }
+  // 别人的划：虚线描边
+  return {
+    height,
+    opacity,
+    backgroundImage: `repeating-linear-gradient(90deg, ${color} 0 5px, transparent 5px 9px)`,
+    backgroundSize: "auto 100%",
+  };
+}
+
+/** 琥珀下划线热区：Range 量句 → 基线描边；一段一线；>30% 只显 TOP。 */
 export function Highlights({ date }: { date: string }) {
-  const [items, setItems] = useState<Anno[] | null>(null);
-  const [counts, setCounts] = useState<Record<string, number>>({});
-  const [bars, setBars] = useState<Bar[]>([]);
-  const [open, setOpen] = useState<{ anchor: string; quote: string } | null>(null);
+  const [items, setItems] = useState<HeatItem[] | null>(null);
+  const [mine, setMine] = useState<MineMark[]>([]);
+  const [strokes, setStrokes] = useState<Stroke[]>([]);
+  const [open, setOpen] = useState<{ anchor: string; quote: string; n: number; mine: boolean } | null>(null);
+  const [tip, setTip] = useState<{ x: number; y: number; text: string } | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [dark, setDark] = useState(false);
   const reduce = useReducedMotion();
   const tries = useRef(0);
 
   useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    const root = document.documentElement;
+    const sync = () => setDark(root.getAttribute("data-theme") === "dark");
+    sync();
+    const mo = new MutationObserver(sync);
+    mo.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => mo.disconnect();
+  }, []);
 
   useEffect(() => {
     let alive = true;
-    api<{ items?: Anno[]; counts?: Record<string, number> }>(`/api/annotations?date=${date}`, { auth: false })
-      .then((d) => { if (!alive) return; setItems(d.items ?? []); setCounts(d.counts ?? {}); })
-      .catch(() => { if (alive) setItems([]); });   // 还没开通就安静：正文照常读
+    api<{ items?: HeatItem[]; mine?: MineMark[] }>(`/api/annotations/heatmap?date=${date}`, { auth: !!token() })
+      .then((d) => {
+        if (!alive) return;
+        setItems(d.items ?? []);
+        setMine(Array.isArray(d.mine) ? d.mine : []);
+      })
+      .catch(() => { if (alive) { setItems([]); setMine([]); } });
     return () => { alive = false; };
   }, [date]);
 
   const measure = useCallback(() => {
-    if (!items?.length) { setBars([]); return; }
-    const pub = items.filter((a) => a.quote);   // 公开列表已由后端过滤
-    // 同一句被多人划过 → 叠加深度
-    const byQuote = new Map<string, Anno[]>();
-    for (const a of pub) {
-      const k = `${a.anchor}||${a.quote.replace(/\s+/g, "")}`;
-      byQuote.set(k, [...(byQuote.get(k) ?? []), a]);
+    if (!items?.length) { setStrokes([]); return; }
+    const mineAnchors = new Set(mine.map((m) => m.anchor));
+    const cands = items.map((it) => ({
+      anchor: it.anchor,
+      quote: it.quote || "",
+      n: it.count,
+      mine: mineAnchors.has(it.anchor),
+      actors: it.count,
+    }));
+
+    const allAnchors = document.querySelectorAll("[data-anchor]").length || cands.length;
+    const ratio = allAnchors ? cands.length / allAnchors : 0;
+    let draw = cands;
+    if (ratio > DENSITY_RATIO && allAnchors > 0) {
+      const keep = Math.max(1, Math.ceil(allAnchors * DENSITY_RATIO));
+      draw = [...cands].sort((a, b) => b.actors - a.actors).slice(0, keep);
     }
-    const out: Bar[] = [];
-    for (const [k, group] of byQuote) {
-      const [anchor, quote] = k.split("||");
-      const el = document.querySelector<HTMLElement>(`[data-anchor="${CSS.escape(anchor)}"]`);
+    const topSet = new Set(draw.map((c) => c.anchor));
+
+    const out: Stroke[] = [];
+    for (const c of cands) {
+      if (!topSet.has(c.anchor)) continue;
+      const el = document.querySelector<HTMLElement>(`[data-anchor="${CSS.escape(c.anchor)}"]`);
       if (!el) continue;
-      const r = rangeOf(el, group[0].quote);
-      if (!r) continue;
-      const depth = Math.min(3, group.length);
-      Array.from(r.getClientRects()).forEach((rect, n) => {
+      const r = c.quote ? rangeOf(el, c.quote) : null;
+      const rects = r ? Array.from(r.getClientRects()) : [el.getBoundingClientRect()];
+      const b = bandOf(c.n);
+      rects.forEach((rect, i) => {
         if (rect.width < 2) return;
         out.push({
-          key: `${k}-${n}`, anchor, quote,
-          top: rect.bottom + window.scrollY - 2,
+          key: `${c.anchor}-${i}`,
+          top: rect.bottom + window.scrollY - (b === 1 ? 1.5 : b === 3 ? 2.25 : 3),
           left: rect.left + window.scrollX,
-          width: rect.width, depth,
+          width: rect.width,
+          band: b,
+          mine: c.mine,
+          n: c.n,
+          anchor: c.anchor,
+          quote: (c.quote || "").replace(/\s+/g, ""),
         });
       });
     }
-    setBars(out);
-  }, [items]);
+    const lastByQuote = new Map<string, number>();
+    out.forEach((s, i) => lastByQuote.set(`${s.anchor}||${s.quote}`, i));
+    out.forEach((s, i) => { s.dot = Boolean(s.mine && lastByQuote.get(`${s.anchor}||${s.quote}`) === i); });
+    setStrokes(out);
+  }, [items, mine]);
 
-  // 锚点是 ParagraphTools 在 effect 里打的，可能比这里晚；重试几次直到量到为止
   useEffect(() => {
     if (!items) return;
     tries.current = 0;
@@ -125,88 +184,104 @@ export function Highlights({ date }: { date: string }) {
     return () => { ro.disconnect(); removeEventListener("resize", measure); };
   }, [items, measure]);
 
-  // 段尾「N 人划过」：后端直接给了按 anchor 聚合的 counts，用它，别自己数
+  // 段尾「N 人划过」——counts 已是 unique user，匿名也画
   useEffect(() => {
     if (!items) return;
-    const agg = new Map<string, number>(Object.entries(counts));
-    if (!agg.size) for (const a of items) agg.set(a.anchor, (agg.get(a.anchor) ?? 0) + 1);
     const made: HTMLElement[] = [];
-    for (const [anchor, n] of agg) {
-      if (!n) continue;
-      const el = document.querySelector<HTMLElement>(`[data-anchor="${CSS.escape(anchor)}"]`);
+    for (const it of items) {
+      if (!it.count) continue;
+      const el = document.querySelector<HTMLElement>(`[data-anchor="${CSS.escape(it.anchor)}"]`);
       if (!el || el.querySelector("[data-hl-tag]")) continue;
       const tag = document.createElement("span");
       tag.dataset.hlTag = "1";
       tag.className = "ml-2 inline-flex translate-y-[-1px] items-center rounded-[3px] border border-amber-deep/40 bg-amber-wash px-1.5 py-[1px] align-middle font-sans text-[11px] font-semibold text-amber-text";
-      tag.textContent = `${n} 人划过`;
+      tag.textContent = `${it.count} 人划过`;
       el.appendChild(tag);
       made.push(tag);
     }
     return () => { for (const t of made) t.remove(); };
-  }, [items, counts]);
+  }, [items]);
 
-  const panel = open ? (items ?? []).filter((a) => a.anchor === open.anchor && a.quote.replace(/\s+/g, "") === open.quote) : [];
+  if (!mounted || !strokes.length) return null;
 
-  if (!mounted || !bars.length) return null;
+  const openQuote = open
+    ? (items ?? []).find((it) => it.anchor === open.anchor)?.quote || open.quote
+    : "";
 
   return createPortal(
     <>
       <div aria-hidden className="no-print pointer-events-none absolute left-0 top-0 z-[5]">
-        {bars.map((b) => (
+        {strokes.map((s) => (
           <button
-            key={b.key}
+            key={s.key}
             type="button"
-            onMouseEnter={() => setOpen({ anchor: b.anchor, quote: b.quote.replace(/\s+/g, "") })}
-            onClick={() => setOpen({ anchor: b.anchor, quote: b.quote.replace(/\s+/g, "") })}
-            aria-label="看谁划了这一句"
-            className="pointer-events-auto absolute cursor-pointer rounded-full transition-[height,opacity] hover:h-[5px]"
+            onMouseEnter={(e) => {
+              setTip({ x: e.clientX + 8, y: e.clientY - 36, text: s.mine ? `${s.n} 人划过 · 你划过` : `${s.n} 人划过` });
+            }}
+            onFocus={(e) => {
+              const r = e.currentTarget.getBoundingClientRect();
+              setTip({ x: r.left, y: Math.max(8, r.top - 28), text: s.mine ? `${s.n} 人划过 · 你划过` : `${s.n} 人划过` });
+            }}
+            onBlur={() => setTip(null)}
+            onMouseMove={(e) => setTip((t) => t ? { ...t, x: e.clientX + 8, y: Math.max(8, e.clientY - 36) } : t)}
+            onMouseLeave={() => setTip(null)}
+            onClick={() => setOpen({ anchor: s.anchor, quote: s.quote, n: s.n, mine: s.mine })}
+            aria-label={`${s.n} 人划过这一句`}
+            className="pointer-events-auto absolute cursor-pointer rounded-full"
             style={{
-              top: b.top, left: b.left, width: b.width, height: 3,
-              background: "var(--amber)",
-              opacity: b.depth === 1 ? 0.42 : b.depth === 2 ? 0.7 : 1,
+              top: s.top, left: s.left, width: s.width,
+              ...strokeStyle(s.band, s.mine, dark),
+            }}
+          />
+        ))}
+        {strokes.filter((s) => s.dot).map((s) => (
+          <span
+            key={`${s.key}-dot`}
+            aria-hidden
+            className="absolute rounded-full"
+            style={{
+              top: s.top + (s.band === 1 ? 1.5 : s.band === 3 ? 2.25 : 3) / 2 - 2.5,
+              left: s.left + s.width - 2,
+              width: 5,
+              height: 5,
+              background: dark ? "#d79a3a" : "#c37a14",
             }}
           />
         ))}
       </div>
 
+      {tip && (
+        <div
+          role="tooltip"
+          className="no-print pointer-events-none fixed z-[60] rounded-md border border-rule bg-paper px-2.5 py-1 font-sans text-[12px] font-semibold text-ink shadow-[var(--shadow-pop)]"
+          style={{ left: Math.min(tip.x, window.innerWidth - 160), top: tip.y }}
+        >
+          {tip.text}
+        </div>
+      )}
+
       <AnimatePresence>
-        {open && panel.length > 0 && (
+        {open && (
           <motion.aside
             data-notebook
             initial={reduce ? false : { x: 24, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={reduce ? { opacity: 0 } : { x: 24, opacity: 0 }}
             transition={reduce ? { duration: 0 } : { duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
             className="no-print fixed bottom-0 right-0 top-[var(--nav-h)] z-40 flex w-full max-w-[400px] flex-col border-l border-rule bg-paper shadow-[var(--shadow-pop)]"
-            role="dialog" aria-label="划过这一句的人">
+            role="dialog" aria-label="这段被划过">
             <div className="flex items-start justify-between gap-3 border-b border-rule px-5 py-3">
               <div>
-                <div className="font-serif text-[16px] font-bold text-ink">划过这一句的人</div>
-                <div className="num font-sans text-[12px] text-ink-3">{panel.length} 位</div>
+                <div className="font-serif text-[16px] font-bold text-ink">这段被划过</div>
+                <div className="num font-sans text-[12px] text-ink-3">{open.n} 人划过{open.mine ? " · 你划过" : ""}</div>
               </div>
               <button type="button" onClick={() => setOpen(null)} className="rounded-md px-2 py-1 text-ink-3 hover:text-ink" aria-label="关闭">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden><path d="M6 6l12 12M18 6L6 18" /></svg>
               </button>
             </div>
-            <blockquote className="prose-sheet mx-5 mt-4 border-l-2 border-amber pl-3 text-[14.5px] leading-[1.75] text-ink-2">{panel[0].quote}</blockquote>
-            <ul className="flex-1 space-y-3 overflow-y-auto px-5 py-4">
-              {panel.map((a) => (
-                <li key={a.id} className={`rounded-[10px] border px-4 py-3 ${a.is_admin ? "border-cinnabar/40 bg-cinnabar-wash/45" : "border-rule bg-paper-2/50"}`}>
-                  <div className="flex items-center gap-2.5">
-                    {a.avatar
-                      // eslint-disable-next-line @next/next/no-img-element
-                      ? <img src={a.avatar} alt="" width={26} height={26} className="h-[26px] w-[26px] shrink-0 rounded-full border border-rule object-cover" />
-                      : <span aria-hidden className="inline-flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full border border-blue-wash-2 bg-blue-wash font-serif text-[13px] font-bold text-blue-text">{(a.user || "?").slice(0, 1)}</span>}
-                    <span className="min-w-0 flex-1 truncate font-sans text-[13.5px] font-semibold text-ink">{a.user}</span>
-                    {a.is_admin && (
-                      <span className="inline-flex shrink-0 -rotate-2 items-center rounded-[3px] border border-cinnabar px-1.5 py-[1px] font-sans text-[10.5px] font-semibold text-cinnabar-text">鉴定人批注</span>
-                    )}
-                  </div>
-                  {a.note ? <p className={`mt-2 text-[15.5px] leading-[1.8] ${a.is_admin ? "hand" : "prose-sheet"}`}>{a.note}</p> : <p className="mt-2 font-sans text-[13px] text-ink-3">只划了线，没写话。</p>}
-                  {a.at && <div className="num mt-1.5 font-sans text-[11.5px] text-ink-3">{a.at.replace("T", " ").slice(0, 16)}</div>}
-                </li>
-              ))}
-            </ul>
-            <p className="border-t border-rule px-5 py-3 font-sans text-[12px] leading-relaxed text-ink-3">
-              选中正文里的任意一句，点「记下这段」，你的划线也会出现在这里。
+            {openQuote ? (
+              <blockquote className="prose-sheet mx-5 mt-4 border-l-2 border-amber pl-3 text-[14.5px] leading-[1.75] text-ink-2">{openQuote}</blockquote>
+            ) : null}
+            <p className="mt-auto border-t border-rule px-5 py-3 font-sans text-[12px] leading-relaxed text-ink-3">
+              选中正文里的任意一句，点「记下这段」，你的划线也会出现在这里。划线人只计人数，不公开是谁。
             </p>
           </motion.aside>
         )}

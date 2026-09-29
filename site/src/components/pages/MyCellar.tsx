@@ -33,46 +33,53 @@ function useMatchNames(displayName: string) {
 
 /* ── 一期 · 入窖档案 ── */
 
-interface Essay { title: string; author: string; date: string; word_count: number }
+interface Essay { title: string; author: string; date: string; word_count: number; member_key?: string }
 
-export function CellarEssay({ displayName }: { displayName: string }) {
+/** 入窖档案：按 member_key（wxid）归属，展示名只负责渲染。 */
+export function CellarEssay({ displayName, memberKey }: { displayName: string; memberKey?: string }) {
   const names = useMatchNames(displayName);
   const [st, setSt] = useState<St>("loading");
   const [items, setItems] = useState<Essay[]>([]);
 
   useEffect(() => {
     let alive = true;
-    apiFetch<{ items: Essay[] }>("/api/governed/essays")
+    const q = memberKey
+      ? `/api/governed/essays?member_key=${encodeURIComponent(memberKey)}&limit=50`
+      : "/api/governed/essays?limit=300";
+    apiFetch<{ items: Essay[] }>(q)
       .then((d) => { if (alive) { setItems(d.items ?? []); setSt("ok"); } })
       .catch(() => { if (alive) setSt("err"); });
     return () => { alive = false; };
-  }, []);
+  }, [memberKey]);
 
   // 窖藏页按「入窖日期升序、同日按作者」排架,#essay-N 的 N 就是这个序;这里照同一把尺子算回去
   const shelf = useMemo(() => items.slice().sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : a.author.localeCompare(b.author))), [items]);
   const mine = useMemo(() => {
+    if (memberKey) {
+      return shelf.map((e, i) => ({ e, i })).filter(({ e }) => (e.member_key || "") === memberKey);
+    }
     if (!names) return [];
     return shelf.map((e, i) => ({ e, i })).filter(({ e }) => names.includes(e.author));
-  }, [shelf, names]);
+  }, [shelf, names, memberKey]);
 
-  if (st === "loading" || names === null) return <p className="font-sans text-[13px] text-ink-3">正在开窖……</p>;
+  if (st === "loading" || (!memberKey && names === null)) return <p className="font-sans text-[13px] text-ink-3">正在开窖……</p>;
   if (st === "err") return <Note tone="bad">窖藏这会儿读不到,等会儿再来看。</Note>;
   if (!mine.length) {
     return (
       <p className="font-sans text-[13.5px] leading-relaxed text-ink-2">
         窖里还没有你署名的瓶子。写一篇入群小作文交给群主,入窖之后会出现在这里
-        {displayName ? <>(按「<b className="text-ink">{displayName}</b>」这个名字找的;台账里若用的是别的称呼,可能对不上号)</> : null}。
+        {displayName ? <>(按身份键找的；当前显示名「<b className="text-ink">{displayName}</b>」)</> : null}。
       </p>
     );
   }
   return (
     <ul className="divide-y divide-rule-soft border-y border-rule">
       {mine.map(({ e, i }) => (
-        <li key={`${e.author}-${e.date}`}>
+        <li key={`${e.member_key || e.author}-${e.date}`}>
           <a href={`/essays/#essay-${i + 1}`} className="group flex min-h-11 items-center justify-between gap-4 py-4 no-underline">
             <span className="min-w-0">
               <span className="block truncate font-serif text-[17px] font-bold text-ink transition-colors group-hover:text-blue-text">{e.title}</span>
-              <span className="num mt-0.5 block font-sans text-[12.5px] text-ink-3">{e.date} 入窖 · {fmtInt(e.word_count)} 字</span>
+              <span className="num mt-0.5 block font-sans text-[12.5px] text-ink-3">{e.date} 入窖 · {fmtInt(e.word_count)} 字 · {e.author}</span>
             </span>
             <svg aria-hidden width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="shrink-0 text-ink-3 transition-transform group-hover:translate-x-1"><path d="M9 6l6 6-6 6" /></svg>
           </a>
@@ -95,7 +102,8 @@ interface Step { date: string; issue: number | null; kind: string; text: string;
 
 const TRAIL_SCAN_LIMIT = 60; // 一天一期,60 期 ≈ 两个月;再往前的翻往期页去看
 
-export function CellarTrail({ displayName }: { displayName: string }) {
+export function CellarTrail({ displayName, limit = 8 }: { displayName: string; limit?: number }) {
+  const [showAll, setShowAll] = useState(false);
   const names = useMatchNames(displayName);
   const [st, setSt] = useState<St>("loading");
   const [steps, setSteps] = useState<Step[]>([]);
@@ -142,13 +150,14 @@ export function CellarTrail({ displayName }: { displayName: string }) {
       </p>
     );
   }
+  const shown = showAll ? steps : steps.slice(0, limit);
   return (
     <div>
       <p className="mb-3 font-sans text-[12.5px] text-ink-3">
-        从近往回数,台账点到你 <b className="num font-semibold text-amber-text">{steps.length}</b> 次。这就是你进群以来被蒸出来的样子。
+        台账点到你 <b className="num font-semibold text-amber-text">{steps.length}</b> 次。{steps.length > limit ? <span className="text-ink-3">显示最近 {limit} 条</span> : null}
       </p>
       <ol className="border-l border-rule pl-5">
-        {steps.map((s, i) => (
+        {shown.map((s, i) => (
           <li key={`${s.date}-${s.kind}-${i}`} className="relative pb-6 last:pb-0">
             <span aria-hidden className={`absolute -left-[23px] top-[7px] h-[7px] w-[7px] rounded-full ${s.kind === "新面孔" ? "bg-teal" : s.kind === "金句" ? "bg-amber" : "bg-blue"}`} />
             <a href={s.url} className="group block no-underline">
@@ -163,6 +172,12 @@ export function CellarTrail({ displayName }: { displayName: string }) {
           </li>
         ))}
       </ol>
+      {steps.length > limit && (
+        <button type="button" onClick={() => setShowAll((v) => !v)}
+          className="mt-3 font-sans text-[12.5px] font-semibold text-blue-text hover:underline">
+          {showAll ? "收起，只看最近 8 条 ↑" : `全部 ${steps.length} 条 →`}
+        </button>
+      )}
     </div>
   );
 }
@@ -180,7 +195,8 @@ function favUrl(anchor: string): string | null {
   return `/ledger/${date}/#${sec}`;
 }
 
-export function CellarFavorites() {
+export function CellarFavorites({ limit = 8 }: { limit?: number }) {
+  const [showAll, setShowAll] = useState(false);
   const [st, setSt] = useState<St>("loading");
   const [items, setItems] = useState<Fav[]>([]);
   const [busyId, setBusyId] = useState<number | null>(null);
@@ -210,11 +226,13 @@ export function CellarFavorites() {
       </p>
     );
   }
+  const shown = showAll ? items : items.slice(0, limit);
   return (
     <div>
+      {items.length > limit && <p className="mb-2 font-sans text-[12px] text-ink-3">共 {items.length} 条 · 显示最近 {limit} 条</p>}
       {err && <div className="mb-4"><Note tone="bad">{err}</Note></div>}
       <ul className="divide-y divide-rule-soft border-y border-rule">
-        {items.map((f) => {
+        {shown.map((f) => {
           const url = favUrl(f.anchor);
           return (
             <li key={f.id} className="py-5">
@@ -233,6 +251,12 @@ export function CellarFavorites() {
           );
         })}
       </ul>
+      {items.length > limit && (
+        <button type="button" onClick={() => setShowAll((v) => !v)}
+          className="mt-3 font-sans text-[12.5px] font-semibold text-blue-text hover:underline">
+          {showAll ? "收起，只看最近 8 条 ↑" : `全部 ${items.length} 条 →`}
+        </button>
+      )}
     </div>
   );
 }
@@ -241,7 +265,8 @@ export function CellarFavorites() {
 
 interface NoteItem { id: number; kind: string; title: string; content: string; created_at: string; updated_at: string }
 
-export function CellarFragments() {
+export function CellarFragments({ limit = 8 }: { limit?: number }) {
+  const [showAll, setShowAll] = useState(false);
   const [st, setSt] = useState<St>("loading");
   const [items, setItems] = useState<NoteItem[]>([]);
   const [draft, setDraft] = useState("");
@@ -296,9 +321,10 @@ export function CellarFragments() {
       {st === "ok" && !items.length && (
         <p className="mt-4 font-sans text-[13px] leading-relaxed text-ink-3">还空着。第一笔从上面那个框开始——碎片多了,自然就想写深的。</p>
       )}
+      {items.length > limit && <p className="mt-4 font-sans text-[12px] text-ink-3">共 {items.length} 条 · 显示最近 {limit} 条</p>}
       {items.length > 0 && (
         <ul className="mt-5 divide-y divide-rule-soft border-y border-rule">
-          {items.map((n) => (
+          {(showAll ? items : items.slice(0, limit)).map((n) => (
             <li key={n.id} className="py-4">
               <p className="hand whitespace-pre-wrap text-[16px] leading-[1.8] text-ink">{n.content}</p>
               <div className="mt-1.5 flex items-center justify-between gap-4">
@@ -318,7 +344,8 @@ export function CellarFragments() {
 
 /* ── 三期 · 长文(article):标题+正文,草稿自动保存 ── */
 
-export function CellarArticles() {
+export function CellarArticles({ limit = 8 }: { limit?: number }) {
+  const [showAll, setShowAll] = useState(false);
   const [st, setSt] = useState<St>("loading");
   const [items, setItems] = useState<NoteItem[]>([]);
   const [busyId, setBusyId] = useState<number | null>(null);
@@ -427,9 +454,10 @@ export function CellarArticles() {
       {st === "ok" && !items.length && (
         <p className="mt-4 font-sans text-[13px] leading-relaxed text-ink-3">一篇都还没有。不急——随手记那边碎片攒够了,这里自然会有第一篇。</p>
       )}
+      {items.length > limit && <p className="mt-4 font-sans text-[12px] text-ink-3">共 {items.length} 条 · 显示最近 {limit} 条</p>}
       {items.length > 0 && (
         <ul className="mt-5 divide-y divide-rule-soft border-y border-rule">
-          {items.map((n) => (
+          {(showAll ? items : items.slice(0, limit)).map((n) => (
             <li key={n.id} className="flex min-h-11 items-center justify-between gap-4 py-4">
               <button type="button" onClick={() => openOld(n)} className="group min-w-0 flex-1 text-left">
                 <span className="block truncate font-serif text-[17px] font-bold text-ink transition-colors group-hover:text-blue-text">{n.title.trim() || "未命名的一篇"}</span>
@@ -442,6 +470,12 @@ export function CellarArticles() {
             </li>
           ))}
         </ul>
+      )}
+      {items.length > limit && (
+        <button type="button" onClick={() => setShowAll((v) => !v)}
+          className="mt-3 font-sans text-[12.5px] font-semibold text-blue-text hover:underline">
+          {showAll ? "收起，只看最近 8 篇 ↑" : `全部 ${items.length} 篇 →`}
+        </button>
       )}
     </div>
   );

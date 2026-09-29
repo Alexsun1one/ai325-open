@@ -1,0 +1,73 @@
+/* 消息流：头像绝对到独立左列，姓名/徽标/时间同一行，正文与姓名对齐。
+   框与身份分层：人类无框sans；普通Agent中性框+serif；Hermes蓝系框+楷体；
+   采纳态单框，不与身份框叠加成双重边框。 */
+.msg { position:relative; padding-left:48px; }
+.msg :global(.identity-avatar) { position:absolute; left:0; top:1px; }
+.msgHead { display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px; min-height:32px; }
+.msgBody { margin-top:2px; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word; font:15px/1.7 var(--font-sans); color:var(--ink); }
+
+/* 带框消息统一几何：头像进框内左列，正文不悬空 */
+.msgAgent, .msgHermes, .msgAccepted { border:1px solid var(--rule); border-radius:8px; padding:10px 12px 10px 56px; }
+.msgAgent :global(.identity-avatar), .msgHermes :global(.identity-avatar), .msgAccepted :global(.identity-avatar) { left:12px; top:11px; }
+.msgAgent { background:var(--paper-2); }
+.msgAgent .msgBody { font-family:var(--font-serif); }
+.msgHermes { border-color:var(--blue-wash-2); background:var(--blue-wash); }
+.msgHermes .msgBody { font-family:var(--font-kai); font-size:16px; line-height:1.8; }
+.msgAccepted { border-color:var(--amber-deep); background:var(--amber-wash); }
+/* Hermes+采纳：单框，琥珀边表示采纳、蓝底保留身份主题 */
+.msgAcceptedHermes { border-color:var(--amber-deep); background:var(--blue-wash); }
+.msgAcceptedHermes .msgBody { font-family:var(--font-kai); font-size:16px; line-height:1.8; }
+
+/* 有引用行时头像对齐作者行而非引用行：仅 hasRef 时 msgHead 承接定位，头像左移回头像列 */
+.hasRef .msgHead { position: relative; }
+.hasRef .msgHead :global(.identity-avatar) { position: absolute; left: -48px; top: 0; }
+.msgAgent.hasRef .msgHead :global(.identity-avatar),
+.msgHermes.hasRef .msgHead :global(.identity-avatar),
+.msgAccepted.hasRef .msgHead :global(.identity-avatar) { left: -44px; }
+
+/* 接话按钮与回复目标横幅 */
+.replyBtn {
+  margin-left: auto;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 5px;
+  font: 600 12px/1.5 var(--font-sans);
+  color: var(--blue-text);
+  background: transparent;
+}
+.replyBtn:hover { background: var(--blue-wash); }
+.replyBtn:focus-visible { outline: 2px solid var(--blue-text); outline-offset: 1px; }
+
+.replyBanner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-left: 2px solid var(--blue);
+  border-radius: 0 6px 6px 0;
+  background: var(--blue-wash);
+}
+.replyBannerText {
+  min-width: 0;
+  font: 12.5px/1.6 var(--font-sans);
+  color: var(--ink-2);
+}
+.replyBannerText b { color: var(--blue-text); }
+.replyBannerQuote {
+  margin-left: 6px;
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+}
+.replyBannerCancel {
+  flex: none;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 5px;
+  font: 600 12.5px/1.5 var(--font-sans);
+  color: var(--ink-3);
+}
+.replyBannerCancel:hover { color: var(--ink); background: var(--paper); }
+.replyBannerCancel:focus-visible { outline: 2px solid var(--blue-text); outline-offset: 1px; }

@@ -1,0 +1,86 @@
+/* timeline.js companion styles — paired last/next reset summary in the hero,
+   row layout (not cards). Reuses page tokens. */
+.reset-pair {
+  margin: 14px 0 4px;
+  border-top: 1px solid var(--ink, #20211f);
+  border-bottom: 1px solid var(--line, #d2d1c9);
+}
+.reset-pair[hidden] {
+  display: none;
+}
+.rt-pending {
+  font-size: 12px;
+  color: var(--muted, #696960);
+  padding: 10px 0;
+  margin: 0;
+}
+.rt-row {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: baseline;
+  gap: 4px 14px;
+  padding: 10px 0;
+}
+.rt-row + .rt-row {
+  border-top: 1px solid var(--line, #d2d1c9);
+}
+.rt-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted, #696960);
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
+.rt-stale {
+  display: inline-block;
+  font-style: normal;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  color: var(--red, #d83b2b);
+  border: 1px dashed var(--red, #d83b2b);
+  border-radius: 3px;
+  padding: 0 4px;
+  margin-left: 6px;
+  vertical-align: 1px;
+}
+.rt-main {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  min-width: 0;
+}
+.rt-main b {
+  font-size: 17px;
+  font-weight: 750;
+  letter-spacing: -.01em;
+  color: var(--ink, #20211f);
+}
+.rt-main small {
+  font-size: 11px;
+  color: var(--muted, #696960);
+}
+.rt-sub {
+  grid-column: 2;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted, #696960);
+}
+.rt-src {
+  display: inline-block;
+  color: inherit;
+  border-bottom: 1px solid var(--line, #d2d1c9);
+}
+.rt-src:hover {
+  color: var(--red, #d83b2b);
+}
+@media (max-width: 760px) {
+  .rt-row {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+  .rt-sub {
+    grid-column: 1;
+  }
+}

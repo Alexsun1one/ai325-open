@@ -1,0 +1,35 @@
+{
+  "skillMarkdown": "---\nname: remotion-create\ndescription: Create a new Remotion video\nversion: 4.0.529\n---\n\nThese are instructions for making a new Remotion project and composition.  \nIf this is not the next task, see Remotion Best Practices\n\n## Scaffold a project\n\nIf a project already exists, skip this.\nEnsure Node.js and Git is installed, and the current folder is appropriate for starting a new project.\n\nInspect the current folder, including hidden files, before choosing where to scaffold.\n\n### Empty folder\n\nIf it is empty, or contains only disposable operating-system metadata such as `.DS_Store`, create the project directly in the current folder.\nRemove only those disposable metadata files first, since `create-video` rejects non-empty folders.\nDo not treat all hidden files as disposable: files such as `.env` and directories such as `.git` are meaningful contents.\n\nScaffold in existing folder:\n\n```bash\nnpx create-video@latest --yes --blank --no-tailwind .\nnpm i\n```\n\n### Non-empty folder\n\nIf the current folder contains meaningful contents and no project already exists, scaffold into a new subfolder.\nReplace `my-video` with a suitable project name.\n\n\n```bash\nnpx create-video@latest --yes --blank --no-tailwind my-video\ncd my-video\nnpm i\n```\n\n## Designing a video\n\nKeep the scaffold and add React Markup.\nFollow Remotion React Markup Best Practices and [Video Layout Rules](video-layout.md) for video-first layout and text sizing guidance.\n\n## Is this a multi-scene video?\n\nIf this is a video with multiple subsequence videos, follow guidance at Multi-scene videos.\n\n## Interactivity Best Practices\n\nBy structuring the React Markup following Remotion Interactivity Best Practices, you allow the user to make edits in the Studio which write back to code.\n\n## TailwindCSS\n\nIf Tailwind is requested, see [tailwind.md](tailwind.md) for using TailwindCSS in Remotion.\n\n## Open the preview\n\nStart the preview server after building the composition:\n\n```bash\nnpx remotion studio --no-open\n```\n\nThis will start a long-running process and print the server URL for the preview.  \nIf the server is already started, it will print the URL.\nIf an in-harness browser is available, open it there.\nYou can visit a specific composition by navigating to `/[composition-id]`, for example `http://localhost:3000/MapAnimation`.\n\n## Render the video\n\nOnly render if the user explicitly asks for it.\n\n```\nnpx remotion render\n```\n\nFor more options, see Rendering.\n\n## Follow-up\n\nThe video creation process has finished.\nFor follow-up prompts, use Remotion Best Practices\n",
+  "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-create/SKILL.md",
+  "repositoryUrl": "https://github.com/remotion-dev/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 4754,
+  "starsCheckedAt": "2026-09-28T18:57:03Z",
+  "editorial": {
+    "overview": "这项技能负责建立 Remotion 视频工程和 composition，先检查当前目录是否已有项目，再决定沿用工程还是在合适位置新建。公开版本明确区分空目录与包含有效内容的目录，不能为创建脚手架而把隐藏配置或现有代码当成无用文件。随后用 React 内容组织视频，并按任务继续读取版式、多场景和交互相关说明。\n\n它的交付阶段包含启动 Studio 预览，让使用者查看具体 composition；最终渲染则是另一个明确动作，所链版本要求用户提出导出需求后再进行。因此，建立了工程、能够预览和已经得到成片不能混称为完成。本条按研读版本归纳，不把脚手架命令中的依赖选择固定为长期默认。使用者应提供脚本、素材与视频规格，并确认要交源码、预览还是成片。已有工程应尽量延续目录结构和工具链，本站建议先验证一个代表性场景，再扩展多场景内容，减少素材与布局问题累积。",
+    "useCases": [
+      "从脚本建立视频工程",
+      "在已有Remotion项目增加新composition"
+    ],
+    "inputs": [
+      "视频脚本、素材和画面规格",
+      "工程位置及源码或成片交付要求"
+    ],
+    "outputs": [
+      "Remotion工程与composition代码",
+      "预览入口及尚待渲染的状态说明"
+    ],
+    "steps": [
+      "检查目录内容与既有工程，选择安全的新建或续写位置。",
+      "实现composition，按需补读布局与多场景说明。",
+      "启动预览检查内容；明确需要成片时再执行渲染。"
+    ],
+    "limitations": [
+      "本站未创建工程、启动预览或渲染视频，依赖条件未实测。",
+      "此入口组织制作流程，不能仅凭脚手架成功判断视频质量。"
+    ],
+    "reviewedAt": "2026-09-22",
+    "sourceUrl": "https://github.com/remotion-dev/skills/blob/9682e994989f951c75912fbc49aa10332a512685/skills/remotion-create/SKILL.md"
+  }
+}

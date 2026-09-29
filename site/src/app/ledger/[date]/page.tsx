@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getLedger, getNeighbors, getSpotIllustrations, getThemeIllustrations, listLedgerDates, pad3 } from "@/lib/content";
+import { arsenalGapFor } from "@/components/pages/arsenaldata";
 import { LedgerSheet } from "@/components/sheet/LedgerSheet";
 import { FontPreload } from "@/components/site/FontPreload";
 import type { Ledger } from "@/lib/shared";
@@ -33,5 +34,5 @@ export default async function LedgerPage({ params }: { params: Promise<{ date: s
   const l = getLedger(date);
   const nb = getNeighbors(l.date);
   const { members_focus: _mf, thanks: _th, ...core } = l; // 群像高光/感谢走页尾懒加载
-  return (<><FontPreload plan={fontPlan(l)} /><LedgerSheet l={core} totalIssues={listLedgerDates().length} prev={nb.prev} next={nb.next} prevOpen={nb.prevOpen} illus={getThemeIllustrations(l.themes.length)} spots={getSpotIllustrations()} /></>);
+  return (<><FontPreload plan={fontPlan(l)} /><LedgerSheet l={core} totalIssues={listLedgerDates().length} prev={nb.prev} next={nb.next} prevOpen={nb.prevOpen} illus={getThemeIllustrations(l.themes.length)} spots={getSpotIllustrations()} arsenalGap={arsenalGapFor(date)} /></>);
 }

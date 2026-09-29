@@ -1,0 +1,42 @@
+/* 按问题找实现 · 纸面蓝白，条目式结果（非卡片墙）。 */
+.wrap{margin-top:1.6rem}
+.searchBox{display:flex;gap:.6rem;align-items:stretch}
+.input{flex:1;min-width:0;min-height:52px;border:1px solid var(--color-rule);border-radius:8px;background:var(--color-paper);padding:.7rem .9rem;font:400 1rem/1.5 var(--font-sans);color:var(--color-ink)}
+.input:focus{border-color:var(--color-blue-2);outline:none;box-shadow:0 0 0 3px var(--color-blue-wash)}
+.go{min-height:52px;min-width:64px;border:1px solid var(--color-blue);border-radius:8px;background:var(--color-blue);color:var(--color-paper);font:700 .9rem var(--font-sans);cursor:pointer;padding:0 1.1rem}
+.go:disabled{opacity:.55;cursor:not-allowed}
+
+.examples{margin-top:.9rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:baseline}
+.examplesLabel{font-size:.72rem;color:var(--color-ink-3)}
+.example{min-height:40px;border:1px solid var(--color-rule);border-radius:999px;background:var(--color-paper);padding:.2rem .85rem;font:400 .78rem var(--font-sans);color:var(--color-ink-2);cursor:pointer;text-align:left}
+.example:hover{border-color:var(--color-blue-wash-2);color:var(--color-blue-text)}
+
+.meta{margin-top:1.4rem;font-size:.72rem;color:var(--color-ink-3);line-height:1.7}
+.meta b{color:var(--color-ink-2);font-weight:700}
+.metaDim{opacity:.62;font-size:.92em}
+
+.results{margin:1rem 0 0;padding:0;list-style:none;border-top:2px solid var(--color-ink)}
+.result{border-bottom:1px solid var(--color-rule-soft);padding:1rem .1rem 1.1rem}
+.resultTop{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem .8rem}
+.resultTitle{font-family:var(--font-serif);font-size:1.05rem;font-weight:800;color:var(--color-ink);text-decoration:none;overflow-wrap:anywhere}
+.resultTitle:hover{color:var(--color-blue-text)}
+.resultWhy{font-size:.78rem;color:var(--color-ink-2)}
+.chips{display:inline-flex;flex-wrap:wrap;gap:.3rem}
+.chip{display:inline-flex;align-items:center;border:1px solid var(--color-blue-wash-2);border-radius:4px;padding:.05rem .35rem;font:600 .62rem var(--font-sans);color:var(--color-blue-text);white-space:nowrap}
+.chipGray{border-color:var(--color-rule);color:var(--color-ink-3)}
+.excerpt{margin:.55rem 0 0;font-size:.85rem;line-height:1.75;color:var(--color-ink-2);overflow-wrap:anywhere}
+.excerpt mark,.summary mark{background:var(--color-amber-wash);color:inherit;border-radius:2px;padding:0 .1rem}
+.summary{margin:.35rem 0 0;font-size:.82rem;line-height:1.7;color:var(--color-ink-3)}
+.refs{margin:.6rem 0 0;display:flex;flex-direction:column;gap:.3rem}
+.ref{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem .6rem;font-size:.78rem;min-height:32px}
+.ref a{color:var(--color-blue-text);font-weight:600;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+.refPath{font-family:var(--font-sans);font-size:.72rem;color:var(--color-ink-3);overflow-wrap:anywhere}
+.refNote{font-size:.72rem;color:var(--color-ink-3)}
+.noRef{margin:.6rem 0 0;font-size:.75rem;color:var(--color-ink-3)}
+.fit{margin:.5rem 0 0;font-size:.72rem;color:var(--color-ink-3);line-height:1.6}
+.fit b{color:var(--color-ink-2)}
+.more{margin-top:.55rem}
+
+.state{margin-top:1.2rem;padding:1.1rem;border:1px dashed var(--color-rule);font-size:.84rem;color:var(--color-ink-3);text-align:center;line-height:1.8}
+.state a{color:var(--color-blue-text)}
+.state button,.textBtn{min-height:44px;border:0;background:none;color:var(--color-blue-text);font:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0 .3rem}

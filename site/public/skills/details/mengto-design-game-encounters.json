@@ -1,0 +1,9 @@
+{
+  "skillMarkdown": "---\nname: design-game-encounters\ndescription: Design, implement, tune, or test Three.js action-game encounters. Use for arena layout, enemy composition, spawn pacing, objectives, boss phases, reward cadence, encounter fixtures, and difficulty validation.\n---\n\n# Design Game Encounters\n\nDesign encounters as decisions, not actor counts.\n\n## Compose\n\nDefine objective, available space, enemy roles, spawn timing, hazards, player resources, exits, failure recovery, and reward. Add one pressure source at a time; require each archetype to create a distinct response.\n\n## Keep it fair\n\nProtect readable paths, telegraphs, camera sight lines, and recovery windows. Cap simultaneous committed attackers and avoid offscreen damage, unavoidable chains, or encounter resets that duplicate rewards.\n\n## Validate\n\nCreate deterministic starts for low resources, each wave, boss phase, victory, and death/retry. Test desktop and mobile at the real camera distance, then adjust composition from observed decisions rather than raw completion time.\n",
+  "sourceUrl": "https://github.com/MengTo/skills/blob/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/design-game-encounters/SKILL.md",
+  "repositoryUrl": "https://github.com/MengTo/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 6367,
+  "starsCheckedAt": "2026-09-28T18:57:00Z"
+}

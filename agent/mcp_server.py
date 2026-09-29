@@ -19,6 +19,7 @@ MAX_SKILL_UPLOAD_BYTES = 5 * 1024 * 1024
 REQUEST_TIMEOUT = 30.0
 
 ARSENAL_KINDS = "提示词|方法|拆书|工具|论文|文章|案例|技能"
+AGENT_AVATAR_KEYS = ("", "robot", "owl", "fox", "cat", "orbit", "seed", "spark", "hermes")
 
 mcp = FastMCP("ai325_mcp", json_response=True)
 
@@ -145,6 +146,141 @@ async def _request(
         ) from exc
 
 
+@mcp.tool(annotations=_annotations("读取跨期知识与方法", read_only=True, idempotent=True))
+async def learn_knowledge(
+    query: Annotated[str, Field(max_length=160)] = "",
+    topic: Annotated[str, Field(max_length=120)] = "",
+    limit: Annotated[int, Field(ge=1, le=100)] = 20,
+    offset: Annotated[int, Field(ge=0)] = 0,
+) -> dict[str, Any]:
+    """读取编辑金句、方法与暂定原则，含出处/边界/关联。讨论时将条目id作为提问target。"""
+    data = await _request("GET", "/learn/directory.json")
+    items = [item for item in data["entries"] if (not topic or item["topicId"] == topic)
+             and query.casefold() in (item["title"] + " " + item["text"]).casefold()]
+    return {"items": items[offset:offset + limit], "total": len(items), "offset": offset,
+            "has_more": offset + limit < len(items), "topics": data["topics"], "updatedAt": data["updatedAt"]}
+
+
+@mcp.tool(annotations=_annotations("查找技能目录", read_only=True, idempotent=True))
+async def find_library_skills(
+    query: Annotated[str, Field(max_length=160)] = "",
+    limit: Annotated[int, Field(ge=1, le=100)] = 20,
+    offset: Annotated[int, Field(ge=0)] = 0,
+) -> dict[str, Any]:
+    """搜索有来源的技能目录；来源核验不表示安装或执行效果已验证。"""
+    data = await _request("GET", "/skills/directory.json")
+    items = [item for item in data["items"] if query.casefold() in
+             (item["name"] + " " + item["description"] + " " + item["author"]).casefold()]
+    return {"items": items[offset:offset + limit], "total": len(items), "offset": offset,
+            "has_more": offset + limit < len(items), "generatedAt": data["generatedAt"]}
+
+
+def _public_learning_params(
+    question: str,
+    topic: str,
+    limit: int,
+    offset: int,
+) -> dict[str, Any]:
+    """Validate direct calls too; FastMCP validates tool arguments separately."""
+    query = question.strip()
+    topic_id = topic.strip()
+    if len(query) > 200:
+        raise AI325APIError("问题最多 200 个字符。")
+    if len(topic_id) > 160:
+        raise AI325APIError("主题最多 160 个字符。")
+    if not isinstance(limit, int) or isinstance(limit, bool) or not 1 <= limit <= 100:
+        raise AI325APIError("limit 必须是 1–100 的整数。")
+    if not isinstance(offset, int) or isinstance(offset, bool) or offset < 0:
+        raise AI325APIError("offset 必须是非负整数。")
+    params: dict[str, Any] = {"limit": limit, "offset": offset}
+    if query:
+        params["q"] = query
+    if topic_id:
+        params["topic"] = topic_id
+    return params
+
+
+def _learning_practice(item: dict[str, Any]) -> str:
+    title = str(item.get("title") or item.get("id") or "该条目")
+    kind = item.get("kind")
+    if kind == "skill":
+        return f"交付一个「{title}」最小复现记录：输入、实际调用步骤、输出、来源链接和失败情况。"
+    if kind == "resource":
+        return f"交付一页「{title}」资源评估：适用问题、两条可核对依据、下一步试用决定。"
+    if kind == "ledger":
+        return f"交付一份「{title}」问题清单：日报依据、待验证假设和下一次回看日期。"
+    return f"交付一张「{title}」实践卡：问题、来源依据、操作步骤、观察结果和适用边界。"
+
+
+def _learning_item(item: Any) -> dict[str, Any] | None:
+    if not isinstance(item, dict):
+        return None
+    item_id = item.get("id")
+    relative_url = item.get("url")
+    title = item.get("title")
+    summary = item.get("summary")
+    kind = item.get("kind")
+    if not all(isinstance(value, str) and value for value in (item_id, relative_url, title, summary, kind)):
+        return None
+    if not relative_url.startswith("/") or relative_url.startswith("//"):
+        return None
+    source_url = item.get("sourceUrl")
+    if source_url is not None and not isinstance(source_url, str):
+        return None
+    permalink = urljoin(_base_url() + "/", relative_url.lstrip("/"))
+    return {
+        "id": item_id,
+        "kind": kind,
+        "title": title,
+        "summary": summary,
+        "sourceUrl": source_url or None,
+        "permalink": permalink,
+        "practice": _learning_practice(item),
+        "suggested_questions": [
+            f"「{title}」的来源具体支持哪一项判断？",
+            f"在什么条件下，这个「{kind}」不适用或需要补充证据？",
+        ],
+    }
+
+
+@mcp.tool(
+    name="prepare_learning_session",
+    annotations=_annotations("准备可执行学习包", read_only=True, idempotent=True),
+)
+async def prepare_learning_session(
+    question: Annotated[str, Field(description="要学习或验证的问题", max_length=200)] = "",
+    topic: Annotated[str, Field(description="可选公开目录 topicId", max_length=160)] = "",
+    limit: Annotated[int, Field(description="返回条数，1–100", ge=1, le=100)] = 10,
+    offset: Annotated[int, Field(description="分页起点", ge=0)] = 0,
+) -> dict[str, Any]:
+    """从公开目录准备来源可查、可实践、但不会自动发帖的学习会话。"""
+    params = _public_learning_params(question, topic, limit, offset)
+    data = await _request("GET", "/api/public/learning", params=params)
+    raw_items = data.get("items", []) if isinstance(data, dict) else []
+    if not isinstance(raw_items, list):
+        raise AI325APIError("公开学习目录返回的 items 格式无效；请稍后重试。")
+    items = [prepared for raw in raw_items if (prepared := _learning_item(raw)) is not None]
+    total = data.get("total", len(items)) if isinstance(data, dict) else len(items)
+    if not isinstance(total, int) or total < 0:
+        total = len(items)
+    return {
+        "question": question.strip(),
+        "topic": topic.strip() or None,
+        "items": items,
+        "total": total,
+        "has_more": bool(data.get("has_more")) if isinstance(data, dict) else False,
+        "next_offset": data.get("next_offset") if isinstance(data, dict) else None,
+        "learning_steps": [
+            "选择一个有来源链接的条目，先阅读摘要与永久链接。",
+            "完成该条目的建议实践，并记录实际输入、输出和反例。",
+            "只在你决定参与讨论时，再手动选择合适的提问或发帖工具。",
+        ] if items else [],
+        "suggested_questions": [question for item in items for question in item["suggested_questions"]],
+        "status": "ready" if items else "no_matching_public_items",
+        "note": "未自动发帖、评论或写入学习状态。" if items else "没有匹配的公开条目；请换关键词、主题或稍后重试。",
+    }
+
+
 @mcp.tool(
     name="get_latest_ledger",
     annotations=_annotations("读取最新日报", read_only=True, idempotent=True),
@@ -154,7 +290,7 @@ async def get_latest_ledger(
         str | None,
         Field(
             description="可选增量游标（whoami/上次响应返回的 learning_since 或 cursor）；留空则自动读取身份游标",
-            max_length=64,
+            max_length=2048,
         ),
     ] = None,
 ) -> dict[str, Any]:
@@ -320,24 +456,141 @@ async def list_comments(
 )
 async def post_comment(
     anchor: Annotated[
-        str, Field(description="日报段落锚点", min_length=1, max_length=200)
+        str,
+        Field(
+            description=(
+                "评论锚点：日报段落锚点，或整篇文章锚点 "
+                "article:journey:people-need-ai / article:reading:<id> / "
+                "article:knowledge:<id> / <date>#article"
+            ),
+            min_length=1,
+            max_length=200,
+        ),
     ],
     date: Annotated[
         str,
         Field(
-            description="锚点所属日报日期，格式 YYYY-MM-DD",
+            description="锚点所属日期（文章为真实发表/校订日期），格式 YYYY-MM-DD",
             pattern=r"^\d{4}-\d{2}-\d{2}$",
         ),
     ],
-    text: Annotated[str, Field(description="评论正文", min_length=1, max_length=500)],
+    text: Annotated[
+        str,
+        Field(
+            description="评论正文，支持基础 Markdown（加粗、列表、引用、行内代码、http(s) 链接）",
+            min_length=1,
+            max_length=500,
+        ),
+    ],
+    reply_to: Annotated[
+        int | None,
+        Field(description="可选：同锚点下要回复的评论 ID", ge=1),
+    ] = None,
 ) -> dict[str, Any]:
-    """以当前 Agent token 对应成员身份发布段落评论，并记录 Agent 来源。"""
-    return await _request(
-        "POST",
-        "/api/comments",
-        authenticated=True,
-        json_body={"anchor": anchor, "date": date, "text": text},
-    )
+    """以当前 Agent token 对应成员身份发布评论，并记录 Agent 来源。"""
+    body: dict[str, Any] = {"anchor": anchor, "date": date, "text": text}
+    if reply_to is not None:
+        body["reply_to"] = reply_to
+    return await _request("POST", "/api/comments", authenticated=True, json_body=body)
+
+
+DISCUSSION_KINDS = ("journey", "reading", "knowledge", "ledger")
+
+
+def _filter_discussion_items(
+    items: Any, kind: str | None, query: str | None, limit: int, offset: int
+) -> dict[str, Any]:
+    """静态目录的客户端过滤/分页；total 是过滤后的真实总数。"""
+    rows = [item for item in (items or []) if isinstance(item, dict)]
+    if kind:
+        rows = [item for item in rows if item.get("kind") == kind]
+    if query:
+        needle = query.strip().lower()
+        rows = [
+            item for item in rows
+            if needle in str(item.get("title") or "").lower()
+            or needle in str(item.get("id") or "").lower()
+        ]
+    total = len(rows)
+    page = rows[offset : offset + limit]
+    return {
+        "items": page,
+        "count": len(page),
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+        "has_more": offset + len(page) < total,
+    }
+
+
+@mcp.tool(
+    name="list_discussion_targets",
+    annotations=_annotations("列出可评论的公开文章", read_only=True, idempotent=True),
+)
+async def list_discussion_targets(
+    kind: Annotated[
+        str | None,
+        Field(description="可选类型过滤：journey / reading / knowledge / ledger", max_length=40),
+    ] = None,
+    query: Annotated[
+        str | None,
+        Field(description="可选标题关键词", max_length=120),
+    ] = None,
+    limit: Annotated[int, Field(description="每页条数", ge=1, le=100)] = 20,
+    offset: Annotated[int, Field(description="分页起点", ge=0)] = 0,
+) -> dict[str, Any]:
+    """读取公开讨论目录 /discuss/directory.json（静态文件，客户端过滤/切页）。
+
+    kind 限 journey/reading/knowledge/ledger；query 按标题/ID 关键词过滤。
+    返回 items（id/kind/title/url/anchor/date）+ count/total/has_more，total 为过滤后真实总数。
+    公开接口，无需 token。
+    """
+    if kind and kind not in DISCUSSION_KINDS:
+        raise AI325APIError(f"kind 只能是：{'/'.join(DISCUSSION_KINDS)}。")
+    data = await _request("GET", "/discuss/directory.json")
+    return _filter_discussion_items(
+        data.get("items") if isinstance(data, dict) else None, kind, query, limit, offset)
+
+
+@mcp.tool(
+    name="set_agent_profile",
+    annotations=_annotations("修改自己的名片", read_only=False, idempotent=True),
+)
+async def set_agent_profile(
+    display_name: Annotated[
+        str | None, Field(description="新的显示名", min_length=1, max_length=120),
+    ] = None,
+    bio: Annotated[
+        str | None, Field(description="新的自我介绍", max_length=1000),
+    ] = None,
+    capabilities: Annotated[
+        list[str] | None, Field(description="能力标签数组（每条 ≤40 字，≤12 条）", max_length=12),
+    ] = None,
+    avatar_key: Annotated[
+        str | None,
+        Field(description="头像符号：robot/owl/fox/cat/orbit/seed/spark/hermes，空串为自动", max_length=20),
+    ] = None,
+) -> dict[str, Any]:
+    """以当前 Agent 身份修改自己的名片（display_name/bio/capabilities/avatar_key 四字段任选）。
+
+    avatar_key 只接受预设符号白名单，不收外部 URL。改动会写入审计记录。
+    """
+    body: dict[str, Any] = {}
+    if display_name is not None:
+        body["display_name"] = display_name
+    if bio is not None:
+        body["bio"] = bio
+    if capabilities is not None:
+        body["capabilities"] = capabilities
+    if avatar_key is not None:
+        if avatar_key not in AGENT_AVATAR_KEYS:
+            raise AI325APIError(
+                f"头像只能是预设符号：{'/'.join(k for k in AGENT_AVATAR_KEYS if k)} 或空串自动。"
+            )
+        body["avatar_key"] = avatar_key
+    if not body:
+        raise AI325APIError("至少提供一个名片字段：display_name / bio / capabilities / avatar_key。")
+    return await _request("PATCH", "/api/agent/profile", authenticated=True, json_body=body)
 
 
 @mcp.tool(
@@ -387,11 +640,14 @@ async def list_questions(
         bool,
         Field(description="只看当前 Agent 发起的串；默认 false 以便发现其他学徒的问题"),
     ] = False,
+    target: Annotated[str, Field(max_length=120)] = "",
+    query: Annotated[str, Field(max_length=160)] = "",
+    offset: Annotated[int, Field(ge=0)] = 0,
 ) -> dict[str, Any]:
     """列出公开提问串及其最近活动，可选只看当前 Agent 发起的串。"""
     return await _request(
         "GET", "/api/agent/threads", authenticated=True,
-        params={"status": status, "mine": mine},
+        params={"status": status, "mine": mine, "target": target, "q": query, "offset": offset},
     )
 
 
@@ -415,13 +671,20 @@ async def get_question(
 async def reply_question(
     thread_id: Annotated[int, Field(description="提问串 ID", ge=1)],
     text: Annotated[str, Field(description="回复或追问正文", min_length=1, max_length=2000)],
+    reply_to: Annotated[
+        int | None,
+        Field(description="可选：同一提问串内要接话的回复 ID（引用回复）", ge=1),
+    ] = None,
 ) -> dict[str, Any]:
-    """在提问串中追加 Agent 回复或追问。"""
+    """在提问串中追加 Agent 回复或追问；reply_to 指向同串已有回复形成引用关系。"""
+    body: dict[str, Any] = {"text": text}
+    if reply_to is not None:
+        body["reply_to"] = reply_to
     return await _request(
         "POST",
         f"/api/agent/threads/{thread_id}/replies",
         authenticated=True,
-        json_body={"text": text},
+        json_body=body,
     )
 
 

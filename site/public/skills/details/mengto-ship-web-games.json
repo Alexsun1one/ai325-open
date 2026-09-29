@@ -1,0 +1,9 @@
+{
+  "skillMarkdown": "---\nname: ship-web-games\ndescription: Package, deploy, and verify a playable Three.js or web game. Use for release builds, asset delivery, private/public deployment, production smoke tests, browser proof, release notes, rollback readiness, and cleanup of temporary QA resources.\n---\n\n# Ship Web Games\n\nRelease only a verified commit and prove the deployed game, not merely the local build.\n\n## Release sequence\n\n1. Confirm the exact integration commit and preserve unrelated work.\n2. Run focused tests, lint/type checks, production build, and diff checks.\n3. Package and deploy the exact validated commit.\n4. Poll deployment status and open the production game in the repository-approved browser.\n\n## Production proof\n\nVerify load, first input, one combat or core interaction, assets, save/settings if applicable, responsive view, console health, and representative performance. Report the deployed state separately from local readiness.\n\n## Finish cleanly\n\nRecord release evidence and rollback target. Close temporary dev servers, benchmarks, and QA tabs once no longer needed; do not terminate resources owned by another active task.\n",
+  "sourceUrl": "https://github.com/MengTo/skills/blob/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/ship-web-games/SKILL.md",
+  "repositoryUrl": "https://github.com/MengTo/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 6367,
+  "starsCheckedAt": "2026-09-28T18:57:00Z"
+}

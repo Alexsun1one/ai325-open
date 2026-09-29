@@ -1,13 +1,20 @@
+import { JourneyNav } from "@/components/site/JourneyNav";
 import type { ReactNode } from "react";
+import styles from "./PageHead.module.css";
 
 export interface HeadField { k: string; v: ReactNode; num?: boolean }
 
 /** 分页刊头：与首页 SheetHeader 同一套表单语法——样品信息行 + 大标题 + 导语，右侧留给章/器皿。 */
-export function PageHead({ fields, title, lead, aside, note }: { fields: HeadField[]; title: string; lead: string; aside?: ReactNode; note?: ReactNode }) {
+export function PageHead({ fields, title, lead, aside, note, compact = false }: { fields: HeadField[]; title: string; lead: string; aside?: ReactNode; note?: ReactNode; compact?: boolean }) {
   return (
-    <header className={`relative grid gap-8 pb-10 pt-10 sm:pt-14 lg:gap-12 ${aside ? "lg:grid-cols-[minmax(0,1fr)_232px]" : ""}`}>
+    <header className={`${styles.enter} page-heading relative grid gap-8 ${compact ? "py-6 sm:py-8" : "pb-10 pt-10 sm:pt-14"} lg:gap-12 ${aside ? "lg:grid-cols-[minmax(0,1fr)_232px]" : ""}`}>
       <div className="min-w-0">
-        <dl className="grid grid-cols-2 gap-x-6 gap-y-3 border-y border-rule py-3 font-sans text-[13px] sm:grid-cols-4">
+
+        <h1 className={`${compact ? "mt-0 text-[32px] sm:text-[40px]" : "mt-0 text-[36px] sm:text-[46px] lg:text-[52px]"} font-serif font-black leading-[1.18] tracking-[0.01em] text-ink`}>{title}</h1>
+        <p className={`prose-sheet max-w-[40em] text-ink-2 ${compact ? "mt-3 text-[16px] leading-[1.7]" : "mt-5 text-[17.5px] leading-[1.9]"}`}>{lead}</p>
+        <details className="mt-4 font-sans">
+          <summary className="inline-flex min-h-11 cursor-pointer items-center gap-2 text-[12px] text-ink-3">栏目说明与资料 <span aria-hidden>＋</span></summary>
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-3 border-0 py-3 font-sans text-[13px] sm:grid-cols-4">
           {fields.map((f) => (
             <div key={f.k}>
               <dt className="label">{f.k}</dt>
@@ -15,8 +22,7 @@ export function PageHead({ fields, title, lead, aside, note }: { fields: HeadFie
             </div>
           ))}
         </dl>
-        <h1 className="mt-8 font-serif text-[36px] font-black leading-[1.18] tracking-[0.01em] text-ink sm:text-[46px] lg:text-[52px]">{title}</h1>
-        <p className="prose-sheet mt-5 max-w-[40em] text-[17.5px] leading-[1.9] text-ink-2">{lead}</p>
+        </details>
         {note && <div className="mt-6 rounded-[10px] border border-blue-wash-2 bg-blue-wash/70 px-4 py-3 font-sans text-[13.5px] leading-relaxed text-ink-2">{note}</div>}
       </div>
       {aside && <div className="flex flex-row flex-wrap items-start gap-6 lg:flex-col lg:items-end lg:gap-4 lg:pt-2">{aside}</div>}
@@ -26,7 +32,7 @@ export function PageHead({ fields, title, lead, aside, note }: { fields: HeadFie
 
 /** 页面主壳：与 LedgerSheet 同宽同边距。 */
 export function PageShell({ children }: { children: ReactNode }) {
-  return <main id="top" className="relative z-[1] mx-auto max-w-[1180px] px-5 sm:px-8">{children}</main>;
+  return <main id="top" className="site-main relative z-[1] mx-auto max-w-[1180px] px-5 sm:px-8"><JourneyNav />{children}</main>;
 }
 
 /** 诚实缺口条：数据没有就说没有，不用占位图糊过去。 */

@@ -1,0 +1,96 @@
+{
+  "recent_days": 7,
+  "guardian_note": "它陪你看看小院，按眼前的地块报个信。收菜仍由你亲手完成。",
+  "guardians": [
+    {
+      "id": "mochi-cat",
+      "name": "麻糬",
+      "species": "小猫",
+      "tagline": "坐在田埂上数成熟的菜。",
+      "sprite": "/brand/garden-companions/cat-sit.webp",
+      "tips": {
+        "no_garden": "家园还没开通。开通之后，我就坐在田埂上帮你看着。",
+        "ripe": "有 {ripe} 块地已经成熟啦，随时可以收。",
+        "empty": "有 {empty} 块空地，想种点什么就去种吧。",
+        "waiting": "{growing} 块地还在长，慢慢等，不用一直盯着。"
+      }
+    },
+    {
+      "id": "bolt-dog",
+      "name": "螺丝",
+      "species": "小狗",
+      "tagline": "巡园一圈，只报真实状态。",
+      "sprite": "/brand/garden-companions/dog-stand.webp",
+      "tips": {
+        "no_garden": "还没有家园可巡。先开通一块园子，我再来报告。",
+        "ripe": "巡完了：{ripe} 块地成熟，等你来收。",
+        "empty": "巡完了：{empty} 块空地待播种。",
+        "waiting": "巡完了：{growing} 块地在生长，暂时没有可收的。"
+      }
+    },
+    {
+      "id": "box-cat",
+      "name": "纸箱",
+      "species": "小猫",
+      "tagline": "缩在箱子里，偶尔探头看一眼。",
+      "sprite": "/brand/garden-companions/cat-box.webp",
+      "tips": {
+        "no_garden": "探头看了看，园子还没开通。",
+        "ripe": "探头看了一眼，{ripe} 块地熟了。",
+        "empty": "探头看了一眼，{empty} 块地空着。",
+        "waiting": "探头看了一眼，{growing} 块地还没熟，我再睡会儿。"
+      }
+    }
+  ],
+  "milestones": [
+    {
+      "id": "first-plant",
+      "kind": "plant_count",
+      "target": 1,
+      "title": "第一次播种",
+      "description": "亲手种下第一茬作物"
+    },
+    {
+      "id": "first-harvest",
+      "kind": "harvest_count",
+      "target": 1,
+      "title": "第一次收获",
+      "description": "收回自己种的第一茬"
+    },
+    {
+      "id": "harvest-50",
+      "kind": "harvest_total",
+      "target": 50,
+      "title": "累计收成 50",
+      "description": "只计自己种、自己收的份数"
+    },
+    {
+      "id": "harvest-200",
+      "kind": "harvest_total",
+      "target": 200,
+      "title": "累计收成 200",
+      "description": "只计自己种、自己收的份数"
+    },
+    {
+      "id": "crops-3",
+      "kind": "distinct_crops",
+      "target": 3,
+      "title": "试过三种作物",
+      "description": "种过 3 种不同的作物"
+    },
+    {
+      "id": "days-3",
+      "kind": "active_days",
+      "target": 3,
+      "title": "三个种收日",
+      "description": "在 3 个不同的日子里播种或收获（不要求连续）"
+    },
+    {
+      "id": "days-7",
+      "kind": "active_days",
+      "target": 7,
+      "title": "七个种收日",
+      "description": "在 7 个不同的日子里播种或收获（不要求连续）"
+    }
+  ]
+}

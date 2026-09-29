@@ -1,0 +1,35 @@
+{
+  "skillMarkdown": "---\nname: web-artifacts-builder\ndescription: Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui). Use for complex artifacts requiring state management, routing, or shadcn/ui components - not for simple single-file HTML/JSX artifacts.\nlicense: Complete terms in LICENSE.txt\n---\n\n# Web Artifacts Builder\n\nTo build powerful frontend claude.ai artifacts, follow these steps:\n1. Initialize the frontend repo using `scripts/init-artifact.sh`\n2. Develop your artifact by editing the generated code\n3. Bundle all code into a single HTML file using `scripts/bundle-artifact.sh`\n4. Display artifact to user\n5. (Optional) Test the artifact\n\n**Stack**: React 18 + TypeScript + Vite + Parcel (bundling) + Tailwind CSS + shadcn/ui\n\n## Design & Style Guidelines\n\nVERY IMPORTANT: To avoid what is often referred to as \"AI slop\", avoid using excessive centered layouts, purple gradients, uniform rounded corners, and Inter font.\n\n## Quick Start\n\n### Step 1: Initialize Project\n\nRun the initialization script to create a new React project:\n```bash\nbash scripts/init-artifact.sh <project-name>\ncd <project-name>\n```\n\nThis creates a fully configured project with:\n- ✅ React + TypeScript (via Vite)\n- ✅ Tailwind CSS 3.4.1 with shadcn/ui theming system\n- ✅ Path aliases (`@/`) configured\n- ✅ 40+ shadcn/ui components pre-installed\n- ✅ All Radix UI dependencies included\n- ✅ Parcel configured for bundling (via .parcelrc)\n- ✅ Node 18+ compatibility (auto-detects and pins Vite version)\n\n### Step 2: Develop Your Artifact\n\nTo build the artifact, edit the generated files. See **Common Development Tasks** below for guidance.\n\n### Step 3: Bundle to Single HTML File\n\nTo bundle the React app into a single HTML artifact:\n```bash\nbash scripts/bundle-artifact.sh\n```\n\nThis creates `bundle.html` - a self-contained artifact with all JavaScript, CSS, and dependencies inlined. This file can be directly shared in Claude conversations as an artifact.\n\n**Requirements**: Your project must have an `index.html` in the root directory.\n\n**What the script does**:\n- Installs bundling dependencies (parcel, @parcel/config-default, parcel-resolver-tspaths, html-inline)\n- Creates `.parcelrc` config with path alias support\n- Builds with Parcel (no source maps)\n- Inlines all assets into single HTML using html-inline\n\n### Step 4: Share Artifact with User\n\nFinally, share the bundled HTML file in conversation with the user so they can view it as an artifact.\n\n### Step 5: Testing/Visualizing the Artifact (Optional)\n\nNote: This is a completely optional step. Only perform if necessary or requested.\n\nTo test/visualize the artifact, use available tools (including other Skills or built-in tools like Playwright or Puppeteer). In general, avoid testing the artifact upfront as it adds latency between the request and when the finished artifact can be seen. Test later, after presenting the artifact, if requested or if issues arise.\n\n## Reference\n\n- **shadcn/ui components**: https://ui.shadcn.com/docs/components",
+  "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/web-artifacts-builder/SKILL.md",
+  "repositoryUrl": "https://github.com/anthropics/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 178790,
+  "starsCheckedAt": "2026-09-28T18:57:01Z",
+  "editorial": {
+    "overview": "这项技能面向包含多个组件、状态或页面切换的 HTML 交互产物。公开版本先用随包初始化脚本建立前端工程，再开发内容与交互，最后通过打包脚本把代码和样式组织为可分享的 HTML。它解决的是较复杂交互作品的工程搭建与打包问题，适合需要继续编辑源代码的原型。\n\n初始化、开发和产物检查是不同步骤。开发服务器中可以运行，不代表最终单文件已经包含所有必要资源；图片、字体或远程请求仍应逐项确认。公开流程把测试列为可选，本条建议在交付前至少检查关键操作以及打包文件本身，避免只展示开发环境的效果。简单的一页静态说明可能不需要这套工程。本条依据所链研读版本整理，不固定包版本或组件数量，也不保证所有托管环境都能运行同一产物。使用者应明确目标宿主、是否允许网络请求以及数据保存需求，不能把前端原型误认为已有可靠后端服务。",
+    "useCases": [
+      "制作可分享的多组件交互原型",
+      "将已有前端小工程打包成HTML产物"
+    ],
+    "inputs": [
+      "功能范围、真实内容与交互规则",
+      "目标宿主、联网限制及输出要求"
+    ],
+    "outputs": [
+      "可编辑的前端工程",
+      "打包HTML及资源依赖说明"
+    ],
+    "steps": [
+      "确认复杂度需要工程脚手架，再按包内流程初始化。",
+      "实现状态与交互，用真实内容检查关键路径。",
+      "打包后直接检查最终HTML，确认资源和交互完整。"
+    ],
+    "limitations": [
+      "本站未运行初始化或打包脚本，未证明单文件离线可用。",
+      "此技能不自动提供后端、持久化或生产部署，宿主限制需核对。"
+    ],
+    "reviewedAt": "2026-09-22",
+    "sourceUrl": "https://github.com/anthropics/skills/blob/34040c9c568585f6929bedeaad110ad08f079624/skills/web-artifacts-builder/SKILL.md"
+  }
+}

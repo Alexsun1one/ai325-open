@@ -1,0 +1,41 @@
+/* 家园成果木牌：一段木牌条列表（≤ max_marks），蓝白纸面 + 一点暖木色左缘。
+   无奖励话术、无大卡片、无无限动效；触区 44px。 */
+
+.box{margin-top:1.4rem;border-top:1px solid var(--color-rule);padding-top:.9rem}
+.h3{margin:0;font:800 .95rem var(--font-serif);color:var(--color-ink)}
+.h3 small{margin-left:.4rem;font:600 .7rem var(--font-sans);color:var(--color-ink-3)}
+.hint{margin:.3rem 0 0;font:400 .72rem/1.65 var(--font-sans);color:var(--color-ink-3);overflow-wrap:anywhere}
+.state{margin:.7rem 0 0;padding:.9rem;border:1px dashed var(--color-rule);font-size:.8rem;line-height:1.7;color:var(--color-ink-3);text-align:center}
+.err{margin:.6rem 0 0;font-size:.76rem;line-height:1.6;color:var(--color-cinnabar-text);overflow-wrap:anywhere}
+.ok{margin:.6rem 0 0;font-size:.76rem;line-height:1.6;color:var(--color-teal-text)}
+
+.list{margin:.7rem 0 0;padding:0;list-style:none;border-top:1px solid var(--color-rule)}
+.row{padding:.6rem .5rem .6rem .7rem;border-bottom:1px solid var(--color-rule-soft);border-left:3px solid var(--color-rule)}
+.rowShown{border-left-color:var(--color-amber)}
+.rowHead{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem}
+.title{font:700 .84rem/1.5 var(--font-sans);color:var(--color-ink);overflow-wrap:anywhere}
+.src{display:block;margin-top:.1rem;font:400 .72rem/1.6 var(--font-sans);color:var(--color-ink-3);overflow-wrap:anywhere}
+.src a{color:var(--color-blue-text);text-decoration:underline;text-underline-offset:3px}
+.src a:focus-visible{outline:2px solid var(--color-blue-text);outline-offset:2px}
+.meta{font:400 .68rem var(--font-sans);color:var(--color-ink-3)}
+.row>.meta{display:block;margin-top:.1rem}
+.chip{flex:0 0 auto;border:1px solid var(--color-rule);border-radius:4px;padding:0 .35rem;font:600 .64rem/1.6 var(--font-sans);color:var(--color-ink-3)}
+.chipShown{border-color:var(--color-amber);color:var(--color-amber-text)}
+
+.actions{display:flex;flex-wrap:wrap;gap:.2rem .5rem;margin-top:.3rem}
+.btn,.btnQuiet,.primary{min-height:44px;padding:0 .8rem;border-radius:6px;font:700 .78rem var(--font-sans);cursor:pointer}
+.btn{border:1px solid var(--color-blue-2);background:var(--color-paper);color:var(--color-blue-text)}
+.btnQuiet{border:1px solid transparent;background:none;color:var(--color-ink-3);text-decoration:underline;text-underline-offset:3px}
+.primary{border:1px solid var(--color-blue);background:var(--color-blue);color:var(--color-paper)}
+.btn:disabled,.btnQuiet:disabled,.primary:disabled{opacity:.55;cursor:not-allowed}
+.btn:focus-visible,.btnQuiet:focus-visible,.primary:focus-visible,.linkBtn:focus-visible{outline:2px solid var(--color-blue-text);outline-offset:2px}
+.linkBtn{min-height:44px;padding:0 .4rem;border:0;background:none;color:var(--color-blue-text);font:700 .76rem var(--font-sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+.confirm{margin-top:.8rem;padding:.7rem .8rem;border:1px solid var(--color-blue-wash-2);border-left:3px solid var(--color-blue-text);background:var(--color-blue-wash)}
+.confirmText{margin:0;font:400 .8rem/1.7 var(--font-sans);color:var(--color-ink)}
+.preview{margin:.4rem 0 0;padding:.4rem .6rem;border:1px dashed var(--color-rule);background:var(--color-paper);font-size:.8rem;line-height:1.6;color:var(--color-ink)}
+
+.addBar{display:flex;flex-wrap:wrap;align-items:center;gap:.2rem .8rem;margin-top:.7rem}
+.picker{margin-top:.4rem}
+.pickRow{display:flex;align-items:center;justify-content:space-between;gap:.6rem;min-height:48px;padding:.4rem .2rem;border-bottom:1px solid var(--color-rule-soft)}
+.pickText{flex:1;min-width:0;display:flex;flex-direction:column;gap:.05rem}

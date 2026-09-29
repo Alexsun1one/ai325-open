@@ -1,0 +1,10 @@
+/* 阅读足迹工具条：轻量行内条，44px 触区，纸色/蓝 token */
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .75rem;border-top:1px solid var(--color-rule-soft);border-bottom:1px solid var(--color-rule-soft);padding:.45rem 0;margin:0 0 1.2rem;min-height:44px}
+.act{display:inline-flex;align-items:center;min-height:44px;padding:.2rem .5rem;border:none;background:none;font:600 .82rem var(--font-sans);color:var(--color-blue-text);cursor:pointer;border-radius:6px}
+.act:hover{text-decoration:underline}
+.act:disabled{color:var(--color-ink-3);cursor:default;text-decoration:none}
+.act:focus-visible{outline:2px solid var(--color-blue);outline-offset:2px}
+.act.on{color:var(--color-teal-text)}
+.note{font:400 .76rem var(--font-sans);color:var(--color-ink-3)}
+.err{font:400 .76rem var(--font-sans);color:var(--color-cinnabar-text)}
+.err .act{min-height:44px;padding:0 .3rem;font-size:.76rem}

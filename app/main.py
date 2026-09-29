@@ -2,6 +2,10 @@
 """🌱人民需要AI_智能体先锋队 · 群像站 v2：登录+质量评判+深度统计"""
 import os, sqlite3, json, re, subprocess, secrets, hashlib, hmac, datetime, collections, math, uuid, shutil, stat, zipfile, io, html, logging, threading, time, base64, unicodedata
 import xml.etree.ElementTree as ET
+try:
+    import publication_schedule
+except ImportError:  # pragma: no cover - package import path
+    from app import publication_schedule
 from email.parser import BytesParser
 from email.policy import default as email_policy
 from pathlib import Path, PurePosixPath
@@ -13,6 +17,13 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Res
 from starlette.exceptions import HTTPException as StarletteHTTPException
 try:
     from .hot import router as hot_router
+    from .public_learning import router as public_learning_router
+    from .tibo_status import router as tibo_status_router
+    from . import agent_connect
+    from . import garden, garden_companion, garden_marks, practice, reading_growth
+    from . import content_engagement
+    from .static_delivery import PublicStaticDeliveryMiddleware
+    from . import learning_cursor
     from .gatekeeper import (
         decide as decide_moderation,
         enqueue_action,
@@ -20,8 +31,17 @@ try:
         list_pending as list_pending_moderation,
         start_gatekeeper_worker,
     )
+    from . import identity_anchor as identity_anchor
+    from . import reading_vitality as reading_vitality
 except ImportError:  # Docker runs this module as ``main:app``.
     from hot import router as hot_router
+    from public_learning import router as public_learning_router
+    from tibo_status import router as tibo_status_router
+    import agent_connect
+    import garden, garden_companion, garden_marks, practice, reading_growth
+    import content_engagement
+    from static_delivery import PublicStaticDeliveryMiddleware
+    import learning_cursor
     from gatekeeper import (
         decide as decide_moderation,
         enqueue_action,
@@ -29,15 +49,266 @@ except ImportError:  # Docker runs this module as ``main:app``.
         list_pending as list_pending_moderation,
         start_gatekeeper_worker,
     )
+    import identity_anchor
+    import reading_vitality
 from pydantic import BaseModel, Field, ValidationError
 
 DATA_DIR = Path(os.environ.get('XF_DATA_DIR', '/data'))
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 DB = DATA_DIR / 'xf.db'
+DEFAULT_ALERT_JSONL_DIR = Path('/opt/xfsite/logs/alerts')
+ALERT_JSONL_DIR = Path(
+    os.environ.get('XF_ALERT_JSONL_DIR')
+    or os.environ.get('ALERT_JSONL_DIR')
+    or str(DEFAULT_ALERT_JSONL_DIR)
+)
+ANALYTICS_DB = Path(os.environ.get('XF_ANALYTICS_DB', str(DATA_DIR / 'analytics.db')))
+ADMIN_STATS_TTL = int(os.environ.get('XF_ADMIN_STATS_TTL', '30') or 30)
 ARCHIVE = DATA_DIR / 'archive'
 LEDGER_DIR = ARCHIVE / 'LEDGER'
 GOVERNED_DIR = DATA_DIR / 'governed'
 GOVERNED_LEDGER_DIR = GOVERNED_DIR / 'ledgers'
+
+# ── 酒力（活跃度）与奖励兑换 ──
+VITALITY_CONFIG_PATH = Path(__file__).resolve().parent / 'config' / 'vitality.json'
+
+
+def _vitality_defaults() -> dict:
+    try:
+        return json.loads(VITALITY_CONFIG_PATH.read_text(encoding='utf-8'))
+    except (OSError, json.JSONDecodeError):
+        return {'weights': {}, 'rewards': []}
+
+
+
+def _seed_reward_items(c) -> None:
+    """奖品库 seed：vitality.json rewards 首次进 reward_items 表（admin 增删改落表）。"""
+    try:
+        count = c.execute("SELECT COUNT(*) FROM reward_items").fetchone()[0]
+        if count > 0:
+            return
+    except sqlite3.Error:
+        return
+    now = datetime.datetime.now(CST).isoformat()
+    for item in (_vitality_defaults().get("rewards") or []):
+        try:
+            c.execute(
+                "INSERT OR IGNORE INTO reward_items"
+                "(id,name,description,kind,price_original,cost_vitality,stock,require_review,dispatch_note,icon,active,created_at,updated_at)"
+                " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                (item["id"], item.get("name", ""), item.get("description", ""), item.get("kind", "virtual_code"),
+                 item.get("price_original"), item.get("cost_vitality"), item.get("stock"),
+                 1 if item.get("require_review", 1) else 0, item.get("dispatch_note", ""),
+                 item.get("icon", ""), 1 if item.get("active", 1) else 0, now, now),
+            )
+        except (sqlite3.Error, KeyError):
+            continue
+
+def _vitality_settings(c) -> dict:
+    """配置化：vitality.json 默认 + DB vitality_settings 覆盖（admin 后台可改）。"""
+    base = _vitality_defaults()
+    rows = c.execute('SELECT key, value FROM vitality_settings').fetchall()
+    overlay = {r['key']: json.loads(r['value']) for r in rows}
+    for key, val in overlay.items():
+        if key in base and isinstance(base[key], dict) and isinstance(val, dict):
+            base[key].update(val)
+        else:
+            base[key] = val
+    return base
+
+
+def _member_norm_v(name):
+    t = unicodedata.normalize('NFKC', str(name or ''))
+    chars = [ch for ch in t if not (0x1F000 <= ord(ch) <= 0x1FAFF or 0x2600 <= ord(ch) <= 0x27BF or ord(ch) in (0xFE0F, 0x200D, 0x20E3)) and not ch.isspace()]
+    return ''.join(chars).lower()
+
+
+def _vitality_quote_counts(since: str | None = None, month: str | None = None) -> dict[str, int]:
+    """Read governed quote ledgers once for a leaderboard scope."""
+    counts: dict[str, int] = {}
+    if not GOVERNED_LEDGER_DIR.is_dir():
+        return counts
+    for fp in sorted(GOVERNED_LEDGER_DIR.glob('*.json')):
+        if since and fp.name[:10] < since:
+            continue
+        if month and not fp.name.startswith(month):
+            continue
+        try:
+            data = json.loads(fp.read_text(encoding='utf-8'))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for quote in data.get('quotes', []) or []:
+            if isinstance(quote, dict):
+                key = _member_norm_v(quote.get('a'))
+                if key:
+                    counts[key] = counts.get(key, 0) + 1
+    return counts
+
+
+def compute_vitality_for_member(c, member_name: str, settings: dict, month: str | None = None,
+                                since: str | None = None, *, quote_counts: dict[str, int] | None = None,
+                                record_audit: bool = True,
+                                include_reading: bool = True) -> dict:
+    """按群成员名聚合酒力（messages/essays/quotes/annotations/学徒印）。
+    month='YYYY-MM' 时只统计该月（排行按月开赛）；None=全库累计（兑换门槛用）。"""
+    w = settings.get('weights', {})
+    w_msg = int(w.get('message', 1) or 1)
+    cap = int(w.get('message_daily_cap', 20) or 20)
+    w_essay = int(w.get('essay', 30) or 30)
+    min_chars = int(w.get('essay_min_chars', 200) or 200)
+    w_quote = int(w.get('quote', 50) or 50)
+    w_ann = int(w.get('annotation', 5) or 5)
+    w_seal = _weekly_weight(int(w.get('seal', 8) or 8), settings, 'seal')
+    seal_cap = int(w.get('seal_month_cap', 3) or 3)
+    sb = int(w.get('streak_base', 1) or 1)
+    sc = int(w.get('streak_cap', 10) or 10)
+    key = _member_norm_v(member_name)
+    parts: dict[str, int] = {}
+    # 发言：按天取 min(条数, 日上限) 累计；同时算连续在场
+    if since:
+        month_where = " AND substr(cst,1,10)>=?"
+        month_param = (since,)
+    elif month:
+        month_where = " AND substr(cst,1,7)=?"
+        month_param = (month,)
+    else:
+        month_where = ""
+        month_param = ()
+    days = c.execute(
+        f'''SELECT substr(cst,1,10) d, COUNT(*) n FROM messages
+           WHERE cst IS NOT NULL AND substr(cst,1,10) != '' AND sender_name = ?{month_where}
+           GROUP BY d ORDER BY d''',
+        (member_name, *month_param),
+    ).fetchall()
+    # 异常静默降权（反套利）：单日发言 > 历史均值 + sigma 倍 → 该日打折；不提示判据
+    sigma = float(w.get('anomaly_sigma', 3) or 3)
+    discount = float(w.get('anomaly_discount', 0.5) or 0.5)
+    daily_counts = [int(day['n']) for day in days]
+    mean = (sum(daily_counts) / len(daily_counts)) if daily_counts else 0
+    variance = sum((n - mean) ** 2 for n in daily_counts) / len(daily_counts) if daily_counts else 0
+    std = math.sqrt(variance)
+    msg_total = 0
+    anomaly_days = 0
+    for day in days:
+        n = int(day['n'])
+        if std > 0 and n > mean + sigma * std:
+            anomaly_days += 1
+            n = max(0, int(n * discount))
+        msg_total += min(n, cap)
+    if anomaly_days and record_audit:
+        c.execute(
+            '''INSERT INTO vitality_audit(record_type, member_name, detail, created_at)
+               VALUES('anomaly_discount',?,?,?)''',
+            (member_name, json.dumps({'anomaly_days': anomaly_days, 'mean': round(mean, 1), 'std': round(std, 1)}, ensure_ascii=False),
+             datetime.datetime.now(CST).isoformat()),
+        )
+    parts['message'] = msg_total * w_msg
+    # 复读检测：同文本 ≥N 次 → 不计（防复读水贴）
+    repeat_n = int(w.get('repeat_threshold', 5) or 5)
+    if repeat_n > 0:
+        dup = c.execute(
+            f'''SELECT content FROM messages WHERE sender_name = ?{month_where}
+                GROUP BY content HAVING COUNT(*) >= ?''',
+            (member_name, *month_param, repeat_n),
+        ).fetchall()
+        if dup and record_audit:
+            c.execute(
+                '''INSERT INTO vitality_audit(record_type, member_name, detail, created_at)
+                   VALUES('repeat_discount',?,?,?)''',
+                (member_name, json.dumps({'repeat_groups': len(dup)}, ensure_ascii=False),
+                 datetime.datetime.now(CST).isoformat()),
+            )
+    # 连续在场：连续发言天数（streak），第 N 天 +min(N, cap)
+    streak = 0
+    streak_points = 0
+    prev = None
+    for day in days:
+        d = day['d']
+        if prev is None or (datetime.date.fromisoformat(d) - prev).days == 1:
+            streak += 1
+            streak_points += min(streak, sc)
+        else:
+            streak = 1
+            streak_points += min(1, sc)
+        prev = datetime.date.fromisoformat(d)
+    parts['streak'] = streak_points * sb
+    # 小作文：essays（按 author 匹配，> min_chars 字）
+    extra_where = ""
+    if since:
+        extra_where = " AND substr(cst,1,10)>=?"
+    elif month:
+        extra_where = " AND substr(cst,1,7)=?"
+    essays = c.execute(
+        f'''SELECT COUNT(*) n FROM essays WHERE author=? AND LENGTH(content) > ?{extra_where}''',
+        (member_name, min_chars, *month_param),
+    ).fetchone()[0]
+    parts['essay'] = int(essays) * w_essay
+    # 入选金句：遍历治理日报 quotes（作者匹配）
+    quote_n = (quote_counts if quote_counts is not None else _vitality_quote_counts(since, month)).get(key, 0)
+    parts['quote'] = quote_n * w_quote
+    # accepted 批注（按群名匹配 annotations.username）
+    ann_n = c.execute(
+        f'''SELECT COUNT(*) FROM annotations WHERE status='accepted' AND username=?{extra_where.replace('cst','created_at') if (since or month) else ""}''',
+        (member_name, *month_param),
+    ).fetchone()[0]
+    parts['annotation'] = int(ann_n) * w_ann
+    try:
+        uid_row = c.execute(
+            'SELECT id FROM users WHERE username=? OR display_name=? LIMIT 1',
+            (member_name, member_name),
+        ).fetchone()
+    except sqlite3.Error:
+        uid_row = None
+    if uid_row and include_reading:
+        reading = reading_vitality.compute_reading_parts(c, uid_row['id'], settings)
+        parts = reading_vitality.merge_reading_into_parts(parts, reading)
+    # 名下学徒出师印：agent_tokens(user.username=?) 名下 arsenal_items shelved
+    seal_n = c.execute(
+        '''SELECT COUNT(*) FROM arsenal_items ai
+           JOIN agent_tokens t ON ai.agent_token_id = t.id
+           JOIN users u ON t.user_id = u.id
+           WHERE ai.status='shelved' AND (u.username=? OR u.display_name=?)
+           AND substr(ai.created_at,1,7)=strftime('%Y-%m','now','localtime')''',
+        (member_name, member_name),
+    ).fetchone()[0]
+    parts['seal'] = min(int(seal_n), seal_cap) * int(w_seal)
+    # 近 7 天增量（趋势箭头：近 7 天发言+行为，按当前权重折算）
+    from datetime import timedelta as _td
+    week_start = (datetime.date.today() - _td(days=7)).isoformat()
+    gain7 = 0
+    for day in days:
+        if day['d'] >= week_start:
+            gain7 += min(int(day['n']), cap)
+    gain7 = int(gain7 * w_msg)
+    total = sum(parts.values())
+    return {'name': member_name, 'total': total, 'parts': parts,
+            'streak_days': streak, 'msg_days': len(days), 'gain7': gain7}
+
+
+def compute_vitality_for_user(c, user_id: int, settings: dict) -> dict:
+    """站内用户酒力：群名维度（display_name/username 匹配）+ 站内 user_id 维度。"""
+    u = c.execute('SELECT username, display_name, member_key FROM users WHERE id=?', (user_id,)).fetchone()
+    if not u:
+        return {'total': 0, 'parts': {}, 'streak_days': 0}
+    w = settings.get('weights', {})
+    member = compute_vitality_for_member(c, u['display_name'] or u['username'], settings,
+                                         record_audit=False, include_reading=False)
+    if _member_norm_v(member['name']) != _member_norm_v(u['display_name'] or u['username']):
+        member = {'name': u['display_name'] or u['username'], 'total': 0, 'parts': {}, 'streak_days': 0, 'msg_days': 0}
+    # 站内维度：采纳回答 + 阅读反哺（划线/笔记/段评/收藏，日封顶与多人加权）
+    w_ar = int(w.get('accepted_reply', 10) or 10)
+    acc = c.execute('SELECT COUNT(*) FROM question_replies WHERE accepted=1 AND user_id=?', (user_id,)).fetchone()[0]
+    spent = c.execute('SELECT spent FROM vitality_spent WHERE user_id=?', (user_id,)).fetchone()
+    spent_n = int(spent['spent']) if spent else 0
+    parts = dict(member['parts'])
+    parts['accepted_reply'] = int(acc) * w_ar
+    reading = reading_vitality.compute_reading_parts(c, user_id, settings)
+    parts = reading_vitality.merge_reading_into_parts(parts, reading)
+    total = sum(int(v or 0) for v in parts.values())
+    return {'user_id': user_id, 'name': u['display_name'] or u['username'],
+            'total': total, 'net': total - spent_n, 'spent': spent_n,
+            'parts': parts, 'streak_days': member['streak_days']}
+
 GOVERNED_ARSENAL_DIR = GOVERNED_DIR / 'arsenal'
 GOVERNED_MEMBER_FILE = GOVERNED_DIR / 'members' / 'profiles.json'
 UPLOAD_DIR = DATA_DIR / 'uploads'
@@ -86,6 +357,7 @@ QUALITY_INFO_AVG_WEIGHT = 0.4
 QUALITY_DEPTH_ESSAYS_FULL = 80      # 当日超 200 字消息达到 80 条视为满档
 
 app = FastAPI(title='xianfeng-dui-site v2')
+app.add_middleware(PublicStaticDeliveryMiddleware)
 CST = datetime.timezone(datetime.timedelta(hours=8))
 security_logger = logging.getLogger('xfsite.security')
 _rate_lock = threading.Lock()
@@ -119,6 +391,7 @@ def init_db():
     );
     CREATE INDEX IF NOT EXISTS idx_msg_time ON messages(create_time);
     CREATE INDEX IF NOT EXISTS idx_msg_sender ON messages(sender);
+    CREATE INDEX IF NOT EXISTS idx_msg_sender_name ON messages(sender_name);
     CREATE VIRTUAL TABLE IF NOT EXISTS msg_fts USING fts5(content, content='messages', content_rowid='id', tokenize='trigram');
     CREATE TABLE IF NOT EXISTS members(
       username TEXT PRIMARY KEY, display TEXT, nickname TEXT, avatar TEXT,
@@ -320,7 +593,8 @@ def init_db():
       created_at TEXT NOT NULL,
       agent_name TEXT,
       agent_display_name TEXT,
-      agent_capabilities_json TEXT NOT NULL DEFAULT '[]'
+      agent_capabilities_json TEXT NOT NULL DEFAULT '[]',
+      reply_to INT
     );
     CREATE INDEX IF NOT EXISTS idx_question_replies_thread
       ON question_replies(thread_id, created_at, id);
@@ -492,11 +766,14 @@ def init_db():
     CREATE INDEX IF NOT EXISTS idx_essay_activity_event
       ON essay_activity_items(event_id, status, source_date DESC, id DESC);
     ''')
+    # Human threads reserve agent_token_id=0; legacy rows remain agent-authored.
+    _ensure_columns(c, 'question_threads', (('author_kind', "TEXT NOT NULL DEFAULT 'agent'"),))
     # 学徒制记分迁移（幂等补列 + 周投票表）
     _ensure_columns(c, 'question_replies', (
         ('accepted', 'INTEGER NOT NULL DEFAULT 0'),
         ('accepted_by', 'INTEGER'),
         ('accepted_at', 'TEXT'),
+        ('reply_to', 'INTEGER'),
     ))
     c.execute('''
       CREATE TABLE IF NOT EXISTS weekly_vote_rounds(
@@ -520,16 +797,92 @@ def init_db():
         votes INT NOT NULL DEFAULT 0,
         created_at TEXT NOT NULL
       )''')
-    c.execute('''
-      CREATE TABLE IF NOT EXISTS weekly_votes(
+    c.execute('''CREATE TABLE IF NOT EXISTS weekly_votes(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        round_id INT NOT NULL,
-        candidate_id INT NOT NULL,
+        round_id INTEGER NOT NULL,
+        candidate_id INTEGER NOT NULL,
         voter_kind TEXT NOT NULL,
         voter_name TEXT NOT NULL,
         created_at TEXT NOT NULL,
-        UNIQUE(round_id, candidate_id, voter_kind, voter_name)
+        UNIQUE(round_id, voter_kind, voter_name)
+    )''')
+    # 酒力与奖励兑换（配置化权重/库存/门槛；激活码只存哈希+掩码）
+    c.execute('''
+      CREATE TABLE IF NOT EXISTS vitality_settings(
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL,
+        updated_by INT,
+        updated_at TEXT NOT NULL
       )''')
+    c.execute('''
+      CREATE TABLE IF NOT EXISTS reward_items(
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        description TEXT NOT NULL DEFAULT '',
+        kind TEXT NOT NULL DEFAULT 'virtual_code',
+        price_original INT,
+        cost_vitality INT,
+        stock INT,
+        require_review INT NOT NULL DEFAULT 1,
+        dispatch_note TEXT NOT NULL DEFAULT '',
+        icon TEXT NOT NULL DEFAULT '',
+        active INT NOT NULL DEFAULT 1,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )''')
+    c.execute('''
+      CREATE TABLE IF NOT EXISTS reward_codes(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        item_id TEXT NOT NULL,
+        code_hash TEXT NOT NULL,
+        code_mask TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pool',
+        issued_to INT,
+        issued_at TEXT,
+        redemption_id INT,
+        created_at TEXT NOT NULL
+      )''')
+    c.execute('''
+      CREATE TABLE IF NOT EXISTS reward_redemptions(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INT NOT NULL,
+        item_id TEXT NOT NULL,
+        cost INT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        created_at TEXT NOT NULL,
+        reviewed_by INT,
+        reviewed_at TEXT,
+        issued_code_id INT
+      )''')
+    c.execute('''
+      CREATE TABLE IF NOT EXISTS vitality_spent(
+        user_id INT PRIMARY KEY,
+        spent INT NOT NULL DEFAULT 0
+      )''')
+    _ensure_columns(c, 'reward_redemptions', (
+        ('shipping_json', 'TEXT'),
+        ('fulfillment_status', "TEXT NOT NULL DEFAULT ''"),
+        ('quota_amount', 'INTEGER'),
+        ('quota_usage', 'TEXT'),
+    ))
+    # 线上 reward_items 是早期窄表（无 active/description 等），/api/rewards/items 直接 500
+    _ensure_columns(c, 'reward_items', (
+        ('description', "TEXT NOT NULL DEFAULT ''"),
+        ('kind', "TEXT NOT NULL DEFAULT 'virtual_code'"),
+        ('require_review', 'INT NOT NULL DEFAULT 1'),
+        ('dispatch_note', "TEXT NOT NULL DEFAULT ''"),
+        ('icon', "TEXT NOT NULL DEFAULT ''"),
+        ('active', 'INT NOT NULL DEFAULT 1'),
+    ))
+    c.execute('''
+      CREATE TABLE IF NOT EXISTS vitality_audit(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        record_type TEXT NOT NULL,
+        member_name TEXT,
+        detail TEXT,
+        created_at TEXT NOT NULL
+      )''')
+    _seed_reward_items(c)
     try:
         c.execute(
             '''CREATE VIRTUAL TABLE IF NOT EXISTS context_unit_fts USING fts5(
@@ -684,10 +1037,18 @@ def init_db():
         ('bio', "bio TEXT NOT NULL DEFAULT ''"),
         ('capabilities_json', "capabilities_json TEXT NOT NULL DEFAULT '[]'"),
         ('last_learning_at', 'last_learning_at TEXT'),
+        ('avatar_key', "avatar_key TEXT NOT NULL DEFAULT ''"),
     ):
         if column not in token_columns:
             c.execute(f'ALTER TABLE agent_tokens ADD COLUMN {column} {ddl}')
     c.execute("UPDATE agent_tokens SET display_name=name WHERE display_name='' OR display_name IS NULL")
+    agent_connect.ensure_schema(c)
+    practice.ensure_schema(c)
+    garden.ensure_schema(c)
+    garden_marks.ensure_schema(c)
+    garden_companion.ensure_schema(c)
+    reading_growth.ensure_schema(c)
+    content_engagement.ensure_schema(c)
     vote_columns = {row[1] for row in c.execute('PRAGMA table_info(submission_votes)')}
     if 'status' not in vote_columns:
         c.execute("ALTER TABLE submission_votes ADD COLUMN status TEXT NOT NULL DEFAULT 'accepted'")
@@ -834,13 +1195,32 @@ def verify_token(c, token):
 AGENT_CONTROL_RE = re.compile(r'[\x00-\x1f\x7f\u200b-\u200f\u202a-\u202e\u2060\ufeff]')
 
 
-def clean_agent_text(value, limit, *, required=False):
-    value = AGENT_CONTROL_RE.sub('', str(value or '')).strip()
+AGENT_LINE_CONTROL_RE = re.compile(r'[\x00-\x09\x0b-\x1f\x7f\u200b-\u200f\u202a-\u202e\u2060\ufeff]')
+
+
+def clean_agent_text(value, limit, *, required=False, multiline=False):
+    value = str(value or '')
+    if multiline:
+        value = value.replace('\r\n', '\n').replace('\r', '\n')
+        value = AGENT_LINE_CONTROL_RE.sub('', value)
+    else:
+        value = AGENT_CONTROL_RE.sub('', value)
+    value = value.strip()
     if len(value) > limit:
         raise HTTPException(422, f'Agent 名片字段不能超过 {limit} 字')
     if required and not value:
         raise HTTPException(422, 'Agent 名片字段不能为空')
     return value
+
+
+AGENT_AVATAR_KEYS = frozenset({'', 'robot', 'owl', 'fox', 'cat', 'orbit', 'seed', 'spark', 'hermes'})
+
+
+def clean_avatar_key(value):
+    key = str(value or '').strip()
+    if key not in AGENT_AVATAR_KEYS:
+        raise HTTPException(422, '头像只能在预设符号里选择')
+    return key
 
 
 def clean_agent_capabilities(values):
@@ -878,6 +1258,7 @@ def agent_card(user):
         'display_name': display_name,
         'bio': bio,
         'capabilities': capabilities,
+        'avatar_key': str(user.get('avatar_key') or ''),
         'mentor': {
             'user_id': user.get('id'),
             'username': user.get('username'),
@@ -891,7 +1272,7 @@ def verify_agent_token(c, token):
     r = c.execute(
         '''SELECT u.id,u.username,u.role,u.display_name,u.member_key,
                   t.id token_id,t.name agent_name,t.display_name agent_display_name,
-                  t.bio agent_bio,t.capabilities_json,t.created_at,t.last_learning_at
+                  t.bio agent_bio,t.capabilities_json,t.created_at,t.last_learning_at,t.avatar_key
            FROM agent_tokens t JOIN users u ON t.user_id=u.id
            WHERE t.token_hash=? AND t.revoked=0 AND u.active=1''',
         (token_hash,),
@@ -927,10 +1308,14 @@ async def auth(request: Request, call_next):
     public_agent_roster = request.method == 'GET' and path == '/api/agent/roster'
     public_agent_activity = request.method == 'GET' and path == '/api/agent/activity'
     public_agent_weekly_vote = request.method == 'GET' and path == '/api/agent/weekly-vote'
+    public_vitality_board = request.method == 'GET' and path == '/api/vitality/leaderboard'
     public_agent_questions = request.method == 'GET' and (
         path == '/api/agent/threads' or re.fullmatch(r'/api/agent/threads/\d+', path)
     )
-    public_annotations = request.method == 'GET' and path == '/api/annotations'
+    public_agent_answers = request.method == 'GET' and path == '/api/agent/answers'
+    public_annotations = request.method == 'GET' and path in (
+        '/api/annotations', '/api/annotations/heatmap',
+    )
     public_arsenal = request.method == 'GET' and (path == '/api/arsenal' or path.startswith('/api/arsenal/'))
     public_quality = request.method == 'GET' and path == '/api/quality'
     public_search = request.method == 'GET' and path == '/api/search'
@@ -941,9 +1326,24 @@ async def auth(request: Request, call_next):
     public_legacy_messages = request.method == 'GET' and path == '/api/messages'
     public_member_names = request.method == 'GET' and path == '/api/members/names'
     public_legacy_subscribe = path in ('/api/subscribe', '/api/subscribe/status', '/api/unsubscribe')
+    public_learning = request.method == 'GET' and (
+        path == '/api/public/learning'
+        or bool(re.fullmatch(r'/api/public/learning/[A-Za-z0-9][A-Za-z0-9._:-]{0,159}', path))
+        or path == '/feed/learning.xml'
+    )
+    public_tibo = request.method == 'GET' and path == '/api/tibo/status'
+    public_agent_connect = request.method == 'POST' and path in (
+        '/api/agent/connect/start', '/api/agent/connect/poll',
+    )
+    # 公开互动计数：GET 公共统计匿名可读；POST .../view 匿名可见停留计数（me 前缀仍鉴权）
+    public_engagement = path.startswith('/api/content-engagement/') and (
+        request.method == 'GET'
+        or (request.method == 'POST' and bool(
+            re.fullmatch(r'/api/content-engagement/[A-Za-z0-9_-]{1,80}/[A-Za-z0-9_-]{1,80}/view', path)))
+    )
     public_auth = path in ('/api/auth/login', '/api/auth/register', '/api/auth/claim')
     tok = request.headers.get('authorization', '').replace('Bearer ', '') or request.query_params.get('token', '')
-    public_request = path in ('/', '/index.html', '/favicon.ico') or public_auth or path == '/health' or public_governed or public_comments or public_events or public_threads or public_agent or public_agent_roster or public_agent_activity or public_agent_weekly_vote or public_agent_questions or public_annotations or public_arsenal or public_quality or public_search or public_context or public_context_search or public_legacy_messages or public_member_names or public_legacy_subscribe
+    public_request = path in ('/', '/index.html', '/favicon.ico') or public_auth or path == '/health' or public_governed or public_comments or public_events or public_threads or public_agent or public_agent_roster or public_agent_activity or public_agent_weekly_vote or public_vitality_board or public_agent_questions or public_agent_answers or public_annotations or public_arsenal or public_quality or public_search or public_context or public_context_search or public_legacy_messages or public_member_names or public_legacy_subscribe or public_learning or public_agent_connect or public_engagement or public_tibo
     if public_request and not tok:
         return await call_next(request)
     # 已登录则直接过（login 页面跳转不拦）
@@ -969,6 +1369,9 @@ async def auth(request: Request, call_next):
             request.state.agent_token_id = agent['token_id'] if agent else None
             request.state.agent_profile = agent_card(agent) if agent else None
             return await call_next(request)
+        # 坏 token 不把公开接口打成 401（热区匿名可读）
+        if public_request:
+            return await call_next(request)
     # 未登录：API 返回 401，页面返回 login 页
     if path.startswith('/api/') or path.startswith('/ledgers/'):
         return JSONResponse({'detail': '请先登录'}, status_code=401)
@@ -978,6 +1381,10 @@ async def auth(request: Request, call_next):
 @app.middleware('http')
 async def security_headers(request: Request, call_next):
     response = await call_next(request)
+    path = request.url.path
+    # 私稿/家园家族全部响应一律 no-store：路由级 Depends 盖不住鉴权中间件提前返回与异常路径
+    if path == '/api/practice' or path.startswith('/api/practice/') or path == '/api/garden' or path.startswith('/api/garden/') or path == '/api/me/reading-progress' or path.startswith('/api/me/reading-progress/') or path == '/api/me/growth-activity' or path.startswith('/api/content-engagement/') or path.startswith('/api/me/content-engagement/') or path.startswith('/api/admin/'):
+        response.headers['Cache-Control'] = 'no-store'
     response.headers.setdefault('X-Content-Type-Options', 'nosniff')
     response.headers.setdefault('X-Frame-Options', 'DENY')
     response.headers.setdefault('Referrer-Policy', 'strict-origin-when-cross-origin')
@@ -1061,6 +1468,7 @@ class AgentTokenUpdateReq(BaseModel):
     display_name: str | None = Field(None, max_length=120)
     bio: str | None = Field(None, max_length=1000)
     capabilities: list[str] | None = Field(None, max_length=12)
+    avatar_key: str | None = Field(None, max_length=20)
 
 
 class AgentQuestionReq(BaseModel):
@@ -1071,6 +1479,7 @@ class AgentQuestionReq(BaseModel):
 
 class AgentReplyReq(BaseModel):
     text: str = Field(..., min_length=1, max_length=2000)
+    reply_to: int | None = Field(None, ge=1)
 
 class EventUpsertReq(BaseModel):
     slug: str = Field(..., min_length=1, max_length=80)
@@ -1391,7 +1800,7 @@ def session_token(request: Request):
 
 def user_settings(c, user_id: int):
     user = c.execute(
-        'SELECT username,display_name,role,email FROM users WHERE id=?',
+        'SELECT username,display_name,role,email,member_key FROM users WHERE id=?',
         (user_id,),
     ).fetchone()
     if not user:
@@ -1400,9 +1809,13 @@ def user_settings(c, user_id: int):
         'SELECT 1 FROM subscribers WHERE user_id=? AND active=1 LIMIT 1',
         (user_id,),
     ).fetchone()
+    member_key = (user['member_key'] or '').strip()
+    # 渲染用当前群昵称；归属永远走 member_key
+    display = identity_anchor.resolve_display_name(c, member_key, user['display_name']) if member_key else (user['display_name'] or user['username'])
     return {
         'username': user['username'],
-        'display_name': user['display_name'],
+        'display_name': display,
+        'member_key': member_key,
         'role': user['role'],
         'email': user['email'] or '',
         'subscribed': bool(subscribed),
@@ -1845,7 +2258,7 @@ def list_agent_tokens(request: Request):
     user = require_human_session(request)
     c = db()
     rows = c.execute(
-        '''SELECT id,name,display_name,bio,capabilities_json,token_prefix,
+        '''SELECT id,name,display_name,bio,capabilities_json,token_prefix,avatar_key,
                   created_at,last_used_at,last_learning_at,revoked FROM agent_tokens
            WHERE user_id=? ORDER BY created_at DESC,id DESC''',
         (user['id'],),
@@ -1854,9 +2267,9 @@ def list_agent_tokens(request: Request):
     return {'items': [{
         'id': row['id'], 'name': row['name'], 'display_name': row['display_name'] or row['name'],
         'bio': row['bio'] or '', 'capabilities': parse_agent_capabilities(row['capabilities_json']),
-        'token': row['token_prefix'],
+        'token': row['token_prefix'], 'avatar_key': row['avatar_key'] or '',
         'created_at': row['created_at'], 'last_used_at': row['last_used_at'],
-        'last_learning_at': row['last_learning_at'],
+        'last_learning_at': learning_cursor.last_read_at(row['last_learning_at']),
         'revoked': bool(row['revoked']),
     } for row in rows]}
 
@@ -1878,9 +2291,23 @@ def admin_agent_list(request: Request):
         'name': row['name'], 'display_name': row['display_name'] or row['name'],
         'bio': row['bio'] or '', 'capabilities': parse_agent_capabilities(row['capabilities_json']),
         'token_prefix': row['token_prefix'], 'created_at': row['created_at'],
-        'last_used_at': row['last_used_at'], 'last_learning_at': row['last_learning_at'],
+        'last_used_at': row['last_used_at'], 'last_learning_at': learning_cursor.last_read_at(row['last_learning_at']),
         'revoked': bool(row['revoked']), 'mentor_display': row['mentor_display'] or row['username'],
     } for row in rows]}
+
+
+def _apply_agent_card_update(c, row, changes: dict) -> dict:
+    # 清洗并落库名片字段；校验异常由调用方 try/finally 关连接
+    display_name = clean_agent_text(changes.get('display_name', row['display_name'] or row['name']), 120, required=True)
+    bio = clean_agent_text(changes.get('bio', row['bio'] or ''), 1000)
+    capabilities = clean_agent_capabilities(changes.get('capabilities', parse_agent_capabilities(row['capabilities_json'])))
+    avatar_key = clean_avatar_key(changes.get('avatar_key', row['avatar_key'] if 'avatar_key' in row.keys() else ''))
+    c.execute(
+        'UPDATE agent_tokens SET display_name=?,bio=?,capabilities_json=?,avatar_key=? WHERE id=?',
+        (display_name, bio, json.dumps(capabilities, ensure_ascii=False), avatar_key, row['id']),
+    )
+    return {'id': row['id'], 'name': row['name'], 'display_name': display_name,
+            'bio': bio, 'capabilities': capabilities, 'avatar_key': avatar_key}
 
 
 @app.patch('/api/agent/tokens/{token_id}', tags=['agent'])
@@ -1890,24 +2317,45 @@ def update_agent_token(token_id: int, req: AgentTokenUpdateReq, request: Request
     if not changes:
         raise HTTPException(422, '至少提供一个名片字段')
     c = db()
-    row = c.execute(
-        'SELECT * FROM agent_tokens WHERE id=? AND user_id=? AND revoked=0',
-        (token_id, user['id']),
-    ).fetchone()
-    if not row:
+    try:
+        row = c.execute(
+            'SELECT * FROM agent_tokens WHERE id=? AND user_id=? AND revoked=0',
+            (token_id, user['id']),
+        ).fetchone()
+        if not row:
+            raise HTTPException(404, 'Agent token 不存在')
+        result = _apply_agent_card_update(c, row, changes)
+        c.commit()
+    finally:
         c.close()
-        raise HTTPException(404, 'Agent token 不存在')
-    display_name = clean_agent_text(changes.get('display_name', row['display_name'] or row['name']), 120, required=True)
-    bio = clean_agent_text(changes.get('bio', row['bio'] or ''), 1000)
-    capabilities = clean_agent_capabilities(changes.get('capabilities', parse_agent_capabilities(row['capabilities_json'])))
-    c.execute(
-        'UPDATE agent_tokens SET display_name=?,bio=?,capabilities_json=? WHERE id=?',
-        (display_name, bio, json.dumps(capabilities, ensure_ascii=False), token_id),
-    )
-    c.commit()
-    c.close()
-    return {'id': token_id, 'name': row['name'], 'display_name': display_name,
-            'bio': bio, 'capabilities': capabilities}
+    return result
+
+
+class AgentProfileUpdateReq(AgentTokenUpdateReq):
+    pass
+
+
+@app.patch('/api/agent/profile', tags=['agent'])
+def update_agent_profile(req: AgentProfileUpdateReq, request: Request):
+    """Agent 身份改自己的名片（display_name/bio/capabilities/avatar_key）；越权拒绝，有审计。"""
+    if getattr(request.state, 'auth_kind', None) != 'agent' or not request.state.agent_profile:
+        raise HTTPException(401, '需要 Agent 身份')
+    token_id = request.state.agent_token_id
+    changes = req.model_dump(exclude_unset=True) if hasattr(req, 'model_dump') else req.dict(exclude_unset=True)
+    if not changes:
+        raise HTTPException(422, '至少提供一个名片字段')
+    c = db()
+    try:
+        row = c.execute('SELECT * FROM agent_tokens WHERE id=? AND revoked=0', (token_id,)).fetchone()
+        if not row:
+            raise HTTPException(404, 'Agent token 不存在')
+        result = _apply_agent_card_update(c, row, changes)
+        c.commit()
+    finally:
+        c.close()
+    record_agent_action(request, 'agent.profile_update', 'agent_token', token_id,
+                        metadata={'fields': sorted(changes)})
+    return result
 
 
 @app.delete('/api/agent/tokens/{token_id}', tags=['agent'])
@@ -2023,12 +2471,15 @@ def _current_vote_round(c) -> dict | None:
         (week_start,),
     ).fetchone()
     if row:
-        return dict(row)
-    c.execute(
-        'INSERT INTO weekly_vote_rounds(week_start, week_end, status, created_at) VALUES(?,?,?,?)',
-        (week_start, week_end, 'open', datetime.datetime.now(CST).isoformat()),
-    )
-    round_id = c.execute('SELECT last_insert_rowid()').fetchone()[0]
+        if row['status'] != 'open':
+            return dict(row)
+        round_id = row['id']
+    else:
+        c.execute(
+            'INSERT INTO weekly_vote_rounds(week_start, week_end, status, created_at) VALUES(?,?,?,?)',
+            (week_start, week_end, 'open', datetime.datetime.now(CST).isoformat()),
+        )
+        round_id = c.execute('SELECT last_insert_rowid()').fetchone()[0]
     # 候选：本周被采纳的回答 + 本周 accepted 批注
     now_iso = datetime.datetime.now(CST).isoformat()
     for kind, sql in (
@@ -2036,10 +2487,13 @@ def _current_vote_round(c) -> dict | None:
                      FROM question_replies r WHERE r.accepted=1
                      AND r.accepted_at >= ? AND r.accepted_at < ?'''),
         ('annotation', '''SELECT a.id, a.note, a.username, 'human', NULL
-                          FROM annotations a WHERE a.status='accepted'
+                          FROM annotations a WHERE a.status='accepted' AND a.deleted=0 AND a.visibility='public'
                           AND a.created_at >= ? AND a.created_at < ?'''),
     ):
-        for rid, text, author, akind, tokid in c.execute(sql, (now_iso[:10], week_end)):
+        for rid, text, author, akind, tokid in c.execute(sql, (week_start, week_end)):
+            if c.execute('SELECT 1 FROM weekly_vote_candidates WHERE round_id=? AND source_kind=? AND source_id=?',
+                         (round_id, kind, rid)).fetchone():
+                continue
             c.execute(
                 '''INSERT INTO weekly_vote_candidates
                    (round_id, source_kind, source_id, text, author_name, author_kind, author_agent_token_id, votes, created_at)
@@ -2108,34 +2562,62 @@ def agent_roster(limit: int = Query(200, ge=1, le=500)):
     """公开学徒名录；只展示非撤销 token 的名片与脱敏近期动作。"""
     c = db()
     rows = c.execute(
-        '''SELECT t.id,t.name,t.display_name,t.bio,t.capabilities_json,t.last_used_at,
+        '''SELECT t.id,t.name,t.display_name,t.bio,t.capabilities_json,t.last_used_at,t.avatar_key,
                   u.username master,u.display_name master_display
            FROM agent_tokens t JOIN users u ON u.id=t.user_id
            WHERE t.revoked=0 AND u.active=1
            ORDER BY t.created_at DESC,t.id DESC LIMIT ?''',
         (limit,),
     ).fetchall()
+    # 批量取数：4 条聚合 + 1 条窗口函数，替代每 agent 4 次子查询（1+4N → 5）
+    ids = [row['id'] for row in rows]
+    recent_by_agent: dict[int, list] = {}
+    seals_by_agent: dict[int, int] = {}
+    accepted_by_agent: dict[int, int] = {}
+    votes_by_agent: dict[int, int] = {}
+    if ids:
+        marks = ','.join('?' * len(ids))
+        for r in c.execute(
+            f'''SELECT agent_token_id,action,ts,target_id FROM (
+                  SELECT agent_token_id,action,ts,target_id,
+                         ROW_NUMBER() OVER (
+                           PARTITION BY agent_token_id ORDER BY ts DESC,id DESC
+                         ) AS rn
+                  FROM agent_action_audit WHERE agent_token_id IN ({marks})
+                ) WHERE rn<=8 ORDER BY agent_token_id,rn''',
+            ids,
+        ).fetchall():
+            recent_by_agent.setdefault(r['agent_token_id'], []).append(r)
+        for r in c.execute(
+            f'''SELECT agent_token_id,COUNT(*) AS n FROM arsenal_items
+                WHERE status='shelved' AND agent_token_id IN ({marks})
+                GROUP BY agent_token_id''',
+            ids,
+        ).fetchall():
+            seals_by_agent[r['agent_token_id']] = r['n']
+        for r in c.execute(
+            f'''SELECT agent_token_id,COUNT(*) AS n FROM question_replies
+                WHERE accepted=1 AND agent_token_id IN ({marks})
+                GROUP BY agent_token_id''',
+            ids,
+        ).fetchall():
+            accepted_by_agent[r['agent_token_id']] = r['n']
+        for r in c.execute(
+            f'''SELECT wc.author_agent_token_id AS aid,COUNT(*) AS n
+                FROM weekly_votes v
+                JOIN weekly_vote_candidates wc ON v.candidate_id=wc.id
+                WHERE wc.author_agent_token_id IN ({marks})
+                GROUP BY wc.author_agent_token_id''',
+            ids,
+        ).fetchall():
+            votes_by_agent[r['aid']] = r['n']
+    total = c.execute('SELECT COUNT(*) FROM agent_tokens t JOIN users u ON u.id=t.user_id WHERE t.revoked=0 AND u.active=1').fetchone()[0]
     items = []
     for row in rows:
-        recent_rows = c.execute(
-            '''SELECT action,ts,target_id FROM agent_action_audit
-               WHERE agent_token_id=? ORDER BY ts DESC,id DESC LIMIT 8''',
-            (row['id'],),
-        ).fetchall()
-        seals = c.execute(
-            "SELECT COUNT(*) FROM arsenal_items WHERE agent_token_id=? AND status='shelved'",
-            (row['id'],),
-        ).fetchone()[0]
-        accepted_replies = c.execute(
-            "SELECT COUNT(*) FROM question_replies WHERE agent_token_id=? AND accepted=1",
-            (row['id'],),
-        ).fetchone()[0]
-        weekly_votes = c.execute(
-            '''SELECT COUNT(*) FROM weekly_votes v
-               JOIN weekly_vote_candidates wc ON v.candidate_id=wc.id
-               WHERE wc.author_agent_token_id=?''',
-            (row['id'],),
-        ).fetchone()[0]
+        recent_rows = recent_by_agent.get(row['id'], [])
+        seals = seals_by_agent.get(row['id'], 0)
+        accepted_replies = accepted_by_agent.get(row['id'], 0)
+        weekly_votes = votes_by_agent.get(row['id'], 0)
         progress = min(
             100,
             accepted_replies * PROGRESS_WEIGHTS['accepted_reply']
@@ -2145,7 +2627,7 @@ def agent_roster(limit: int = Query(200, ge=1, le=500)):
         items.append({
             'id': row['id'], 'name': row['name'],
             'display_name': row['display_name'] or row['name'],
-            'bio': row['bio'] or '',
+            'bio': row['bio'] or '', 'avatar_key': row['avatar_key'] or '',
             'tags': parse_agent_capabilities(row['capabilities_json']),
             'master': row['master'], 'master_display': row['master_display'] or row['master'],
             'last_used_at': row['last_used_at'], 'seals': seals,
@@ -2161,32 +2643,20 @@ def agent_roster(limit: int = Query(200, ge=1, le=500)):
             } for recent in recent_rows],
         })
     c.close()
-    return {'items': items, 'count': len(items)}
+    return {'items': items, 'count': len(items), 'total': total, 'limit': limit, 'truncated': total > len(items)}
 
 
 def _current_identity(c, request) -> dict | None:
     """当前请求身份（人 session 或 agent token），无则 None。"""
-    auth = request.headers.get('authorization', '')
-    if auth.lower().startswith('bearer '):
-        tok = auth[7:].strip()
-        row = c.execute(
-            'SELECT id, user_id, name, display_name FROM agent_tokens WHERE token=? AND revoked=0',
-            (tok,),
-        ).fetchone()
-        if row:
-            return {'kind': 'agent', 'agent_token_id': row['id'], 'user_id': row['user_id'],
-                    'name': row['display_name'] or row['name']}
-    sess = request.cookies.get('session')
-    if sess:
-        row = c.execute(
-            'SELECT user_id FROM sessions WHERE token=? AND expires_at > ?',
-            (sess, datetime.datetime.now(datetime.timezone.utc).isoformat()),
-        ).fetchone()
-        if row:
-            user = c.execute('SELECT id, username, display_name FROM users WHERE id=?', (row['user_id'],)).fetchone()
-            if user:
-                return {'kind': 'human', 'user_id': user['id'], 'name': user['display_name'] or user['username']}
-    return None
+    user = getattr(request.state, 'user', None)
+    if not user:
+        return None
+    if getattr(request.state, 'auth_kind', None) == 'agent':
+        profile = request.state.agent_profile
+        return {'kind': 'agent', 'agent_token_id': profile['id'],
+                'user_id': user['id'], 'name': profile['display_name'] or profile['name']}
+    return {'kind': 'human', 'user_id': user['id'], 'name': user['display_name'] or user['username']}
+
 
 
 @app.post('/api/agent/questions/{thread_id}/accept', tags=['agent'])
@@ -2217,12 +2687,9 @@ def accept_question_reply(thread_id: int, body: dict, request: Request):
         'UPDATE question_replies SET accepted=1, accepted_by=?, accepted_at=? WHERE id=?',
         (identity['user_id'], now, reply_id),
     )
-    c.execute(
-        'INSERT INTO agent_action_audit(agent_token_id, action, ts, target_id, meta_json) VALUES(?,?,?,?,?)',
-        (reply['agent_token_id'] or thread['agent_token_id'], 'answer_accepted', now, reply_id, '{}'),
-    )
     c.commit()
     c.close()
+    record_agent_action(request, 'answer_accepted', 'question_reply', reply_id)
     return {'ok': True, 'accepted': True, 'reply_id': reply_id,
             'progress_delta': PROGRESS_WEIGHTS['accepted_reply'] if reply['agent_token_id'] else 0}
 
@@ -2289,17 +2756,14 @@ def cast_weekly_vote(candidate_id: int, request: Request):
         (rnd['id'], candidate_id, identity['kind'], identity['name'], now),
     )
     c.execute(
-        'UPDATE weekly_vote_candidates SET votes=(SELECT COUNT(*) FROM weekly_votes WHERE candidate_id=?) WHERE id=?',
-        (candidate_id, candidate_id),
-    )
-    c.execute(
-        'INSERT INTO agent_action_audit(agent_token_id, action, ts, target_id, meta_json) VALUES(?,?,?,?,?)',
-        (identity['agent_token_id'] if identity['kind'] == 'agent' else None,
-         'weekly_vote', now, candidate_id, '{}'),
+        'UPDATE weekly_vote_candidates SET votes=(SELECT COUNT(*) FROM weekly_votes '
+        'WHERE candidate_id=weekly_vote_candidates.id) WHERE round_id=?',
+        (rnd['id'],),
     )
     c.commit()
     votes = c.execute('SELECT votes FROM weekly_vote_candidates WHERE id=?', (candidate_id,)).fetchone()[0]
     c.close()
+    record_agent_action(request, 'weekly_vote', 'weekly_vote_candidate', candidate_id)
     return {'ok': True, 'candidate_id': candidate_id, 'votes': votes}
 
 
@@ -2316,6 +2780,7 @@ def agent_manifest():
             'card_fields': ['display_name', 'bio', 'capabilities'],
         },
         'capabilities': [
+            {'name': '跨期共同学习', 'endpoints': ['GET /learn/directory.json', 'GET /skills/directory.json'], 'auth': False, 'note': '编辑金句、方法与暂定原则有来源/边界/关联；来源核验不代表效果实测。讨论target使用知识id。'},
             {'name': '日报与增量学习', 'endpoints': ['GET /api/governed/ledgers', 'GET /api/governed/ledgers/{date}', 'GET /api/agent/updates?since='], 'auth': 'updates requires Agent token'},
             {'name': '线索', 'endpoints': ['GET /api/threads', 'GET /api/threads/{id}'], 'auth': False},
             {'name': '学徒近况', 'endpoints': ['GET /api/agent/activity?limit=5'], 'auth': False},
@@ -2334,6 +2799,451 @@ def agent_manifest():
             'headers': {'Authorization': 'Bearer <agent-token>', 'X-Agent-Name': '我的研究 Agent'},
         },
     }
+
+
+# ── 酒力（活跃度）与奖励兑换 API ──
+
+@app.get('/api/vitality/me', tags=['rewards'])
+def vitality_me(request: Request):
+    """我的酒力 + 7 天流水 + 今日变动（见环：即时反馈）。"""
+    if getattr(request.state, 'auth_kind', None) != 'session':
+        raise HTTPException(401, '请先登录')
+    c = db()
+    settings = _vitality_settings(c)
+    data = compute_vitality_for_user(c, request.state.user['id'], settings)
+    data['band'] = _vitality_band(data['total'], settings)
+    uid = request.state.user['id']
+    u = c.execute('SELECT username, display_name FROM users WHERE id=?', (uid,)).fetchone()
+    name = u['display_name'] or u['username'] if u else ''
+    # 7 天流水：一次 GROUP BY 替代逐日 COUNT
+    from datetime import timedelta as _td2
+    today = datetime.date.today()
+    week_start = (today - _td2(days=6)).isoformat()
+    cap = int(settings.get('weights', {}).get('message_daily_cap', 20) or 20)
+    w_msg = int(settings.get('weights', {}).get('message', 1) or 1)
+    day_msgs = {
+        r['d']: int(r['n']) for r in c.execute(
+            'SELECT substr(cst,1,10) AS d, COUNT(*) AS n FROM messages '
+            'WHERE sender_name=? AND substr(cst,1,10)>=? GROUP BY substr(cst,1,10)',
+            (name, week_start),
+        ).fetchall()
+    }
+    stream = []
+    for i in range(6, -1, -1):
+        ds = (today - _td2(days=i)).isoformat()
+        msgs = day_msgs.get(ds, 0)
+        points = min(msgs, cap) * w_msg
+        if points or i == 0:
+            stream.append({'date': ds, 'points': points, 'msgs': msgs})
+    data['stream'] = stream
+    data['today_gain'] = stream[-1]['points'] if stream else 0
+    c.close()
+    return data
+
+
+@app.get('/api/vitality/leaderboard', tags=['rewards'])
+def vitality_leaderboard(request: Request, limit: int = Query(10, ge=1, le=50)):
+    """本月酒力榜（公开）。主榜=近 30 天滚动（始终有内容，月初不空窗）；
+    参与 <10 人自动回退全期榜并标注口径；补充=上月榜首 + 本月进度。
+    反套利：只显名次+段位+涨幅，不显精确分。"""
+    c = db()
+    settings = _vitality_settings(c)
+    exclude = set(_member_norm_v(x) for x in (settings.get('leaderboard_exclude') or []))
+    for r in c.execute("SELECT username, display_name FROM users WHERE role='admin'"):
+        exclude.add(_member_norm_v(r['display_name'] or r['username']))
+
+    def build(since: str | None = None, month: str | None = None):
+        rows = c.execute(
+            "SELECT DISTINCT sender_name AS name FROM messages"
+            " WHERE sender_name IS NOT NULL AND sender_name != '' AND sender_name != '?'"
+            " ORDER BY sender_name",
+        ).fetchall()
+        quote_counts = _vitality_quote_counts(since, month)
+        board = []
+        for row in rows:
+            key = _member_norm_v(row['name'])
+            if key in exclude:
+                continue
+            data = compute_vitality_for_member(
+                c, row['name'], settings, month=month, since=since,
+                quote_counts=quote_counts, record_audit=False,
+            )
+            if data['total'] > 0:
+                board.append(data)
+        board.sort(key=lambda x: -x['total'])
+        return board
+
+    today = datetime.date.today()
+    since30 = (today - datetime.timedelta(days=30)).isoformat()
+    board = build(since=since30)
+    scope = '30d'
+    if len(board) < 10:
+        board = build()
+        scope = 'all'  # 数据不足：回退全期榜，标注口径
+    last_month = (today.replace(day=1) - datetime.timedelta(days=1)).strftime('%Y-%m')
+    lb_board = build(month=last_month)
+    last_month_top = lb_board[0]['name'] if lb_board else None
+    cur_month = today.strftime('%Y-%m')
+    cur_board = build(month=cur_month)
+    month_progress = len(cur_board)
+    month_my = None
+    mine = request.state.user if getattr(request.state, 'auth_kind', None) == 'session' else None
+    my_rank = None
+    my_gap = None
+    if mine:
+        my_key = _member_norm_v(mine.get('display_name') or mine.get('username'))
+        for i, b in enumerate(board):
+            if _member_norm_v(b['name']) == my_key:
+                my_rank = i + 1
+                break
+        if my_rank and my_rank > limit:
+            top10_min = board[limit - 1]['total'] if len(board) >= limit else 0
+            my_total = next((b['total'] for b in board if _member_norm_v(b['name']) == my_key), 0)
+            my_gap = max(0, top10_min - my_total)
+        if my_rank is None:
+            for i, b in enumerate(cur_board):
+                if _member_norm_v(b['name']) == my_key:
+                    month_my = i + 1
+                    break
+    c.close()
+    return {
+        'scope': scope,
+        'scope_label': '近 30 天' if scope == '30d' else '全期（本月参与人少，按全期排）',
+        'last_month_top': last_month_top,
+        'month': cur_month,
+        'month_progress': month_progress,
+        'month_my': month_my,
+        'items': [{
+            'name': b['name'], 'rank': i + 1,
+            'band': _vitality_band(b['total'], settings), 'gain7': int(b.get('gain7', 0)),
+        } for i, b in enumerate(board[:limit])],
+        'count': len(board),
+        'my_rank': my_rank,
+        'my_gap': my_gap,
+    }
+
+
+def _vitality_band(total: int, settings: dict | None = None) -> str:
+    """段位（配置化 bands，默认值兜底）：见习/品鉴师/资深品鉴师/掌酒师。"""
+    bands = (settings or {}).get('bands') or [
+        {'name': '见习', 'min': 0}, {'name': '品鉴师', 'min': 60},
+        {'name': '资深品鉴师', 'min': 300}, {'name': '掌酒师', 'min': 650},
+    ]
+    best = '见习'
+    for b in bands:
+        if total >= int(b.get('min', 0)):
+            best = b.get('name', '见习')
+    return best
+
+
+def _weekly_weight(weight: float, settings: dict, key: str) -> float:
+    """反套利：权重每周小幅浮动（±weight_jitter，ISO 周号确定性 seed）。"""
+    jitter = float(settings.get('weights', {}).get('weight_jitter', 0) or 0)
+    if jitter <= 0:
+        return weight
+    iso = datetime.date.today().isocalendar()
+    seed_val = int(f'{iso[0]}{iso[1]:02d}{sum(ord(c) for c in key)}')
+    factor = 1.0 + jitter * (2.0 * ((seed_val % 100) / 100.0) - 1.0)
+    return weight * factor
+
+
+@app.get('/api/rewards/items', tags=['rewards'])
+def rewards_items(request: Request):
+    """可兑换奖品（奖品库表，active=1；门槛/库存未定=null 显示待定）。"""
+    if getattr(request.state, 'auth_kind', None) != 'session':
+        raise HTTPException(401, '请先登录')
+    c = db()
+    rows = c.execute(
+        'SELECT id,name,description,kind,price_original,cost_vitality,stock,require_review,dispatch_note,icon FROM reward_items WHERE active=1 ORDER BY created_at'
+    ).fetchall()
+    c.close()
+    return {'items': [dict(r) for r in rows]}
+
+
+@app.post('/api/rewards/redemptions', tags=['rewards'])
+def create_redemption(req: dict, request: Request):
+    """兑换申请：校验酒力≥门槛，pending 预占（不扣，审核通过才正式扣）。"""
+    if getattr(request.state, 'auth_kind', None) != 'session':
+        raise HTTPException(401, '请先登录')
+    item_id = str(req.get('item_id') or '')
+    c = db()
+    settings = _vitality_settings(c)
+    row = c.execute(
+        'SELECT * FROM reward_items WHERE id=? AND active=1', (item_id,),
+    ).fetchone()
+    if not row:
+        c.close(); raise HTTPException(404, '奖品不存在或已下架')
+    cost = row['cost_vitality']
+    if cost is None:
+        c.close(); raise HTTPException(409, '兑换门槛还没定，等 Sun 定价')
+    me = compute_vitality_for_user(c, request.state.user['id'], settings)
+    if me['net'] < int(cost):
+        c.close(); raise HTTPException(409, f'酒力不够（差 {int(cost) - me["net"]}）')
+    pending = c.execute(
+        "SELECT COUNT(*) FROM reward_redemptions WHERE user_id=? AND status='pending'",
+        (request.state.user['id'],),
+    ).fetchone()[0]
+    if pending:
+        c.close(); raise HTTPException(409, '已有待审核的申请，先等 Sun 处理')
+    now = datetime.datetime.now(CST).isoformat()
+    cur = c.execute(
+        'INSERT INTO reward_redemptions(user_id, item_id, cost, status, created_at) VALUES(?,?,?,?,?)',
+        (request.state.user['id'], item_id, int(cost), 'pending', now),
+    )
+    c.commit()
+    rid = cur.lastrowid
+    c.close()
+    return {'ok': True, 'redemption_id': rid, 'status': 'pending', 'cost': int(cost)}
+
+
+def _pii_key() -> str:
+    """Fernet key：32 字节 → urlsafe base64（44 字符）。可用 REWARD_PII_KEY 覆盖。"""
+    key = os.environ.get('REWARD_PII_KEY', '')
+    if key and len(key) == 44:
+        return key
+    seed = (os.environ.get('ADMIN_AUTH') or 'ai325-pii-fallback').encode()
+    return base64.urlsafe_b64encode(hashlib.sha256(seed).digest()).decode()
+
+
+REWARD_PII_KEY = _pii_key()
+
+
+def _pii_cipher():
+    from cryptography.fernet import Fernet
+    return Fernet(REWARD_PII_KEY)
+
+
+@app.post('/api/rewards/redemptions/{rid}/shipping', tags=['rewards'])
+def submit_shipping(rid: int, req: dict, request: Request):
+    """实物兑换：提交尺码+收货信息（隐私加密存储，日志不落明文；admin 只看掩码）。"""
+    if getattr(request.state, 'auth_kind', None) != 'session':
+        raise HTTPException(401, '请先登录')
+    shipping = {k: str(req.get(k) or '').strip()[:200] for k in ('size', 'receiver', 'phone', 'address', 'city', 'province')}
+    if not shipping['address'] or not shipping['receiver']:
+        raise HTTPException(400, '收货地址与收件人必填')
+    c = db()
+    row = c.execute('SELECT * FROM reward_redemptions WHERE id=? AND user_id=?', (rid, request.state.user['id'])).fetchone()
+    if not row:
+        c.close(); raise HTTPException(404, '兑换不存在')
+    item = c.execute('SELECT kind FROM reward_items WHERE id=?', (row['item_id'],)).fetchone()
+    if not item or item['kind'] != 'physical':
+        c.close(); raise HTTPException(409, '只有实物奖品需要收货信息')
+    plain = json.dumps(shipping, ensure_ascii=False)
+    try:
+        encrypted = _pii_cipher().encrypt(plain.encode()).decode()
+    except Exception as exc:
+        c.close(); raise HTTPException(500, '收货信息加密失败') from exc
+    c.execute('UPDATE reward_redemptions SET shipping_json=? WHERE id=?', (encrypted, rid))
+    c.commit()
+    c.close()
+    return {'ok': True, 'mask': _shipping_mask(shipping)}
+
+
+def _shipping_mask(shipping: dict) -> dict:
+    """掩码：省市 + 姓氏 + 尾号——明文只有 admin 发货时解密单条。"""
+    province = (shipping.get('province') or '')[:2]
+    city = (shipping.get('city') or '')[:2]
+    receiver = (shipping.get('receiver') or '')
+    surname = receiver[:1] + '*' * max(0, len(receiver) - 1)
+    phone = (shipping.get('phone') or '')
+    phone_mask = phone[:3] + '****' + phone[-4:] if len(phone) >= 7 else '***'
+    return {'province': province, 'city': city, 'receiver': surname, 'phone': phone_mask}
+
+
+@app.get('/api/rewards/me', tags=['rewards'])
+def rewards_me(request: Request):
+    """我的兑换记录（发码只显示掩码；明文只在 issue 响应出现一次）。"""
+    if getattr(request.state, 'auth_kind', None) != 'session':
+        raise HTTPException(401, '请先登录')
+    c = db()
+    rows = c.execute(
+        '''SELECT r.id, r.item_id, r.cost, r.status, r.created_at, r.reviewed_at,
+                  rc.code_mask
+           FROM reward_redemptions r LEFT JOIN reward_codes rc ON rc.redemption_id = r.id
+           WHERE r.user_id=? ORDER BY r.created_at DESC''',
+        (request.state.user['id'],),
+    ).fetchall()
+    c.close()
+    return {'items': [dict(r) for r in rows]}
+
+
+# ── admin：兑换审核 / 库存 / 录码 ──
+
+@app.get('/api/admin/rewards', tags=['rewards'])
+def admin_rewards(request: Request):
+    """奖品库管理：奖品（表）/兑换/已花/码；实物收货信息只显示掩码。"""
+    require_admin(request)
+    c = db()
+    items = c.execute('SELECT * FROM reward_items ORDER BY created_at').fetchall()
+    redemptions = c.execute(
+        'SELECT * FROM reward_redemptions ORDER BY created_at DESC LIMIT 50',
+    ).fetchall()
+    spent = c.execute(
+        'SELECT user_id, spent FROM vitality_spent ORDER BY spent DESC',
+    ).fetchall()
+    codes = c.execute(
+        "SELECT id, item_id, code_mask, status, issued_to, issued_at FROM reward_codes ORDER BY id DESC LIMIT 50",
+    ).fetchall()
+    redemption_items = []
+    for r in redemptions:
+        item = dict(r)
+        if r['shipping_json']:
+            try:
+                plain = json.loads(_pii_cipher().decrypt(r['shipping_json'].encode()).decode())
+                item['shipping_mask'] = _shipping_mask(plain)
+            except Exception:
+                item['shipping_mask'] = None
+        redemption_items.append(item)
+    c.close()
+    return {
+        'items': [dict(r) for r in items], 'redemptions': redemption_items,
+        'spent': [dict(r) for r in spent], 'codes': [dict(r) for r in codes],
+    }
+
+
+@app.post('/api/admin/rewards/items/{item_id}', tags=['rewards'])
+def admin_update_reward_item(item_id: str, req: dict, request: Request):
+    """奖品库编辑：门槛/库存/上下架/名称描述等（落表，配置化）。"""
+    require_admin(request)
+    c = db()
+    row = c.execute('SELECT id FROM reward_items WHERE id=?', (item_id,)).fetchone()
+    if not row:
+        c.close(); raise HTTPException(404, '奖品不存在')
+    fields = {}
+    for key in ('name', 'description', 'kind', 'price_original', 'cost_vitality', 'stock', 'require_review', 'dispatch_note', 'icon', 'active'):
+        if key in req:
+            val = req[key]
+            if key in ('cost_vitality', 'stock'):
+                val = None if val in (None, '') else int(val)
+            elif key in ('require_review', 'active'):
+                val = 1 if val else 0
+            fields[key] = val
+    if not fields:
+        c.close(); raise HTTPException(400, '没有可更新的字段')
+    sets = ', '.join(f'{k}=?' for k in fields)
+    c.execute(f'UPDATE reward_items SET {sets}, updated_at=? WHERE id=?',
+              (*fields.values(), datetime.datetime.now(CST).isoformat(), item_id))
+    c.commit()
+    c.close()
+    return {'ok': True, 'item_id': item_id}
+
+
+@app.post('/api/admin/rewards/redemptions/{rid}/ship', tags=['rewards'])
+def admin_mark_shipped(rid: int, request: Request):
+    """实物发货：标记 fulfillment_status=shipped（发货时解密单条看地址，记 audit）。"""
+    require_admin(request)
+    c = db()
+    row = c.execute('SELECT * FROM reward_redemptions WHERE id=?', (rid,)).fetchone()
+    if not row:
+        c.close(); raise HTTPException(404, '兑换不存在')
+    c.execute('UPDATE reward_redemptions SET fulfillment_status=? WHERE id=?', ('shipped', rid))
+    c.execute(
+        'INSERT INTO vitality_audit(record_type, member_name, detail, created_at) VALUES(?,?,?,?)',
+        ('physical_shipped', str(row['user_id']),
+         json.dumps({'redemption_id': rid}, ensure_ascii=False), datetime.datetime.now(CST).isoformat()),
+    )
+    c.commit()
+    c.close()
+    return {'ok': True, 'fulfillment_status': 'shipped'}
+
+
+@app.post('/api/admin/rewards/settings', tags=['rewards'])
+def admin_rewards_settings(req: dict, request: Request):
+    """后台改配置（库存/门槛等）：写 DB 覆盖层。"""
+    require_admin(request)
+    key = str(req.get('key') or '')
+    value = req.get('value')
+    if key not in ('weights', 'rewards'):
+        raise HTTPException(400, '只允许 weights / rewards')
+    c = db()
+    now = datetime.datetime.now(CST).isoformat()
+    c.execute(
+        'INSERT INTO vitality_settings(key, value, updated_by, updated_at) VALUES(?,?,?,?) '
+        'ON CONFLICT(key) DO UPDATE SET value=excluded.value, updated_by=excluded.updated_by, updated_at=excluded.updated_at',
+        (key, json.dumps(value, ensure_ascii=False), request.state.user['id'], now),
+    )
+    c.commit()
+    c.close()
+    return {'ok': True, 'key': key}
+
+
+@app.post('/api/admin/rewards/redemptions/{rid}/approve', tags=['rewards'])
+def admin_approve_redemption(rid: int, request: Request):
+    """审核通过：正式扣分（vitality_spent += cost），转 approved。"""
+    require_admin(request)
+    c = db()
+    row = c.execute('SELECT * FROM reward_redemptions WHERE id=?', (rid,)).fetchone()
+    if not row:
+        c.close(); raise HTTPException(404, '申请不存在')
+    if row['status'] != 'pending':
+        c.close(); raise HTTPException(409, f'当前状态 {row["status"]} 不可审核')
+    now = datetime.datetime.now(CST).isoformat()
+    c.execute(
+        'INSERT INTO vitality_spent(user_id, spent) VALUES(?,?) '
+        'ON CONFLICT(user_id) DO UPDATE SET spent = spent + excluded.spent',
+        (row['user_id'], row['cost']),
+    )
+    c.execute(
+        'UPDATE reward_redemptions SET status=?, reviewed_by=?, reviewed_at=? WHERE id=?',
+        ('approved', request.state.user['id'], now, rid),
+    )
+    c.commit()
+    c.close()
+    return {'ok': True, 'status': 'approved'}
+
+
+@app.post('/api/admin/rewards/redemptions/{rid}/reject', tags=['rewards'])
+def admin_reject_redemption(rid: int, request: Request):
+    """驳回：不扣分，转 rejected。"""
+    require_admin(request)
+    c = db()
+    row = c.execute('SELECT * FROM reward_redemptions WHERE id=?', (rid,)).fetchone()
+    if not row:
+        c.close(); raise HTTPException(404, '申请不存在')
+    if row['status'] != 'pending':
+        c.close(); raise HTTPException(409, f'当前状态 {row["status"]} 不可驳回')
+    now = datetime.datetime.now(CST).isoformat()
+    c.execute(
+        'UPDATE reward_redemptions SET status=?, reviewed_by=?, reviewed_at=? WHERE id=?',
+        ('rejected', request.state.user['id'], now, rid),
+    )
+    c.commit()
+    c.close()
+    return {'ok': True, 'status': 'rejected'}
+
+
+@app.post('/api/admin/rewards/redemptions/{rid}/issue', tags=['rewards'])
+def admin_issue_redemption(rid: int, req: dict, request: Request):
+    """发放：admin 现场录码（明文只在请求体出现）→ 存 hash+掩码 → 响应明文一次给兑换者。
+    红线：服务端不留明文；日志/审计只记掩码与发放记录。"""
+    require_admin(request)
+    code = str(req.get('code') or '').strip()
+    if len(code) < 8 or len(code) > 128:
+        raise HTTPException(400, '激活码长度不符')
+    c = db()
+    row = c.execute('SELECT * FROM reward_redemptions WHERE id=?', (rid,)).fetchone()
+    if not row:
+        c.close(); raise HTTPException(404, '申请不存在')
+    if row['status'] != 'approved':
+        c.close(); raise HTTPException(409, '先审核通过才能发放')
+    code_hash = hashlib.sha256(code.encode()).hexdigest()
+    dup = c.execute('SELECT id FROM reward_codes WHERE code_hash=?', (code_hash,)).fetchone()
+    if dup:
+        c.close(); raise HTTPException(409, '这个码已录过')
+    mask = code[:4] + '*' * max(0, len(code) - 8) + code[-4:]
+    now = datetime.datetime.now(CST).isoformat()
+    cur = c.execute(
+        '''INSERT INTO reward_codes(item_id, code_hash, code_mask, status, issued_to, issued_at, redemption_id, created_at)
+           VALUES(?,?,?,?,?,?,?,?)''',
+        (row['item_id'], code_hash, mask, 'issued', row['user_id'], now, rid, now),
+    )
+    c.execute(
+        'UPDATE reward_redemptions SET status=?, reviewed_at=?, issued_code_id=? WHERE id=?',
+        ('issued', now, cur.lastrowid, rid),
+    )
+    c.commit()
+    c.close()
+    return {'ok': True, 'status': 'issued', 'code': code, 'code_mask': mask}
 
 
 # ── 军火库 Agent 市集 ──
@@ -2823,51 +3733,130 @@ def update_arsenal_status(item_id: str, req: ArsenalStatusReq, request: Request)
 
 # ── 邀请码后台 API ──
 def require_admin(request: Request):
-    user = request.state.user
-    if request.state.auth_kind != 'session' or user['role'] != 'admin':
+    user = getattr(request.state, 'user', None)
+    role = user.get('role') if hasattr(user, 'get') else (user['role'] if user else None)
+    if getattr(request.state, 'auth_kind', None) != 'session' or role != 'admin':
         raise HTTPException(403, '仅管理员登录态可操作后台')
+
+
+def _alert_jsonl_dirs() -> list[Path]:
+    """Return the configured canonical directory and the legacy data fallback.
+
+    Host-side operations write /opt/xfsite/logs/alerts. Older deployments (and
+    the API container before the logs volume is mounted) may only expose the
+    mirrored /data/ops-alerts directory; callers de-duplicate both sources.
+    """
+    configured = os.environ.get('XF_ALERT_JSONL_DIR') or os.environ.get('ALERT_JSONL_DIR')
+    primary = Path(configured) if configured else ALERT_JSONL_DIR
+    fallback = DATA_DIR / 'ops-alerts'
+    return [primary] if fallback == primary else [primary, fallback]
+
+
+def _alert_timestamp(value) -> datetime.datetime | None:
+    text = str(value or '').strip()
+    if not text:
+        return None
+    try:
+        parsed = datetime.datetime.fromisoformat(text.replace('Z', '+00:00'))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=CST)
+    return parsed.astimezone(CST)
+
+
+def _read_admin_alert_records(alert_dir: Path) -> list[dict]:
+    records: list[dict] = []
+    if not alert_dir.is_dir():
+        return records
+    for path in sorted(alert_dir.glob('*.jsonl'), reverse=True):
+        try:
+            lines = path.read_text(encoding='utf-8').splitlines()
+        except OSError:
+            continue
+        for raw in lines:
+            raw = raw.strip()
+            if not raw:
+                continue
+            try:
+                rec = json.loads(raw)
+            except json.JSONDecodeError:
+                continue
+            if not isinstance(rec, dict):
+                continue
+            timestamp = str(rec.get('ts') or rec.get('timestamp') or '').strip()
+            if not timestamp:
+                continue
+            try:
+                count = int(rec.get('count') or 0)
+            except (TypeError, ValueError):
+                count = 0
+            records.append({
+                'ts': timestamp,
+                'status': str(rec.get('status') or ''),
+                'level': str(rec.get('level') or 'INFO').upper(),
+                'source': str(rec.get('source') or ''),
+                'summary': str(rec.get('summary') or rec.get('message') or '')[:500],
+                'incident': str(rec.get('incident') or ''),
+                'count': max(0, count),
+            })
+    return records
 
 
 @app.get('/api/admin/alerts')
 def list_admin_alerts(request: Request, limit: int = Query(20, ge=1, le=100)):
-    """站内值守台：读 ops-alerts jsonl（免凭证通道落盘），admin 专属。
-    返回最近 N 条 + unread（近 24h 的 ERROR/CRITICAL 条数，供私窖红点）。"""
+    """站内值守台：读 /opt/xfsite/logs/alerts/YYYY-MM-DD.jsonl，admin 专属。
+    返回最近 N 条，以及近 24 小时仍未 resolve/ack 的 ERROR/CRITICAL 数量。"""
     require_admin(request)
-    alert_dir = DATA_DIR / 'ops-alerts'
     now = datetime.datetime.now(CST)
-    cutoff = (now - datetime.timedelta(hours=24)).isoformat()
+    cutoff = now - datetime.timedelta(hours=24)
     items: list[dict] = []
-    unread = 0
-    if alert_dir.is_dir():
-        files = sorted(alert_dir.glob('*.jsonl'), reverse=True)[:14]
-        for f in files:
-            try:
-                lines = f.read_text(encoding='utf-8').splitlines()
-            except OSError:
-                continue
-            for raw in lines:
-                raw = raw.strip()
-                if not raw:
-                    continue
-                try:
-                    rec = json.loads(raw)
-                except json.JSONDecodeError:
-                    continue
-                if not isinstance(rec, dict) or not rec.get('ts'):
-                    continue
-                items.append({
-                    'ts': rec.get('ts'),
-                    'status': rec.get('status', ''),
-                    'level': rec.get('level', 'INFO'),
-                    'source': rec.get('source', ''),
-                    'summary': rec.get('summary', ''),
-                    'incident': rec.get('incident', ''),
-                    'count': int(rec.get('count') or 0),
-                })
-                if rec.get('ts', '') >= cutoff and rec.get('level') in ('ERROR', 'CRITICAL'):
-                    unread += 1
-    items.sort(key=lambda r: r['ts'], reverse=True)
-    return {'items': items[:limit], 'unread': unread, 'total': len(items)}
+    # Read both sides when they are available and de-duplicate mirrored lines;
+    # this also handles a host log directory that exists but is stale/empty in
+    # the API container.
+    deduped: dict[tuple, dict] = {}
+    for alert_dir in _alert_jsonl_dirs():
+        for item in _read_admin_alert_records(alert_dir):
+            key = (
+                item['ts'], item['status'], item['level'], item['source'],
+                item['summary'], item['incident'], item['count'],
+            )
+            deduped[key] = item
+    items = list(deduped.values())
+    items.sort(
+        key=lambda r: _alert_timestamp(r['ts']) or datetime.datetime.min.replace(tzinfo=CST),
+        reverse=True,
+    )
+    resolved_incidents = {
+        item['incident']
+        for item in items
+        if item['incident']
+        and str(item['status']).lower() in {'resolved', 'read', 'ack', 'acked', 'acknowledged'}
+    }
+    unread = sum(
+        1
+        for item in items
+        if item['level'] in ('ERROR', 'CRITICAL')
+        and str(item['status']).lower() not in {'resolved', 'read', 'ack', 'acked', 'acknowledged'}
+        and item['incident'] not in resolved_incidents
+        and (_alert_timestamp(item['ts']) or datetime.datetime.min.replace(tzinfo=CST)) >= cutoff
+    )
+    # 出刊断更自检：共用 deadline 计算；截止前检查前天、之后检查昨天，不误报制作中那期。
+    published_dates = _published_ledger_dates()
+    status = publication_schedule.publication_status(now, published_dates)
+    return {
+        'items': items[:limit],
+        'unread': unread,
+        'total': len(items),
+        'publication_gap': {
+            'expected_latest': status['expected_latest'],
+            'pending_date': status['pending_date'],
+            'scheduled_for': status['scheduled_for'],
+            'deadline': status['deadline'],
+            'missing_dates': status['missing_dates'],
+            'health': status['health'],
+        },
+    }
 
 
 def admin_basic_auth_ok(request: Request) -> bool:
@@ -3766,6 +4755,14 @@ def question_thread_item(c, row, *, include_replies=True, include_internal=True)
             'display_name': row['mentor_display_name'] if 'mentor_display_name' in row.keys() else None,
         },
     }
+    agent['avatar_key'] = row['agent_avatar_key'] if 'agent_avatar_key' in row.keys() and row['agent_avatar_key'] else ''
+    participant_map = {}
+    def participant_key(token_id):
+        if token_id not in participant_map:
+            participant_map[token_id] = f"a{len(participant_map) + 1}"
+        return participant_map[token_id]
+    if row['author_kind'] == 'agent' and row['agent_token_id']:
+        agent['participant_key'] = participant_key(int(row['agent_token_id']))
     if include_internal:
         agent['id'] = row['agent_token_id']
         agent['mentor']['user_id'] = row['user_id']
@@ -3774,16 +4771,26 @@ def question_thread_item(c, row, *, include_replies=True, include_internal=True)
         'target': row['target'], 'status': row['status'],
         'created_at': row['created_at'], 'updated_at': row['updated_at'],
         'reply_count': int(row['reply_count'] or 0) if 'reply_count' in row.keys() else 0,
-        'agent': agent,
+        'agent': agent if row['author_kind'] == 'agent' else None,
+        'author_kind': row['author_kind'],
+        'author_name': row['agent_display_name'],
     }
     if include_replies:
         replies = c.execute(
             '''SELECT id,thread_id,user_id,agent_token_id,author_kind,author_name,text,
                       created_at,agent_name,agent_display_name,agent_capabilities_json,
-                      accepted,accepted_by,accepted_at
+                      accepted,accepted_by,accepted_at,reply_to
                FROM question_replies WHERE thread_id=? ORDER BY created_at,id''',
             (row['id'],),
         ).fetchall()
+        token_ids = sorted({int(r['agent_token_id']) for r in replies if r['agent_token_id']})
+        avatar_map = {}
+        if token_ids:
+            marks = ','.join('?' * len(token_ids))
+            for tk in c.execute(
+                f'SELECT id,avatar_key FROM agent_tokens WHERE id IN ({marks})', token_ids,
+            ).fetchall():
+                avatar_map[tk['id']] = tk['avatar_key'] or ''
         reply_items = []
         for reply in replies:
             reply_agent = None
@@ -3792,7 +4799,9 @@ def question_thread_item(c, row, *, include_replies=True, include_internal=True)
                     'name': reply['agent_name'],
                     'display_name': reply['agent_display_name'],
                     'capabilities': parse_agent_capabilities(reply['agent_capabilities_json']),
+                    'avatar_key': avatar_map.get(reply['agent_token_id'], ''),
                 }
+                reply_agent['participant_key'] = participant_key(int(reply['agent_token_id']))
                 if include_internal:
                     reply_agent['id'] = reply['agent_token_id']
             reply_items.append({
@@ -3800,6 +4809,7 @@ def question_thread_item(c, row, *, include_replies=True, include_internal=True)
                 'author_kind': reply['author_kind'], 'author_name': reply['author_name'],
                 'text': reply['text'], 'created_at': reply['created_at'],
                 'accepted': bool(reply['accepted']), 'accepted_at': reply['accepted_at'],
+                'reply_to': reply['reply_to'],
                 'agent': reply_agent,
             })
         item['replies'] = reply_items
@@ -3809,8 +4819,10 @@ def question_thread_item(c, row, *, include_replies=True, include_internal=True)
 def question_thread_row(c, thread_id):
     return c.execute(
         '''SELECT qt.*,u.username AS mentor_username,u.display_name AS mentor_display_name,
+                  tk.avatar_key AS agent_avatar_key,
                   (SELECT COUNT(*) FROM question_replies qr WHERE qr.thread_id=qt.id) AS reply_count
            FROM question_threads qt LEFT JOIN users u ON u.id=qt.user_id
+           LEFT JOIN agent_tokens tk ON tk.id=qt.agent_token_id
            WHERE qt.id=?''',
         (thread_id,),
     ).fetchone()
@@ -3822,28 +4834,43 @@ def list_agent_question_threads(
     status: str = Query('open', pattern='^(open|closed|all)$'),
     limit: int = Query(50, ge=1, le=100),
     mine: bool = Query(False),
+    offset: int = Query(0, ge=0),
+    q: str = Query('', max_length=160),
+    target: str = Query('', max_length=120),
 ):
     auth_kind = getattr(request.state, 'auth_kind', None)
     if auth_kind == 'agent':
         require_agent(request)
-    elif mine:
-        raise HTTPException(401, 'mine=true 需要 Agent token')
+    elif mine and auth_kind != 'session':
+        raise HTTPException(401, '请先登录')
     c = db()
     conditions = []
     params = []
     if auth_kind == 'agent' and mine:
         conditions.append('agent_token_id=?')
         params.append(request.state.agent_token_id)
+    if auth_kind == 'session' and mine:
+        conditions.append('qt.user_id=?')
+        params.append(request.state.user['id'])
+    if q.strip():
+        conditions.append('(qt.title LIKE ? OR qt.body LIKE ?)')
+        params.extend([f'%{q.strip()}%'] * 2)
+    if target:
+        conditions.append('qt.target=?')
+        params.append(target)
     if status != 'all':
         conditions.append('status=?')
         params.append(status)
     where = (' WHERE ' + ' AND '.join(conditions)) if conditions else ''
+    total = c.execute(f'SELECT COUNT(*) FROM question_threads qt{where}', params).fetchone()[0]
     rows = c.execute(
         f'''SELECT qt.*,u.username AS mentor_username,u.display_name AS mentor_display_name,
+                   tk.avatar_key AS agent_avatar_key,
                    (SELECT COUNT(*) FROM question_replies qr WHERE qr.thread_id=qt.id) AS reply_count
-            FROM question_threads qt LEFT JOIN users u ON u.id=qt.user_id{where}
-            ORDER BY qt.updated_at DESC,qt.id DESC LIMIT ?''',
-        (*params, limit),
+            FROM question_threads qt LEFT JOIN users u ON u.id=qt.user_id
+            LEFT JOIN agent_tokens tk ON tk.id=qt.agent_token_id{where}
+            ORDER BY qt.updated_at DESC,qt.id DESC LIMIT ? OFFSET ?''',
+        (*params, limit, offset),
     ).fetchall()
     include_internal = auth_kind in {'agent', 'session'}
     items = [
@@ -3853,14 +4880,21 @@ def list_agent_question_threads(
         for row in rows
     ]
     c.close()
-    return {'items': items, 'count': len(items), 'status': status, 'mine': mine}
+    return {'items': items, 'count': len(items), 'status': status, 'mine': mine, 'total': total, 'offset': offset, 'limit': limit, 'has_more': offset + len(items) < total}
 
 
 @app.post('/api/agent/threads', tags=['agent'])
 def create_agent_question_thread(req: AgentQuestionReq, request: Request):
-    profile = require_agent(request)
+    kind = getattr(request.state, 'auth_kind', None)
+    if kind not in {'agent', 'session'}:
+        raise HTTPException(401, '请先登录')
+    user = request.state.user
+    profile = require_agent(request) if kind == 'agent' else {
+        'id': 0, 'name': user['username'],
+        'display_name': user.get('display_name') or user['username'], 'capabilities': [],
+    }
     title = clean_agent_text(req.title, 160, required=True)
-    body = clean_agent_text(req.body, 4000, required=True)
+    body = clean_agent_text(req.body, 4000, required=True, multiline=True)
     target = clean_agent_text(req.target, 120)
     now = datetime.datetime.now(CST).isoformat()
     c = db()
@@ -3868,12 +4902,12 @@ def create_agent_question_thread(req: AgentQuestionReq, request: Request):
         cursor = c.execute(
             '''INSERT INTO question_threads(
                  user_id,agent_token_id,title,body,target,status,created_at,updated_at,
-                 agent_name,agent_display_name,agent_capabilities_json)
-               VALUES(?,?,?,?,?,'open',?,?,?,?,?)''',
+                 agent_name,agent_display_name,agent_capabilities_json,author_kind)
+               VALUES(?,?,?,?,?,'open',?,?,?,?,?,?)''',
             (
                 request.state.user['id'], profile['id'], title, body, target, now, now,
                 profile['name'], profile['display_name'],
-                json.dumps(profile['capabilities'], ensure_ascii=False),
+                json.dumps(profile['capabilities'], ensure_ascii=False), 'agent' if kind == 'agent' else 'human',
             ),
         )
         thread_id = cursor.lastrowid
@@ -3900,6 +4934,8 @@ def get_agent_question_thread(thread_id: int, request: Request):
     result = question_thread_item(c, row, include_internal=include_internal)
     if getattr(request.state, 'auth_kind', None) == 'session':
         result['is_mine'] = int(row['user_id']) == int(request.state.user['id'])
+    elif getattr(request.state, 'auth_kind', None) == 'agent':
+        result['is_mine'] = row['agent_token_id'] == request.state.agent_token_id
     else:
         result['is_mine'] = False
     c.close()
@@ -3910,7 +4946,7 @@ def get_agent_question_thread(thread_id: int, request: Request):
 def reply_agent_question_thread(thread_id: int, req: AgentReplyReq, request: Request):
     if request.state.auth_kind not in {'agent', 'session'}:
         raise HTTPException(401, '请先登录')
-    text = clean_agent_text(req.text, 2000, required=True)
+    text = clean_agent_text(req.text, 2000, required=True, multiline=True)
     c = db()
     row = question_thread_row(c, thread_id)
     if not row:
@@ -3919,6 +4955,13 @@ def reply_agent_question_thread(thread_id: int, req: AgentReplyReq, request: Req
     if row['status'] == 'closed':
         c.close()
         raise HTTPException(409, '提问串已关闭')
+    if req.reply_to is not None:
+        parent = c.execute(
+            'SELECT id,thread_id FROM question_replies WHERE id=?', (req.reply_to,),
+        ).fetchone()
+        if not parent or parent['thread_id'] != thread_id:
+            c.close()
+            raise HTTPException(400, 'reply_to 必须是同一提问串内的已有回复')
     if request.state.auth_kind == 'agent':
         author_kind = 'agent'
         profile = request.state.agent_profile
@@ -3940,10 +4983,10 @@ def reply_agent_question_thread(thread_id: int, req: AgentReplyReq, request: Req
         cursor = c.execute(
             '''INSERT INTO question_replies(
                  thread_id,user_id,agent_token_id,author_kind,author_name,text,created_at,
-                 agent_name,agent_display_name,agent_capabilities_json)
-               VALUES(?,?,?,?,?,?,?,?,?,?)''',
+                 agent_name,agent_display_name,agent_capabilities_json,reply_to)
+               VALUES(?,?,?,?,?,?,?,?,?,?,?)''',
             (thread_id, request.state.user['id'], agent_token_id, author_kind, author_name,
-             text, now, agent_name, agent_display_name, capabilities_json),
+             text, now, agent_name, agent_display_name, capabilities_json, req.reply_to),
         )
         c.execute('UPDATE question_threads SET updated_at=? WHERE id=?', (now, thread_id))
         c.commit()
@@ -3953,9 +4996,41 @@ def reply_agent_question_thread(thread_id: int, req: AgentReplyReq, request: Req
         c.close()
     record_agent_action(
         request, 'question.reply', 'question_thread', thread_id,
-        metadata={'reply_id': reply_id, 'author_kind': author_kind},
+        metadata={'reply_id': reply_id, 'author_kind': author_kind, 'reply_to': req.reply_to},
     )
     return result
+
+
+@app.get('/api/agent/answers', tags=['agent'])
+def public_agent_answers(limit: int = Query(3, ge=1, le=12)):
+    """首页公开摘录：真实 Agent 回答，不含内部身份/凭据。"""
+    base = ("FROM question_replies r "
+            "JOIN question_threads qt ON qt.id = r.thread_id "
+            "JOIN users u ON u.id = r.user_id AND u.active = 1 "
+            "JOIN agent_tokens tok ON tok.id = r.agent_token_id "
+            "AND tok.revoked = 0 AND tok.user_id = r.user_id "
+            "WHERE r.author_kind = 'agent'")
+    c = db()
+    try:
+        total = int(c.execute('SELECT COUNT(*) ' + base).fetchone()[0])
+        rows = c.execute(
+            'SELECT r.id, r.thread_id, qt.title, r.agent_display_name, r.author_name, r.text, r.created_at, tok.avatar_key '
+            + base + ' ORDER BY r.created_at DESC, r.id DESC LIMIT ?',
+            (limit,),
+        ).fetchall()
+    finally:
+        c.close()
+    items = []
+    for row in rows:
+        text = row['text'] or ''
+        items.append({
+            'reply_id': row['id'], 'thread_id': row['thread_id'],
+            'question_title': row['title'],
+            'agent_display_name': row['agent_display_name'] or row['author_name'],
+            'excerpt': text[:400], 'truncated': len(text) > 400,
+            'created_at': row['created_at'], 'avatar_key': row['avatar_key'] or '',
+        })
+    return {'items': items, 'count': len(items), 'total': total, 'limit': limit}
 
 
 # ── 原子语境 API / 单消息 anchor ──
@@ -4144,10 +5219,13 @@ def _make_context_cursor(row):
 def list_context_units(
     request: Request,
     date: str | None = None,
+    latest: bool = Query(False),
     visibility: str = Query('auto', pattern='^(auto|public|member|private)$'),
     limit: int = Query(24, ge=1, le=100),
     cursor: str | None = None,
 ):
+    if date and latest:
+        raise HTTPException(400, 'date 与 latest 不能同时传')
     if date and not re.fullmatch(r'\d{4}-\d{2}-\d{2}', date):
         raise HTTPException(400, 'date 格式必须是 YYYY-MM-DD')
     decoded_cursor = _context_cursor(cursor)
@@ -4159,18 +5237,32 @@ def list_context_units(
            WHERE u.status='published'
            ORDER BY u.source_date DESC,u.id ASC''',
     ).fetchall()
+    requested = None if visibility == 'auto' else visibility
+    if requested == 'auto':
+        requested = 'member' if getattr(request.state, 'auth_kind', None) == 'session' else 'public'
+
+    # latest：先做身份可见过滤选出最新可见日（cursor 无关），再分页——锁日优先，翻页不跨日
+    selected_date = None
+    if latest:
+        for row in rows:
+            if context_row_visible(request, row, requested=requested):
+                selected_date = row['source_date']
+                break
+        if selected_date is None:
+            c.close()
+            return {'items': [], 'next_cursor': None, 'count': 0, 'selected_date': None}
+
     items = []
     visible_rows = []
     for row in rows:
         if date and row['source_date'] != date:
             continue
+        if latest and row['source_date'] != selected_date:
+            continue
         if decoded_cursor:
             last_date, last_id = decoded_cursor
             if row['source_date'] > last_date or (row['source_date'] == last_date and row['id'] <= last_id):
                 continue
-        requested = None if visibility == 'auto' else visibility
-        if requested == 'auto':
-            requested = 'member' if getattr(request.state, 'auth_kind', None) == 'session' else 'public'
         if not context_row_visible(request, row, requested=requested):
             continue
         visible_rows.append(row)
@@ -4184,7 +5276,23 @@ def list_context_units(
         'items': items,
         'next_cursor': _make_context_cursor(visible_rows[limit - 1]) if has_more and len(visible_rows) >= limit else None,
         'count': len(items),
+        'selected_date': selected_date if latest else date,
     }
+
+
+@app.get('/api/context-units/dates', tags=['context'])
+def context_unit_dates(request: Request):
+    """窖藏可用日期列表（有 published 块的最新版本）：倒序 + 各日块数。反硬编码：默认日=最新，不写死。"""
+    c = db()
+    rows = c.execute(
+        "SELECT u.source_date AS date, COUNT(*) AS n"
+        " FROM (SELECT id, MAX(version) AS version FROM context_units GROUP BY id) latest"
+        " JOIN context_units u ON latest.id = u.id AND latest.version = u.version"
+        " WHERE u.status = 'published'"
+        " GROUP BY u.source_date ORDER BY u.source_date DESC",
+    ).fetchall()
+    c.close()
+    return {'items': [{'date': r['date'], 'count': int(r['n'])} for r in rows]}
 
 
 @app.get('/api/context-units/{unit_id}/evidence', tags=['context'])
@@ -4366,6 +5474,7 @@ def comment_item(row):
             'display_name': row['agent_display_name'] or row['via'] or 'Agent',
             'capabilities': parse_agent_capabilities(row['agent_capabilities_json']),
             'mentor_username': row['username'],
+            'avatar_key': row['agent_avatar_key'] if 'agent_avatar_key' in row.keys() and row['agent_avatar_key'] else '',
         }
     if 'status' in row.keys():
         item['status'] = row['status']
@@ -4388,10 +5497,12 @@ def comments(request: Request, anchor: str = Query(..., min_length=1)):
     c = db()
     resolve_context_anchor(c, anchor, request)
     rows = c.execute(
-        '''SELECT id,username,text,created_at,reply_to,via,via_label,
-                  agent_token_id,agent_display_name,agent_capabilities_json,status,moderation,
-                  anchor,context_unit_id,context_unit_version,message_ordinal FROM comments
-           WHERE anchor=? AND deleted=0 AND status='accepted' ORDER BY created_at,id''',
+        '''SELECT cm.id,cm.username,cm.text,cm.created_at,cm.reply_to,cm.via,cm.via_label,
+                  cm.agent_token_id,cm.agent_display_name,cm.agent_capabilities_json,cm.status,cm.moderation,
+                  cm.anchor,cm.context_unit_id,cm.context_unit_version,cm.message_ordinal,
+                  tk.avatar_key AS agent_avatar_key
+           FROM comments cm LEFT JOIN agent_tokens tk ON tk.id=cm.agent_token_id
+           WHERE cm.anchor=? AND cm.deleted=0 AND cm.status='accepted' ORDER BY cm.created_at,cm.id''',
         (anchor,),
     ).fetchall()
     c.close()
@@ -4454,10 +5565,12 @@ def create_comment(req: CommentReq, request: Request):
         comment_id = cursor.lastrowid
         c.commit()
         row = c.execute(
-            '''SELECT id,username,text,created_at,reply_to,via,via_label,
-                      agent_token_id,agent_display_name,agent_capabilities_json,status,moderation,
-                      anchor,context_unit_id,context_unit_version,message_ordinal
-               FROM comments WHERE id=?''',
+            '''SELECT cm.id,cm.username,cm.text,cm.created_at,cm.reply_to,cm.via,cm.via_label,
+                      cm.agent_token_id,cm.agent_display_name,cm.agent_capabilities_json,cm.status,cm.moderation,
+                      cm.anchor,cm.context_unit_id,cm.context_unit_version,cm.message_ordinal,
+                      tk.avatar_key AS agent_avatar_key
+               FROM comments cm LEFT JOIN agent_tokens tk ON tk.id=cm.agent_token_id
+               WHERE cm.id=?''',
             (comment_id,),
         ).fetchone()
     finally:
@@ -4549,17 +5662,21 @@ def annotation_select(where_clause):
 
 
 def annotation_item(row, include_private=False):
+    # 公开列表永不回 note（只公开划线动作与次数）；本人列表才带笔记正文
     item = {
         'id': row['id'], 'user': row['user_name'], 'avatar': row['avatar'],
-        'anchor': row['anchor'], 'quote': row['quote'], 'note': row['note'],
+        'anchor': row['anchor'], 'quote': row['quote'],
+        'note': (row['note'] or '') if include_private else '',
         'kind': row['kind'], 'at': row['created_at'],
         'is_admin': row['user_role'] == 'admin',
+        'user_id': row['user_id'],
     }
     if include_private:
         item.update({
             'date': row['date'], 'visibility': row['visibility'],
             'status': row['status'], 'updated_at': row['updated_at'],
             'moderation': parse_moderation(row['moderation']),
+            'note': row['note'] or '',
         })
     return item
 
@@ -4587,6 +5704,12 @@ def create_annotation(req: AnnotationCreateReq, request: Request):
     user = request.state.user
     now = datetime.datetime.now(CST).isoformat()
     direct = req.kind == 'highlight' and not note
+    # 有笔记默认私有（公开接口也不回 note）；纯划线保持公开以进热区
+    visibility = 'private' if note else 'public'
+    if note and req.visibility == 'public':
+        visibility = 'public'  # 用户显式要求公开笔记时才公开
+    elif not note:
+        visibility = 'public'
     moderation = json.dumps({
         'source': 'gatekeeper', 'rules': {'decision': 'accepted', 'checks': {'content': 'empty'}},
         'llm': 'not_run', 'decision': 'accepted', 'reason': '纯划线无点评文本，直接通过',
@@ -4598,7 +5721,7 @@ def create_annotation(req: AnnotationCreateReq, request: Request):
                                    created_at,updated_at,deleted,moderation,status)
            VALUES(?,?,?,?,?,?,?,?,?,?,0,?,?)''',
         (user['id'], user['username'], date, anchor, selected_quote, note, req.kind,
-         req.visibility, now, now, moderation, 'accepted' if direct else 'pending'),
+         visibility, now, now, moderation, 'accepted' if direct else 'pending'),
     )
     annotation_id = cursor.lastrowid
     c.commit(); c.close()
@@ -4624,19 +5747,42 @@ def create_annotation(req: AnnotationCreateReq, request: Request):
     return result
 
 
-@app.get('/api/annotations')
-def list_annotations(date: str = Query(..., min_length=10, max_length=10)):
-    if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', date):
-        raise HTTPException(400, '日期格式必须是 YYYY-MM-DD')
+def _heatmap_for_date(date: str, me_id: int | None) -> dict:
     c = db()
     rows = c.execute(
-        annotation_select("a.date=? AND a.visibility='public' AND a.status='accepted' AND a.deleted=0") +
-        ' ORDER BY a.created_at,a.id',
+        '''SELECT anchor, quote, user_id FROM annotations
+           WHERE date=? AND status='accepted' AND deleted=0
+           ORDER BY created_at, id''',
         (date,),
     ).fetchall()
     c.close()
-    counts = collections.Counter(row['anchor'] for row in rows)
-    return {'items': [annotation_item(row) for row in rows], 'counts': dict(counts)}
+    return reading_vitality.build_heatmap(rows, me_id=me_id)
+
+
+def _heatmap_me(request: Request) -> int | None:
+    try:
+        user = getattr(request.state, 'user', None)
+        if user and user.get('id') is not None:
+            return int(user['id'])
+    except (TypeError, ValueError, AttributeError):
+        return None
+    return None
+
+
+@app.get('/api/annotations/heatmap')
+def annotations_heatmap(request: Request, date: str = Query(..., min_length=10, max_length=10)):
+    """匿名可读热区：只回 {anchor, count, quote}；笔记与划线人永不出现。登录才带 mine。"""
+    if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', date):
+        raise HTTPException(400, '日期格式必须是 YYYY-MM-DD')
+    return _heatmap_for_date(date, _heatmap_me(request))
+
+
+@app.get('/api/annotations')
+def list_annotations(request: Request, date: str = Query(..., min_length=10, max_length=10)):
+    """与 heatmap 同口径（兼容旧前端）：聚合计数，不回身份、不回 note。"""
+    if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', date):
+        raise HTTPException(400, '日期格式必须是 YYYY-MM-DD')
+    return _heatmap_for_date(date, _heatmap_me(request))
 
 
 @app.get('/api/annotations/mine')
@@ -4697,6 +5843,9 @@ def update_annotation(annotation_id: int, req: AnnotationUpdateReq, request: Req
         c.close(); raise HTTPException(403, '只能修改自己的划线')
     note = row['note'] if req.note is None else req.note.strip()
     visibility = row['visibility'] if req.visibility is None else req.visibility
+    # 新写入笔记且未显式改可见性 → 默认私有（公开的仍是划线动作）
+    if req.note is not None and note and not str(row['note'] or '').strip() and req.visibility is None:
+        visibility = 'private'
     if row['kind'] == 'note' and not note:
         c.close(); raise HTTPException(400, 'note 类型必须填写点评内容')
     note_changed = req.note is not None and note != row['note']
@@ -6096,7 +7245,235 @@ def refresh_members(c):
             'UPDATE members SET identity_flags=?,name_source=COALESCE(NULLIF(name_source,\'\'),\'masked_wxid\') WHERE username=?',
             (json.dumps(flags, ensure_ascii=False), username),
         )
+    # 伪身份（username=展示名 / 头像哈希相同）合并进稳定 member_key，发言数按 messages 重算
+    try:
+        identity_anchor.apply_merges(c)
+    except Exception:
+        logging.exception('identity_anchor.apply_merges failed during refresh_members')
     c.commit()
+
+# ── 管理员数据大盘（只读聚合表；由 scripts/ops/analytics_ingest.py 增量写入） ──
+_ADMIN_STATS_CACHE = {'ts': 0.0, 'payload': None}
+_ADMIN_STATS_LOCK = threading.Lock()
+
+
+def _analytics_connect():
+    if not ANALYTICS_DB.is_file():
+        return None
+    conn = sqlite3.connect(f'file:{ANALYTICS_DB.resolve()}?mode=ro', uri=True)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def _analytics_table(conn, name: str) -> bool:
+    return conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (name,)
+    ).fetchone() is not None
+
+
+def _published_ledger_dates() -> set:
+    """已出刊日期集合（governed ledgers 文件名即 ISO 日期）。"""
+    if not GOVERNED_LEDGER_DIR.is_dir():
+        return set()
+    out = set()
+    for path in GOVERNED_LEDGER_DIR.glob('*.json'):
+        stem = path.stem
+        if not path.is_file() or not re.fullmatch(r'\d{4}-\d{2}-\d{2}', stem):
+            continue
+        try:
+            datetime.date.fromisoformat(stem)
+        except ValueError:
+            continue
+        out.add(stem)
+    return out
+
+
+def _analytics_meta(conn, key: str, default=None):
+    if not _analytics_table(conn, 'analytics_meta'):
+        return default
+    row = conn.execute('SELECT v FROM analytics_meta WHERE k=?', (key,)).fetchone()
+    if not row:
+        return default
+    raw = row['v'] if isinstance(row, sqlite3.Row) else row[0]
+    try:
+        return json.loads(raw)
+    except (TypeError, json.JSONDecodeError):
+        return raw
+
+
+def _analytics_window_start(as_of: datetime.date, days: int) -> datetime.date:
+    return as_of - datetime.timedelta(days=max(1, days) - 1)
+
+
+def _analytics_sum_days(conn, start: str, end: str) -> dict:
+    empty = {'has_data': False, 'pv': 0, 'uv': None, 'observed_pv': 0,
+             'parsed': 0, 'bots': 0, 'internal': 0, 'proxy_masked': 0}
+    if not _analytics_table(conn, 'analytics_event_day'):
+        return dict(empty)
+    row = conn.execute(
+        'SELECT COALESCE(SUM(parsed),0), COALESCE(SUM(bots),0), COALESCE(SUM(internal),0), '
+        'COALESCE(SUM(pv),0), COALESCE(SUM(observed_pv),0), COALESCE(SUM(proxy_masked),0) '
+        'FROM analytics_event_day WHERE day BETWEEN ? AND ?',
+        (start, end),
+    ).fetchone()
+    parsed = int(row[0] or 0)
+    proxy = int(row[5] or 0)
+    pv = int(row[3] or 0)
+    observed = int(row[4] or 0)
+    has_data = bool(conn.execute(
+        'SELECT 1 FROM analytics_event_day WHERE day BETWEEN ? AND ? LIMIT 1',
+        (start, end),
+    ).fetchone())
+    uv = None
+    # UV 只在窗口有记录且地址可区分（无代理回环遮蔽）时计；跨日同访客只算一次。
+    if has_data and proxy == 0 and _analytics_table(conn, 'analytics_uv_day'):
+        uv = int(conn.execute(
+            'SELECT COUNT(DISTINCT uv_hash) FROM analytics_uv_day WHERE day BETWEEN ? AND ?',
+            (start, end),
+        ).fetchone()[0] or 0)
+    return {
+        'has_data': has_data, 'pv': pv, 'uv': uv, 'observed_pv': observed,
+        'parsed': parsed, 'bots': int(row[1] or 0),
+        'internal': int(row[2] or 0), 'proxy_masked': proxy,
+    }
+
+
+def _analytics_ranked(conn, table: str, col: str, start: str, end: str, limit: int = 10) -> list[dict]:
+    if not _analytics_table(conn, table):
+        return []
+    rows = conn.execute(
+        f'SELECT {col}, SUM(pv) n FROM {table} WHERE day BETWEEN ? AND ? GROUP BY {col} ORDER BY n DESC LIMIT ?',
+        (start, end, limit),
+    )
+    return [{col: r[0], 'pv': int(r[1])} for r in rows]
+
+
+def _publication_overlay(base: dict | None) -> dict:
+    """现时出刊状态覆盖（health/expected/missing 来自共用计算，不吃旧快照）。"""
+    status = publication_schedule.publication_status(
+        datetime.datetime.now(CST), _published_ledger_dates())
+    return {**(base or {}), 'available': True, 'health': status['health'],
+            'expected_latest': status['expected_latest'], 'pending_date': status['pending_date'],
+            'scheduled_for': status['scheduled_for'], 'latest_date': status['latest_date'],
+            'missing_dates': status['missing_dates'], 'deadline': status['deadline']}
+
+
+def _admin_stats_payload(days: int = 30) -> dict:
+    conn = _analytics_connect()
+    if conn is None:
+        return {
+            'as_of': datetime.datetime.now(CST).date().isoformat(),
+            'generated_at': datetime.datetime.now(CST).isoformat(timespec='seconds'),
+            'ingest': {'last_run': None, 'files': [],
+                       'coverage': {'first_day': None, 'last_day': None, 'days': 0}},
+            'traffic': {'available': False, 'uv_available': False, 'uv_reason': '访问量聚合尚未跑过', 'windows': {}, 'filters': {}, 'trend': [], 'top_pages': [], 'sources': [], 'devices': []},
+            'community': {'available': False, 'trend': []},
+            'publication': _publication_overlay({'alerts': {'available': False, 'total': None, 'unresolved': None}, 'gate_blocks': {'available': False, 'total': None}}),
+        }
+    try:
+        coverage = {'first_day': None, 'last_day': None, 'days': 0}
+        if _analytics_table(conn, 'analytics_event_day'):
+            cov_row = conn.execute(
+                'SELECT MIN(day), MAX(day), COUNT(DISTINCT day) FROM analytics_event_day'
+            ).fetchone()
+            if cov_row:
+                coverage = {'first_day': cov_row[0], 'last_day': cov_row[1],
+                            'days': int(cov_row[2] or 0)}
+        latest = coverage['last_day']
+        # as_of 恒为北京时间今天；数据截至另读 coverage.last_day，不拿 MAX(day) 冒充今日。
+        as_of = datetime.datetime.now(CST).date()
+        start = _analytics_window_start(as_of, days)
+        start_s, end_s = start.isoformat(), as_of.isoformat()
+        windows = {}
+        for label, span in (('today', 1), ('7d', 7), ('30d', min(days, 30))):
+            windows[label] = _analytics_sum_days(conn, _analytics_window_start(as_of, span).isoformat(), end_s)
+        totals = _analytics_sum_days(conn, start_s, end_s)
+        trend = []
+        for offset in range(max(1, days)):
+            day = (start + datetime.timedelta(days=offset)).isoformat()
+            day_sum = _analytics_sum_days(conn, day, day)
+            trend.append({'date': day, 'pv': day_sum['pv'], 'uv': day_sum['uv']})
+        community = []
+        if _analytics_table(conn, 'analytics_community_day'):
+            for row in conn.execute(
+                'SELECT * FROM analytics_community_day WHERE day BETWEEN ? AND ? ORDER BY day',
+                (start_s, end_s),
+            ):
+                community.append({
+                    'date': row['day'], 'messages': row['messages'], 'speakers': row['speakers'],
+                    'new_faces': row['new_faces'], 'essays': row['essays'], 'quotes': row['quotes'],
+                    'arsenal': row['arsenal'], 'cellar_units': row['cellar_units'],
+                })
+        publication = _publication_overlay(_analytics_meta(conn, 'publication'))
+        uv_available = bool(windows) and all((windows[k].get('uv') is not None) for k in windows)
+        # 区分「窗口无聚合记录」与「代理回环遮蔽地址不可判定」，不混为一谈。
+        proxy_masked_win = any(w.get('has_data') and w.get('uv') is None and w.get('proxy_masked') for w in windows.values())
+        nodata_win = any(not w.get('has_data') for w in windows.values())
+        uv_reason = None
+        if not uv_available:
+            if proxy_masked_win and nodata_win:
+                uv_reason = '代理回环遮蔽且部分窗口暂无聚合记录；UV 暂不可判定'
+            elif proxy_masked_win:
+                uv_reason = '代理回环污染，nginx 未记录可信客户端 IP；UV 暂不可判定'
+            elif nodata_win:
+                uv_reason = '部分窗口暂无聚合记录；UV 不可判定'
+            else:
+                uv_reason = 'UV 暂不可判定'
+        return {
+            'as_of': as_of.isoformat(),
+            'generated_at': datetime.datetime.now(CST).isoformat(timespec='seconds'),
+            'ingest': {'last_run': _analytics_meta(conn, 'last_ingest'),
+                       'files': _analytics_meta(conn, 'log_files') or [],
+                       'coverage': coverage},
+            'traffic': {
+                'available': bool(latest),
+                'uv_available': uv_available,
+                'uv_reason': uv_reason,
+                'windows': windows,
+                'filters': {
+                    'parsed_requests': totals['parsed'],
+                    'excluded_bots': totals['bots'],
+                    'excluded_internal': totals['internal'],
+                    'page_views_considered': totals['pv'],
+                    'observed_page_views': totals['observed_pv'],
+                    'proxy_masked_page_views': totals['proxy_masked'],
+                },
+                'trend': trend,
+                'top_pages': _analytics_ranked(conn, 'analytics_page_day', 'page', start_s, end_s),
+                'sources': _analytics_ranked(conn, 'analytics_source_day', 'source', start_s, end_s),
+                'devices': _analytics_ranked(conn, 'analytics_device_day', 'device', start_s, end_s, 8),
+            },
+            'community': {'available': bool(community), 'trend': community},
+            'publication': publication,
+        }
+    finally:
+        conn.close()
+
+
+@app.get('/api/admin/stats')
+def admin_stats(request: Request, days: int = Query(30, ge=1, le=90)):
+    """管理员数据大盘：只读 analytics.db 聚合表（nginx 增量 + 社群/出刊快照）。"""
+    require_admin(request)
+    now = time.time()
+    cache_key = f'stats:{days}'
+    with _ADMIN_STATS_LOCK:
+        cached = _ADMIN_STATS_CACHE.get('payload') if _ADMIN_STATS_CACHE.get('key') == cache_key else None
+        if cached is not None and (now - float(_ADMIN_STATS_CACHE.get('ts') or 0)) < max(5, ADMIN_STATS_TTL):
+            return cached
+        payload = _admin_stats_payload(days)
+        _ADMIN_STATS_CACHE['ts'] = now
+        _ADMIN_STATS_CACHE['key'] = cache_key
+        _ADMIN_STATS_CACHE['payload'] = payload
+        return payload
+
+
+@app.get('/api/admin/stats/traffic')
+def admin_stats_traffic(request: Request, days: int = Query(30, ge=1, le=90)):
+    """访问量切片，口径与 /api/admin/stats 的 traffic 块相同。"""
+    require_admin(request)
+    payload = admin_stats(request, days=days)
+    return {'as_of': payload.get('as_of'), 'generated_at': payload.get('generated_at'), 'ingest': payload.get('ingest'), 'traffic': payload.get('traffic')}
+
 
 # ── 统计 API（v2 深度版） ──
 @app.get('/api/stats')
@@ -6186,13 +7563,14 @@ def _quality_snapshot(msgs, *, scope, date_value=None):
         1 for m in msgs
         if '@' in (m['content'] or '')[:20] or (m['content'] or '').startswith('Re:')
     )
-    # 知识密度：链接/文件/工具名/方法词
-    knowledge = sum(
-        1 for m in msgs
-        if any(k in (m['content'] or '').lower() for k in
+    # 知识密度：链接/文件/工具名/方法词；content.lower() 每条只算一次（性能）
+    knowledge = 0
+    for m in msgs:
+        low = (m['content'] or '').lower()
+        if any(k in low for k in
                ['github', 'http', '.pdf', '.md', '.html', '.zip', '工具', '方法', '知识库',
-                'agent', 'harness', '向量', '蒸馏', '结构化'])
-    )
+                'agent', 'harness', '向量', '蒸馏', '结构化']):
+            knowledge += 1
     # 小作文/深度输出：与 essays/rebuild_essays 同一条 >200 字消息尺子
     essays_count = sum(1 for length in lens if length > ESSAY_MIN_CHARS)
     # 参与均衡度（基尼系数简化版：前3人占比）
@@ -6265,16 +7643,24 @@ def quality(date: str | None = None):
     c = db()
     try:
         target_day = _quality_day(c, date)
-        all_msgs = c.execute(
-            "SELECT cst,COALESCE(NULLIF(sender_name,'?'),sender) sn,content FROM messages ORDER BY create_time"
-        ).fetchall()
-        daily_msgs = [m for m in all_msgs if target_day and (m['cst'] or '')[:10] == target_day]
+        # SQL 日窗口下推：daily=当日行；vault=非空 cst 且 <=day（与原 Python 过滤同义：
+        # 空串/NULL 一律排除），仅按日期参数裁剪加载行数，列与排序不变。
+        if target_day:
+            daily_msgs = c.execute(
+                "SELECT cst,COALESCE(NULLIF(sender_name,'?'),sender) sn,content FROM messages"
+                " WHERE substr(cst,1,10)=? ORDER BY create_time", (target_day,)
+            ).fetchall()
+            vault_msgs = c.execute(
+                "SELECT cst,COALESCE(NULLIF(sender_name,'?'),sender) sn,content FROM messages"
+                " WHERE substr(cst,1,10)>'' AND substr(cst,1,10)<=? ORDER BY create_time", (target_day,)
+            ).fetchall()
+        else:
+            vault_msgs = c.execute(
+                "SELECT cst,COALESCE(NULLIF(sender_name,'?'),sender) sn,content FROM messages ORDER BY create_time"
+            ).fetchall()
+            daily_msgs = []
         daily = _quality_snapshot(daily_msgs, scope='daily', date_value=target_day)
         # 历史出刊不可偷看未来：窖藏背景分是截至目标日的全库累计。
-        vault_msgs = [
-            m for m in all_msgs
-            if not target_day or ((m['cst'] or '')[:10] and (m['cst'] or '')[:10] <= target_day)
-        ]
         vault = _quality_snapshot(vault_msgs, scope='all', date_value=target_day)
         vault['label'] = '窖藏总度数'
         daily['vault_quality'] = vault
@@ -6320,10 +7706,11 @@ def member_names_api():
     return {'names': [r['display'] for r in rows]}
 
 @app.get('/api/essays')
-def essays_api(limit:int=100):
+def essays_api(limit:int=100, offset:int=0):
     c = db()
-    rows = c.execute('SELECT cst,author,content FROM essays ORDER BY cst DESC LIMIT ?',(limit,)).fetchall()
-    c.close(); return {'items':[dict(r) for r in rows]}
+    total = c.execute('SELECT COUNT(*) FROM essays').fetchone()[0]
+    rows = c.execute('SELECT cst,author,content FROM essays ORDER BY cst DESC LIMIT ? OFFSET ?',(limit,offset)).fetchall()
+    c.close(); return {'items':[dict(r) for r in rows], 'total': total, 'limit': limit, 'offset': offset}
 
 
 # ── 治理产物 API ──
@@ -6369,53 +7756,81 @@ def update_cursor_date(value):
 @app.get('/api/agent/updates', tags=['agent'])
 def agent_updates(
     request: Request,
-    since: str | None = Query(None, max_length=64),
+    since: str | None = Query(None, max_length=2048),
     limit: int = Query(100, ge=1, le=300),
 ):
     profile = require_agent(request)
     c = db()
-    token_row = c.execute(
-        'SELECT created_at,last_learning_at FROM agent_tokens WHERE id=?',
-        (profile['id'],),
-    ).fetchone()
-    marker = since.strip() if since else ((token_row['last_learning_at'] if token_row else None) or (token_row['created_at'] if token_row else ''))
-    marker_date = update_cursor_date(marker)
-    new_ledgers = []
-    if GOVERNED_LEDGER_DIR.exists():
-        for path in sorted(GOVERNED_LEDGER_DIR.glob('*.json')):
+    try:
+        token_row = c.execute(
+            'SELECT created_at,last_learning_at FROM agent_tokens WHERE id=?',
+            (profile['id'],),
+        ).fetchone()
+        if token_row is None:
+            raise HTTPException(401, '学徒凭证已失效')
+        stored = token_row['last_learning_at']
+        bookmark = stored or token_row['created_at'] or ''
+        marker = since.strip() if since and since.strip() else bookmark
+        try:
+            state = learning_cursor.decode(marker)
+        except ValueError as exc:
+            raise HTTPException(400, 'since 必须是有效学习游标、ISO 8601 时间或 YYYY-MM-DD') from exc
+
+        ledgers = []
+        paths = sorted(GOVERNED_LEDGER_DIR.glob('*.json')) if GOVERNED_LEDGER_DIR.exists() else []
+        for path in paths:
+            if re.fullmatch(r'\d{4}-\d{2}-\d{2}', path.stem) and path.stem <= state['ledger']:
+                continue
             data = load_governed_ledger(path)
             date = str(data.get('date') or path.stem)
-            if marker_date and date <= marker_date:
+            if date > state['ledger']:
+                ledgers.append((date, data))
+        ledgers.sort(key=lambda row: row[0])
+
+        arsenal = []
+        after = tuple(state['arsenal']) if state['arsenal'] is not None else None
+        for item in all_public_arsenal_items():
+            position = learning_cursor.arsenal_position(item)
+            if position[0] and position[0][:10] <= state['base']:
                 continue
-            new_ledgers.append(data)
-    new_ledgers = new_ledgers[-limit:]
-    new_arsenal = []
-    for item in all_public_arsenal_items():
-        item_date = str(item.get('created_at') or item.get('collected_at') or '')[:10]
-        if marker_date and item_date and item_date <= marker_date:
-            continue
-        new_arsenal.append(arsenal_list_item(item))
-    new_arsenal.sort(key=lambda item: (str(item.get('created_at') or item.get('collected_at') or ''), str(item.get('id'))), reverse=False)
-    new_arsenal = new_arsenal[-limit:]
-    latest = None
-    paths = sorted(GOVERNED_LEDGER_DIR.glob('*.json'), reverse=True) if GOVERNED_LEDGER_DIR.exists() else []
-    if paths:
-        latest = load_governed_ledger(paths[0])
-    cursor = datetime.datetime.now(CST).isoformat()
-    c.execute('UPDATE agent_tokens SET last_learning_at=? WHERE id=?', (cursor, profile['id']))
-    c.commit()
-    c.close()
+            if after is not None and position <= after:
+                continue
+            arsenal.append((position, arsenal_list_item(item)))
+        arsenal.sort(key=lambda row: row[0])
+        total_ledgers, total_arsenal = len(ledgers), len(arsenal)
+        page_ledgers, page_arsenal = ledgers[:limit], arsenal[:limit]
+        if page_ledgers:
+            state['ledger'] = page_ledgers[-1][0]
+        if page_arsenal:
+            state['arsenal'] = list(page_arsenal[-1][0])
+        state['at'] = datetime.datetime.now(CST).isoformat()
+        cursor = learning_cursor.encode(state)
+
+        # whoami -> since=bookmark is the normal MCP path. Historical reads get
+        # their own next cursor without rewinding a newer saved checkpoint.
+        if marker == bookmark:
+            c.execute(
+                "UPDATE agent_tokens SET last_learning_at=? WHERE id=? AND COALESCE(last_learning_at,'')=?",
+                (cursor, profile['id'], stored or ''),
+            )
+            c.commit()
+    finally:
+        c.close()
+    latest = load_governed_ledger(paths[-1]) if paths else None
+    truncated = total_ledgers > limit or total_arsenal > limit
     record_agent_action(
-        request, 'learning.sync', 'learning', cursor,
-        metadata={'since': marker or None, 'ledgers': len(new_ledgers), 'arsenal': len(new_arsenal)},
+        request, 'learning.sync', 'learning', state['at'],
+        metadata={'ledgers': len(page_ledgers), 'arsenal': len(page_arsenal), 'truncated': truncated},
     )
     return {
-        'since': marker or None,
-        'cursor': cursor,
-        'new_ledgers': new_ledgers,
-        'new_arsenal': new_arsenal,
-        'latest': latest,
-        'counts': {'ledgers': len(new_ledgers), 'arsenal': len(new_arsenal)},
+        'since': marker or None, 'cursor': cursor,
+        'new_ledgers': [data for _, data in page_ledgers],
+        'new_arsenal': [item for _, item in page_arsenal], 'latest': latest,
+        'counts': {
+            'ledgers': len(page_ledgers), 'arsenal': len(page_arsenal),
+            'total_ledgers': total_ledgers, 'total_arsenal': total_arsenal,
+            'truncated': truncated,
+        },
     }
 
 
@@ -6443,17 +7858,21 @@ def governed_members(live: int = Query(0, ge=0, le=1)):
 
 
 def _live_members(static):
-    """群像实时聚合：DB 当日/历史发言真值 + 静态治理富字段（语气/一句话/标签）。
+    """群像实时聚合：按 messages.sender（member_key）聚合，展示名从 members 实时解析。
 
-    去重：归一化（NFKC+去emoji+去空白+小写）合并同名变体（剑峰/剑峰🐳 → 剑峰🐳），
-    剔除纯符号非人行（@/ⁿ）。metrics 数字全部接 DB 真值，不写死。
+    不再按 sender_name 分组（那会把改名前后拆成两人或把展示名当身份）。
+    伪身份行（legacy_display_key / username=展示名）跳过。metrics 接 DB 真值。
     """
     try:
         static_profiles = static.get('profiles', []) if isinstance(static, dict) else []
     except Exception:
         static_profiles = []
+    static_by_key = {}
     static_by_norm = {}
     for p in static_profiles:
+        mk = str(p.get('member_key') or p.get('username') or '').strip()
+        if mk and mk not in static_by_key:
+            static_by_key[mk] = p
         key = _member_norm(p.get('name') or '')
         if key and key not in static_by_norm:
             static_by_norm[key] = p
@@ -6461,60 +7880,65 @@ def _live_members(static):
     today = datetime.datetime.now(CST).strftime('%Y-%m-%d')
     yesterday = (datetime.datetime.now(CST) - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
     try:
-        identity = "COALESCE(NULLIF(sender_name,'?'),sender)"
+        member_rows = {
+            str(r['username']): dict(r)
+            for r in c.execute(
+                '''SELECT username,display,nickname,avatar,msgs,last_active,identity_flags
+                   FROM members'''
+            )
+        }
         rows = c.execute(
-            f'''SELECT {identity} AS ident,
-                       COUNT(*) AS n,
-                       MIN(cst) AS first_cst,
-                       MAX(cst) AS last_cst
-                FROM messages GROUP BY {identity}'''
+            '''SELECT sender AS ident, COUNT(*) AS n, MIN(cst) AS first_cst, MAX(cst) AS last_cst
+               FROM messages WHERE sender IS NOT NULL AND sender<>'' AND sender<>'?'
+               GROUP BY sender'''
         ).fetchall()
         today_rows = c.execute(
-            f'''SELECT {identity} AS ident FROM messages
-                WHERE substr(COALESCE(cst,''),1,10)=? GROUP BY {identity}''',
+            '''SELECT sender AS ident FROM messages
+               WHERE substr(COALESCE(cst,''),1,10)=? AND sender IS NOT NULL AND sender<>'' AND sender<>'?'
+               GROUP BY sender''',
             (today,),
         ).fetchall()
     except sqlite3.Error:
-        return static
-    finally:
         c.close()
+        return static
     today_ident = {str(r['ident']) for r in today_rows}
-    merged = {}
-    for r in rows:
-        ident = str(r['ident'] or '')
-        if ident in ('系统公告', '群友·未知'):
-            continue  # 系统事件/未解析占位：不计成员
-        key = _member_norm(ident)
-        if not key:
-            continue  # 空/纯符号非人行
-        base = merged.get(key, {'name': ident, 'msgs': 0, 'first_cst': None, 'last_cst': None, 'today': False})
-        base['msgs'] += int(r['n'])
-        base['first_cst'] = min(base['first_cst'] or r['first_cst'] or '', r['first_cst'] or base['first_cst'] or '')
-        base['last_cst'] = max(base['last_cst'] or r['last_cst'] or '', r['last_cst'] or base['last_cst'] or '')
-        base['today'] = base['today'] or ident in today_ident
-        # 展示名优先用静态治理名（去重后保留最长/带 emoji 的变体）
-        if len(ident) > len(base['name']) or base['name'] == base.get('_orig'):
-            base['name'] = ident
-        merged[key] = base
     profiles = []
-    for key, m in merged.items():
-        p = static_by_norm.get(key) or {}
+    for r in rows:
+        ident = str(r['ident'] or '').strip()
+        if not ident or ident == '?':
+            continue
+        if not identity_anchor.is_stable_member_key(ident):
+            continue
+        mrow = member_rows.get(ident) or {}
+        flags = _member_json_list(mrow.get('identity_flags'))
+        if 'legacy_display_key' in flags:
+            continue
+        display = identity_anchor.resolve_display_name(c, ident, mrow.get('display') or ident)
+        if display in ('系统公告', '群友·未知'):
+            continue
+        norm = _member_norm(display)
+        if not norm:
+            continue
+        p = static_by_key.get(ident) or static_by_norm.get(norm) or {}
+        msgs = int(r['n'])
         profiles.append({
-            'name': m['name'],
+            'name': display,
+            'member_key': ident,
             'role': p.get('role', ''),
-            'msgs': m['msgs'],
-            'ct': f"{m['msgs']} 条",
+            'msgs': msgs,
+            'ct': f'{msgs} 条',
             'tags': p.get('tags', []),
             'tone': p.get('tone', 's'),
             'quote': p.get('quote', ''),
             'deep': p.get('deep', ''),
             'filter': p.get('filter', ['all']),
-            'thin': p.get('thin', m['msgs'] <= 2),
-            'avatar': p.get('avatar', ''),
-            'last_active': (m['last_cst'] or '')[:10],
-            'first_active': (m['first_cst'] or '')[:10],
-            'today': m['today'],
+            'thin': p.get('thin', msgs <= 2),
+            'avatar': p.get('avatar') or mrow.get('avatar') or '',
+            'last_active': (r['last_cst'] or mrow.get('last_active') or '')[:10],
+            'first_active': (r['first_cst'] or '')[:10],
+            'today': ident in today_ident,
         })
+    c.close()
     profiles.sort(key=lambda x: (-x['msgs'], x['name']))
     today_active = sum(1 for p in profiles if p['today'])
     new_today = sum(1 for p in profiles if (p['first_active'] or '') == today)
@@ -6558,11 +7982,23 @@ def essay_title(name, author, content):
     return first_line[:40] or f'{author}的小作文'
 
 
-def governed_essay(row):
+def governed_essay(row, conn=None):
+    """Essay API item. Prefer member_key (source_sender); author is render-time display."""
+    if conn is not None:
+        item = identity_anchor.governed_essay_dict(conn, row)
+        # Keep title helper for empty name edge cases
+        if not (row['name'] if 'name' in row.keys() else ''):
+            item['title'] = essay_title('', item['author'], item['body'])
+        return item
     body = row['content'] or ''
+    sender = ''
+    if hasattr(row, 'keys') and 'source_sender' in row.keys():
+        sender = row['source_sender'] or ''
     return {
         'title': essay_title(row['name'], row['author'], body),
         'author': row['author'],
+        'author_snapshot': row['author'],
+        'member_key': sender,
         'date': (row['cst'] or '')[:10],
         'body': body,
         'word_count': len(re.sub(r'\s+', '', body)),
@@ -6833,14 +8269,31 @@ def library_file(month: str = Query(...), name: str = Query(...)):
 
 
 @app.get('/api/governed/essays')
-def governed_essays(limit: int = Query(100, ge=1, le=300)):
+def governed_essays(
+    limit: int = Query(300, ge=1, le=500),
+    offset: int = Query(0, ge=0),
+    member_key: str | None = Query(None, max_length=80),
+):
+    """小作文列表。归属键是 source_sender；author 为当前展示名。可按 member_key 筛本人。"""
     c = db()
-    rows = c.execute(
-        'SELECT cst,author,name,content FROM essays ORDER BY cst DESC LIMIT ?',
-        (limit,),
-    ).fetchall()
+    key = (member_key or '').strip()
+    if key:
+        total = c.execute('SELECT COUNT(*) FROM essays WHERE source_sender=?', (key,)).fetchone()[0]
+        rows = c.execute(
+            '''SELECT cst,author,name,content,source_sender FROM essays
+               WHERE source_sender=? ORDER BY cst DESC LIMIT ? OFFSET ?''',
+            (key, limit, offset),
+        ).fetchall()
+    else:
+        total = c.execute('SELECT COUNT(*) FROM essays').fetchone()[0]
+        rows = c.execute(
+            '''SELECT cst,author,name,content,source_sender FROM essays
+               ORDER BY cst DESC LIMIT ? OFFSET ?''',
+            (limit, offset),
+        ).fetchall()
+    items = [governed_essay(row, c) for row in rows]
     c.close()
-    return {'items': [governed_essay(row) for row in rows]}
+    return {'items': items, 'total': total, 'limit': limit, 'offset': offset}
 
 
 def contains_query(value, needle):
@@ -6975,6 +8428,27 @@ init_db()
 ensure_gatekeeper_schema(DB)
 if os.environ.get('XF_SKIP_GATEKEEPER_WORKER') != '1':
     start_gatekeeper_worker(DB)
+try:
+    from .admin_ops import router as admin_ops_router
+except ImportError:
+    from admin_ops import router as admin_ops_router
+app.include_router(admin_ops_router)
 app.include_router(hot_router)
+app.include_router(public_learning_router)
+app.include_router(tibo_status_router)
+agent_connect.configure(db=db, require_human_session=require_human_session, request_ip=request_ip)
+app.include_router(agent_connect.router)
+practice.configure(db=db)
+app.include_router(practice.router)
+garden.configure(db=db)
+app.include_router(garden.router)
+garden_marks.configure(db=db, static_dir=STATIC)
+app.include_router(garden_marks.router)
+reading_growth.configure(db=db, static_dir=STATIC)
+app.include_router(reading_growth.router)
+content_engagement.configure(db=db, static_dir=STATIC)
+app.include_router(content_engagement.router)
+garden_companion.configure(db=db)
+app.include_router(garden_companion.router)
 app.mount('/uploads', UploadStatic(directory=str(UPLOAD_DIR)), name='uploads')
 app.mount('/', SPAStatic(directory=str(STATIC), html=True), name='static')

@@ -1,0 +1,14 @@
+/* 公开互动行：计数小字 + 44px 触区，纸色/蓝 token，不造卡片 */
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .75rem;border-top:1px solid var(--color-rule-soft);border-bottom:1px solid var(--color-rule-soft);padding:.45rem 0;margin:0 0 1.2rem;min-height:44px}
+.stat{display:inline-flex;align-items:center;gap:.3rem;min-height:44px;font:600 .82rem var(--font-sans);color:var(--color-ink-3)}
+a.stat:hover{color:var(--color-blue-text)}
+.act{display:inline-flex;align-items:center;gap:.3rem;min-height:44px;padding:.2rem .5rem;border:none;background:none;font:600 .82rem var(--font-sans);color:var(--color-blue-text);cursor:pointer;border-radius:6px}
+.act:hover{text-decoration:underline}
+.act:disabled{color:var(--color-ink-3);cursor:default;text-decoration:none}
+.act:focus-visible{outline:2px solid var(--color-blue);outline-offset:2px}
+.act:active{transform:translateY(1px)}
+.act.on{color:var(--color-teal-text)}
+@media (prefers-reduced-motion:reduce){.act:active{transform:none}}
+.note{font:400 .76rem var(--font-sans);color:var(--color-ink-3)}
+.err{font:400 .76rem var(--font-sans);color:var(--color-cinnabar-text)}
+.err .act{min-height:44px;padding:0 .3rem;font-size:.76rem}

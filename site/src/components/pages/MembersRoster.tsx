@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ApiError, apiFetch } from "@/lib/auth";
 import { TONE_META, type Tone, fmtInt, maskRawIds } from "@/lib/shared";
 import { ToneTag } from "@/components/sheet/ToneTag";
-import { Avatar, AvatarRow } from "./AvatarRow";
+import { Avatar } from "./AvatarRow";
 import { Note } from "./FormBits";
 import { GapNote } from "./PageHead";
 
@@ -12,6 +12,7 @@ export interface Profile {
   name: string; role: string; msgs: number; ct: string; tags: string[];
   tone: Tone; quote: string; deep: string; filter: string[]; thin: boolean; avatar?: string;
   last_active?: string; first_active?: string; today?: boolean;
+  member_key?: string;
 }
 interface Metrics { today_active?: number; new_today?: number; recent_active?: number; total?: number }
 interface Payload { generated?: string; count?: number; profiles: Profile[]; metrics?: Metrics; live?: boolean }
@@ -35,18 +36,18 @@ function Row({ p, i }: { p: Profile; i: number }) {
       initial={reduce ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: Math.min(i, 12) * 0.025, ease: [0.16, 1, 0.3, 1] }}
-      className="border-b border-rule-soft py-5"
+      className="min-w-0 self-start border-b border-rule px-1 py-5"
     >
-      <div className="grid grid-cols-[44px_minmax(0,1fr)_auto] items-start gap-x-4 gap-y-2">
+      <div className="grid grid-cols-[44px_minmax(0,1fr)] items-start gap-x-3 gap-y-2">
         <Avatar f={p} size={44} />
         <div className="min-w-0">
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <h3 className="font-serif text-[18px] font-bold leading-tight text-ink">{p.name}</h3>
+            <h3 className="break-words font-serif text-[18px] font-bold leading-tight text-ink">{p.name}</h3>
             <ToneTag g={p.tone} />
             {p.thin && <span className="rounded-[4px] border border-rule bg-paper-2 px-1.5 py-[2px] font-sans text-[10.5px] font-semibold text-ink-3">薄数据</span>}
           </div>
           <div className="mt-1 font-sans text-[13px] leading-snug text-ink-2">{p.role}</div>
-          {p.quote && <p className="prose-sheet mt-2.5 text-[16px] leading-[1.8] text-ink-2">「{maskRawIds(p.quote)}」</p>}
+          {p.quote && <p className={`prose-sheet mt-2.5 text-[15px] leading-[1.8] text-ink-2 ${open ? "" : "line-clamp-3"}`}>「{maskRawIds(p.quote)}」</p>}
           {p.tags?.length > 0 && (
             <ul className="mt-2.5 flex flex-wrap gap-x-2 gap-y-1.5">
               {p.tags.map((t) => (
@@ -54,12 +55,12 @@ function Row({ p, i }: { p: Profile; i: number }) {
               ))}
             </ul>
           )}
-          {p.deep && (
+          {(p.deep || p.quote) && (
             <>
               <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open}
-                className="mt-3 inline-flex items-center gap-1.5 font-sans text-[13px] font-semibold text-blue-text hover:underline">
+                className="mt-2 inline-flex min-h-11 items-center gap-1.5 font-sans text-[13px] font-semibold text-blue-text hover:underline">
                 <svg aria-hidden width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className={`transition-transform ${open ? "rotate-90" : ""}`}><path d="M9 6l6 6-6 6" /></svg>
-                深读
+                {open ? "收起介绍" : "展开介绍"}
               </button>
               <AnimatePresence initial={false}>
                 {open && (
@@ -77,8 +78,8 @@ function Row({ p, i }: { p: Profile; i: number }) {
             </>
           )}
         </div>
-        <div className="text-right">
-          <div className="num font-sans text-[19px] font-semibold leading-none text-ink">{fmtInt(p.msgs)}</div>
+        <div className="col-span-2 flex items-baseline gap-2 border-t border-rule-soft pt-3">
+          <div className="num font-sans text-[15px] font-semibold leading-none text-ink">{fmtInt(p.msgs)}</div>
           <div className="num mt-1 font-sans text-[11px] leading-tight text-ink-3">{p.ct || "条"}</div>
         </div>
       </div>
@@ -86,7 +87,7 @@ function Row({ p, i }: { p: Profile; i: number }) {
   );
 }
 
-/** 群像名册：51 人一栏一人，不是卡片墙。上方叠排头像行，chips 按 filter 字段筛。 */
+/** 紧凑多列名册，完整介绍按需展开；人数取接口真值。 */
 export function MembersRoster() {
   const [data, setData] = useState<Payload | null>(null);
   const [err, setErr] = useState("");
@@ -94,28 +95,25 @@ export function MembersRoster() {
 
   useEffect(() => {
     let alive = true;
-    apiFetch<Payload>("/api/governed/members")
-      .then((d) => { if (alive) setData(d); })
-      .catch((e) => { if (alive) setErr(e instanceof ApiError ? e.message : "读取失败"); });
+    Promise.allSettled([
+      apiFetch<Payload>("/api/governed/members"),
+      apiFetch<Payload>("/api/governed/members?live=1"),
+    ]).then(([snapshot, live]) => {
+      if (!alive) return;
+      if (live.status === "fulfilled") { setData(live.value); setErr(""); }
+      else if (snapshot.status === "fulfilled") { setData(snapshot.value); setErr(""); }
+      else setErr(snapshot.reason instanceof ApiError ? snapshot.reason.message : "读取失败");
+    });
     return () => { alive = false; };
   }, []);
 
-  // 实时覆盖：接口按库真值算当日动态与去重名单；失败回退静态快照
-  useEffect(() => {
-    let alive = true;
-    apiFetch<Payload>("/api/governed/members?live=1")
-      .then((d) => { if (alive && d.profiles?.length) setData(d); })
-      .catch(() => {});
-    return () => { alive = false; };
-  }, []);
-
-  const profiles = data?.profiles ?? [];
+  const profiles = useMemo(() => data?.profiles ?? [], [data]);
   const counts = useMemo(() => {
     const m: Record<string, number> = {};
-    for (const c of CHIPS) m[c.k] = profiles.filter((p) => p.filter?.includes(c.k)).length;
+    for (const c of CHIPS) m[c.k] = profiles.filter((p) => c.k === "all" || p.filter?.includes(c.k)).length;
     return m;
   }, [profiles]);
-  const list = useMemo(() => profiles.filter((p) => p.filter?.includes(chip)).sort((a, b) => b.msgs - a.msgs), [profiles, chip]);
+  const list = useMemo(() => profiles.filter((p) => chip === "all" || p.filter?.includes(chip)).sort((a, b) => b.msgs - a.msgs), [profiles, chip]);
 
   if (err) return <Note tone="bad">{err}</Note>;
   if (!data) return <p className="py-10 font-sans text-[14px] text-ink-3">正在取群像……</p>;
@@ -136,9 +134,6 @@ export function MembersRoster() {
             <div className="mt-1 font-sans text-[12px] text-ink-3">{k}</div>
           </div>
         ))}
-      </div>
-      <div className="mb-8">
-        <AvatarRow faces={profiles.slice().sort((a, b) => b.msgs - a.msgs)} />
       </div>
 
       <div className="flex flex-wrap gap-2 border-y border-rule py-3">
@@ -169,7 +164,7 @@ export function MembersRoster() {
         </div>
       )}
 
-      <div className="mt-2 border-t border-rule">
+      <div className="mt-4 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {list.map((p, i) => <Row key={p.name} p={p} i={i} />)}
       </div>
 

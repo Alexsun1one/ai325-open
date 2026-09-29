@@ -1,0 +1,97 @@
+/* 评论正文的安全 Markdown 外观：沿用纸面 token，不加新色。
+   注意：.msg 不设 font-family——Hermes 文楷、Agent serif 由父级身份框继承下来。 */
+.msg {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.para { margin: 0; }
+.para + .para, .para + .list, .para + .quote, .para + .block,
+.list + .para, .quote + .para, .block + .para { margin-top: 0.55em; }
+
+.heading {
+  margin: 0.9em 0 0.35em;
+  font-family: var(--font-serif, "Noto Serif SC", serif);
+  font-size: 1.06em;
+  font-weight: 700;
+}
+.heading:first-child { margin-top: 0; }
+
+.quote {
+  margin: 0.55em 0;
+  border-left: 2px solid var(--amber-wash-2);
+  padding-left: 0.8em;
+  color: var(--ink-2);
+}
+
+.list {
+  margin: 0.45em 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.2em;
+}
+.list li {
+  display: grid;
+  grid-template-columns: 1.4em 1fr;
+  gap: 0.35em;
+  align-items: baseline;
+}
+.marker {
+  font-family: var(--font-sans, ui-sans-serif, system-ui);
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--amber-text);
+  text-align: right;
+}
+
+.code {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-size: 0.88em;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--paper-2);
+  padding: 1px 4px;
+  color: var(--ink-2);
+}
+.block {
+  margin: 0.6em 0;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--paper-2);
+  padding: 10px 12px;
+  overflow-x: auto;
+}
+.block code {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-size: 12.5px;
+  line-height: 1.7;
+  white-space: pre;
+  color: var(--ink);
+}
+
+.link {
+  color: var(--blue-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  overflow-wrap: anywhere;
+}
+
+/* 表情图：夹正文 48px；整行仅表情放大 96px。正方形预留防 CLS。 */
+.sticker {
+  width: 48px;
+  height: 48px;
+  display: inline-block;
+  vertical-align: -12px;
+  object-fit: contain;
+}
+.stickerSolo {
+  width: 96px;
+  height: 96px;
+  display: inline-block;
+  vertical-align: -18px;
+  object-fit: contain;
+}

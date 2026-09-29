@@ -1,0 +1,51 @@
+/* 阅读与足迹：紧凑编辑列表，非卡片墙；纸色/墨色/蓝 token */
+.h{font:700 1.15rem/1.4 var(--font-serif);color:var(--color-ink);margin:0 0 .35rem}
+.h2{margin-top:2rem}
+.counts{font:400 .82rem var(--font-sans);color:var(--color-ink-3);margin:0 0 .9rem;display:flex;flex-wrap:wrap;gap:.25rem .8rem;align-items:baseline}
+.priv{font-size:.72rem;color:var(--color-ink-3)}
+.tabs{display:flex;gap:.3rem;margin:0 0 .9rem;border-bottom:1px solid var(--color-rule);padding-bottom:.5rem}
+.tab{min-height:44px;padding:.2rem .7rem;border:none;background:none;font:600 .82rem var(--font-sans);color:var(--color-ink-3);cursor:pointer;border-radius:6px 6px 0 0}
+.tab:hover{color:var(--color-ink)}
+.tabOn{color:var(--color-blue-text);box-shadow:inset 0 -2px 0 var(--color-blue)}
+.subtabs{display:flex;gap:.3rem;margin:0 0 .8rem}
+.stab{min-height:44px;padding:.15rem .6rem;border:1px solid var(--color-rule);background:none;font:600 .78rem var(--font-sans);color:var(--color-ink-3);cursor:pointer;border-radius:999px}
+.stab:hover{color:var(--color-ink)}
+.stab:disabled{color:var(--color-ink-3);opacity:.5;cursor:default}
+.stabOn{color:var(--color-blue-text);border-color:var(--color-blue-wash-2);background:var(--color-blue-wash)}
+.confirm{display:flex;flex-wrap:wrap;align-items:center;gap:.1rem .5rem;flex:none;max-width:22rem}
+.confirmText{font:400 .74rem/1.5 var(--font-sans);color:var(--color-ink-3);flex-basis:100%}
+.confirm button{min-height:44px;padding:.2rem .45rem;border:none;background:none;font:600 .74rem var(--font-sans);color:var(--color-cinnabar-text);cursor:pointer;border-radius:5px}
+.confirm button:last-child{color:var(--color-ink-3)}
+.confirm button:hover{text-decoration:underline}
+.confirm button:disabled{color:var(--color-ink-3);cursor:default;text-decoration:none}
+.list{list-style:none;margin:0;padding:0}
+.row{display:flex;align-items:baseline;gap:.7rem;padding:.55rem 0;border-bottom:1px solid var(--color-rule-soft);min-height:44px}
+.kind{flex:none;font:600 .68rem var(--font-sans);color:var(--color-blue-text);border:1px solid var(--color-blue-wash-2);border-radius:4px;padding:.1rem .35rem}
+.main{min-width:0;flex:1}
+.title{font:600 .92rem/1.5 var(--font-serif);color:var(--color-ink);overflow-wrap:anywhere}
+a.title:hover{color:var(--color-blue-text)}
+.meta{display:flex;flex-wrap:wrap;gap:.3rem .7rem;font:400 .72rem var(--font-sans);color:var(--color-ink-3);margin-top:.15rem}
+.tag{color:var(--color-blue-text)}
+.tagDone{color:var(--color-teal-text)}
+.off{color:var(--color-ink-3);text-decoration:line-through}
+.excerpt{display:block;font:400 .78rem/1.6 var(--font-sans);color:var(--color-ink-3);margin-top:.15rem;overflow-wrap:anywhere}
+.ops{flex:none;display:flex;gap:.1rem}
+.ops button{min-height:44px;padding:.2rem .45rem;border:none;background:none;font:600 .74rem var(--font-sans);color:var(--color-blue-text);cursor:pointer;border-radius:5px}
+.ops button:hover{text-decoration:underline}
+.ops button:disabled{color:var(--color-ink-3);cursor:default;text-decoration:none}
+.ops button:last-child{color:var(--color-ink-3)}
+.ops button:last-child:hover{color:var(--color-cinnabar-text)}
+.more{display:block;width:100%;min-height:44px;margin:.7rem 0;border:1px solid var(--color-rule);border-radius:7px;background:var(--color-paper-2);font:600 .8rem var(--font-sans);color:var(--color-blue-text);cursor:pointer}
+.more:hover{background:var(--color-blue-wash)}
+.note{font:400 .78rem/1.7 var(--font-sans);color:var(--color-ink-3);margin:.6rem 0}
+.note button{min-height:44px;border:none;background:none;font:600 .78rem var(--font-sans);color:var(--color-blue-text);cursor:pointer;padding:0 .35rem}
+.note button:hover{text-decoration:underline}
+.note button:disabled{color:var(--color-ink-3);cursor:default;text-decoration:none}
+/* 320：类型+主体一行、操作独占下一行，标题不被挤成竖列 */
+@media (max-width:639px){
+  .row{flex-wrap:wrap}
+  .ops,.confirm{flex-basis:100%;margin-top:.1rem}
+  .confirm{max-width:none}
+  .ops button:first-child{padding-left:0}
+}
+.tab:focus-visible,.stab:focus-visible,.ops button:focus-visible,.confirm button:focus-visible,.more:focus-visible,.note button:focus-visible{outline:2px solid var(--color-blue);outline-offset:2px}

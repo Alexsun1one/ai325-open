@@ -1,0 +1,35 @@
+{
+  "skillMarkdown": "---\nname: remotion-render\ndescription: Export a Remotion video\nversion: 4.0.529\n---\n\n## General rendering strategy\n\nRender a video using:\n\n```\nnpx remotion render\n```\n\nFull list of options: https://www.remotion.dev/docs/cli/render.md\n\nRender a still using:\n\n```\nnpx remotion still\n```\n\nFull list of options: https://www.remotion.dev/docs/cli/still.md\n\nTo render several frames as images in one call, use `render --frames`:\n\n```\nnpx remotion render [composition-id] out/frames --frames=0,30,90 --image-format=png\n```\n\nSee https://www.remotion.dev/docs/cli/render.md#--frames for more options.\n\n## Transparent videos\n\nSee [Transparent videos](./transparent-videos.md) for rendering out a video with transparency.\n",
+  "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-render/SKILL.md",
+  "repositoryUrl": "https://github.com/remotion-dev/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 4754,
+  "starsCheckedAt": "2026-09-28T18:57:03Z",
+  "editorial": {
+    "overview": "这项技能负责把已经完成的 Remotion composition 导出为视频或静态帧。公开入口分别给出 render 与 still 的操作路线，并把完整选项交给官方命令文档。它并不负责替你完成脚本、素材或动画设计，因此使用前应明确渲染的是哪一个 composition、采用哪组输入参数，以及最终要交哪种文件。\n\n配套说明另外讨论透明视频，提醒渲染配置需要与目标格式和使用场景配合。透明背景不是给普通视频改后缀，输出是否包含透明通道也应在目标播放或剪辑环境中检查。本站建议先渲染代表性静帧或短段，核对尺寸、字体、素材加载和声音，再处理完整成片；这是一项交付检查建议，不是本轮已运行的结果。本条依据所链版本整理，不复制其中固定编码参数或推断云渲染能力。渲染退出成功以后，仍应打开实际文件核对时长、首尾与音画关系，不能用命令日志替代成片审看。检查时应保留所用参数记录。",
+    "useCases": [
+      "导出已完成的视频composition",
+      "生成封面静帧或透明叠加素材"
+    ],
+    "inputs": [
+      "可用工程、composition及输入参数",
+      "输出格式、目标用途和保存位置"
+    ],
+    "outputs": [
+      "视频文件或静态帧",
+      "渲染日志及实际产物检查记录"
+    ],
+    "steps": [
+      "确认composition和参数，区分视频、静帧或透明输出。",
+      "按项目条件核对命令选项，先导出代表性画面。",
+      "完成渲染后打开产物，检查尺寸、首尾和音画。"
+    ],
+    "limitations": [
+      "本站未执行渲染，编码兼容、耗时和成片质量均未实测。",
+      "透明输出须按目标环境核对；本条不据简短入口承诺云端能力。"
+    ],
+    "reviewedAt": "2026-09-22",
+    "sourceUrl": "https://github.com/remotion-dev/skills/blob/9682e994989f951c75912fbc49aa10332a512685/skills/remotion-render/SKILL.md"
+  }
+}

@@ -126,6 +126,7 @@ TOP_FIELDS = {
     "distilled_by",
     "reviewed_by",
     "prompt_version",
+    "reader_echo",
 }
 LIST_LIMITS = {
     "events": 12,
@@ -268,12 +269,16 @@ def load_materials(materials: Path) -> dict[str, Any]:
     newcomers = load_json(materials / "newcomers.json", required=False)
     context_path = materials / "context-prev.md"
     context = context_path.read_text(encoding="utf-8") if context_path.exists() else ""
+    reader_attention = load_json(materials / "reader-attention.json", required=False)
+    if reader_attention is not None and not isinstance(reader_attention, dict):
+        reader_attention = {}
     return {
         "transcript": transcript,
         "stats": stats,
         "avatars": avatars or {},
         "newcomers": newcomers or [],
         "context": context,
+        "reader_attention": reader_attention or {},
     }
 
 
@@ -670,6 +675,133 @@ def strip_json_fence(content: str) -> str:
     return stripped.strip()
 
 
+def json_value_span(source: str) -> tuple[int, int] | None:
+    """首个完整 JSON 值（对象或数组）的半开区间；括号配平且字符串感知。"""
+    start = min((i for i in (source.find("{"), source.find("[")) if i >= 0), default=-1)
+    if start < 0:
+        return None
+    stack: list[str] = []
+    in_string = False
+    escaped = False
+    for index in range(start, len(source)):
+        char = source[index]
+        if in_string:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                in_string = False
+            continue
+        if char == '"':
+            in_string = True
+        elif char in "{[":
+            stack.append(char)
+        elif char in "}]":
+            if not stack or stack[-1] != ("{" if char == "}" else "["):
+                return None
+            stack.pop()
+            if not stack:
+                return start, index + 1
+    return None
+
+
+def _json_string_segments(source: str) -> list[tuple[bool, str]]:
+    """Split source into (is_outside_string, segment) pieces."""
+    parts: list[tuple[bool, str]] = []
+    in_string = False
+    escaped = False
+    seg_start = 0
+    for index, char in enumerate(source):
+        if in_string:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                parts.append((False, source[seg_start : index + 1]))
+                seg_start = index + 1
+                in_string = False
+            continue
+        if char == '"':
+            if seg_start < index:
+                parts.append((True, source[seg_start:index]))
+            seg_start = index
+            in_string = True
+    if seg_start < len(source):
+        parts.append((not in_string, source[seg_start:]))
+    return parts
+
+
+def repair_json_text(source: str) -> str:
+    """json_repair 式确定性修复：只改字符串外侧的格式毛病与串内非法控制符。"""
+
+    def fix_outside(text: str) -> str:
+        text = text.replace("﻿", "").replace("​", "")
+        text = re.sub(r"//[^\n]*", "", text)
+        text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
+        text = re.sub(r"\bNone\b", "null", text)
+        text = re.sub(r"\bTrue\b", "true", text)
+        text = re.sub(r"\bFalse\b", "false", text)
+        text = re.sub(r"\b(?:NaN|Infinity|-Infinity)\b", "null", text)
+        # 行号被当裸标识符输出（line:L0301 / {L0301:...}）——09-15 切片 3/6 实测死因
+        text = re.sub(r"([{:\[,]\s*)(L\d{4,})\b", r'\1"\2"', text)
+        text = re.sub(r",(\s*[}\]])", r"\1", text)
+        return text
+
+    def fix_inside(text: str) -> str:
+        return re.sub(
+            r"[\x00-\x1f]",
+            lambda m: {"\n": "\\n", "\r": "\\r", "\t": "\\t"}.get(
+                m.group(0), f"\\u{ord(m.group(0)):04x}"
+            ),
+            text,
+        )
+
+    return "".join(
+        fix_outside(seg) if outside else fix_inside(seg)
+        for outside, seg in _json_string_segments(source)
+    )
+
+
+_BARE_VALUE_TOKEN = re.compile(r"[A-Za-z0-9_一-鿿./:\-]{1,80}")
+
+
+def quote_bare_token_at(text: str, pos: int) -> str | None:
+    """把解析报错位置上的裸标识符补成双引号字符串（Expecting value 专用）。"""
+    match = _BARE_VALUE_TOKEN.match(text, pos)
+    if not match or match.start() != pos or match.group(0) in {"null", "true", "false"}:
+        return None
+    return text[:pos] + json.dumps(match.group(0), ensure_ascii=False) + text[match.end() :]
+
+
+def loads_lenient(candidate: str) -> Any:
+    """json_repair 式加载：确定性修复后，按报错位置补引号/缺冒号逗号，限次防死循环。"""
+    text = repair_json_text(candidate)
+    for _ in range(8):
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError as exc:
+            fixed: str | None = None
+            if exc.msg == "Expecting value":
+                fixed = quote_bare_token_at(text, exc.pos)
+            elif exc.msg == "Expecting ',' delimiter":
+                fixed = text[: exc.pos] + "," + text[exc.pos :]
+            elif exc.msg == "Expecting ':' delimiter":
+                fixed = text[: exc.pos] + ":" + text[exc.pos :]
+            elif exc.msg == "Extra data":
+                span = json_value_span(text)
+                if span:
+                    try:
+                        return json.loads(text[span[0] : span[1]])
+                    except json.JSONDecodeError:
+                        fixed = None
+            if not fixed or fixed == text:
+                raise
+            text = fixed
+    raise json.JSONDecodeError("lenient repair exhausted", text, 0)
+
+
 def json_stack(source: str) -> tuple[list[tuple[str, int]], bool]:
     """Return unmatched containers and whether the source ends inside a string."""
     stack: list[tuple[str, int]] = []
@@ -741,27 +873,35 @@ def repair_truncated_json(source: str) -> str | None:
 
 
 def extract_json(content: str) -> Any:
+    """剥围栏 → 截取首个完整 JSON 对象 → json_repair 式补全 → 截断闭合。"""
     stripped = strip_json_fence(content)
     payload: Any
     try:
         payload = json.loads(stripped)
     except json.JSONDecodeError as original_error:
-        start = min((i for i in (stripped.find("{"), stripped.find("[")) if i >= 0), default=-1)
-        end = max(stripped.rfind("}"), stripped.rfind("]"))
-        if start >= 0 and end > start:
+        payload = None
+        truncated = False
+        # 逐候选起点：完整对象优先，截断闭合兜底；首个能过 json.loads 的胜出。
+        for start in [m.start() for m in re.finditer(r"[{\[]", stripped)][:6]:
+            span = json_value_span(stripped[start:])
+            candidate = stripped[start : start + span[1]] if span else stripped[start:]
             try:
-                payload = json.loads(stripped[start : end + 1])
+                payload = loads_lenient(candidate)
+                break
             except json.JSONDecodeError:
-                payload = None
-            else:
-                if isinstance(payload, dict) and set(payload) == {"content"} and isinstance(payload["content"], dict):
-                    return payload["content"]
-                return payload
-        repaired = repair_truncated_json(stripped)
-        if not repaired:
+                pass
+            repaired = repair_truncated_json(candidate)
+            if repaired:
+                try:
+                    payload = json.loads(repaired)
+                    truncated = True
+                    break
+                except json.JSONDecodeError:
+                    continue
+        if payload is None:
             raise original_error
-        payload = json.loads(repaired)
-        print("[warn] DeepSeek JSON 被截断：已丢弃最后一个不完整对象并闭合结构", file=sys.stderr)
+        if truncated:
+            print("[warn] DeepSeek JSON 被截断：已丢弃最后一个不完整对象并闭合结构", file=sys.stderr)
     if isinstance(payload, dict) and set(payload) == {"content"} and isinstance(payload["content"], dict):
         return payload["content"]
     return payload
@@ -821,6 +961,7 @@ def call_with_repair(
     retries: int,
     stage: str,
     budget: RunBudget | None = None,
+    raw_dumper: Callable[[int, str, str], None] | None = None,
 ) -> Any:
     history = list(messages)
     errors: list[str] = []
@@ -848,6 +989,11 @@ def call_with_repair(
         if budget:
             stage_done(attempt_name, attempt_started, budget, "retry")
         errors.append(detail)
+        if raw and raw_dumper is not None:
+            try:
+                raw_dumper(attempt, raw, detail)
+            except OSError:
+                pass
         print(f"[retry {attempt}/{retries}] {stage}：{detail}", file=sys.stderr)
         if raw:
             history.append({"role": "assistant", "content": raw})
@@ -858,6 +1004,12 @@ def call_with_repair(
                     "请在上一版 JSON 基础上只修复下列具体错误，保留已正确的证据与判断，"
                     "只输出 JSON，不要 Markdown、解释或多余字段，必须控制长度；"
                     f"然后重新输出完整 JSON 对象。具体错误：{detail}"
+                    + (
+                        "。特别注意：quote_plan 只能使用候选里 type=quote 的 evidence id；"
+                        "不要再引用上面点名的非法 id，改用其它合法 quote id 或少摘几条。"
+                        if "quote_plan" in detail and ("只能引用" in detail or "未知" in detail or "剔除" in detail)
+                        else ""
+                    )
                 ),
             }
         )
@@ -896,30 +1048,67 @@ def write_extraction_cache(path: Path, digest: str, result: dict[str, Any]) -> N
     )
 
 
-def extract_chunks(
-    transcript: str,
-    date_value: str,
-    api_key: str,
-    model: str,
-    api_url: str,
-    timeout: float,
-    retries: int,
-    chunk_size: int,
-    cache_dir: Path | None = None,
-    budget: RunBudget | None = None,
-) -> list[dict[str, Any]]:
-    chunks = chunk_transcript(numbered_transcript(redact_for_model(transcript)), chunk_size)
-    line_index = transcript_line_index(transcript)
-    results: list[dict[str, Any]] = []
-    system = load_prompt(EXTRACT_PROMPT)
-    for index, chunk in enumerate(chunks, start=1):
-        chunk_name = f"切片抽取 {index}/{len(chunks)}"
-        chunk_started = stage_start(chunk_name, budget) if budget else time.monotonic()
-        reference_warnings: list[str] = []
-        allowed_line_ids = set(re.findall(r"(?m)^(L\d{4,})\b", chunk))
-        prompt = f"""
+def raw_dumper_for(dump_dir: Path | None, slug: str) -> Callable[[int, str, str], None] | None:
+    """失败 attempt 的原始响应落盘：<slug>-attempt-N.txt 存纯原文，.err 存错误。"""
+    if dump_dir is None:
+        return None
+
+    def dump(attempt: int, raw: str, detail: str) -> None:
+        dump_dir.mkdir(parents=True, exist_ok=True)
+        (dump_dir / f"{slug}-attempt-{attempt}.txt").write_text(raw, encoding="utf-8")
+        (dump_dir / f"{slug}-attempt-{attempt}.err").write_text(detail, encoding="utf-8")
+
+    return dump
+
+
+def parse_chunk_payload(
+    raw: str,
+    *,
+    label: str,
+    allowed_line_ids: set[str],
+    line_index: dict[str, dict[str, str]],
+    warnings: list[str],
+) -> dict[str, Any]:
+    payload = extract_json(raw)
+    if not isinstance(payload, dict):
+        raise ValidationFailure(["切片输出顶层必须是对象"])
+    if set(payload) != {"evidence"}:
+        raise ValidationFailure(["切片输出只能有 evidence 字段，不要多余字段"])
+    evidence = payload["evidence"]
+    if not isinstance(evidence, list):
+        raise ValidationFailure(["切片输出 evidence 必须是数组"])
+    errors: list[str] = []
+    for evidence_index, item in enumerate(evidence):
+        path = f"evidence[{evidence_index}]"
+        if not isinstance(item, dict) or set(item) != {"type", "data"}:
+            errors.append(f"{path} 必须且只能有 type/data")
+            continue
+        if item.get("type") not in EVIDENCE_TYPES:
+            errors.append(f"{path}.type 不在枚举中")
+        if not isinstance(item.get("data"), dict):
+            errors.append(f"{path}.data 必须是对象")
+    if errors:
+        raise ValidationFailure(errors)
+    payload = canonicalize_evidence_references(payload, line_index, warnings, allowed_line_ids)
+    evidence = payload["evidence"]
+    if len(evidence) > CHUNK_EVIDENCE_LIMIT:
+        print(
+            f"[warn] {label} 证据超过 {CHUNK_EVIDENCE_LIMIT} 条，已截断",
+            file=sys.stderr,
+        )
+        evidence = evidence[:CHUNK_EVIDENCE_LIMIT]
+    while evidence and len(json.dumps({"evidence": evidence}, ensure_ascii=False, separators=(",", ":"))) > CHUNK_OUTPUT_CHAR_LIMIT:
+        evidence.pop()
+    if not evidence:
+        raise ValidationFailure([f"切片证据为空或单条过长，整体必须小于 {CHUNK_OUTPUT_CHAR_LIMIT} 字符"])
+    payload["evidence"] = evidence
+    return payload
+
+
+def chunk_extract_prompt(date_value: str, chunk: str, place: str) -> str:
+    return f"""
 日期：{date_value}
-这是全文第 {index}/{len(chunks)} 切片。
+{place}
 顶层必须且只能是：
 {{"evidence":[{{"type":"event|fragment|tone|quote|member|newcomer|arsenal|docket|clash","data":{{...}}}}]}}
 
@@ -937,43 +1126,111 @@ def extract_chunks(
 {chunk}
 """.strip()
 
-        def parse_chunk(raw: str) -> dict[str, Any]:
-            payload = extract_json(raw)
-            if not isinstance(payload, dict):
-                raise ValidationFailure(["切片输出顶层必须是对象"])
-            if set(payload) != {"evidence"}:
-                raise ValidationFailure(["切片输出只能有 evidence 字段，不要多余字段"])
-            evidence = payload["evidence"]
-            if not isinstance(evidence, list):
-                raise ValidationFailure(["切片输出 evidence 必须是数组"])
-            errors: list[str] = []
-            for evidence_index, item in enumerate(evidence):
-                path = f"evidence[{evidence_index}]"
-                if not isinstance(item, dict) or set(item) != {"type", "data"}:
-                    errors.append(f"{path} 必须且只能有 type/data")
-                    continue
-                if item.get("type") not in EVIDENCE_TYPES:
-                    errors.append(f"{path}.type 不在枚举中")
-                if not isinstance(item.get("data"), dict):
-                    errors.append(f"{path}.data 必须是对象")
-            if errors:
-                raise ValidationFailure(errors)
-            payload = canonicalize_evidence_references(
-                payload, line_index, reference_warnings, allowed_line_ids
+
+def retry_chunk_smaller(
+    chunk: str,
+    index: int,
+    total: int,
+    system: str,
+    date_value: str,
+    line_index: dict[str, dict[str, str]],
+    api_key: str,
+    model: str,
+    api_url: str,
+    timeout: float,
+    retries: int,
+    raw_dump_dir: Path | None,
+    budget: RunBudget | None,
+) -> dict[str, Any] | None:
+    """整片失败后的最后一招：按一半粒度切成小段各试一次，合并证据。"""
+    subs = chunk_transcript(chunk, max(2_000, len(chunk) // 2))
+    if len(subs) < 2:
+        return None
+    merged: list[dict[str, Any]] = []
+    for sub_index, sub in enumerate(subs, start=1):
+        allowed = set(re.findall(r"(?m)^(L\d{4,})\b", sub))
+        warnings: list[str] = []
+        prompt = chunk_extract_prompt(
+            date_value, sub, f"这是全文第 {index}/{total} 切片的第 {sub_index}/{len(subs)} 小段。"
+        )
+
+        def parse_sub(raw: str) -> dict[str, Any]:
+            return parse_chunk_payload(
+                raw,
+                label=f"chunk {index}.{sub_index}/{total}",
+                allowed_line_ids=allowed,
+                line_index=line_index,
+                warnings=warnings,
             )
-            evidence = payload["evidence"]
-            if len(evidence) > CHUNK_EVIDENCE_LIMIT:
-                print(
-                    f"[warn] chunk {index}/{len(chunks)} 证据超过 {CHUNK_EVIDENCE_LIMIT} 条，已截断",
-                    file=sys.stderr,
-                )
-                evidence = evidence[:CHUNK_EVIDENCE_LIMIT]
-            while evidence and len(json.dumps({"evidence": evidence}, ensure_ascii=False, separators=(",", ":"))) > CHUNK_OUTPUT_CHAR_LIMIT:
-                evidence.pop()
-            if not evidence:
-                raise ValidationFailure([f"切片证据为空或单条过长，整体必须小于 {CHUNK_OUTPUT_CHAR_LIMIT} 字符"])
-            payload["evidence"] = evidence
-            return payload
+
+        try:
+            result = call_with_repair(
+                [{"role": "system", "content": system}, {"role": "user", "content": prompt}],
+                parse_sub,
+                api_key,
+                model,
+                api_url,
+                timeout,
+                max(1, min(2, retries)),
+                f"切片 {index}.{sub_index}/{total} 抽取失败",
+                budget,
+                raw_dumper_for(raw_dump_dir, f"chunk-{index:03d}-{sub_index}"),
+            )
+        except (LedgerError, Exception) as exc:  # noqa: BLE001 — 半粒度补救是尽力而为
+            if isinstance(exc, TimeBudgetExceeded):
+                raise
+            print(f"[degrade] 切片 {index}.{sub_index}/{total} 仍失败：{exc}", file=sys.stderr)
+            return None
+        merged.extend(result["evidence"])
+        for warning in warnings:
+            print(f"[warn] chunk {index}.{sub_index}/{total} {warning}", file=sys.stderr)
+    merged = merged[:CHUNK_EVIDENCE_LIMIT]
+    while merged and len(json.dumps({"evidence": merged}, ensure_ascii=False, separators=(",", ":"))) > CHUNK_OUTPUT_CHAR_LIMIT:
+        merged.pop()
+    if not merged:
+        return None
+    print(f"[degrade] 切片 {index}/{total} 整片失败，按半粒度重试成功：{len(merged)} evidence", file=sys.stderr)
+    return {"evidence": merged}
+
+
+def tolerated_missing_chunks(total: int) -> int:
+    """每 6 个切片容忍 1 个缺失；不足 6 片时一片都不能丢。"""
+    return total // 6
+
+
+def extract_chunks(
+    transcript: str,
+    date_value: str,
+    api_key: str,
+    model: str,
+    api_url: str,
+    timeout: float,
+    retries: int,
+    chunk_size: int,
+    cache_dir: Path | None = None,
+    budget: RunBudget | None = None,
+    raw_dump_dir: Path | None = None,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    chunks = chunk_transcript(numbered_transcript(redact_for_model(transcript)), chunk_size)
+    line_index = transcript_line_index(transcript)
+    results: list[dict[str, Any]] = []
+    missing: list[dict[str, Any]] = []
+    system = load_prompt(EXTRACT_PROMPT)
+    for index, chunk in enumerate(chunks, start=1):
+        chunk_name = f"切片抽取 {index}/{len(chunks)}"
+        chunk_started = stage_start(chunk_name, budget) if budget else time.monotonic()
+        reference_warnings: list[str] = []
+        allowed_line_ids = set(re.findall(r"(?m)^(L\d{4,})\b", chunk))
+        prompt = chunk_extract_prompt(date_value, chunk, f"这是全文第 {index}/{len(chunks)} 切片。")
+
+        def parse_chunk(raw: str) -> dict[str, Any]:
+            return parse_chunk_payload(
+                raw,
+                label=f"chunk {index}/{len(chunks)}",
+                allowed_line_ids=allowed_line_ids,
+                line_index=line_index,
+                warnings=reference_warnings,
+            )
 
         cache_path: Path | None = None
         digest = ""
@@ -992,17 +1249,54 @@ def extract_chunks(
             else:
                 print(f"[cache] extracted chunk {index}/{len(chunks)}", file=sys.stderr)
         if cached is None:
-            result = call_with_repair(
-                [{"role": "system", "content": system}, {"role": "user", "content": prompt}],
-                parse_chunk,
-                api_key,
-                model,
-                api_url,
-                timeout,
-                retries,
-                f"切片 {index}/{len(chunks)} 抽取失败",
-                budget,
-            )
+            try:
+                result = call_with_repair(
+                    [{"role": "system", "content": system}, {"role": "user", "content": prompt}],
+                    parse_chunk,
+                    api_key,
+                    model,
+                    api_url,
+                    timeout,
+                    retries,
+                    f"切片 {index}/{len(chunks)} 抽取失败",
+                    budget,
+                    raw_dumper_for(raw_dump_dir, f"chunk-{index:03d}"),
+                )
+            except LedgerError as exc:
+                result = retry_chunk_smaller(
+                    chunk,
+                    index,
+                    len(chunks),
+                    system,
+                    date_value,
+                    line_index,
+                    api_key,
+                    model,
+                    api_url,
+                    timeout,
+                    retries,
+                    raw_dump_dir,
+                    budget,
+                )
+                if result is None:
+                    chunk_lines = sorted(allowed_line_ids)
+                    missing.append(
+                        {
+                            "chunk": index,
+                            "of": len(chunks),
+                            "lines": [chunk_lines[0], chunk_lines[-1]] if chunk_lines else [],
+                            "error": str(exc),
+                        }
+                    )
+                    print(
+                        f"[degrade] 切片 {index}/{len(chunks)} 放弃，其余切片继续：{exc}",
+                        file=sys.stderr,
+                    )
+                    if len(missing) > tolerated_missing_chunks(len(chunks)):
+                        raise LedgerError(
+                            f"缺失切片达 {len(missing)}/{len(chunks)} 超出容错，整期不可信"
+                        ) from exc
+                    continue
             if cache_path is not None:
                 write_extraction_cache(cache_path, digest, result)
         for evidence_index, item in enumerate(result["evidence"], start=1):
@@ -1017,7 +1311,7 @@ def extract_chunks(
         )
         if budget:
             stage_done(chunk_name, chunk_started, budget)
-    return results
+    return results, missing
 
 
 def quote_evidence_items(chunks: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -1102,7 +1396,11 @@ def supplement_quote_evidence(
         return chunks
     candidates = high_frequency_quote_lines(transcript, stats)
     if not candidates:
-        raise ValidationFailure([f"逐字金句证据仅 {len(current)} 条，且没有可补抽的高频发言行"])
+        print(
+            f"[warn] 逐字金句证据仅 {len(current)} 条，且没有可补抽的高频发言行；软下限继续",
+            file=sys.stderr,
+        )
+        return chunks
     system = load_prompt(EXTRACT_PROMPT)
     prompt = f"""
 这是金句不足时唯一一次补抽。当前只有 {len(current)} 条，至少需要 {MIN_QUOTES} 条。
@@ -1184,7 +1482,10 @@ def supplement_quote_evidence(
     total = len(quote_evidence_items(chunks))
     print(f"[ok] quote evidence: {len(current)} + {len(additions)} = {total}", file=sys.stderr)
     if total < MIN_QUOTES:
-        raise ValidationFailure([f"逐字金句证据补抽后仍只有 {total} 条，至少需要 {MIN_QUOTES} 条"])
+        print(
+            f"[warn] 逐字金句证据补抽后仍只有 {total} 条（软下限 {MIN_QUOTES}，继续出刊）",
+            file=sys.stderr,
+        )
     return chunks
 
 
@@ -1215,6 +1516,73 @@ def planned_quotes(skeleton: dict[str, Any], chunks: list[dict[str, Any]]) -> li
     return quotes[: LIST_LIMITS["quotes"]]
 
 
+def available_quote_ids(chunks: list[dict[str, Any]]) -> list[str]:
+    """Stable order of quote evidence ids across chunks."""
+    ids: list[str] = []
+    seen: set[str] = set()
+    for chunk in chunks:
+        for item in chunk.get("evidence", []):
+            if not isinstance(item, dict) or item.get("type") != "quote" or not item.get("id"):
+                continue
+            evidence_id = str(item["id"])
+            if evidence_id in seen:
+                continue
+            seen.add(evidence_id)
+            ids.append(evidence_id)
+    return ids
+
+
+def sanitize_quote_plan(
+    plan: Any, chunks: list[dict[str, Any]]
+) -> tuple[list[str], list[str]]:
+    """Drop non-quote/unknown ids, backfill from unused quote evidence, soft floor.
+
+    Returns (sanitized_plan, notes). Notes are for retry feedback / stderr — they
+    never by themselves fail validation.
+    """
+    notes: list[str] = []
+    quote_ids = available_quote_ids(chunks)
+    quote_set = set(quote_ids)
+    if not isinstance(plan, list):
+        notes.append("quote_plan 不是数组，已置空并由合法候选补位")
+        plan = []
+    kept: list[str] = []
+    seen: set[str] = set()
+    dropped: list[str] = []
+    for value in plan:
+        if not isinstance(value, str) or not value.strip():
+            dropped.append(repr(value))
+            continue
+        if value in quote_set and value not in seen:
+            kept.append(value)
+            seen.add(value)
+        else:
+            dropped.append(value)
+    if dropped:
+        notes.append(f"quote_plan 剔除非法/非 quote id：{', '.join(dropped[:8])}")
+    # Replace dropped slots from remaining legal candidates; never force MIN_QUOTES.
+    desired = min(MAX_QUOTES, len(kept) + len(dropped), len(quote_ids))
+    filled: list[str] = []
+    for evidence_id in quote_ids:
+        if len(kept) >= desired:
+            break
+        if evidence_id in seen:
+            continue
+        kept.append(evidence_id)
+        seen.add(evidence_id)
+        filled.append(evidence_id)
+    if filled:
+        notes.append(f"quote_plan 用合法候选补位：{', '.join(filled[:8])}")
+    if len(kept) > MAX_QUOTES:
+        kept = kept[:MAX_QUOTES]
+        notes.append(f"quote_plan 截断至上限 {MAX_QUOTES}")
+    if len(kept) < MIN_QUOTES:
+        notes.append(
+            f"quote_plan 仅 {len(kept)} 条（目标下限 {MIN_QUOTES} 为软约束，宁缺毋滥可出刊）"
+        )
+    return kept, notes
+
+
 def numbered_reference_catalog(chunks: list[dict[str, Any]]) -> str:
     rows: dict[str, str] = {}
     for item in evidence_by_id(chunks).values():
@@ -1232,7 +1600,7 @@ def numbered_reference_catalog(chunks: list[dict[str, Any]]) -> str:
 def schema_prompt() -> str:
     return """
 顶层必须且只能有这些字段：
-date,stats_override,hours,events,themes,tone_notes,quotes,growth,members_focus,title,lead,coverage,complete,pulse,insights,glossary,arsenal,docket,clashes,newcomers,members_total,essays_total,essays_open,distilled_by,reviewed_by,prompt_version
+date,stats_override,hours,events,themes,tone_notes,quotes,growth,members_focus,title,lead,coverage,complete,pulse,insights,glossary,arsenal,docket,clashes,newcomers,members_total,essays_total,essays_open,distilled_by,reviewed_by,prompt_version,reader_echo
 嵌套 schema：
 stats_override={msgs:int,active:int}; hours={"00":int,...};
 events=[{t,h,d}];
@@ -1243,7 +1611,8 @@ members_focus=[{name,role,msgs:int,tone:"j|s|h",quote,tags:[str]}];
 coverage={from,to,cutoff,note}; pulse={caption,note};
 insights=[{h,en,body}]; glossary=[{term,def}]; arsenal=[{h,body}];
 docket=[{kind,h,d,status:"open|closed"}]; clashes=[{h,en,sides,verdict}];
-newcomers=[{name,note,t,by,first_words}].
+newcomers=[{name,note,t,by,first_words}];
+reader_echo={{of_window:str,anchors:[str],text:str}} 可选；text 空或不写均可。今日聊天没碰到读者关注面时必须留空，禁止补戏。
 """.strip()
 
 
@@ -1345,14 +1714,28 @@ def validate_skeleton(payload: Any, chunks: list[dict[str, Any]]) -> dict[str, A
     if tones != TONE_CLASSES:
         errors.append("tone_plan 必须同时覆盖 s/j/h")
 
-    if not MIN_QUOTES <= len(payload["quote_plan"]) <= MAX_QUOTES:
-        errors.append(f"quote_plan 必须 {MIN_QUOTES}–{MAX_QUOTES} 条")
-    check_ids(payload["quote_plan"], "quote_plan", minimum=MIN_QUOTES)
-    non_quote_ids = sorted(set(payload["quote_plan"]) - quote_ids)
-    if non_quote_ids:
-        errors.append(f"quote_plan 只能引用 quote evidence id：{', '.join(non_quote_ids[:5])}")
-    if len(planned_quotes(payload, chunks)) < MIN_QUOTES:
-        errors.append(f"quote_plan 必须选出至少 {MIN_QUOTES} 条不同的逐字金句")
+    # Soft floor: illegal/non-quote ids are stripped and backfilled; low count
+    # never hard-fails (宁缺毋滥). Only oversize remains a hard error.
+    sanitized_plan, sanitize_notes = sanitize_quote_plan(payload["quote_plan"], chunks)
+    payload["quote_plan"] = sanitized_plan
+    for note in sanitize_notes:
+        print(f"[sanitize] {note}", file=sys.stderr)
+    if len(payload["quote_plan"]) > MAX_QUOTES:
+        errors.append(f"quote_plan 不得超过 {MAX_QUOTES} 条")
+    elif not all(isinstance(value, str) for value in payload["quote_plan"]):
+        errors.append("quote_plan 必须是 evidence id 字符串数组")
+    else:
+        unknown = sorted(set(payload["quote_plan"]) - valid_ids)
+        if unknown:
+            errors.append(f"quote_plan 含未知 evidence id：{', '.join(unknown[:5])}")
+        non_quote_ids = sorted(set(payload["quote_plan"]) - quote_ids)
+        if non_quote_ids:
+            # Should be unreachable after sanitize; keep as last-resort hard error
+            # and surface the bad ids so the next repair attempt can avoid them.
+            errors.append(
+                f"quote_plan 只能引用 quote evidence id：{', '.join(non_quote_ids[:5])}"
+                + (f"；已尝试剔除：{sanitize_notes[0]}" if sanitize_notes else "")
+            )
 
     if not 1 <= len(payload["member_plan"]) <= 12:
         errors.append("member_plan 必须 1–12 条")
@@ -1397,8 +1780,11 @@ def build_skeleton_messages(
     chunks: list[dict[str, Any]],
     model: str,
     judge_feedback: str = "",
+    reader_attention: dict[str, Any] | None = None,
 ) -> list[dict[str, str]]:
     system = load_prompt(SKELETON_PROMPT)
+    attention = reader_attention or {}
+    prompt_block = str(attention.get("prompt_block") or "").strip() or "(无读者关注面)"
     prompt = f"""
 日期：{date_value}
 模型：{model}
@@ -1408,17 +1794,18 @@ def build_skeleton_messages(
   "event_plan":[{{"evidence_ids":["c01-e01"],"angle":"短角度"}}],
   "theme_plan":[{{"h":"幕名","thread_id":"旧id或新slug","thread_title":"线索名","thread_status":"ongoing|closed","evidence_ids":["至少3个id"],"deep_question":"没说破的结构"}}],
   "tone_plan":[{{"cls":"s|j|h","evidence_id":"id","reason":"短理由"}}],
-  "quote_plan":["按质量断崖选出的 quote evidence id，数量 {MIN_QUOTES}–{MAX_QUOTES}"],
+  "quote_plan":["只引用 type=quote 的 evidence id；上限 {MAX_QUOTES}，下限按当天成色（可 0）"],
   "member_plan":[{{"name":"人名","evidence_ids":["id"]}}],
   "growth_plan":{{"takeaways":["3–5个角度"],"actions":["3–5个以动作动词开头的一日任务"]}},
   "extension_plan":{{"insights":[],"glossary":[],"arsenal":[],"docket":[],"clashes":[],"newcomers":[]}}
 }}
 必须有 3–6 个主题幕，每幕引用至少 3 个证据 id；语气恰好覆盖 s/j/h。
-金句选择顺序：先取不可替代的 {MIN_QUOTES} 条，再按“脱离上下文独立成立 + 有新增事实/机制/判断/行动”逐条递补；出现质量断崖立即停止。{MAX_QUOTES - 2}–{MAX_QUOTES} 条只属于强句密集的少数日子，不把上限当目标。
+金句只能引用候选里 type=quote 的 evidence id；非法 id 会被程序剔除。按质量断崖递补，上限 {MAX_QUOTES}，宁缺毋滥允许少于 {MIN_QUOTES} 甚至 0 条。
 半句、纯反应、泛夸、寒暄、泛泛格言、只有情绪没有信息的句子不入选；同一主题或同一结论仅换说法时只留最好的一条。
 候选允许时至少覆盖 3 位作者，单一作者不超过总数一半；不得为了作者多样性收录弱句。
 growth_plan.actions 每条必须以“写、重写、列、整理、检查、验证、记录、创建、建立、选、拆、跑、做、复盘、对比、访谈、尝试、标注、更新、删除”之一开头，且不超过 40 字。
 线索优先沿用上期 thread_id；新线索才起稳定英文 slug。
+读者关注面是编辑参考，不是硬指令。同等证据下可优先承接读者簇；不得因读者划过就编造当日未出现的聊天。
 
 stats.json（数字真值，程序还会回锁）：
 {json.dumps(stats, ensure_ascii=False)}
@@ -1428,6 +1815,9 @@ context-prev.md：
 
 上一期承接数据：
 {json.dumps(previous_context(previous), ensure_ascii=False)}
+
+reader-attention.json（编辑参考）：
+{prompt_block}
 
 newcomers.json（如有）：
 {json.dumps(newcomers, ensure_ascii=False)}
@@ -1452,8 +1842,13 @@ def build_fill_messages(
     skeleton: dict[str, Any],
     model: str,
     judge_feedback: str = "",
+    reader_attention: dict[str, Any] | None = None,
 ) -> list[dict[str, str]]:
     system = load_prompt(FILL_PROMPT)
+    attention = reader_attention or {}
+    prompt_block = str(attention.get("prompt_block") or "").strip() or "(无读者关注面)"
+    window = attention.get("window") or []
+    of_window = f"{window[0]}..{window[1]}" if isinstance(window, list) and len(window) == 2 else ""
     prompt = f"""
 日期：{date_value}
 模型署名：{distilled_by(model)}
@@ -1472,10 +1867,12 @@ def build_fill_messages(
 6. 文字必须紧凑：lead 不超过 180 字，每个 event.d 不超过 100 字，每幕 body/deep 各不超过 260 字，每条 insight.body 不超过 220 字。
 7. 富文本只允许 <b> <i> <br> <u>；insights 中延伸用 <u>没说破的：…</u>。不得编造质量分。
 8. 全文禁用这些工程腔：口径、治理产物、端点、静态、渲染、数据层、接线、缺口、闭环、赋能。改写成具体的人、问题和动作。
+9. reader_echo：仅当今日聊天确实碰到读者关注面里的线索时，写一句人话回声（of_window可用「{of_window}」，anchors 填相关旧锚点）；没碰到必须省略或 text 留空。不得把读者笔记写成群友原话。
 
 stats.json：{json.dumps(stats, ensure_ascii=False)}
 context-prev.md：{context or '(无)'}
 上一期承接：{json.dumps(previous_context(previous), ensure_ascii=False)}
+reader-attention.json：{prompt_block}
 newcomers.json：{json.dumps(newcomers, ensure_ascii=False)}
 证据包：{json.dumps(chunks, ensure_ascii=False)}
 证据引用行原文索引：
@@ -1518,6 +1915,9 @@ def clean_engineering_jargon(content: dict[str, Any], warnings: list[str]) -> No
         (content, "title", "title"),
         (content, "lead", "lead"),
     ]
+    echo = content.get("reader_echo")
+    if isinstance(echo, dict):
+        targets.append((echo, "text", "reader_echo.text"))
     for group, fields in (
         ("events", ("h", "d")),
         ("themes", ("h", "body", "deep", "thread_title")),
@@ -1891,7 +2291,96 @@ def normalize_content(
     normalize_threads(normalized, previous, warnings)
     if isinstance(normalized.get("quotes"), list) and len(normalized["quotes"]) < MIN_QUOTES:
         warnings.append(f"quotes 逐字清洗后仅 {len(normalized['quotes'])} 条")
+    sanitize_reader_echo(normalized, warnings)
     return normalized
+
+
+_ECHO_GENERIC_PHRASES = (
+    "上一期你们盯着的是",
+    "上一期你们盯着",
+    "上回你们盯着的",
+    "上回你们盯着",
+    "盯着的是",
+    "有了新进展",
+    "新进展",
+    "上一期",
+    "上期",
+    "上回",
+    "你们",
+    "今天",
+    "这条线",
+    "这条",
+    "线索",
+    "读者",
+    "关注",
+    "回声",
+    "划过",
+    "最多",
+    "如果",
+    "还在",
+    "写在",
+    "这里",
+    "没有",
+    "就留",
+    "盯着",
+)
+
+
+def echo_tokens(value: str) -> set[str]:
+    text = plain(value)
+    for phrase in _ECHO_GENERIC_PHRASES:
+        text = text.replace(phrase, " ")
+    text = re.sub(r"[^\w\u4e00-\u9fff]+", " ", text.lower())
+    tokens: set[str] = set()
+    for part in text.split():
+        if len(part) < 2:
+            continue
+        tokens.add(part)
+        tokens.update(part[index : index + 2] for index in range(len(part) - 1))
+        if len(part) >= 3:
+            tokens.update(part[index : index + 3] for index in range(len(part) - 2))
+    return tokens
+
+
+def today_echo_corpus(content: dict[str, Any]) -> set[str]:
+    parts: list[str] = []
+    for theme in content.get("themes") or []:
+        if not isinstance(theme, dict):
+            continue
+        parts.extend([str(theme.get("h") or ""), str(theme.get("body") or ""), str(theme.get("deep") or "")])
+        for voice in theme.get("voices") or []:
+            if isinstance(voice, dict):
+                parts.append(str(voice.get("v") or ""))
+    for quote in content.get("quotes") or []:
+        if isinstance(quote, dict):
+            parts.append(str(quote.get("t") or ""))
+    return echo_tokens("\n".join(parts))
+
+
+def sanitize_reader_echo(content: dict[str, Any], warnings: list[str]) -> None:
+    """Keep reader_echo only when text overlaps today's themes/quotes/voices."""
+    raw = content.get("reader_echo")
+    if raw is None:
+        content.pop("reader_echo", None)
+        return
+    if not isinstance(raw, dict):
+        content.pop("reader_echo", None)
+        warnings.append("reader_echo 不是对象，已移除")
+        return
+    text = plain(raw.get("text"))
+    window = str(raw.get("of_window") or "")
+    anchors_raw = raw.get("anchors")
+    anchors = [str(item) for item in anchors_raw if item] if isinstance(anchors_raw, list) else []
+    if not text:
+        content.pop("reader_echo", None)
+        return
+    needles = echo_tokens(text)
+    hay = today_echo_corpus(content)
+    if not needles or not (needles & hay):
+        content.pop("reader_echo", None)
+        warnings.append("reader_echo 与当日 themes/quotes/voices 无重叠，已清空")
+        return
+    content["reader_echo"] = {"of_window": window, "anchors": anchors, "text": text}
 
 
 def privacy_shapes(content: dict[str, Any]) -> list[str]:
@@ -1931,7 +2420,7 @@ def validate_content(
         ),
         "主题幕": isinstance(content.get("themes"), list) and bool(content.get("themes")),
         "语气分层": isinstance(content.get("tone_notes"), list) and bool(content.get("tone_notes")),
-        "金句墙": isinstance(content.get("quotes"), list) and len(content.get("quotes", [])) >= MIN_QUOTES,
+        "金句墙": isinstance(content.get("quotes"), list),
         "成长/行动": (
             isinstance(content.get("growth"), dict)
             and bool(content.get("growth", {}).get("takeaways") or content.get("growth", {}).get("todo"))
@@ -2329,10 +2818,14 @@ def emergency_partial_content(
     ]
     quotes = [
         {"t": row["text"], "a": row["a"], "g": "s"}
-        for row in safe_lines[: max(MIN_QUOTES, 6)]
+        for row in safe_lines[:MAX_QUOTES]
     ]
+    if not safe_lines:
+        raise TimeBudgetExceeded(f"{reason}；transcript 中无安全原文，无法构造 partial")
     if len(quotes) < MIN_QUOTES:
-        raise TimeBudgetExceeded(f"{reason}；transcript 中不足 {MIN_QUOTES} 条安全原文，无法构造 partial")
+        warnings.append(
+            f"partial 金句仅 {len(quotes)} 条（软下限 {MIN_QUOTES}，降级出刊）"
+        )
     first = safe_lines[0]
     raw_speakers = material["stats"].get("speakers", [])
     speakers = [
@@ -2432,9 +2925,11 @@ def self_check(
             errors.append(f"quotes[{index}] 含敏感内容")
         else:
             quote_count += 1
-    if not MIN_QUOTES <= quote_count <= MAX_QUOTES:
-        errors.append(
-            f"逐字核验金句必须 {MIN_QUOTES}–{MAX_QUOTES} 条，实际 {quote_count} 条"
+    if quote_count > MAX_QUOTES:
+        errors.append(f"逐字核验金句超过上限 {MAX_QUOTES} 条，实际 {quote_count} 条")
+    elif quote_count < MIN_QUOTES:
+        warnings.append(
+            f"逐字核验金句仅 {quote_count} 条（软下限 {MIN_QUOTES}，宁缺毋滥可出刊）"
         )
 
     voices_verified = 0
@@ -2685,6 +3180,112 @@ def dry_run_content(
     }
 
 
+
+def degrade_skeleton(
+    chunks: list[dict[str, Any]],
+    material: dict[str, Any],
+    previous: dict[str, Any],
+    date_value: str,
+    reason: str,
+) -> dict[str, Any]:
+    """Minimal valid skeleton after repeated model failures — publish with soft quotes."""
+    del previous, date_value  # reserved for future thread continuity
+    indexed = evidence_by_id(chunks)
+    all_ids = [str(item_id) for item_id in indexed]
+    quote_ids, _notes = sanitize_quote_plan([], chunks)
+    if not all_ids:
+        raise LedgerError(f"降级出刊失败：无可用 evidence（{reason}）")
+    seed = all_ids[0]
+    theme_ids = all_ids[: max(3, min(6, len(all_ids)))]
+    while len(theme_ids) < 3:
+        theme_ids.append(seed)
+    speakers = material.get("stats", {}).get("speakers") or []
+    member_name = "群友"
+    if isinstance(speakers, list) and speakers:
+        first = speakers[0]
+        if isinstance(first, list) and first:
+            member_name = str(first[0]) or member_name
+        elif isinstance(first, dict):
+            member_name = str(first.get("name") or member_name)
+    skeleton = {
+        "title": "降级出刊 · 骨架自愈",
+        "lead_angle": "模型骨架连续失败后，按合法证据降级出刊，金句按实际条数展示。",
+        "event_plan": [{"evidence_ids": [seed], "angle": "降级保全当日材料"}],
+        "theme_plan": [
+            {
+                "h": "降级出刊 · 主题待补蒸",
+                "thread_id": "degrade-redistill",
+                "thread_title": "等待补蒸",
+                "thread_status": "ongoing",
+                "evidence_ids": theme_ids[:3],
+                "deep_question": "没说破的：骨架失败不应停刊，应先保全可核验事实。",
+            }
+        ],
+        "tone_plan": [
+            {"cls": "s", "evidence_id": seed, "reason": "降级：认真档占位"},
+            {"cls": "j", "evidence_id": all_ids[min(1, len(all_ids) - 1)], "reason": "降级：玩笑档占位"},
+            {"cls": "h", "evidence_id": all_ids[min(2, len(all_ids) - 1)], "reason": "降级：半真档占位"},
+        ],
+        "quote_plan": quote_ids,
+        "member_plan": [{"name": member_name, "evidence_ids": [seed]}],
+        "growth_plan": {
+            "takeaways": ["本期骨架降级出刊，结论需人工复核。"],
+            "actions": ["检查降级标记并安排补蒸"],
+        },
+        "extension_plan": {
+            "insights": [],
+            "glossary": [],
+            "arsenal": [],
+            "docket": [],
+            "clashes": [],
+            "newcomers": [],
+        },
+    }
+    print(f"[degrade] skeleton quotes={len(quote_ids)} reason={reason[:160]}", file=sys.stderr)
+    return validate_skeleton(skeleton, chunks)
+
+
+def annotate_missing_segments(
+    content: dict[str, Any],
+    missing: list[dict[str, Any]],
+    transcript: str,
+    warnings: list[str],
+) -> None:
+    """缺失切片不拖垮整期：在 coverage 标注哪一段进料没蒸上。"""
+    if not missing:
+        return
+    line_index = transcript_line_index(transcript)
+    coverage = content.get("coverage")
+    if not isinstance(coverage, dict):
+        coverage = {}
+        content["coverage"] = coverage
+    segments: list[dict[str, Any]] = []
+    spans: list[str] = []
+    for item in missing:
+        lines = [lid for lid in item.get("lines", []) if isinstance(lid, str)]
+        times = sorted(
+            line_index[lid]["time"][-5:]
+            for lid in lines
+            if lid in line_index
+        )
+        span = f"{times[0]}–{times[-1]}" if times else "时段不明"
+        segments.append(
+            {
+                "chunk": item.get("chunk"),
+                "of": item.get("of"),
+                "lines": "–".join(lines) if lines else "",
+                "span": span,
+                "error": str(item.get("error", ""))[:200],
+            }
+        )
+        spans.append(span)
+    coverage["missing_segments"] = segments
+    note = str(coverage.get("note", "")).strip()
+    marker = f"进料有 {len(segments)} 段没蒸上（{'、'.join(spans)} 一带的聊天），其余照常在。"
+    coverage["note"] = f"{note} {marker}".strip()
+    warnings.append(marker + "已按容错出刊并在 coverage 标注")
+
+
 def assemble_real(
     date_value: str,
     material: dict[str, Any],
@@ -2698,10 +3299,11 @@ def assemble_real(
     judge_feedback: str = "",
     cache_dir: Path | None = None,
     budget: RunBudget | None = None,
-) -> tuple[dict[str, Any], list[str], dict[str, Any], int]:
+    raw_dump_dir: Path | None = None,
+) -> tuple[dict[str, Any], list[str], dict[str, Any], int, list[dict[str, Any]]]:
     budget = budget or RunBudget()
     extraction_started = stage_start("全文切片抽取", budget)
-    chunks = extract_chunks(
+    chunks, missing_chunks = extract_chunks(
         material["transcript"],
         date_value,
         api_key,
@@ -2712,8 +3314,9 @@ def assemble_real(
         chunk_size,
         cache_dir,
         budget,
+        raw_dump_dir,
     )
-    extraction_chunk_count = len(chunks)
+    extraction_chunk_count = len(chunks) + len(missing_chunks)
     stage_done("全文切片抽取", extraction_started, budget)
     supplement_started = stage_start("金句数量检查与补抽", budget)
     chunks = supplement_quote_evidence(
@@ -2739,22 +3342,29 @@ def assemble_real(
         chunks,
         model,
         judge_feedback,
+        reader_attention=material.get("reader_attention") or {},
     )
 
     def parse_skeleton(raw: str) -> dict[str, Any]:
         return validate_skeleton(extract_json(raw), chunks)
 
-    skeleton = call_with_repair(
-        skeleton_messages,
-        api_key=api_key,
-        model=model,
-        api_url=api_url,
-        timeout=timeout,
-        retries=retries,
-        stage="八段骨架生成失败",
-        parse=parse_skeleton,
-        budget=budget,
-    )
+    try:
+        skeleton = call_with_repair(
+            skeleton_messages,
+            api_key=api_key,
+            model=model,
+            api_url=api_url,
+            timeout=timeout,
+            retries=retries,
+            stage="八段骨架生成失败",
+            parse=parse_skeleton,
+            budget=budget,
+            raw_dumper=raw_dumper_for(raw_dump_dir, "skeleton"),
+        )
+    except LedgerError as exc:
+        # 三次仍失败 → 降级出刊：用合法 quote 候选构造最小骨架，不停刊。
+        print(f"[degrade] 八段骨架连续失败，降级出刊：{exc}", file=sys.stderr)
+        skeleton = degrade_skeleton(chunks, material, previous, date_value, str(exc))
     print(
         f"[ok] assembly skeleton: {len(skeleton['theme_plan'])} themes / {len(skeleton['quote_plan'])} quotes",
         file=sys.stderr,
@@ -2769,6 +3379,7 @@ def assemble_real(
         skeleton,
         model,
         judge_feedback,
+        reader_attention=material.get("reader_attention") or {},
     )
     success_warnings: list[str] = []
     success_checks: dict[str, Any] = {}
@@ -2779,8 +3390,9 @@ def assemble_real(
         payload = resolve_content_references(extract_json(raw), material["transcript"], warnings)
         structural_quotes = planned_quotes(skeleton, chunks)
         if len(structural_quotes) < MIN_QUOTES:
-            raise ValidationFailure(
-                [f"quote_plan 按行号回填后仅 {len(structural_quotes)} 条，至少需要 {MIN_QUOTES} 条"]
+            warnings.append(
+                f"quote_plan 按行号回填后仅 {len(structural_quotes)} 条"
+                f"（软下限 {MIN_QUOTES}，宁缺毋滥可出刊）"
             )
         payload["quotes"] = structural_quotes
         compact_length = len(json.dumps(payload, ensure_ascii=False, separators=(",", ":")))
@@ -2813,6 +3425,7 @@ def assemble_real(
         stage="八段成品填充失败",
         parse=parse_final,
         budget=budget,
+        raw_dumper=raw_dumper_for(raw_dump_dir, "fill"),
     )
     repair_warnings: list[str] = []
     final_status = "ok"
@@ -2840,8 +3453,10 @@ def assemble_real(
             model,
             repair_warnings,
         )
+        annotate_missing_segments(result, missing_chunks, material["transcript"], repair_warnings)
         final_started = stage_start("最终硬规则校验", budget)
     except TimeBudgetExceeded as exc:
+        annotate_missing_segments(result, missing_chunks, material["transcript"], repair_warnings)
         result = mark_partial(result, str(exc), repair_warnings)
         final_started = time.monotonic()
         final_status = "partial"
@@ -2851,7 +3466,7 @@ def assemble_real(
     success_checks = self_check(result, material["transcript"], repair_warnings)
     stage_done("最终硬规则校验", final_started, budget, final_status)
     success_warnings.extend(repair_warnings)
-    return result, success_warnings, success_checks, extraction_chunk_count
+    return result, success_warnings, success_checks, extraction_chunk_count, missing_chunks
 
 
 def atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -2887,6 +3502,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--retries", type=int, default=3)
     parser.add_argument("--chunk-size", type=int, default=DEFAULT_CHUNK_SIZE)
     parser.add_argument("--chunk-cache", type=Path, help="成功切片持久缓存目录；默认 materials/.distill-cache")
+    parser.add_argument("--raw-dump-dir", type=Path, help="失败原始响应落盘目录；默认 materials/.distill-raw")
     parser.add_argument("--judge-feedback", type=Path, help="上一轮 judge JSON，重蒸时带 suggestions")
     parser.add_argument("--usage-output", type=Path, help="写入本次 DeepSeek token 用量")
     parser.add_argument(
@@ -2971,8 +3587,9 @@ def main() -> int:
         api_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
         if not api_key:
             raise LedgerError("缺少 DEEPSEEK_API_KEY；本地验证请用 --dry-run")
+        missing_chunks: list[dict[str, Any]] = []
         try:
-            content, warnings, checks, chunks = assemble_real(
+            content, warnings, checks, chunks, missing_chunks = assemble_real(
                 date_value,
                 material,
                 previous,
@@ -2985,10 +3602,11 @@ def main() -> int:
                 judge_feedback,
                 args.chunk_cache or args.materials / ".distill-cache",
                 budget,
+                args.raw_dump_dir or args.materials / ".distill-raw",
             )
             mode = "deepseek-partial" if content.get("complete") is False else "deepseek"
-        except TimeBudgetExceeded as exc:
-            warnings = []
+        except (TimeBudgetExceeded, LedgerError) as exc:
+            warnings = [f"蒸馏降级：{exc}"]
             if output.is_file():
                 try:
                     content = normalize_content(
@@ -3034,6 +3652,7 @@ def main() -> int:
                 "partial": content.get("complete") is False,
                 "transcript_chars": len(material["transcript"]),
                 "chunks": chunks,
+                "missing_chunks": [item.get("chunk") for item in missing_chunks],
                 "previous": previous_path or None,
                 "warnings": warnings,
                 "prompt_version": PROMPT_VERSION,

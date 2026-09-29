@@ -6,9 +6,10 @@ import { API_BASE, getToken } from "@/lib/auth";
 interface Related { source: string; title: string; url: string }
 interface Hit { source: string; title: string; excerpt: string; url: string; date: string; issue: number | null; related?: Related[] }
 interface IndexPayload { threads: { title: string; url: string; issue: number | null }[]; glossary: { title: string; url: string }[] }
-interface Payload { items: Hit[]; count: number; gated_included: boolean; fuzzy?: boolean; index?: IndexPayload }
+interface PublicSearch { items: {kind:string; title:string; summary:string; url:string; date:string}[]; total:number; has_more:boolean }
+interface Payload { resolvedQuery?: string; notice?: string; morePublic?: boolean; items: Hit[]; count: number; gated_included: boolean; fuzzy?: boolean; index?: IndexPayload }
 
-const SOURCE_ORDER = ["线索", "黑话", "品评项", "军火库", "深潜", "日报", "悬案", "对撞", "窖藏", "群像", "弹药", "大事记", "真伪鉴定", "逐字摘录"];
+const SOURCE_ORDER = ["精读", "知识", "技能", "资源","线索", "黑话", "品评项", "军火库", "深潜", "日报", "悬案", "对撞", "窖藏", "群像", "弹药", "大事记", "真伪鉴定", "逐字摘录"];
 
 /** 命中词高亮：拆分渲染，不走 innerHTML。 */
 function Mark({ text, terms }: { text: string; terms: string[] }) {
@@ -31,6 +32,8 @@ export function SearchPalette() {
   const [sel, setSel] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const seq = useRef(0);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
 
   // 打开入口：按钮、/ 键、⌘K
   useEffect(() => {
@@ -46,35 +49,77 @@ export function SearchPalette() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  useEffect(() => { if (open) setTimeout(() => inputRef.current?.focus(), 30); }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const timer = setTimeout(() => inputRef.current?.focus(), 30);
+    const trap = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") return;
+      const targets = [...(dialogRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input, [tabindex="0"]') ?? [])].filter(node => node.getClientRects().length);
+      const first = targets[0], last = targets[targets.length - 1];
+      if (!first) return;
+      if (event.shiftKey && (document.activeElement === first || !dialogRef.current?.contains(document.activeElement))) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && (document.activeElement === last || !dialogRef.current?.contains(document.activeElement))) { event.preventDefault(); first.focus(); }
+    };
+    document.addEventListener("keydown", trap);
+    return () => { clearTimeout(timer); document.removeEventListener("keydown", trap); previous?.focus(); };
+  }, [open]);
 
   // 防抖检索；空查询拿索引
   useEffect(() => {
     if (!open) return;
     const id = ++seq.current;
+    let active = true;
+    const controller = new AbortController();
+    let expired = false;
+    let deadline: ReturnType<typeof setTimeout> | undefined;
     const t = setTimeout(async () => {
       setBusy(true); setErr("");
+      deadline = setTimeout(() => { expired = true; controller.abort(); }, 15000);
       try {
         const token = getToken();
-        const r = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(q.trim())}`, {
-          headers: token ? { authorization: `Bearer ${token}` } : {},
-        });
-        if (!r.ok) throw new Error(`检索失败（HTTP ${r.status}）`);
-        const d = (await r.json()) as Payload;
-        if (seq.current === id) { setData(d); setSel(0); }
+        const keyword = q.trim();
+        const read = async <T,>(url: string, headers: Record<string,string> = {}): Promise<T> => {
+          const response = await fetch(url, {headers, signal: controller.signal});
+          if (!response.ok) throw new Error(`检索失败（HTTP ${response.status}）`);
+          return response.json() as Promise<T>;
+        };
+        const [archive, catalog] = await Promise.allSettled([
+          read<Payload>(`${API_BASE}/api/search?q=${encodeURIComponent(keyword)}`, token ? {authorization:`Bearer ${token}`} : {}),
+          keyword ? read<PublicSearch>(`${API_BASE}/api/public/learning?q=${encodeURIComponent(keyword)}&limit=20`) : Promise.resolve(null),
+        ]);
+        if (archive.status === "rejected" && (catalog.status === "rejected" || !catalog.value)) throw archive.reason;
+        const d: Payload = archive.status === "fulfilled" ? {...archive.value} : {items:[],count:0,gated_included:false};
+        if (catalog.status === "fulfilled" && catalog.value) {
+          const known = new Set(d.items.map(hit => hit.url));
+          const labels: Record<string,string> = {knowledge:"知识",skill:"技能",resource:"资源",ledger:"日报"};
+          const added = catalog.value.items.filter(item => !known.has(item.url)).map(item => ({source:item.url.startsWith("/readings/")?"精读":labels[item.kind]||"资源",title:item.title,excerpt:item.summary,url:item.url,date:item.date,issue:null}));
+          d.items = [...added, ...d.items]; d.count=d.items.length; d.morePublic=catalog.value.has_more;
+        }
+        if (archive.status === "rejected" || catalog.status === "rejected") d.notice="部分内容暂时未能检索，先显示已经找到的结果。";
+        d.resolvedQuery = keyword;
+        if (active && seq.current === id) { setData(d); setSel(0); }
       } catch (e) {
-        if (seq.current === id) setErr(e instanceof Error ? e.message : "检索失败");
+        if (active && seq.current === id && (!controller.signal.aborted || expired)) {
+          setErr(expired ? "检索超时，请稍后重新输入关键词。" : e instanceof Error ? e.message : "检索失败");
+        }
       } finally {
-        if (seq.current === id) setBusy(false);
+        clearTimeout(deadline);
+        if (active && seq.current === id) setBusy(false);
       }
     }, q.trim() ? 220 : 0);
-    return () => clearTimeout(t);
+    return () => {
+      active = false;
+      clearTimeout(t);
+      clearTimeout(deadline);
+      controller.abort();
+    };
   }, [q, open]);
 
   const terms = useMemo(() => q.trim().split(/\s+/).filter(Boolean), [q]);
   const groups = useMemo(() => {
     const g = new Map<string, Hit[]>();
-    for (const h of data?.items ?? []) {
+    for (const h of data?.resolvedQuery === q.trim() ? data.items : []) {
       if (!g.has(h.source)) g.set(h.source, []);
       g.get(h.source)!.push(h);
     }
@@ -82,7 +127,7 @@ export function SearchPalette() {
       const ia = SOURCE_ORDER.indexOf(a[0]), ib = SOURCE_ORDER.indexOf(b[0]);
       return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
     });
-  }, [data]);
+  }, [data, q]);
   const flat = useMemo(() => groups.flatMap(([, hs]) => hs), [groups]);
 
   const goto = useCallback((url: string) => { setOpen(false); window.location.href = url; }, []);
@@ -90,7 +135,7 @@ export function SearchPalette() {
   const onInputKey = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") { e.preventDefault(); setSel((s) => Math.min(s + 1, flat.length - 1)); }
     if (e.key === "ArrowUp") { e.preventDefault(); setSel((s) => Math.max(s - 1, 0)); }
-    if (e.key === "Enter" && flat[sel]) { e.preventDefault(); goto(flat[sel].url); }
+    if (e.key === "Enter" && !busy && !err && data?.resolvedQuery === q.trim() && flat[sel]) { e.preventDefault(); goto(flat[sel].url); }
   };
 
   return (
@@ -117,6 +162,7 @@ export function SearchPalette() {
             onMouseDown={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
           >
             <motion.div
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
               aria-label="站内检索"
@@ -136,12 +182,15 @@ export function SearchPalette() {
                   className="w-full bg-transparent font-sans text-[15px] text-ink outline-none placeholder:text-ink-3"
                   maxLength={60}
                 />
+                <button type="button" onClick={() => setOpen(false)} className="min-h-11 shrink-0 px-2 text-[13px] text-ink-2" aria-label="关闭检索">关闭</button>
                 <kbd className="hidden shrink-0 rounded-[4px] border border-rule px-1.5 py-0.5 font-sans text-[10.5px] text-ink-3 sm:block">ESC</kbd>
               </div>
 
               <div className="min-h-0 overflow-y-auto px-2 py-2">
                 {err && <p className="px-3 py-4 font-sans text-[13px] text-amber-text">{err}</p>}
 
+                {data?.notice && <p className="px-3 py-2 font-sans text-[12px] text-amber-text">{data.notice}</p>}
+                {q.trim() && !busy && !err && <p className="px-3 py-2 font-sans text-[12px] text-ink-3">当前显示 {flat.length} 条结果{data?.morePublic && <> · <a href={`/?q=${encodeURIComponent(q.trim())}`} className="text-blue-text">浏览更多公开内容 →</a></>}</p>}
                 {/* 检索结果 */}
                 {!err && q.trim() && (
                   flat.length ? (
@@ -194,7 +243,7 @@ export function SearchPalette() {
                 )}
 
                 {/* 索引模式：空查询给一张地图 */}
-                {!err && !q.trim() && data?.index && (
+                {!err && !q.trim() && data?.resolvedQuery === "" && data?.index && (
                   <div className="px-3 py-2">
                     {data.index.threads.length > 0 && (
                       <>

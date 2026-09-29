@@ -1,0 +1,35 @@
+{
+  "skillMarkdown": "---\nname: remotion-captions\ndescription: Transcribing, displaying and animating captions\nversion: 4.0.529\n---\n\nAll captions must be processed in JSON. The captions must use the [`Caption`](https://www.remotion.dev/docs/captions/caption.md) type which is the following:\n\n```ts\nimport type { Caption } from \"@remotion/captions\";\n```\n\nThis is the definition:\n\n```ts\ntype Caption = {\n  text: string;\n  startMs: number;\n  endMs: number;\n  timestampMs: number | null;\n  confidence: number | null;\n  pageBreakAfter?: boolean;\n};\n```\n\n## Generating captions\n\nTo transcribe video and audio files to generate captions, load the [transcribe-captions.md](transcribe-captions.md) file for more instructions.\n\n## Displaying captions\n\nTo display captions in your video, load the [display-captions.md](display-captions.md) file for more instructions.\n\n## Importing captions\n\nTo import captions from a .srt file, load the [import-srt-captions.md](import-srt-captions.md) file for more instructions.\n",
+  "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-captions/SKILL.md",
+  "repositoryUrl": "https://github.com/remotion-dev/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 4754,
+  "starsCheckedAt": "2026-09-28T18:57:03Z",
+  "editorial": {
+    "overview": "这项技能把转写、导入和展示字幕统一到带时间信息的 JSON 数据上。公开版本使用 Caption 结构记录文字、开始结束时间及可选的时间戳和置信信息：已有 SRT 时走导入路线，没有字幕时再读取转写流程。字幕与视频分别保存和引用，能让文字校对与画面样式调整相互独立。\n\n展示说明进一步将字幕组织成页面，用时间范围决定显示段落，并根据词的时间区间高亮当前内容。它还提醒保留文字中的空白，避免词语粘连；加载字幕时要处理等待与失败，不能让空画面被当成最终输出。本条按所链版本及配套文档归纳，不固定转写模型或包版本。使用时应先校对专名、数字和断句，再处理行长与高亮节奏；时间对齐准确也不代表转写文字准确。每段素材要确认采用相对时间还是全片时间，避免字幕数据本身正确，放入场景后却整体提前或延后。校对时还应留意画面中的专名。",
+    "useCases": [
+      "给口播视频加入同步字幕",
+      "将已有SRT改为逐词高亮字幕"
+    ],
+    "inputs": [
+      "视频或音频以及字幕数据",
+      "字幕样式、语言和时间轴约定"
+    ],
+    "outputs": [
+      "Caption格式JSON",
+      "字幕组件及时间和文字校对记录"
+    ],
+    "steps": [
+      "选择SRT导入或转写路线，先生成可编辑字幕数据。",
+      "校对文字时间，再设置分页和当前词高亮。",
+      "对照声音检查起止、断句与空白，验证加载失败路径。"
+    ],
+    "limitations": [
+      "本站未执行转写或播放字幕，识别准确率和同步效果未实测。",
+      "配套转写示例的语言与模型不能通用于所有素材，必须重新选择。"
+    ],
+    "reviewedAt": "2026-09-22",
+    "sourceUrl": "https://github.com/remotion-dev/skills/blob/9682e994989f951c75912fbc49aa10332a512685/skills/remotion-captions/SKILL.md"
+  }
+}

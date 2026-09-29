@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ApiError, apiFetch } from "@/lib/auth";
 import { fmtInt } from "@/lib/shared";
@@ -7,8 +7,10 @@ import { Note } from "./FormBits";
 import { GapNote } from "./PageHead";
 import { segment } from "./segment";
 
-export interface Essay { title: string; author: string; date: string; body: string; word_count: number }
-interface Payload { items: Essay[] }
+export interface Essay { title: string; author: string; date: string; body: string; word_count: number; member_key?: string; author_snapshot?: string }
+interface Payload { items: Essay[]; total?: number; limit?: number; offset?: number }
+
+const PAGE = 60;
 
 function daysSince(d: string) {
   const t = Date.parse(`${d}T00:00:00+08:00`);
@@ -78,7 +80,7 @@ function Slot({ e, i, max, onOpen }: { e: Essay; i: number; max: number; onOpen:
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         />
       </span>
-      <span className="mt-3 line-clamp-2 font-serif text-[15px] font-bold leading-snug text-ink">{e.title}</span>
+      <span className="mt-3 line-clamp-2 break-words font-serif text-[15px] font-bold leading-snug text-ink">{e.title}</span>
       <span className="mt-1 font-sans text-[12px] text-ink-2">{e.author}</span>
       <span className="num mt-1.5 font-sans text-[11px] leading-tight text-ink-3">
         {e.date} · {fmtInt(e.word_count)} 字{age != null && <> · 陈 {age} 天</>}
@@ -88,7 +90,7 @@ function Slot({ e, i, max, onOpen }: { e: Essay; i: number; max: number; onOpen:
 }
 
 /** 单篇阅读：宋体 17px、约 38 字/行、行高 1.9。这是这一页真正的产品面。 */
-function Reader({ e, onBack, index, total, onGo }: { e: Essay; onBack: () => void; index: number; total: number; onGo: (i: number) => void }) {
+function Reader({ e, onBack, index, total, onGo, loadingMore = false }: { e: Essay; onBack: () => void; index: number; total: number; onGo: (i: number) => void; loadingMore?: boolean }) {
   const reduce = useReducedMotion();
   // 先按作者自己的换行分段；某一段还是一整坨的（很多人一口气打完不换行），再按句读切开。
   // 「（引用 …）」是清洗微信引用消息时抠出的被引用原文，整行保留、单独成块。
@@ -114,7 +116,9 @@ function Reader({ e, onBack, index, total, onGo }: { e: Essay; onBack: () => voi
         <div><dt className="label">字数</dt><dd className="num mt-0.5 text-ink">{fmtInt(e.word_count)}</dd></div>
         <div><dt className="label">陈年</dt><dd className="num mt-0.5 text-ink">{age != null ? `${age} 天` : "—"}</dd></div>
       </dl>
-      <h2 className="mt-8 font-serif text-[30px] font-black leading-[1.25] text-ink sm:text-[36px]">{e.title}</h2>
+      <h2 className={`mt-8 break-words font-serif font-black text-ink ${
+        e.title.length > 20 ? "max-w-[20em] text-[23px] leading-[1.55] sm:text-[26px]" : "text-[30px] leading-[1.25] sm:text-[36px]"
+      }`}>{e.title}</h2>
 
       {/* 名片行：这是一个人写的，先让读者看见这个人 */}
       <div className="mt-6 flex items-center gap-3 border-b border-rule pb-5">
@@ -152,54 +156,94 @@ function Reader({ e, onBack, index, total, onGo }: { e: Essay; onBack: () => voi
       </div>
       <nav className="mt-12 flex items-center justify-between gap-4 border-t border-rule pt-5 font-sans text-[13.5px]">
         <button type="button" disabled={index <= 0} onClick={() => onGo(index - 1)} className="text-blue-text disabled:cursor-not-allowed disabled:text-ink-3/60 hover:enabled:underline">← 上一瓶</button>
-        <span className="num text-ink-3">{index + 1} / {total}</span>
-        <button type="button" disabled={index >= total - 1} onClick={() => onGo(index + 1)} className="text-blue-text disabled:cursor-not-allowed disabled:text-ink-3/60 hover:enabled:underline">下一瓶 →</button>
+        <span className="num text-ink-3">{loadingMore ? "正在摆……" : `${index + 1} / ${total}`}</span>
+        <button type="button" disabled={index >= total - 1 || loadingMore} onClick={() => onGo(index + 1)} className="text-blue-text disabled:cursor-not-allowed disabled:text-ink-3/60 hover:enabled:underline">下一瓶 →</button>
       </nav>
     </motion.article>
   );
 }
 
 export function EssayCellar() {
-  const [data, setData] = useState<Payload | null>(null);
+  const [items, setItems] = useState<Essay[] | null>(null);
+  const [total, setTotal] = useState(0);
   const [err, setErr] = useState("");
   const [open, setOpen] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const pendingGo = useRef<number | null>(null);
+
+  const load = useCallback(async (offset: number) => {
+    const d = await apiFetch<Payload>(`/api/governed/essays?limit=${PAGE}&offset=${offset}`);
+    const got = d.items ?? [];
+    setItems((prev) => (prev ? [...prev, ...got] : got));
+    setTotal(d.total ?? offset + got.length);
+  }, []);
 
   useEffect(() => {
     let alive = true;
-    apiFetch<Payload>("/api/governed/essays")
-      .then((d) => { if (alive) setData(d); })
-      .catch((e) => { if (alive) setErr(e instanceof ApiError ? e.message : "读取失败"); });
+    load(0).catch((e) => { if (alive) setErr(e instanceof ApiError ? e.message : "读取失败"); });
     return () => { alive = false; };
-  }, []);
+  }, [load]);
 
   // 按入窖日期排架：早入窖的在前
-  const items = useMemo(() => (data?.items ?? []).slice().sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : a.author.localeCompare(b.author))), [data]);
-  const max = useMemo(() => Math.max(1, ...items.map((e) => e.word_count)), [items]);
+  const shelf = useMemo(() => (items ?? []).slice().sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : a.author.localeCompare(b.author))), [items]);
+  const max = useMemo(() => Math.max(1, ...shelf.map((e) => e.word_count)), [shelf]);
+
+  const loadMore = useCallback(async () => {
+    if (loading || !items) return;
+    setLoading(true);
+    try {
+      await load(items.length);
+    } catch (e) {
+      setErr(e instanceof ApiError ? e.message : "读取失败");
+    } finally {
+      setLoading(false);
+    }
+  }, [items, loading, load]);
 
   const go = useCallback((i: number) => {
+    if (i >= shelf.length && shelf.length < total && !loading) {
+      pendingGo.current = i;
+      void loadMore();
+      return;
+    }
     setOpen(i);
     if (typeof window !== "undefined") { history.replaceState(null, "", `#essay-${i + 1}`); window.scrollTo({ top: 0, behavior: "smooth" }); }
-  }, []);
+  }, [shelf.length, total, loading, loadMore]);
   const back = useCallback(() => { setOpen(null); if (typeof window !== "undefined") history.replaceState(null, "", "#rack"); }, []);
 
+  // 翻页到货后兑现 pendingGo（阅读器里跨页点「下一瓶」）
   useEffect(() => {
-    if (!items.length) return;
+    if (pendingGo.current != null && pendingGo.current < shelf.length) {
+      const i = pendingGo.current;
+      pendingGo.current = null;
+      setOpen(i);
+      history.replaceState(null, "", `#essay-${i + 1}`);
+      window.scrollTo({ top: 0 });
+    }
+  }, [shelf.length]);
+
+  useEffect(() => {
+    if (!shelf.length) return;
     const m = location.hash.match(/^#essay-(\d+)$/);
-    if (m) { const i = parseInt(m[1], 10) - 1; if (i >= 0 && i < items.length) setOpen(i); }
-  }, [items.length]);
+    if (!m) return;
+    const i = parseInt(m[1], 10) - 1;
+    if (i >= 0 && i < shelf.length) setOpen(i);
+    else if (i >= shelf.length && shelf.length < total && !loading) void loadMore();
+  }, [shelf.length, total, loading, loadMore]);
 
   if (err) return <Note tone="bad">{err}</Note>;
-  if (!data) return <p className="py-10 font-sans text-[14px] text-ink-3">正在开窖……</p>;
-  if (!items.length) {
+  if (!items) return <p className="py-10 font-sans text-[14px] text-ink-3">正在开窖……</p>;
+  if (!shelf.length) {
     return <GapNote><b>窖里还没有瓶子。</b>一篇小作文都还没收进来——不是这一页坏了，是真的还空着。</GapNote>;
   }
 
-  const totalWords = items.reduce((s, e) => s + e.word_count, 0);
+  const totalWords = shelf.reduce((s, e) => s + e.word_count, 0);
+  const partial = shelf.length < total;
 
   return (
     <AnimatePresence mode="wait" initial={false}>
-      {open != null && items[open] ? (
-        <div key="reader"><Reader e={items[open]} index={open} total={items.length} onBack={back} onGo={go} /></div>
+      {open != null && shelf[open] ? (
+        <div key="reader"><Reader e={shelf[open]} index={open} total={total} onBack={back} onGo={go} loadingMore={loading} /></div>
       ) : (
         <motion.div key="rack" id="rack" initial={false}>
           <div className="mb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-1">
@@ -207,12 +251,20 @@ export function EssayCellar() {
               按<b className="text-ink-2">入窖日期</b>排架，早入窖的在前。瓶身液位 = 这一篇的字数（相对本窖最长的一篇）。
             </p>
             <p className="num font-sans text-[13px] text-ink-3">
-              <span className="font-semibold text-amber-text">{items.length}</span> 瓶 · 合计 <span className="font-semibold text-amber-text">{fmtInt(totalWords)}</span> 字
+              <span className="font-semibold text-amber-text">{total}</span> 瓶{partial && <> · 已摆 <span className="font-semibold text-amber-text">{shelf.length}</span></>} · 合计 <span className="font-semibold text-amber-text">{fmtInt(totalWords)}</span> 字{partial && "（已摆部分）"}
             </p>
           </div>
           <div className="grid grid-cols-2 border-l border-t border-rule sm:grid-cols-3 lg:grid-cols-5">
-            {items.map((e, i) => <Slot key={`${e.author}-${e.date}-${i}`} e={e} i={i} max={max} onOpen={() => go(i)} />)}
+            {shelf.map((e, i) => <Slot key={`${e.author}-${e.date}-${i}`} e={e} i={i} max={max} onOpen={() => go(i)} />)}
           </div>
+          {partial && (
+            <div className="mt-6">
+              <button type="button" onClick={() => void loadMore()} disabled={loading}
+                className="rounded-[6px] border border-blue-wash-2 bg-blue-wash px-4 py-2.5 font-sans text-[13px] font-semibold text-blue-text transition-colors hover:bg-paper-2 disabled:cursor-not-allowed disabled:opacity-60">
+                {loading ? "正在摆……" : `再摆 ${Math.min(PAGE, total - shelf.length)} 瓶`}
+              </button>
+            </div>
+          )}
           <p className="mt-6 font-sans text-[12.5px] leading-relaxed text-ink-3">
             点任意一瓶开读。阅读版按宋体 17px、约 38 字一行、行高 1.9 排——这些是给人读完的东西，不是摘要。
           </p>

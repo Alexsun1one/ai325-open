@@ -1,0 +1,35 @@
+{
+  "skillMarkdown": "---\nname: internal-comms\ndescription: A set of resources to help me write all kinds of internal communications, using the formats that my company likes to use. Claude should use this skill whenever asked to write some sort of internal communications (status reports, leadership updates, 3P updates, company newsletters, FAQs, incident reports, project updates, etc.).\nlicense: Complete terms in LICENSE.txt\n---\n\n## When to use this skill\nTo write internal communications, use this skill for:\n- 3P updates (Progress, Plans, Problems)\n- Company newsletters\n- FAQ responses\n- Status reports\n- Leadership updates\n- Project updates\n- Incident reports\n\n## How to use this skill\n\nTo write any internal communication:\n\n1. **Identify the communication type** from the request\n2. **Load the appropriate guideline file** from the `examples/` directory:\n    - `examples/3p-updates.md` - For Progress/Plans/Problems team updates\n    - `examples/company-newsletter.md` - For company-wide newsletters\n    - `examples/faq-answers.md` - For answering frequently asked questions\n    - `examples/general-comms.md` - For anything else that doesn't explicitly match one of the above\n3. **Follow the specific instructions** in that file for formatting, tone, and content gathering\n\nIf the communication type doesn't match any existing guideline, ask for clarification or more context about the desired format.\n\n## Keywords\n3P updates, company newsletter, company comms, weekly update, faqs, common questions, updates, internal comms\n",
+  "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/internal-comms/SKILL.md",
+  "repositoryUrl": "https://github.com/anthropics/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 178790,
+  "starsCheckedAt": "2026-09-28T18:57:01Z",
+  "editorial": {
+    "overview": "这项技能先识别沟通类型，再读取相应范例，避免把周报、全员简讯和常见问题写成同一种文章。公开版本把进展、计划、问题的团队更新单独组织：先确认团队与时间范围，把已经发生的成果、接下来要做的事和阻碍进度的因素分开。面向管理层时压缩执行细节，面向协作成员时保留能影响下一步行动的信息。\n\n它的作用是调整信息密度与表达顺序，不是凭空补出看起来漂亮的业绩。使用者应提供可核对的交付、日期和问题依据，明确哪些事项还在进行中；无法确认的数字应留待核实。FAQ 则需要围绕重复出现的疑问组织答案，不能直接套周报格式。本条按所链版本归纳，适合已经有事实材料但难以写清重点的内部沟通。草稿完成后还应检查收件对象与敏感范围；整理内容和实际发送是两个不同动作。同一件事在不同读者面前可用不同详略，但事实口径应保持一致。",
+    "useCases": [
+      "编写团队阶段更新",
+      "整理公司简讯或内部FAQ"
+    ],
+    "inputs": [
+      "沟通对象、类型与覆盖日期",
+      "已确认成果、计划、阻塞及素材"
+    ],
+    "outputs": [
+      "符合目标读者的沟通草稿",
+      "需要确认的数据和发布范围"
+    ],
+    "steps": [
+      "明确采用团队更新、简讯还是FAQ的结构。",
+      "按对应范例组织已知事实，区分成果与未来计划。",
+      "核对时间、归属与敏感内容，再交负责人审阅。"
+    ],
+    "limitations": [
+      "本站仅核对说明和团队更新范例，未代写实测或发送消息。",
+      "范例语气不一定适合你的组织，需要结合读者和内部规范调整。"
+    ],
+    "reviewedAt": "2026-09-22",
+    "sourceUrl": "https://github.com/anthropics/skills/blob/34040c9c568585f6929bedeaad110ad08f079624/skills/internal-comms/SKILL.md"
+  }
+}

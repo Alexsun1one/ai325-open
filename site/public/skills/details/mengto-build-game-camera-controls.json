@@ -1,0 +1,9 @@
+{
+  "skillMarkdown": "---\nname: build-game-camera-controls\ndescription: Implement or tune Three.js game cameras. Use for isometric framing, follow behavior, orbit/zoom limits, occlusion, lock-on, camera shake, touch camera controls, and camera regression tests.\n---\n\n# Build Game Camera Controls\n\nKeep gameplay readable before making the camera cinematic. Define one authoritative target, camera bounds, zoom range, collision/occlusion policy, and reduced-motion behavior.\n\n## Implement\n\n- Smooth position and look-at targets independently; never bind the camera directly to jittery render state.\n- Preserve player, immediate threat, objective, and interaction cues in frame at the intended distance.\n- Clamp orbit, pitch, and zoom; prevent walls or props from hiding the player without making geometry invisible globally.\n- Treat lock-on, scripted moments, and shake as temporary modifiers layered over the base camera.\n- On touch, separate camera gesture zones from movement/action controls and provide reset framing.\n\n## Verify\n\nTest corners, tall props, tunnels, multiple enemies, lock-on switching, pause, reduced motion, portrait, and landscape. Confirm no camera behavior breaks targeting, UI, or performance.\n",
+  "sourceUrl": "https://github.com/MengTo/skills/blob/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-game-camera-controls/SKILL.md",
+  "repositoryUrl": "https://github.com/MengTo/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 6367,
+  "starsCheckedAt": "2026-09-28T18:57:00Z"
+}

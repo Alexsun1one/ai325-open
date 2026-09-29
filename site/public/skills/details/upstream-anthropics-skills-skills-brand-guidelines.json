@@ -1,0 +1,35 @@
+{
+  "skillMarkdown": "---\nname: brand-guidelines\ndescription: Applies Anthropic's official brand colors and typography to any sort of artifact that may benefit from having Anthropic's look-and-feel. Use it when brand colors or style guidelines, visual formatting, or company design standards apply.\nlicense: Complete terms in LICENSE.txt\n---\n\n# Anthropic Brand Styling\n\n## Overview\n\nTo access Anthropic's official brand identity and style resources, use this skill.\n\n**Keywords**: branding, corporate identity, visual identity, post-processing, styling, brand colors, typography, Anthropic brand, visual formatting, visual design\n\n## Brand Guidelines\n\n### Colors\n\n**Main Colors:**\n\n- Dark: `#141413` - Primary text and dark backgrounds\n- Light: `#faf9f5` - Light backgrounds and text on dark\n- Mid Gray: `#b0aea5` - Secondary elements\n- Light Gray: `#e8e6dc` - Subtle backgrounds\n\n**Accent Colors:**\n\n- Orange: `#d97757` - Primary accent\n- Blue: `#6a9bcc` - Secondary accent\n- Green: `#788c5d` - Tertiary accent\n\n### Typography\n\n- **Headings**: Poppins (with Arial fallback)\n- **Body Text**: Lora (with Georgia fallback)\n- **Note**: Fonts should be pre-installed in your environment for best results\n\n## Features\n\n### Smart Font Application\n\n- Applies Poppins font to headings (24pt and larger)\n- Applies Lora font to body text\n- Automatically falls back to Arial/Georgia if custom fonts unavailable\n- Preserves readability across all systems\n\n### Text Styling\n\n- Headings (24pt+): Poppins font\n- Body text: Lora font\n- Smart color selection based on background\n- Preserves text hierarchy and formatting\n\n### Shape and Accent Colors\n\n- Non-text shapes use accent colors\n- Cycles through orange, blue, and green accents\n- Maintains visual interest while staying on-brand\n\n## Technical Details\n\n### Font Management\n\n- Uses system-installed Poppins and Lora fonts when available\n- Provides automatic fallback to Arial (headings) and Georgia (body)\n- No font installation required - works with existing system fonts\n- For best results, pre-install Poppins and Lora fonts in your environment\n\n### Color Application\n\n- Uses RGB color values for precise brand matching\n- Applied via python-pptx's RGBColor class\n- Maintains color fidelity across different systems\n",
+  "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/brand-guidelines/SKILL.md",
+  "repositoryUrl": "https://github.com/anthropics/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 178790,
+  "starsCheckedAt": "2026-09-28T18:57:01Z",
+  "editorial": {
+    "overview": "这项技能针对 Anthropic 的视觉规范，将颜色和字体分配到标题、正文、背景及强调元素。它的核心用途是保持同一套品牌材料的一致性，而不是为任何组织自动创造新品牌。使用者可以先提供已有文稿或演示文件，说明哪些页面需要采用这套规范，再把颜色和字体映射到现有层级。\n\n公开版本列出字体不可用时的回退选择，也给出文本与非文本形状的配色方向。实际应用时应逐项检查标题和正文的角色，而不能把所有元素机械刷成同一种颜色。不同字体的字宽会影响换行，品牌颜色落到特定背景上也需要检查可读性。本条仅归纳所链版本的规则，不把其跨系统呈现描述当作本站测试结论。如果材料属于其他品牌，应使用对方的规范或选择更通用的主题工具；能够读取一套视觉指南，不代表已经获得品牌背书，也不代表替换颜色以后内容结构自然变好。",
+    "useCases": [
+      "统一采用Anthropic规范的演示材料",
+      "检查同一品牌文稿的字体和强调色"
+    ],
+    "inputs": [
+      "目标文件与需要保留的内容结构",
+      "明确采用该品牌的需求及字体条件"
+    ],
+    "outputs": [
+      "按品牌角色调整的视觉材料",
+      "字体回退和可读性检查记录"
+    ],
+    "steps": [
+      "先确认品牌适用范围，再区分标题、正文和背景。",
+      "按所链指南映射颜色字体，保留信息层级。",
+      "检查回退字体的换行与对比度，再核对整份材料。"
+    ],
+    "limitations": [
+      "未在本站应用或渲染该规范，字体与显示效果未实测。",
+      "这是特定品牌规则，不是通用品牌生成器，也不构成品牌授权。"
+    ],
+    "reviewedAt": "2026-09-22",
+    "sourceUrl": "https://github.com/anthropics/skills/blob/34040c9c568585f6929bedeaad110ad08f079624/skills/brand-guidelines/SKILL.md"
+  }
+}

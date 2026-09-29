@@ -198,11 +198,11 @@ def normalize_system_fields(
     if not isinstance(entries, list):
         return entries
     warnings = warnings if warnings is not None else []
-    if len(entries) > 15:
-        warnings.append(f"items: {len(entries)} 条超过建议上限 15，已截取前 15 条")
-        del entries[15:]
+    if len(entries) > 24:
+        warnings.append(f"items: {len(entries)} 条超过建议上限 24，已截取前 24 条")
+        del entries[24:]
     elif len(entries) < 8:
-        warnings.append(f"items: 仅 {len(entries)} 条，低于建议 8 条；未编造条目补数")
+        warnings.append(f"items: 仅 {len(entries)} 条，低于建议 12 条；未编造条目补数")
     known = candidate_index(candidates)
     known_threads = {row["id"] for row in (threads or [])}
     seen_urls: set[str] = set()
@@ -381,14 +381,14 @@ def extract_json(content: str) -> Any:
     return payload
 
 
-def schema_prompt(date_value: str, threads: list[dict[str, str]]) -> str:
+def schema_prompt(date_value: str, threads: list[dict[str, str]], item_min: int = 12, item_max: int = 24) -> str:
     thread_ids = [row["id"] for row in threads]
     return load_prompt("arsenal-distill-v3.md") + f"""
 
 群当前主题关键词：{' / '.join(GROUP_KEYWORDS)}。
 日报线索（threads）如下：{json.dumps(threads, ensure_ascii=False)}
 
-从用户给出的候选集中，只保留对这个群今天真正有用的 8–15 条。判断标准：能提升 Agent 委托、知识库建设、销售结构化、行动判断或群体实践；纯发布通稿、重复资讯、只有热度没有方法的内容淘汰。
+从用户给出的候选集中，保留对这个群今天真正有用的 {item_min}–{item_max} 条。宁可少收也不要凑数，但候选里确实有用的别漏掉。判断标准：能提升 Agent 委托、知识库建设、销售结构化、行动判断或群体实践；纯发布通稿、重复资讯、只有热度没有方法的内容淘汰。
 
 只输出一个 JSON 对象：{{"items": [...]}}，不要 Markdown，不要解释。每个条目字段必须恰好为：
 id,title,kind,source,collected_at,by,one_line,why,for_whom,takeaways,quote,tags,threads,body_md,status
@@ -433,10 +433,13 @@ def call_deepseek(
     retries: int,
     timeout: float,
     judge_feedback: str = "",
+    _depth: int = 0,
+    item_min: int = 12,
+    item_max: int = 24,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     api_url = os.environ.get("DEEPSEEK_API_URL", "https://api.deepseek.com/chat/completions")
     model = os.environ.get("DEEPSEEK_MODEL", "deepseek-chat")
-    system = schema_prompt(date_value, threads)
+    system = schema_prompt(date_value, threads, item_min, item_max)
     user = candidate_payload(candidates)
     if judge_feedback:
         user += "\n\n上一次质量 judge 的具体反馈（本次必须修正）：\n" + judge_feedback
@@ -452,8 +455,10 @@ def call_deepseek(
         except ValueError as exc:
             raise SystemExit("DEEPSEEK_SEED 必须是整数") from exc
     last_error = "未调用"
+    truncated = False
     for attempt in range(1, retries + 1):
         content = ""
+        finish_reason = None
         try:
             response = requests.post(
                 api_url,
@@ -473,6 +478,7 @@ def call_deepseek(
             usage = payload.get("usage", {}) if isinstance(payload, dict) else {}
             for key in TOKEN_USAGE:
                 TOKEN_USAGE[key] += int(usage.get(key, 0) or 0)
+            finish_reason = payload["choices"][0].get("finish_reason") if isinstance(payload, dict) else None
             content = payload["choices"][0]["message"]["content"]
             normalization_warnings: list[str] = []
             entries = normalize_system_fields(
@@ -497,18 +503,62 @@ def call_deepseek(
             last_error = "；".join(exc.errors[:12])
         except (requests.RequestException, KeyError, IndexError, TypeError, json.JSONDecodeError) as exc:
             last_error = str(exc)
-        print(f"[retry {attempt}/{retries}] DeepSeek 输出失败：{last_error}", file=sys.stderr)
+            if finish_reason == "length":
+                truncated = True
+        print(
+            f"[retry {attempt}/{retries}] DeepSeek 输出失败：{last_error}"
+            f"（finish_reason={finish_reason}, chars={len(content)}）",
+            file=sys.stderr,
+        )
         if content:
             messages.append({"role": "assistant", "content": content})
+            retry_hint = ""
+            if finish_reason == "length":
+                retry_hint = (
+                    "上一版输出被 max_tokens 截断：本次直接按条数下限写，"
+                    "one_line/why/takeaways/body_md 都压缩到最短，保证 JSON 完整闭合。"
+                )
             messages.append(
                 {
                     "role": "user",
                     "content": (
                         "请在你上一版 JSON 的基础上只修复下列硬错误，保留已经正确的选择与判断；"
-                        f"然后重新输出完整 JSON 对象。具体错误：{last_error}"
+                        f"然后重新输出完整 JSON 对象。具体错误：{last_error}{retry_hint}"
                     ),
                 }
             )
+    if truncated and _depth < 3 and len(candidates) >= 4:
+        # finish_reason=length 直证输出被 max_tokens 截断：同候选集重试只会再截断，
+        # 确定性修法是把候选二分各自蒸馏后合并，再按完整候选集白名单校验。
+        # 每层候选减半、请求条数也减半，输出长度随层数收敛；最多递归 3 层。
+        mid = len(candidates) // 2
+        half_min = max(4, item_min // 2)
+        half_max = max(half_min + 2, item_max // 2)
+        print(
+            f"[fallback] finish_reason=length 截断，候选二分蒸馏：{mid}+{len(candidates) - mid}"
+            f"（depth={_depth + 1}，条数 {half_min}–{half_max}）",
+            file=sys.stderr,
+        )
+        first, warnings_a = call_deepseek(
+            candidates[:mid], threads, date_value, api_key, retries, timeout,
+            judge_feedback, _depth=_depth + 1, item_min=half_min, item_max=half_max,
+        )
+        second, warnings_b = call_deepseek(
+            candidates[mid:], threads, date_value, api_key, retries, timeout,
+            judge_feedback, _depth=_depth + 1, item_min=half_min, item_max=half_max,
+        )
+        merged: dict[str, dict[str, Any]] = {}
+        for entry in first + second:
+            merged[canonical_url(entry.get("source", {}).get("url", "")) or f"_idx{len(merged)}"] = entry
+        entries = validate_entries(
+            list(merged.values()),
+            candidates,
+            threads,
+            date_value,
+            enforce_candidate_urls=True,
+            expected_by=REAL_BY,
+        )
+        return entries, warnings_a + warnings_b
     raise SystemExit(f"DeepSeek 连续 {retries} 次失败；保留已有产物不覆盖。最后错误：{last_error}")
 
 

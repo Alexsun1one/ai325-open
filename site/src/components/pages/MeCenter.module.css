@@ -1,0 +1,14 @@
+.group{margin:1rem 0 .1rem;padding:0 .6rem;font:600 .68rem var(--font-sans);letter-spacing:.08em;color:var(--color-ink-3)}
+div:first-child>.group{margin-top:0}
+.fold{display:flex;width:100%;min-height:44px;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0;border:0;background:none;color:var(--color-ink);text-align:left;cursor:pointer}
+.fold:focus-visible{outline:2px solid var(--color-blue-text);outline-offset:2px}
+.fold:hover .foldTitle{color:var(--color-blue-text)}
+.foldTitle{display:block;font:700 1.05rem var(--font-serif)}
+.foldHint{display:block;margin-top:.15rem;font:400 .78rem var(--font-sans);color:var(--color-ink-3)}
+.chev{flex-shrink:0;color:var(--color-ink-3);transition:transform .2s}
+.chev[data-open="true"]{transform:rotate(90deg)}
+.act{display:inline-flex;min-height:44px;align-items:center;padding:0 .25rem;border:0;background:none;font:600 .8125rem var(--font-sans);color:var(--color-blue-text);cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.act:focus-visible{outline:2px solid var(--color-blue-text);outline-offset:2px}
+.pill{display:inline-flex;align-items:center;border:1px solid var(--color-rule);border-radius:4px;padding:1px .5rem;font:600 .75rem var(--font-sans);color:var(--color-ink-2)}
+.pillOn{border-color:var(--color-blue-wash-2);background:var(--color-blue-wash);color:var(--color-blue-text)}
+@media(prefers-reduced-motion:reduce){.chev{transition:none}}

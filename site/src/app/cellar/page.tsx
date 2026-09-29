@@ -17,7 +17,7 @@ export default function CellarPage() {
           { k: "一坛", v: "一段话题原话", num: false },
           { k: "可见性", v: "群友可下窖", num: false },
           { k: "蒸馏", v: "在日报，不在这", num: false },
-          { k: "2026-08-23", v: "先装这一天", num: true },
+          { k: "按日装坛", v: "最新一天默认开窖", num: false },
         ]}
       />
       <section className="pb-16">

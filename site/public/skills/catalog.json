@@ -1,0 +1,2624 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-29T10:28:15Z",
+  "items": [
+    {
+      "id": "everyday-skills-busy-town",
+      "name": "busy-town",
+      "description": "把流程、分工与系统协作画成手绘风忙碌小镇场景插画。",
+      "category": "视觉设计",
+      "tags": [
+        "自有",
+        "视觉设计"
+      ],
+      "author": "everyday-skills",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/everyday-skills.zip",
+      "packageBytes": 27284152,
+      "sha256": "1530dda5ee4213abbb9c908213bd24eb609e0e8f02c6bbaea0efeb1a7657f6f7",
+      "status": "可分发"
+    },
+    {
+      "id": "everyday-skills-cover-pop",
+      "name": "cover-pop",
+      "description": "将主题变成可读、能促成点击的社交媒体封面图。",
+      "category": "内容创作",
+      "tags": [
+        "自有",
+        "内容创作"
+      ],
+      "author": "everyday-skills",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/everyday-skills.zip",
+      "packageBytes": 27284152,
+      "sha256": "1530dda5ee4213abbb9c908213bd24eb609e0e8f02c6bbaea0efeb1a7657f6f7",
+      "status": "可分发"
+    },
+    {
+      "id": "everyday-skills-design-practice",
+      "name": "design-practice",
+      "description": "完整产品设计流程：意图访谈、风格方向、页面实现与渲染验收。",
+      "category": "视觉设计",
+      "tags": [
+        "自有",
+        "视觉设计"
+      ],
+      "author": "everyday-skills",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/everyday-skills.zip",
+      "packageBytes": 27284152,
+      "sha256": "1530dda5ee4213abbb9c908213bd24eb609e0e8f02c6bbaea0efeb1a7657f6f7",
+      "status": "可分发"
+    },
+    {
+      "id": "everyday-skills-gif-stickers",
+      "name": "gif-stickers",
+      "description": "规划并组装可发送、无缝循环的 GIF 动态表情。",
+      "category": "视频动画",
+      "tags": [
+        "自有",
+        "视频动画"
+      ],
+      "author": "everyday-skills",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/everyday-skills.zip",
+      "packageBytes": 27284152,
+      "sha256": "1530dda5ee4213abbb9c908213bd24eb609e0e8f02c6bbaea0efeb1a7657f6f7",
+      "status": "可分发"
+    },
+    {
+      "id": "everyday-skills-lego-town",
+      "name": "lego-town",
+      "description": "把结构、系统与文档组装成积木式场景、说明书与爆炸图。",
+      "category": "视觉设计",
+      "tags": [
+        "自有",
+        "视觉设计"
+      ],
+      "author": "everyday-skills",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/everyday-skills.zip",
+      "packageBytes": 27284152,
+      "sha256": "1530dda5ee4213abbb9c908213bd24eb609e0e8f02c6bbaea0efeb1a7657f6f7",
+      "status": "可分发"
+    },
+    {
+      "id": "everyday-skills-master-styles",
+      "name": "master-styles",
+      "description": "为视觉内容选择可迁移的版式、配色与质感规则。",
+      "category": "视觉设计",
+      "tags": [
+        "自有",
+        "视觉设计"
+      ],
+      "author": "everyday-skills",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/everyday-skills.zip",
+      "packageBytes": 27284152,
+      "sha256": "1530dda5ee4213abbb9c908213bd24eb609e0e8f02c6bbaea0efeb1a7657f6f7",
+      "status": "可分发"
+    },
+    {
+      "id": "everyday-skills-ppt-craft",
+      "name": "ppt-craft",
+      "description": "以 HTML 优先的工作流制作、改版与精修演示文稿。",
+      "category": "内容创作",
+      "tags": [
+        "自有",
+        "内容创作"
+      ],
+      "author": "everyday-skills",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/everyday-skills.zip",
+      "packageBytes": 27284152,
+      "sha256": "1530dda5ee4213abbb9c908213bd24eb609e0e8f02c6bbaea0efeb1a7657f6f7",
+      "status": "可分发"
+    },
+    {
+      "id": "everyday-skills-ppt-master",
+      "name": "ppt-master",
+      "description": "多角色协作把文档生成可编辑 PPTX，含版式模板与导出校验。",
+      "category": "内容创作",
+      "tags": [
+        "自有",
+        "内容创作"
+      ],
+      "author": "everyday-skills",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；包体过大未分发"
+    },
+    {
+      "id": "everyday-skills-quote-cards",
+      "name": "quote-cards",
+      "description": "把引语做成信息清楚、适合分享的视觉卡片。",
+      "category": "视觉设计",
+      "tags": [
+        "自有",
+        "视觉设计"
+      ],
+      "author": "everyday-skills",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/everyday-skills.zip",
+      "packageBytes": 27284152,
+      "sha256": "1530dda5ee4213abbb9c908213bd24eb609e0e8f02c6bbaea0efeb1a7657f6f7",
+      "status": "可分发"
+    },
+    {
+      "id": "everyday-skills-rank-cards",
+      "name": "rank-cards",
+      "description": "把排行和比较信息组织成可读的视觉卡片。",
+      "category": "视觉设计",
+      "tags": [
+        "自有",
+        "视觉设计"
+      ],
+      "author": "everyday-skills",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/everyday-skills.zip",
+      "packageBytes": 27284152,
+      "sha256": "1530dda5ee4213abbb9c908213bd24eb609e0e8f02c6bbaea0efeb1a7657f6f7",
+      "status": "可分发"
+    },
+    {
+      "id": "everyday-skills-sticker-set",
+      "name": "sticker-set",
+      "description": "为聊天与社交平台策划统一风格的静态贴纸套装。",
+      "category": "视觉设计",
+      "tags": [
+        "自有",
+        "视觉设计"
+      ],
+      "author": "everyday-skills",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/everyday-skills.zip",
+      "packageBytes": 27284152,
+      "sha256": "1530dda5ee4213abbb9c908213bd24eb609e0e8f02c6bbaea0efeb1a7657f6f7",
+      "status": "可分发"
+    },
+    {
+      "id": "skillsdesign-agent-evidence-illustrations",
+      "name": "agent-evidence-illustrations",
+      "description": "将智能体工作证据转成可核验的叙事插图方案。",
+      "category": "视觉设计",
+      "tags": [
+        "自有",
+        "视觉设计"
+      ],
+      "author": "skillsdesign",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/skillsdesign.zip",
+      "packageBytes": 34589615,
+      "sha256": "2ffc6b36c4266a261c03332550ef1aa0a86c080ba038f1fa525f6fdb34b3a006",
+      "status": "可分发"
+    },
+    {
+      "id": "skillsdesign-article-visual-grammar",
+      "name": "article-visual-grammar",
+      "description": "把文章论点拆成清晰、可生成的图解与插图结构。",
+      "category": "视觉设计",
+      "tags": [
+        "自有",
+        "视觉设计"
+      ],
+      "author": "skillsdesign",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/skillsdesign.zip",
+      "packageBytes": 34589615,
+      "sha256": "2ffc6b36c4266a261c03332550ef1aa0a86c080ba038f1fa525f6fdb34b3a006",
+      "status": "可分发"
+    },
+    {
+      "id": "skillsdesign-paper-operators",
+      "name": "paper-operators",
+      "description": "用折纸行动角色表达文章中的机制、关系与张力。",
+      "category": "视觉设计",
+      "tags": [
+        "自有",
+        "视觉设计"
+      ],
+      "author": "skillsdesign",
+      "license": "MIT",
+      "sourceUrl": null,
+      "downloadUrl": "/skills/packages/skillsdesign.zip",
+      "packageBytes": 34589615,
+      "sha256": "2ffc6b36c4266a261c03332550ef1aa0a86c080ba038f1fa525f6fdb34b3a006",
+      "status": "可分发"
+    },
+    {
+      "id": "mengto-3d-falling-leaves",
+      "name": "3d-falling-leaves",
+      "description": "Build recognizable falling leaves in world space using instanced geometry, independent tumble, coupled sideways drift, shared wind, scene occlusion, and camera-aware recycling. Use for 3D autumn leaves or drifting foliage in Three.js and similar scenes; use falling-leaves for a 2D canvas overlay.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/3d/3d-falling-leaves",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-3d-four-seasons",
+      "name": "3d-four-seasons",
+      "description": "Add coordinated spring, summer, fall, and winter states to a 3D scene, blending foliage, sunlight, sky, ground materials, snow, and particles without rebuilding the world. Use for seasonal controls, architectural walkthroughs, and outdoor scenes with four-season transitions.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/3d/3d-four-seasons",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-3d-high-poly-models",
+      "name": "3d-high-poly-models",
+      "description": "Create or integrate highly detailed 3D models with smooth silhouettes, shaped surfaces, believable bevels, and close-up geometry, then prepare suitable runtime LODs and loading. Use when a user requests high polygon counts, ultra-realistic models, detailed architectural assets, or removal of visibly faceted geometry.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/3d/3d-high-poly-models",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-3d-high-resolution-textures",
+      "name": "3d-high-resolution-textures",
+      "description": "Build sharp, physically coherent high-resolution materials for 3D rendering with appropriate PBR maps, texel density, UV direction, mipmaps, anisotropic filtering, and progressive asset delivery. Use for detailed wood, stone, fabric, foliage, and architectural close-ups without excessive download or GPU memory costs.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/3d/3d-high-resolution-textures",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-3d-retina-resolution",
+      "name": "3d-retina-resolution",
+      "description": "Render a 3D canvas sharply on Retina and HiDPI displays, including explicit 200 percent resolution, synchronized renderer and post-processing sizes, correct pointer coordinates, and measured quality fallbacks. Use for blurry WebGL output, 2x rendering, high-resolution previews, and display-density changes.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/3d/3d-retina-resolution",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-3d-sky-background",
+      "name": "3d-sky-background",
+      "description": "Create a camera-correct sky background for a 3D scene with a procedural atmosphere or panorama, horizon haze, aligned sunlight, and coherent environment lighting. Use for architectural skies, outdoor 3D backgrounds, golden hour, and day-to-night sky transitions.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/3d/3d-sky-background",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-3d-sky-rays",
+      "name": "3d-sky-rays",
+      "description": "Add sun shafts and crepuscular rays to a Three.js or equivalent 3D scene, using scene occlusion, a projected sun position, controlled foreground spill, and scalable post-processing. Use for rays of light from the sky, sunlight through trees or roofs, and golden-hour architectural scenes.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/3d/3d-sky-rays",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-3d-virtual-tour",
+      "name": "3d-virtual-tour",
+      "description": "Build guided and interactive virtual tours through a 3D environment with authored camera paths, room and floor-plan navigation, orbit inspection, smooth mode handoffs, and progressive loading. Use for architectural walkthroughs, real-estate tours, museums, showrooms, and explorable spaces built with Three.js or a similar renderer.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/3d/3d-virtual-tour",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-add-mouse-driven-orbit",
+      "name": "add-mouse-driven-orbit",
+      "description": "Add restrained mouse-driven orbit and parallax depth to a Three.js hero by damping one pointer target and splitting it across camera translation, look-at, and small object rotations. Use for passive cinematic 3D heroes, pointer-responsive scenes, organic model parallax, and interactive depth where OrbitControls would feel like a product viewer.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/add-mouse-driven-orbit",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-add-shader-cursor-trail",
+      "name": "add-shader-cursor-trail",
+      "description": "Add the Shaders WebGPU mouse effect used for the Tidal Commons hero: a white twinkling halftone cursor trail driven by ChromaFlow, masked through a DotGrid, finished with chromatic ripples and film grain, and protected by static, touch, accessibility, SSR, and performance fallbacks. Use when a user asks for this shader mouse effect, a halftone cursor trail, an interactive WebGPU hero/contact background, or a reusable cursor-following shader layer in React, Next.js, Vue, Svelte, Solid, or plain web projects.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/add-shader-cursor-trail",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-agency-grid-layout-minimal",
+      "name": "agency-grid-layout-minimal",
+      "description": "Create a minimal agency design system with a disciplined editorial grid, oversized typography, quiet uppercase utility labels, restrained image blocks, and subtle structural detail.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/agency-grid-layout-minimal",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-ambient-section-particles",
+      "name": "ambient-section-particles",
+      "description": "Add a restrained particle atmosphere inside one section with configurable shapes, density, gravity, wind, sway, rotation, recycling or settling, pointer disturbance, visibility pausing, responsive limits, and reduced-motion fallbacks. Use for petals, leaves, snow, sparks, confetti, dots, paper, icons, or brand fragments that support a section's mood without obscuring content.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/ambient-section-particles",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-animation-on-scroll",
+      "name": "animation-on-scroll",
+      "description": "Create an on-scroll animation trigger using IntersectionObserver with Tailwind-friendly animation classes and keyframes. Use when asked for scroll-reveal, animate-on-scroll, or sequencing element animations when they enter the viewport.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/animation-on-scroll",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-animation-systems",
+      "name": "animation-systems",
+      "description": "Use when designing or implementing product-grade web motion like Stripe, Linear, Apple, and Vercel. Covers motion principles, easing/duration defaults, choreography patterns, scroll/hover interactions, performance, accessibility (reduced motion), and implementation guidance.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/animation-systems",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-article-prompts-to-skills",
+      "name": "article-prompts-to-skills",
+      "description": "Convert an article, tutorial, or prompt pack into focused reusable AgentSkills, one independent capability per skill, with portable instructions, example prompts, working demos, preview screenshots, validation, gallery updates, and a narrow commit. Use when the user asks to turn an article's prompts, tutorial sections, design patterns, interactions, or workflow ideas into complete skills rather than leaving them as prose.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/article-prompts-to-skills",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-atmosphere-background",
+      "name": "atmosphere-background",
+      "description": "Create a dark atmospheric background with drifting vertical light folds, screen-blended glow, and a concentrated luminous corner or lower-edge bloom.",
+      "category": "其他",
+      "tags": [
+        "MengTo",
+        "其他"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/atmosphere-background",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-audit-ai-design-slop",
+      "name": "audit-ai-design-slop",
+      "description": "Audit websites, apps, screenshots, mockups, and design code for harmful AI-design clichés, generic generated defaults, and established UI defects. Use when the user wants evidence-backed design feedback, an anti-slop review, or a removal-first cleanup plan without a speculative redesign.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/ui/audit-ai-design-slop",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-audit-reference-originality",
+      "name": "audit-reference-originality",
+      "description": "Audit a website or digital experience against its supplied source references for originality and plagiarism risk. Use when Codex must compare current or historical site output with reference pages, capture packs, screenshots, copy, brands, numbers, images, assets, videos, layouts, motion, or code; raise evidence-backed red flags; distinguish common visual grammar from distinctive copying; and propose concrete fixes without making unsupported legal claims.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/audit-reference-originality",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-audit-verify-explain-grade-5",
+      "name": "audit-verify-explain-grade-5",
+      "description": "Audit work, verify claims with concrete evidence, and explain the result in simple grade-5 language. Use when the user asks to review, audit, check, verify, explain a change, explain a fix, summarize test results, validate whether something works, or translate technical findings into plain language for non-technical readers.",
+      "category": "开发工具",
+      "tags": [
+        "MengTo",
+        "开发工具"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/audit-verify-explain-grade-5",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-aura-asset-images",
+      "name": "aura-asset-images",
+      "description": "Use when you need high-quality stock-style images from Aura Assets (aura.build/assets) similar to Unsplash for design mockups and marketing: backgrounds, abstract wallpapers, architecture, portraits, and headshots. Includes a workflow for searching by tag on aura.build/assets and returns 5 real image URLs per category plus practical guidance for using different resolutions and aspect ratios.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/media/aura-asset-images",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-author-game-levels",
+      "name": "author-game-levels",
+      "description": "Author or revise readable, flat-world Three.js game levels. Use for movement and camera routes, collision and navigation, encounter zones, landmarks, objectives, pickups, motivated lighting, visibility, deterministic level data, or desktop and mobile playthrough verification.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/author-game-levels",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-background-grid-webgl",
+      "name": "background-grid-webgl",
+      "description": "Create a perspective WebGL background grid with fading lines, subtle particle haze, slow forward drift, and gentle camera parallax.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/background-grid-webgl",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-beam-glow-states",
+      "name": "beam-glow-states",
+      "description": "Create React loading, processing, selected, current, focus, and pressed states with the border-beam package's animated edge glow. Use when a card, button, input, tab, option, task panel, or agent surface needs a restrained traveling or breathing beam; includes installation, imports, prop selection, state wiring, reduced motion, accessibility, and performance and layout guardrails.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/beam-glow-states",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-beautiful-shadows",
+      "name": "beautiful-shadows",
+      "description": "Apply exact Tailwind arbitrary shadow utilities for polished, layered neutral elevation. Use when compact cards, controls, panels, popovers, hero media, feature callouts, or modal-like containers need refined shadows without default Tailwind shadow scales or colored tinting.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/beautiful-shadows",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-blue-cloudy-clean-modern",
+      "name": "blue-cloudy-clean-modern",
+      "description": "Create a clean modern design system with a luminous blue sky atmosphere, soft drifting cloud light, minimal white framing, and serene premium typography.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/blue-cloudy-clean-modern",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-blue-laser-clean-glass-layout",
+      "name": "blue-laser-clean-glass-layout",
+      "description": "Create a clean dark glass layout system with a thin blue laser atmosphere, frosted premium shells, and polished dashboard structure.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/blue-laser-clean-glass-layout",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-book-serif-index",
+      "name": "book-serif-index",
+      "description": "Create an archival book-reader design system with serif-led pages, mono index navigation, aged paper surfaces, margin notes, and a premium catalog frame.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/book-serif-index",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-bright-green-tech-system-webgl",
+      "name": "bright-green-tech-system-webgl",
+      "description": "Create a bright-green technical design system with structured split layouts, hard-framed dark surfaces, mono utility labels, and a prominent WebGL visualization zone.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/bright-green-tech-system-webgl",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-browser-video-recording",
+      "name": "browser-video-recording",
+      "description": "Create polished 60 fps 4:3 4K browser screen-recording style videos from Codex in-app browser captures, with browser-only crop, natural macOS cursor styling, deliberate click choreography, zoom-follow framing, ffprobe/thumbnail verification, and optional native recording compatibility checks. Use when the user asks to record or re-record browser actions, show cursor clicks and zooms, make Dribbble/UI inspiration or product demo recordings, or asks whether Codex, Playwright, or an MCP can produce a natural browser demo video.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/browser-video-recording",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-awwwards-quality-sites",
+      "name": "build-awwwards-quality-sites",
+      "description": "Art-direct and implement distinctive, motion-rich marketing, editorial, portfolio, and landing websites with original reference-inspired imagery, standout heroes, GSAP choreography, one smooth-scroll engine, optional Three.js shaders, honest icon and logo sourcing, photo avatars, accessibility, and performance safeguards. Use when a user asks for an Awwwards-quality, premium, cinematic, interactive, high-concept, or motion-led website, or explicitly requests this visual and motion system.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/build-awwwards-quality-sites",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-daily-inspiration-sites",
+      "name": "build-daily-inspiration-sites",
+      "description": "Turn a completed daily UI inspiration capture into exactly five original landing-page builds, one per separate Codex task, using Sites. Use when the user asks to turn the daily inspiration references, a five-item UI prompt pack, or a dated `*-ui-inspiration-capture` article into distinct HTML landing pages while changing the source brands, names, copy, people, numbers, pricing, claims, and imagery.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/build-daily-inspiration-sites",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-game-audio-feedback",
+      "name": "build-game-audio-feedback",
+      "description": "Design or implement responsive audio feedback for a Three.js or web game. Use for action sounds, combat layers, music states, spatial audio, mix priorities, mute controls, accessibility, mobile audio unlock, and audio performance.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-game-audio-feedback",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-game-camera-controls",
+      "name": "build-game-camera-controls",
+      "description": "Implement or tune Three.js game cameras. Use for isometric framing, follow behavior, orbit/zoom limits, occlusion, lock-on, camera shake, touch camera controls, and camera regression tests.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-game-camera-controls",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-game-changelog",
+      "name": "build-game-changelog",
+      "description": "Design, implement, backfill, audit, and release in-game changelogs with contiguous versioning, deployment provenance, menu-state navigation, accessible toggle, close, and Escape behavior, and responsive release-ledger UI. Use when Codex needs to add or revise a changelog or version screen in a game, reconstruct release history from deployments and Git, define version-bump rules, keep displayed versions synchronized with live builds, or test changelog mechanics across desktop and mobile.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-game-changelog",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-game-inventory",
+      "name": "build-game-inventory",
+      "description": "Build or repair game inventory, loot, equipment, tooltips, drag-and-drop, persistence, and progression systems. Use for item schemas, pickup flows, stack rules, equipment slots, atomic swaps, save migration, and no-loss regression testing.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-game-inventory",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-game-map-editor",
+      "name": "build-game-map-editor",
+      "description": "Build, extend, or audit production-linked browser map editors for Three.js and isometric games. Use when Codex needs to create a private director view, derive a versioned editor document from authored placements, add outliner, layer, selection, drag, snap, inspector, or camera controls, expose enemy aggro, leash, or patrol overlays, implement local draft import, export, undo, and reset, secure an editor route with IP and password sessions, or validate and release a map editor without mutating live gameplay data.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-game-map-editor",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-game-monster-system",
+      "name": "build-game-monster-system",
+      "description": "Build, integrate, audit, or refactor rigged monsters for Three.js and web action games. Use for monster asset contracts, procedural or imported creature rigs, semantic joints and sockets, hurtboxes and attack volumes, combat animation states, enemy-runtime adapters, LODs, deterministic review fixtures, and validating that every monster follows one shared system.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-game-monster-system",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-hybrid-game-assets",
+      "name": "build-hybrid-game-assets",
+      "description": "Plan, create, integrate, or audit a hybrid asset pipeline for a Three.js or web game. Use when choosing among imported meshes, procedural 3D geometry, AI-generated reference art, 2D UI media, sprites, VFX, and performance-ready runtime asset delivery.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-hybrid-game-assets",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-interactive-particle-trail",
+      "name": "build-interactive-particle-trail",
+      "description": "Build a cursor or touch particle interaction that emits by distance along the traveled segment into a recycled GPU point pool, with optional keyboard-triggered bursts. Use for interactive particle trails, pollen lifted from a surface, dust disturbed by a pointer, hover particle bursts, and discrete motes whose spacing must stay consistent at different gesture speeds.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/build-interactive-particle-trail",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-isometric-arpg",
+      "name": "build-isometric-arpg",
+      "description": "Build or extend a playable isometric action RPG in Three.js, React, or similar web technology. Use for game-loop architecture, camera and movement, zones, combat integration, content data, progression, saves, or production-ready vertical slices.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-isometric-arpg",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-mobile-threejs-games",
+      "name": "build-mobile-threejs-games",
+      "description": "Build, tune, or test a Three.js game for mobile web. Use for touch movement, action controls, target selection, touch inventory, safe areas, portrait/landscape layouts, responsive HUD, battery/performance budgets, and real mobile browser QA.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-mobile-threejs-games",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-rigged-game-assets",
+      "name": "build-rigged-game-assets",
+      "description": "Create, integrate, or audit production-ready rigged 3D characters and monsters with a main model, skeleton, animation library, sockets, collision contracts, separate character equipment, optimized runtime files, catalog media, and an interactive moveset inspector. Use when generating or importing FBX/GLB game actors; defining character-versus-monster asset requirements; separating swords, shields, helmets, armor, or stowed gear; adding idle, walk, run, attack, hit, dodge, block, cast, or death clips; wiring an asset into gameplay; or adding action and equipment controls plus deterministic tests to a game asset catalog.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-rigged-game-assets",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-threejs-enemy-systems",
+      "name": "build-threejs-enemy-systems",
+      "description": "Build or refactor reusable, data-driven enemy archetype and moveset systems for Three.js action games. Use for enemy content schemas, model and rig conventions, combat move timing and contact contracts, runtime state boundaries, placeholder fallbacks, deterministic fixtures, or production playthrough validation.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-threejs-enemy-systems",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-threejs-scroll-worlds",
+      "name": "build-threejs-scroll-worlds",
+      "description": "Build rich, scroll-controlled real-time Three.js experiences as one persistent 3D world whose camera, lighting, atmosphere, materials, objects, DOM story, and interactions evolve across authored chapters. Use for 3D scrollytelling, scroll-driven WebGL worlds, camera journeys, interactive portfolios, product stories, exhibitions, explainers, game or film microsites, spatial narratives, and multi-scene websites where native scroll should travel through one continuous place. Not limited to landing pages.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/build-threejs-scroll-worlds",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-vesperfall-review-assets",
+      "name": "build-vesperfall-review-assets",
+      "description": "Build truthful Vesperfall asset-library review pairs from transparent PNG references and live Three.js, FBX, or img2threejs models. Use when adding a character, enemy, prop, or equipment asset to the Vesperfall catalog; creating a card-PNG plus inspector-model treatment; exposing an isolated model or moveset route; or standardizing provenance, grounding, tests, and Codex-browser validation for game art review.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/build-vesperfall-review-assets",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-build-wireframe-scan-reveal",
+      "name": "build-wireframe-scan-reveal",
+      "description": "Reveal Three.js geometry with an expanding world-space scan whose wire cage leads the solid surface, then burns away. Use for wireframe scanning, radial mesh reveals, survey pulses, holographic assembly, topology intros, and 3D model entrances where a plain opacity wipe does not explain the form.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/build-wireframe-scan-reveal",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-cinematic-gsap-lenis-motion-system",
+      "name": "cinematic-gsap-lenis-motion-system",
+      "description": "Create premium cinematic web motion systems with GSAP, ScrollTrigger, and Lenis. Use for luxury editorial websites, creative studio portfolios, Awwwards-style interactions, smooth scroll reveals, staggered text, parallax, pinned sections, magnetic hover states, custom cursors, and mouse-reactive layered movement.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/cinematic-gsap-lenis-motion-system",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-cinematic-scroll-storytelling",
+      "name": "cinematic-scroll-storytelling",
+      "description": "Create cinematic scroll-driven landing pages with Lenis smooth scrolling, GSAP ScrollTrigger, scroll-linked progression, staggered text reveals, sticky card stacks, parallax backgrounds, scroll-scrubbed transitions, footer reveals, and immersive preloaders. Use when analyzing or building premium editorial scroll experiences, sticky project stacks, kinetic typography, or section-by-section storytelling.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/cinematic-scroll-storytelling",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-clean-minimal-beige-light-mode",
+      "name": "clean-minimal-beige-light-mode",
+      "description": "Create a clean minimal beige light-mode design system with warm neutral shells, quiet process grids, restrained accent color, and elegant low-contrast structure.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/clean-minimal-beige-light-mode",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-cobejs",
+      "name": "cobejs",
+      "description": "Use when adding a lightweight interactive globe with cobe (canvas setup, markers, interaction, performance, integration with React/Next.js).",
+      "category": "开发工具",
+      "tags": [
+        "MengTo",
+        "开发工具"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/cobejs",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-company-logos",
+      "name": "company-logos",
+      "description": "Use Iconify Simple Icons logos (64x64) instead of text logos.",
+      "category": "其他",
+      "tags": [
+        "MengTo",
+        "其他"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/company-logos",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-container-lines",
+      "name": "container-lines",
+      "description": "Add vertical container-size guide lines with mini corner squares for precise, structured web layouts. Use when asked for container lines, measured layout guides, vertical boundary lines, editorial grid markers, or small corner-square frame details.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/container-lines",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-corner-diagonals",
+      "name": "corner-diagonals",
+      "description": "Apply diagonal-cut corners and chamfered edges to buttons, cards, panels, and container shells. Use when a design needs precise geometric framing, sci-fi UI surfaces, clipped-corner controls, or engineered sharp containers instead of rounded pills or plain rectangles.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/corner-diagonals",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-corner-lasers",
+      "name": "corner-lasers",
+      "description": "Create a corner-anchored laser composition with thin beams, a bright emitter node, bloom, and atmospheric glow or fog.",
+      "category": "其他",
+      "tags": [
+        "MengTo",
+        "其他"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/corner-lasers",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-create-game-vfx",
+      "name": "create-game-vfx",
+      "description": "Create readable, performance-safe Three.js game visual effects. Use for attacks, impacts, damage feedback, status effects, spell trails, particles, shaders, telegraphs, quality tiers, and reduced-motion alternatives.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/create-game-vfx",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-css-alpha-masking",
+      "name": "css-alpha-masking",
+      "description": "Apply CSS alpha masking with linear-gradient for horizontal or vertical edge fades (mask-image and -webkit-mask-image). Use when asked for alpha masks, fade edges, or CSS mask gradients.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/css-alpha-masking",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-css-border-gradient",
+      "name": "css-border-gradient",
+      "description": "Apply subtle gradient-border treatments for premium web surfaces. Use when cards, pricing panels, nav bars, modals, buttons, or hero surfaces need a refined edge highlight without a loud glow.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/css-border-gradient",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-daily-ui-inspiration-capture",
+      "name": "daily-ui-inspiration-capture",
+      "description": "Create a recurring daily UI inspiration capture. Use when the user asks to run, refresh, package, or validate dated UI inspiration bundles, especially for `articles/YYYY-MM-DD-ui-inspiration-capture/` outputs, Framer/Dribbble landing-page inspiration, motion-study screenshots/videos, AI-builder prompts, duplicate checking, or converting a project runbook into repeatable workflow.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/daily-ui-inspiration-capture",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-dark-blue-contrasting-clean",
+      "name": "dark-blue-contrasting-clean",
+      "description": "Create a dark-blue clean design system with strong contrast, cobalt gradient feature blocks, crisp framed structure, and restrained premium glow.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/dark-blue-contrasting-clean",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-dark-glass-clean-layout",
+      "name": "dark-glass-clean-layout",
+      "description": "Create a dark glass layout system with frosted premium shells, clean multi-column workspace structure, floating data cards, and restrained atmospheric depth.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/dark-glass-clean-layout",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-design-action-combat",
+      "name": "design-action-combat",
+      "description": "Design, implement, tune, or test readable tactical action combat for web games. Use for attack timing, guard and dodge windows, hit contact, posture, lock-on, weapons, boss phases, combat feedback, and deterministic combat tests.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/design-action-combat",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-design-first-ui-prompting",
+      "name": "design-first-ui-prompting",
+      "description": "Use when you need design-first, spec-driven, skimmable prompts for UI generation. Covers prompt structure, constraints, variations, typography/spacing rules, and iteration workflow for consistent UI outputs.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/ui/design-first-ui-prompting",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-design-game-encounters",
+      "name": "design-game-encounters",
+      "description": "Design, implement, tune, or test Three.js action-game encounters. Use for arena layout, enemy composition, spawn pacing, objectives, boss phases, reward cadence, encounter fixtures, and difficulty validation.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/design-game-encounters",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-dither-background",
+      "name": "dither-background",
+      "description": "Create a dark monochrome procedural background with enlarged square pixels and visible Bayer-style ordered dithering. Use when a page needs an atmospheric near-black dither field, broad organic waves or cloud masses, and restrained gray-white highlights behind framed UI, hero content, or data overlays.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/dither-background",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-dither-laser-dark-mode",
+      "name": "dither-laser-dark-mode",
+      "description": "Create a dark premium design system that combines near-black surfaces, subtle ordered-dither texture, and a thin accent-colored laser atmosphere.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/dither-laser-dark-mode",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-documentary-brutalist-agency",
+      "name": "documentary-brutalist-agency",
+      "description": "Create or redesign creative agency, production studio, architecture, culture, and portfolio websites with billboard typography, hard black-and-white chapters, exposed grids, documentary imagery, irregular collages, restrained parallax, brutalist navigation, and accessible FAQ controls.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/documentary-brutalist-agency",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-editorial-portfolio-chapters",
+      "name": "editorial-portfolio-chapters",
+      "description": "Create or redesign creative-studio, agency, photographer, artist, and portfolio websites where project work leads the story. Use for dark editorial shells, full-bleed campaign media, color-coded case-study chapters, oversized service typography, restrained project reveals, and a decisive contact finale.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/editorial-portfolio-chapters",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-editorial-service-booking",
+      "name": "editorial-service-booking",
+      "description": "Create or redesign appointment-based service websites for salons, barbers, spas, wellness studios, clinics, and hospitality brands. Use for warm editorial layouts, serif-led identity, documentary portrait crops, calm treatment selectors, location-aware booking, and operational states that remain elegant and trustworthy.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/editorial-service-booking",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-editorial-tech",
+      "name": "editorial-tech",
+      "description": "Blend editorial magazine composition with precision product-tech detailing using asymmetrical grids, cinematic media bands, mono utility labels, and restrained accent color.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/editorial-tech",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-elevenlabs-tts",
+      "name": "elevenlabs-tts",
+      "description": "Generate ElevenLabs text-to-speech audio from scripts or inline text using local voice profiles. Use when the user asks for ElevenLabs, text-to-speech, TTS, narration, voiceover, speech audio, or voice generation; load voice names, voice ids, emails, owners, and account-specific defaults only from local config outside the skill.",
+      "category": "其他",
+      "tags": [
+        "MengTo",
+        "其他"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/elevenlabs-tts",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-falling-leaves",
+      "name": "falling-leaves",
+      "description": "Build falling leaves that read as leaves, with each one tumbling on its own axis so it presents a face, thins to an edge, and opens out again, and with its sideways slip driven by that same tumble. Covers the 2-D canvas build and the instanced-3-D variant, where leaves are recycled from, density-versus-count maths, depth layering, colour under a tone-mapped composite, reduced motion, and visibility pausing. Use for autumn maple, sakura petals, blossom, ash, snowfall shapes, or any drifting foliage where a generic particle field reads as confetti.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/falling-leaves",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-framed-grid-layout",
+      "name": "framed-grid-layout",
+      "description": "Create minimal framed grid layouts with thin visible boundary lines, L-shaped corner brackets, subtle diagonal line texture, and strict section alignment. Use when asked for clean, neutral, precise, structured, editorial, technical, or guide-border web layouts.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/framed-grid-layout",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-framed-tech-dark-border-gradient",
+      "name": "framed-tech-dark-border-gradient",
+      "description": "Create a framed dark technical design system with border-gradient shells, asymmetrical grid panels, mono utility labeling, and restrained monochrome atmosphere.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/framed-tech-dark-border-gradient",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-funky-purple-container-tech",
+      "name": "funky-purple-container-tech",
+      "description": "Create a dark container-led technical design system with fuchsia-purple accents, layered rounded shells, crisp frame lines, and playful futuristic focal objects.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/funky-purple-container-tech",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-generate-reference-inspired-brand-worlds",
+      "name": "generate-reference-inspired-brand-worlds",
+      "description": "Generate multiple original brand campaign worlds from a supplied visual reference while controlling how close the new work feels without copying protected signature elements. Use when a user provides a brand identity image, poster, editorial campaign, moodboard, or generated concept and asks for inspired alternatives, several distinct brands in one visual family, a closer-to-reference V2, exact wordmarks inside images, or originality-safe image-generation prompts and outputs.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/generate-reference-inspired-brand-worlds",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-glass-dark-mode-clock",
+      "name": "glass-dark-mode-clock",
+      "description": "Create a dark glass design system with frosted shells, soft beam grids, circular clock-like calibration dials, and precise sci-fi instrument framing.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/glass-dark-mode-clock",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-glass-dark-ui",
+      "name": "glass-dark-ui",
+      "description": "Build dark-mode glassmorphism interfaces with readable contrast, frosted surfaces, and gradient borders using a pseudo-element mask. Use when asked for glass cards, frosted dark hero sections, blur panels, or dark UI systems with gradient/glow borders.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/glass-dark-ui",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-globe-gl",
+      "name": "globe-gl",
+      "description": "Use when implementing globe.gl (Globe.GL) for 3D globe data visualization with WebGL/ThreeJS, including setup, data layers (points, arcs, polygons, labels), and integration patterns in plain HTML or React.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/globe-gl",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-globe-particles",
+      "name": "globe-particles",
+      "description": "Create a globe-like 3D particle visualization with a dense luminous spherical core and thinner orbital ring or flattened disc. Use when a design needs a premium planetary, orbital, synthesized data-globe effect rendered with real WebGL/Three.js particles, not generic starfields or full page layout changes.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/globe-particles",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-gooey-blob-system",
+      "name": "gooey-blob-system",
+      "description": "Create a gooey blob system using SVG filters where multiple shapes merge into a single fluid form. Use overlapping circles combined with a Gaussian blur and color matrix filter to produce a continuous, organic mass. The forms should visually fuse and separate based on proximity. Focus on filter-driven merging (blur + threshold effect), soft organic boundaries with no hard edges, multiple independent shapes behaving as one system, and smooth continuous motion that feels fluid and cohesive.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/gooey-blob-system",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-gsap",
+      "name": "gsap",
+      "description": "Use when you need to add or debug professional web animations with GSAP (timelines, ScrollTrigger, stagger, transforms) in HTML/CSS/JS/React. Includes patterns for smooth motion, performance, and common pitfalls.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/gsap",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-gsap-scrolltrigger-storytelling",
+      "name": "gsap-scrolltrigger-storytelling",
+      "description": "Build cinematic sticky product storytelling with GSAP ScrollTrigger, progressive UI reveals, scroll-synced animation, smooth interpolation, and immersive section transitions.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/gsap-scrolltrigger-storytelling",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-high-contrast-skeuomorphic-clean",
+      "name": "high-contrast-skeuomorphic-clean",
+      "description": "Create a high-contrast clean skeuomorphic design system with molded dark surfaces, crisp light separation, tactile inset depth, and restrained signal accents.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/high-contrast-skeuomorphic-clean",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-html-to-interaction-prompts",
+      "name": "html-to-interaction-prompts",
+      "description": "Convert a supplied HTML page or generated HTML reference into a screenshot-backed article containing multiple reusable interaction prompts. Use when the user provides an HTML file, exported page, generated-page.html, or local/live reference and asks to extract animation/interactions, create prompts, capture screenshots for each prompt, add them to an article, or commit the resulting article/assets.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/html-to-interaction-prompts",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-image-first-grid-layout",
+      "name": "image-first-grid-layout",
+      "description": "Create an image-led grid design system with full-bleed photography, structural guide lines, anchored content blocks, and restrained technical overlays.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/image-first-grid-layout",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-implement-fog-of-war",
+      "name": "implement-fog-of-war",
+      "description": "Implement, tune, debug, or validate soft wall-aware fog of war and gameplay perception in Three.js action games. Use for orthographic or isometric visibility masks, obstacle-aware line of sight, player and enemy vision ranges, hidden-enemy targeting rules, fog shader artifacts such as spokes or seams, mobile ray budgets, lifecycle and menu-state integration, and deterministic fog-of-war tests.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/implement-fog-of-war",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-iterate-until-verified",
+      "name": "iterate-until-verified",
+      "description": "Apply a prompt-agnostic execution and verification loop to any substantial task while preserving the original request. Use when the user asks to fan out work, use subagents or independent reviewers, loop until done, benchmark against references, apply a harsh critic, compare candidates blind, improve an existing prompt with verification, or continue until explicit quality gates pass.",
+      "category": "内容创作",
+      "tags": [
+        "MengTo",
+        "内容创作"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/iterate-until-verified",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-landing-page",
+      "name": "landing-page",
+      "description": "Use when designing or rewriting a high-converting landing page (single-offer page) for SaaS/apps/services. Covers structure, layout patterns, conversion strategies, copywriting, SEO/AEO, and common pitfalls.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/landing-page",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-light-mode-paper-technical",
+      "name": "light-mode-paper-technical",
+      "description": "Create a light-mode technical design system with warm paper surfaces, dark outer framing, subtle diagonal texture, precise bracketed geometry, and restrained accent signals.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/light-mode-paper-technical",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-liquid-metal-border",
+      "name": "liquid-metal-border",
+      "description": "Add and tune animated liquid-metal WebGL borders with the React `metal-fx` package. Use when buttons, icon controls, chips, tabs, cards, or selected surfaces need a metallic active, selected, hover, focus, or premium border; when implementing the MetalFx component from metal.jakubantalik.com; or when troubleshooting its presets, themes, strength, glow, reflections, sizing, radius, animation, accessibility, SSR, or performance.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/liquid-metal-border",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-marquee-loop",
+      "name": "marquee-loop",
+      "description": "Apply seamless infinite marquee loops using duplicated items.",
+      "category": "其他",
+      "tags": [
+        "MengTo",
+        "其他"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/marquee-loop",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-masked-reveal",
+      "name": "masked-reveal",
+      "description": "Create masked staggered word reveals on scroll with GSAP ScrollTrigger. Use when headings, hero copy, section titles, or editorial text should reveal word-by-word through an overflow mask as they enter the viewport.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/masked-reveal",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-matterjs",
+      "name": "matterjs",
+      "description": "Use when implementing 2D physics interactions with Matter.js, including Engine/World setup, Render/Runner configuration, adding bodies and constraints, and scroll/interaction-friendly canvas scenes.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/matterjs",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-mesh-gradient-dark-blue-clean",
+      "name": "mesh-gradient-dark-blue-clean",
+      "description": "Create a futuristic, premium, clean dark-blue mesh-gradient design system across background rendering, hero shell, navigation, floating nodes, framed sections, CTAs, and motion. Use when the interface needs a near-black navy foundation, procedural blue mesh atmosphere, disciplined minimal structure, and infrastructural or planetary depth.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/mesh-gradient-dark-blue-clean",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-nested-container-clean-agency",
+      "name": "nested-container-clean-agency",
+      "description": "Create a clean agency design system built from nested containers, with an outer editorial shell, inset dark feature blocks, rounded premium cards, and restrained accent color.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/nested-container-clean-agency",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-nested-container-frames",
+      "name": "nested-container-frames",
+      "description": "Create a container-in-container layout system using nested frames. Use an outer centered container with visible vertical boundary lines and corner markers. Inside, place inner containers inset from the edges, each with its own background and rounded frame. Technique: outer container defines global bounds, inner containers use padding to create inset spacing, layered frames (border + background) to separate levels, and consistent spacing between outer frame and inner blocks.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/nested-container-frames",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-no-ai-design-slop",
+      "name": "no-ai-design-slop",
+      "description": "Prevent and remove generic AI-generated design defaults, incoherent visual choices, and established UI defects while creating, revising, or reviewing websites, apps, screenshots, mockups, and design code. Use as a passive quality gate during UI work or for an explicit anti-slop cleanup; preserve the chosen art direction instead of forcing a neutral redesign.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/ui/no-ai-design-slop",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-number-details",
+      "name": "number-details",
+      "description": "Add decorative 01, 02, 03 numeric detail markers.",
+      "category": "其他",
+      "tags": [
+        "MengTo",
+        "其他"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/number-details",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-operational-enterprise-ai",
+      "name": "operational-enterprise-ai",
+      "description": "Create or redesign enterprise AI, automation, security, and operations product pages that explain system boundaries, approvals, auditability, exceptions, and rollback. Use for dark cinematic heroes, hairline grids, metric pauses, expandable solution rows, case-study evidence, security proof, and qualified demo or waitlist handoffs.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/operational-enterprise-ai",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-optimize-threejs-games",
+      "name": "optimize-threejs-games",
+      "description": "Profile, diagnose, and improve Three.js or WebGL game performance without regressing gameplay. Use for frame-time drops, CPU/GPU pressure, draw calls, texture and geometry budgets, animation loops, adaptive quality, mobile performance, and browser performance verification.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/optimize-threejs-games",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-optimize-web-animations",
+      "name": "optimize-web-animations",
+      "description": "Profile, audit, and optimize frontend page performance with emphasis on animation work, memory-leak risks, long-session slowdowns, CSS animations, canvas/WebGL requestAnimationFrame loops, marquees, skeletons, GSAP/Three/Matter effects, timers, listeners, and observers. Use when the user asks to make animations performant, pause offscreen animations, look for memory leaks, profile pages that slow the computer over time, fix janky scrolling, reduce CPU/GPU use, or repeat the \"only play in view\" optimization on React/Vite/Next/frontend pages using Codex Browser.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/optimize-web-animations",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-orange-clean-paper-saas",
+      "name": "orange-clean-paper-saas",
+      "description": "Create a clean paper-toned SaaS design system with warm neutrals, orange accent signals, rounded premium forms, and polished product illustration surfaces.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/orange-clean-paper-saas",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-performance-profiling",
+      "name": "performance-profiling",
+      "description": "Guide performance profiling for Apple platform apps with Instruments, Xcode diagnostics, and MetricKit. Use when investigating app hangs, stutters, high CPU, memory leaks, memory growth, OOM crashes, slow launch, battery drain, thermal issues, App Store performance readiness, or when adding os_signpost and measurement hooks.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/performance-profiling",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-pointer-trail-emitter",
+      "name": "pointer-trail-emitter",
+      "description": "Build a cursor trail whose spacing stays constant at any hand speed, by emitting motes per unit of distance travelled rather than on a timer, so a flick draws the same continuous ribbon as a crawl instead of breaking into scattered dots. Covers sub-segment placement, the ring-buffer ordering trap, the idle breath a distance emitter needs, anchoring the trail to the screen in a 3-D scene, scaling scatter against the plane it hangs on, coasting instead of stopping dead, touch and reduced-motion fallbacks, and why moving the emitter to a DOM overlay to raise its z-index costs more than it buys. Use for cursor wisps, pointer sparks, embers, magic trails, comet tails, plankton, dust, or any mote trail that must stay legible however fast the hand moves.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/pointer-trail-emitter",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-pricing-page",
+      "name": "pricing-page",
+      "description": "Use when designing or rewriting a high-converting SaaS pricing page (structure, plan design, copywriting, SEO/AEO, FAQs, layout patterns, experiments). Includes checklists, templates, and common pitfalls.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/pricing-page",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-product-proof-saas",
+      "name": "product-proof-saas",
+      "description": "Create or redesign SaaS and AI product landing pages where a real workflow, interface, or deterministic demo is the central proof. Use for pale atmospheric shells, product UI in the hero, prompt-to-output stories, audience tabs, compact feature modules, honest pricing comparisons, and FAQ handoffs.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/product-proof-saas",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-progressive-blur",
+      "name": "progressive-blur",
+      "description": "Create a layered CSS progressive blur (top or bottom) using multiple backdrop-filter masks for depth and softness. Use when asked for “progressive blur”, “gradient blur overlay”, or stepped blur masks that fade from an edge of the viewport.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/progressive-blur",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-publish-project-to-github",
+      "name": "publish-project-to-github",
+      "description": "Package a finished local project into an intentional GitHub repository, create a strong README and visual preview, push it safely, configure a public GitHub Pages URL when the project is compatible, and verify the deployed result. Use when a user asks to upload, publish, open-source, share, or turn a local HTML/CSS/JavaScript experiment or small web project into a documented GitHub repository with a live demo.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/publish-project-to-github",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-reveal-hover-effect",
+      "name": "reveal-hover-effect",
+      "description": "Build cursor-following spotlight reveals that expose a second aligned image through a soft radial mask. Use for hover-to-color, before-and-after, x-ray, material, texture, product-detail, and illustrated hero effects where a desaturated or embossed base image should remain visible while another treatment follows an eased pointer.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/reveal-hover-effect",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-scroll-progress-timeline",
+      "name": "scroll-progress-timeline",
+      "description": "Turn any ordered process into a data-driven vertical or horizontal scroll story with a base line, progress fill, active step states, responsive collapse, semantic fallback, and reduced-motion behavior. Use for onboarding, checkout, roadmaps, recipes, case studies, service processes, histories, or narratives where progress through the sequence should become visible while scrolling.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/scroll-progress-timeline",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-scroll-scrubbed-visual-sequence",
+      "name": "scroll-scrubbed-visual-sequence",
+      "description": "Build reversible scroll-controlled visual transformations with a pinned or sticky stage, normalized progress, and video, image-sequence, canvas, SVG, or DOM renderers. Use for hero transformations, product assembly, interface state walkthroughs, object rotation, diagrams, or photo sequences that must move forward and backward with native scrolling.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/scroll-scrubbed-visual-sequence",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-scroll-scrubbed-word-reveal",
+      "name": "scroll-scrubbed-word-reveal",
+      "description": "Reveal marked-up text word by word as scroll progress advances, while preserving semantic inline links, emphasis, responsive line wrapping, and reduced-motion readability. Use for headlines, quotes, manifestos, product statements, onboarding messages, or editorial passages where scrolling should pace comprehension rather than simulate typing.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/scroll-scrubbed-word-reveal",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-scroll-world-storytelling",
+      "name": "scroll-world-storytelling",
+      "description": "Turn an article, case study, brand narrative, product journey, or long-form story into a cinematic scroll-driven landing page using one of three renderers: scrubbed video, a real-time Three.js world, or semantic HTML/SVG data and typography. Use when the user asks for a scroll world, fly-through landing page, article-to-website transformation, animated planet, data scrollytelling, video-scrubbed page, connected visual journey, or story-led alternative to ordinary stacked sections.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/scroll-world-storytelling",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-shaders-cursor-ripples",
+      "name": "shaders-cursor-ripples",
+      "description": "Add cursor-following fluid WebGPU distortion over an existing image with the Shaders library's ImageTexture and CursorRipples components. Use when a hero, gallery, or media panel needs a water-ripple mouse effect; when replacing a drifting CSS spotlight or flashlight reveal; or when a prompt says to borrow only the shader interaction from a Shaders.com reference while preserving the current brand, image, copy, and layout.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/shaders-cursor-ripples",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-ship-web-games",
+      "name": "ship-web-games",
+      "description": "Package, deploy, and verify a playable Three.js or web game. Use for release builds, asset delivery, private/public deployment, production smoke tests, browser proof, release notes, rollback readiness, and cleanup of temporary QA resources.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/ship-web-games",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-skeuomorphic-ui",
+      "name": "skeuomorphic-ui",
+      "description": "Create skeuomorphic web UI surfaces with layered gradients, stacked inner and outer shadows, reflective gradient borders, micro texture, and embossed text or icon details. Use when asked for pressed, carved, tactile, realistic, soft-plastic, soft-metal, or premium physical interface styling.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/skeuomorphic-ui",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-solar-duotone-bold",
+      "name": "solar-duotone-bold",
+      "description": "Use Iconify Solar Duotone Bold icon style.",
+      "category": "其他",
+      "tags": [
+        "MengTo",
+        "其他"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/solar-duotone-bold",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-split-layout-technical",
+      "name": "split-layout-technical",
+      "description": "Create a technical split-screen design system with dual panels, fine frame lines, mono metadata, quiet editorial typography, and premium inset surfaces.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/split-layout-technical",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-staggered-word-reveal",
+      "name": "staggered-word-reveal",
+      "description": "Create subtle editorial word-by-word text reveal animations where each word fades and rises into place once it enters the viewport. Use for premium portfolio headlines, hero copy, section intros, and short marketing text that needs a cinematic staggered reveal with IntersectionObserver or in-view detection.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/staggered-word-reveal",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-stitched-full-page-capture",
+      "name": "stitched-full-page-capture",
+      "description": "Capture or repair reliable full-page screenshots for lazy-loaded, scroll-animated, Framer, WebGL/canvas, or reveal-heavy web pages. Use when full-page screenshots are blank, gray, white, sparse, show a tiny content strip, disagree with a working scroll video, or when article evidence/section crops must be derived from a trustworthy full-page image.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/stitched-full-page-capture",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-tailwindcss",
+      "name": "tailwindcss",
+      "description": "Use when designing/implementing UI with Tailwind CSS (layout, typography, responsive, theming, component patterns). Includes quick recipes and conventions for clean, consistent web design.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/tailwindcss",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-tech-green-dark-mode-modern",
+      "name": "tech-green-dark-mode-modern",
+      "description": "Create a modern dark-mode technical design system with matte-black surfaces, emerald signal accents, mono system labeling, framed dashboard cards, and restrained glow.",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/tech-green-dark-mode-modern",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-technical-wireframe-info-layout",
+      "name": "technical-wireframe-info-layout",
+      "description": "Create a monochrome technical wireframe design system with exploded 3D structure, connector annotations, sparse information labels, and precise dark diagnostic framing.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/technical-wireframe-info-layout",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-test-playable-web-games",
+      "name": "test-playable-web-games",
+      "description": "Test a playable browser game end to end with deterministic fixtures and real browser evidence. Use for gameplay QA, regression testing, controls, accessibility, responsive/mobile testing, save flows, console checks, performance smoke tests, and release verification.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/test-playable-web-games",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-thinking-orbs",
+      "name": "thinking-orbs",
+      "description": "Add accessible animated AI loading and agent-status indicators with the React thinking-orbs library. Use when a chat, copilot, voice, search, generation, or tool-running interface needs a semantic working, searching, solving, listening, composing, or shaping state; when replacing a generic spinner with an AI activity orb; or when implementing the library's size, theme, speed, pause, reduced-motion, and canvas behavior.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/thinking-orbs",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-threejs",
+      "name": "threejs",
+      "description": "Use when building or debugging interactive 3D scenes on the web with Three.js (scene/camera/renderer, lights/materials, GLTF loading, controls, performance). Helpful for designers shipping 3D UI moments.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/threejs",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-threejs-landscape",
+      "name": "threejs-landscape",
+      "description": "Build a live Three.js landscape that stays quiet behind a subject — a noise heightfield on a polar grid so resolution follows the lens, ground coloured by slope and moisture rather than by texture, instanced GPU grass whose wind costs nothing on the CPU, scattered stones, a gradient sky dome, a star field you can actually see, and a time-of-day system that cross-fades instead of cutting. Use for hero backdrops, product stages, scroll worlds, or any scene where a building, object, or figure has to sit in a place rather than float on a gradient.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/threejs-landscape",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-threejs-towers",
+      "name": "threejs-towers",
+      "description": "Generate architecture procedurally in Three.js and film it assembling — a small geometry vocabulary that builds pagodas, castles, domes and spires from parameters instead of mesh files, hip roofs with flying eaves driven by a single profile function, and a clipping-plane build animation where everything below a rising line is finished work and scaffolding stands above it. Use for construction studies, architectural title sequences, procedural landmarks, or any hero object that should build itself rather than fade in.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/threejs-towers",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-threejs-weather",
+      "name": "threejs-weather",
+      "description": "Put weather into a Three.js scene that reads as weather — rain anchored inside the frustum, a storm that is the rain leaned on rather than a second system, lightning on its own light with thunder scheduled by distance, snow that blows up into blizzards and keeps settling until the ground goes white, wet ground with puddles and splashes, and looping ambience that has no seam. Use for scene atmosphere, seasonal states, hero backdrops, or any world where clear/rain/storm/snow needs to be a control the viewer can turn.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/threejs-weather",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-tune-enemy-ai",
+      "name": "tune-enemy-ai",
+      "description": "Build, debug, balance, or test combat enemy AI for playable action games. Use for aggro, target selection, navigation, spacing, attack choices, telegraphs, retreats, boss behavior, behavior-state machines, and deterministic AI regression tests.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/game-development/tune-enemy-ai",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-unicorn-studio",
+      "name": "unicorn-studio",
+      "description": "Use when embedding and customizing Unicorn Studio interactive animations on the web (embed, responsive sizing, performance, layering with UI, fallbacks).",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/unicorn-studio",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-unsplash-asset-images",
+      "name": "unsplash-asset-images",
+      "description": "Use when you need to pick high-quality Unsplash images for product/design assets (avatars, headshots, portraits, large website backgrounds, and abstract wallpapers) and output real Unsplash URLs plus practical instructions for producing the right resolutions and aspect ratios (1:1, 4:5, 3:4, 16:9, 9:16).",
+      "category": "界面交互",
+      "tags": [
+        "MengTo",
+        "界面交互"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/media/unsplash-asset-images",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-vantajs",
+      "name": "vantajs",
+      "description": "Use when adding animated WebGL background effects with Vanta.js (setup, parameters, resizing, performance, integration in React/Next.js).",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/vantajs",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-video-to-superprompt",
+      "name": "video-to-superprompt",
+      "description": "Turn a reference video into a super detailed recreation or inspiration prompt. Use when the user provides, mentions, uploads, links, or points to a video and asks to analyze the design, UI, animations, transitions, scroll interactions, typography, colors, assets, WebGL/Three.js, storytelling, section-by-section behavior, or to create a prompt/article that recreates the page, app, interaction, or motion system.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/video-to-superprompt",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-web-technique-to-skill",
+      "name": "web-technique-to-skill",
+      "description": "Turn a visual or interaction technique you already built into a reusable web-design skill, by isolating the one mechanism that makes it work while reproducing its approved reference exactly around that focus, and packaging it with a demo that proves both the mechanism and the visual fidelity. Covers finding the mechanism, naming the technique plainly, disclosing the verified runtime and renderer, auditing reference layers, carrying real numbers instead of adjectives, preserving owned staging, keeping expensive gotchas, declaring the boundary against neighbouring skills, and browser-verifying before claiming it works. Use when a page, canvas scene, shader, scroll effect, layout system, or hover interaction turned out well and should become a skill rather than staying in one project.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/web-technique-to-skill",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-webgl-3d-object",
+      "name": "webgl-3d-object",
+      "description": "Create a real 3D WebGL object with geometric mesh depth, physically based material, directional and ambient lighting, perspective camera, subtle rotation, and floating motion. Use when a page needs a faceted 3D hero object or product-like visual with real lighting instead of CSS transform tricks.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/webgl-3d-object",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-webgl-landing-steering",
+      "name": "webgl-landing-steering",
+      "description": "Use when creating or refining WebGL-heavy landing pages and you need to steer toward a specific visual outcome (premium, technical, playful, cinematic) while balancing conversion clarity, performance, and implementation complexity.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/webgl-landing-steering",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-webgl-laser",
+      "name": "webgl-laser",
+      "description": "Create a fixed full-screen WebGL laser background effect with a thin white-hot vertical core, restrained brand-colored halo, and soft smoky fog around the beam. Use only for laser background effects, not full page layout, copy, generic hero scenes, particles, or unrelated motion systems.",
+      "category": "视频动画",
+      "tags": [
+        "MengTo",
+        "视频动画"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/webgl-laser",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-write-like-meng-on-x",
+      "name": "write-like-meng-on-x",
+      "description": "Write, rewrite, review, or continuously refine X/Twitter posts in Meng To's current voice using his deduplicated authored-post corpus, personal and product context, shared resources, and Content repo evidence. Use when asked to improve a tweet in Meng's tone, draft an original post, reply, thread, resource share, or quote post as Meng, check whether an angle repeats an earlier post, study Meng's writing style, ingest another 20-50 authored posts, or hone the reusable Meng X voice profile.",
+      "category": "内容创作",
+      "tags": [
+        "MengTo",
+        "内容创作"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/write-like-meng-on-x",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    },
+    {
+      "id": "mengto-x-bookmark-quote-posts",
+      "name": "x-bookmark-quote-posts",
+      "description": "Check a user's latest X/Twitter bookmarks and turn recent saved posts into source-backed quote-post drafts calibrated against the user's latest 100 authored posts. Use when asked to review X bookmarks, create quote posts from bookmarks, refresh a bookmark quote queue, run a bookmark quote automation, study a user's X voice, or write first-person quote posts from X sources.",
+      "category": "内容创作",
+      "tags": [
+        "MengTo",
+        "内容创作"
+      ],
+      "author": "MengTo",
+      "license": "MIT",
+      "sourceUrl": "https://github.com/MengTo/skills/tree/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/codex/x-bookmark-quote-posts",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "仅目录；未逐项实测"
+    }
+  ]
+}

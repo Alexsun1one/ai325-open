@@ -1,0 +1,9 @@
+{
+  "skillMarkdown": "---\nname: nested-container-frames\ndescription: \"Create a container-in-container layout system using nested frames. Use an outer centered container with visible vertical boundary lines and corner markers. Inside, place inner containers inset from the edges, each with its own background and rounded frame. Technique: outer container defines global bounds, inner containers use padding to create inset spacing, layered frames (border + background) to separate levels, and consistent spacing between outer frame and inner blocks.\"\n---\n\n# Nested Container Frames Skill\n\n## Use When\n- A layout needs a container-in-container system with visible outer bounds, inset inner frames, and layered page structure.\n\n## Workflow\n1. Define an outer centered container that controls the global page width.\n2. Add visible vertical boundary lines and small corner markers to establish the frame.\n3. Place inner containers inset from the outer edges using consistent padding.\n4. Give each inner level its own background, border, radius, and spacing rhythm.\n5. Use the frame hierarchy to separate hero, feature, proof, and CTA modules without adding heavy cards.\n\n## Guardrails\n- Do not nest cards inside cards until the layout feels boxed in.\n- Do not let frame lines overpower content readability.\n",
+  "sourceUrl": "https://github.com/MengTo/skills/blob/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/nested-container-frames/SKILL.md",
+  "repositoryUrl": "https://github.com/MengTo/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 6367,
+  "starsCheckedAt": "2026-09-28T18:57:00Z"
+}

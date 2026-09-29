@@ -1,0 +1,3781 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-28T18:43:21Z",
+  "items": [
+    {
+      "id": "upstream-anthropics-skills-skills-academy-guide",
+      "name": "academy-guide",
+      "description": "针对 Claude 产品与 AI 使用问题，从 Claude Academy 推荐匹配的课程、教程和上手资源。",
+      "category": "其他",
+      "tags": [
+        "上游",
+        "anthropics",
+        "其他"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/academy-guide/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/academy-guide/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Claude Academy guide"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-algorithmic-art",
+      "name": "algorithmic-art",
+      "description": "用代码构造可控的图形、随机性和交互参数，生成算法艺术作品。",
+      "category": "视觉设计",
+      "tags": [
+        "上游",
+        "anthropics",
+        "视觉设计"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/algorithmic-art/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/algorithmic-art/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# ALGORITHMIC PHILOSOPHY CREATION"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-brand-guidelines",
+      "name": "brand-guidelines",
+      "description": "将 Anthropic 官方品牌色彩与字体应用到文档、网页等成品的视觉格式中。",
+      "category": "视觉设计",
+      "tags": [
+        "上游",
+        "anthropics",
+        "视觉设计"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/brand-guidelines/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/brand-guidelines/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Anthropic Brand Styling"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-canvas-design",
+      "name": "canvas-design",
+      "description": "运用设计哲学制作原创的静态海报、艺术图或其他 PNG/PDF 视觉成品。",
+      "category": "视觉设计",
+      "tags": [
+        "上游",
+        "anthropics",
+        "视觉设计"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/canvas-design/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/canvas-design/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# DESIGN PHILOSOPHY CREATION"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-claude-api",
+      "name": "claude-api",
+      "description": "接入 Claude API 的消息、流式响应、工具调用与常见错误处理。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "anthropics",
+        "开发工具"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/claude-api/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/claude-api/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Building LLM-Powered Applications with Claude"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-discernment-nudge",
+      "name": "discernment-nudge",
+      "description": "在重要判断前加入反思提示，帮助识别证据不足、偏见和仓促结论。",
+      "category": "其他",
+      "tags": [
+        "上游",
+        "anthropics",
+        "其他"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/discernment-nudge/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/discernment-nudge/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Discernment nudge"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-doc-coauthoring",
+      "name": "doc-coauthoring",
+      "description": "把多人材料组织为有大纲、待确认项和审阅节奏的协作文档。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "anthropics",
+        "内容创作"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/doc-coauthoring/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/doc-coauthoring/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Doc Co-Authoring Workflow"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-docx",
+      "name": "docx",
+      "description": "创建、修改并检查 Word 文档的结构、样式、批注和导出结果。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "anthropics",
+        "内容创作"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/docx/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/docx/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：DOCX creation, editing, and analysis"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-frontend-design",
+      "name": "frontend-design",
+      "description": "把产品需求落实为层级清楚、可访问且具辨识度的前端界面。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "anthropics",
+        "界面交互"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/frontend-design/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/frontend-design/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Frontend Design"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-internal-comms",
+      "name": "internal-comms",
+      "description": "撰写面向团队的公告、决策说明和状态同步，减少信息歧义。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "anthropics",
+        "内容创作"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/internal-comms/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/internal-comms/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# When to use this skill"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-mcp-builder",
+      "name": "mcp-builder",
+      "description": "设计并实现 MCP 服务的工具契约、输入校验、错误处理和测试。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "anthropics",
+        "开发工具"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/mcp-builder/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/mcp-builder/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：MCP Server Development Guide"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-pdf",
+      "name": "pdf",
+      "description": "读取、生成和视觉核验 PDF，处理版式、表单与页面渲染。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "anthropics",
+        "内容创作"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/pdf/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/pdf/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：PDF Processing Guide"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-pptx",
+      "name": "pptx",
+      "description": "制作或修改演示文稿，并通过渲染检查页面布局和内容完整性。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "anthropics",
+        "内容创作"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/pptx/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/pptx/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：PPTX creation, editing, and analysis"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-skill-creator",
+      "name": "skill-creator",
+      "description": "从触发条件、流程到验证用例，创建和迭代可复用 Agent Skill。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "anthropics",
+        "开发工具"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/skill-creator/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/skill-creator/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Skill Creator"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-slack-gif-creator",
+      "name": "slack-gif-creator",
+      "description": "将动效构思制作为符合 Slack 尺寸与循环要求的 GIF。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "anthropics",
+        "视频动画"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/slack-gif-creator/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/slack-gif-creator/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Slack GIF Creator"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-theme-factory",
+      "name": "theme-factory",
+      "description": "为网页或文档定义可复用的主题令牌、配色和排版组合。",
+      "category": "视觉设计",
+      "tags": [
+        "上游",
+        "anthropics",
+        "视觉设计"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/theme-factory/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/theme-factory/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Theme Factory Skill"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-web-artifacts-builder",
+      "name": "web-artifacts-builder",
+      "description": "构建可直接交付的单页网页工具、互动演示或数据展示。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "anthropics",
+        "界面交互"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/web-artifacts-builder/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/web-artifacts-builder/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Web Artifacts Builder"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-webapp-testing",
+      "name": "webapp-testing",
+      "description": "用浏览器自动化复现用户操作，验证页面交互、状态和视觉结果。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "anthropics",
+        "开发工具"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/webapp-testing/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/webapp-testing/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Web Application Testing"
+      }
+    },
+    {
+      "id": "upstream-anthropics-skills-skills-xlsx",
+      "name": "xlsx",
+      "description": "读取、编辑和核验电子表格中的公式、数据、格式和图表。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "anthropics",
+        "内容创作"
+      ],
+      "author": "anthropics",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/xlsx/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "anthropics/skills",
+        "commit": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+        "path": "skills/xlsx/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：XLSX creation, editing, and analysis"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-agents-sdk",
+      "name": "agents-sdk",
+      "description": "使用 Cloudflare Agents SDK 构建带状态、工具和通信能力的智能体。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/agents-sdk/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/agents-sdk/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Cloudflare Agents SDK"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-cloudflare",
+      "name": "cloudflare",
+      "description": "选择并接入 Cloudflare 平台能力，处理应用托管、网络与运行时配置。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/cloudflare/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/cloudflare/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Discover and build with Cloudflare"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-cloudflare-email-service",
+      "name": "cloudflare-email-service",
+      "description": "在 Cloudflare 上配置收信、邮件路由和安全的邮件服务逻辑。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/cloudflare-email-service/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/cloudflare-email-service/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Cloudflare Email Service"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-cloudflare-one",
+      "name": "cloudflare-one",
+      "description": "配置 Cloudflare One 的访问控制、网络连接和零信任策略。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/cloudflare-one/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/cloudflare-one/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Cloudflare One"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-cloudflare-one-migrations",
+      "name": "cloudflare-one-migrations",
+      "description": "规划并执行 Cloudflare One 配置迁移，保留策略与身份访问边界。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/cloudflare-one-migrations/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/cloudflare-one-migrations/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Cloudflare One Migrations"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-durable-objects",
+      "name": "durable-objects",
+      "description": "用 Durable Objects 实现有状态协作、房间、队列或强一致协调逻辑。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/durable-objects/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/durable-objects/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Durable Objects"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-nextjs-on-cloudflare",
+      "name": "nextjs-on-cloudflare",
+      "description": "将 Next.js 应用适配并部署到 Cloudflare Workers 运行时。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/nextjs-on-cloudflare/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/nextjs-on-cloudflare/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Next.js on Cloudflare"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-sandbox-migrate-to-next",
+      "name": "sandbox-migrate-to-next",
+      "description": "把旧版 Cloudflare Sandbox 项目迁移到下一代运行时与接口。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/sandbox-migrate-to-next/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/sandbox-migrate-to-next/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Migrate stable → Sandbox SDK 1.0 preview (`@next`)"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-sandbox-next",
+      "name": "sandbox-next",
+      "description": "使用新版 Cloudflare Sandbox 创建隔离执行环境和任务工作流。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/sandbox-next/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/sandbox-next/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Sandbox SDK — `@next` (1.0 preview)"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-sandbox-stable",
+      "name": "sandbox-stable",
+      "description": "基于稳定版 Cloudflare Sandbox 编写隔离执行与资源管理逻辑。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/sandbox-stable/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/sandbox-stable/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Sandbox SDK — stable package"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-turnstile-spin",
+      "name": "turnstile-spin",
+      "description": "接入 Turnstile 人机验证，并正确处理令牌校验和失败场景。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/turnstile-spin/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/turnstile-spin/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Turnstile Spin skill"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-web-perf",
+      "name": "web-perf",
+      "description": "分析网页加载、运行时和 Core Web Vitals，定位可量化的性能改进点。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/web-perf/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/web-perf/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Web Performance Audit"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-workers-best-practices",
+      "name": "workers-best-practices",
+      "description": "按 Workers 平台约束编写高可靠边缘函数、绑定和错误处理。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/workers-best-practices/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/workers-best-practices/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# References"
+      }
+    },
+    {
+      "id": "upstream-cloudflare-skills-skills-wrangler",
+      "name": "wrangler",
+      "description": "使用 Wrangler 管理 Cloudflare 项目、环境变量、部署和本地调试。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "cloudflare",
+        "开发工具"
+      ],
+      "author": "cloudflare",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/cloudflare/skills/blob/626547c06881a20b3322bdc2ed6e6451b33a4fb6/skills/wrangler/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "cloudflare/skills",
+        "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+        "path": "skills/wrangler/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Wrangler CLI"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-experiments-skills-expo-migrate-module",
+      "name": "expo-migrate-module",
+      "description": "将 Expo 原生模块迁移到当前模块接口、构建配置和平台约定。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo-experiments/skills/expo-migrate-module/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo-experiments/skills/expo-migrate-module/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Migrate an Expo Module"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-eas-app-stores",
+      "name": "eas-app-stores",
+      "description": "通过 EAS 准备应用商店提交、元数据、签名和发布流程。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/eas-app-stores/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/eas-app-stores/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：App Store Deployment"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-eas-hosting",
+      "name": "eas-hosting",
+      "description": "配置 EAS Hosting 的静态或服务端 Web 部署与环境设置。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/eas-hosting/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/eas-hosting/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：EAS Hosting"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-eas-observe",
+      "name": "eas-observe",
+      "description": "使用 EAS Observe 查看崩溃、性能和版本运行状况。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/eas-observe/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/eas-observe/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：EAS Observe"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-eas-simulator",
+      "name": "eas-simulator",
+      "description": "在 EAS 云端远程 iOS/Android 模拟器中运行、控制、截图或调试应用。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/eas-simulator/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/eas-simulator/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：EAS Simulator"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-eas-update",
+      "name": "eas-update",
+      "description": "通过 EAS Update 发布、分支管理和回滚 Expo 的远程更新。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/eas-update/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/eas-update/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：EAS Update"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-eas-update-insights",
+      "name": "eas-update-insights",
+      "description": "分析 EAS Update 的采用率、运行时版本与更新分布。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/eas-update-insights/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/eas-update-insights/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：EAS Update Insights"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-eas-workflows",
+      "name": "eas-workflows",
+      "description": "编写 EAS Workflow 自动化构建、测试和发布步骤。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/eas-workflows/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/eas-workflows/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：EAS Workflows Skill"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-animation",
+      "name": "expo-animation",
+      "description": "在 Expo/React Native 中实现流畅动画、手势和性能友好的过渡。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "expo",
+        "界面交互"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-animation/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-animation/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Building Animations in Expo"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-app-clip",
+      "name": "expo-app-clip",
+      "description": "为 iOS App Clip 配置轻量入口、原生能力与 Expo 工程集成。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-app-clip/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-app-clip/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Add an App Clip to an Expo App"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-brownfield",
+      "name": "expo-brownfield",
+      "description": "将 Expo 逐步嵌入既有原生 iOS/Android 应用，而非一次性重写。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-brownfield/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-brownfield/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Expo Brownfield"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-data-fetching",
+      "name": "expo-data-fetching",
+      "description": "在 Expo 应用中设计缓存、加载状态、请求取消和离线友好的数据获取。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-data-fetching/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-data-fetching/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Expo Networking"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-design-system",
+      "name": "expo-design-system",
+      "description": "建立 Expo 应用的颜色、间距、组件和深浅主题设计系统。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "expo",
+        "界面交互"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-design-system/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-design-system/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Expo Design Systems"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-dev-client",
+      "name": "expo-dev-client",
+      "description": "配置 Expo Development Client 以调试需要原生依赖的应用。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-dev-client/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-dev-client/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# Important: When Development Clients Are Needed"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-dom",
+      "name": "expo-dom",
+      "description": "在 Expo 中使用 DOM 组件承载 Web 能力并处理原生互操作。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-dom/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-dom/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# What are DOM Components?"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-examples",
+      "name": "expo-examples",
+      "description": "从官方 Expo 示例中定位可复用模式，并安全迁入当前项目。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-examples/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-examples/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Expo Examples"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-module",
+      "name": "expo-module",
+      "description": "创建 Expo 模块，封装原生能力、JS 接口与跨平台实现。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-module/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-module/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Writing Expo Modules"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-native-ui",
+      "name": "expo-native-ui",
+      "description": "使用 Expo 的原生 UI 组件构建符合平台习惯的移动界面。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "expo",
+        "界面交互"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-native-ui/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-native-ui/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Expo Native UI Guidelines"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-overview",
+      "name": "expo-overview",
+      "description": "判断 Expo 项目的基础架构、工作流和适用平台能力。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-overview/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-overview/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：`expo-overview` — router & shared rules for Expo / EAS"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-project-structure",
+      "name": "expo-project-structure",
+      "description": "组织 Expo 项目的路由、资源、配置与跨平台代码目录。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-project-structure/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-project-structure/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Expo Project Structure"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-router",
+      "name": "expo-router",
+      "description": "使用 Expo Router 实现文件路由、深链、导航和受保护页面。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "expo",
+        "界面交互"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-router/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-router/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Expo Router Navigation"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-skill-feedback",
+      "name": "expo-skill-feedback",
+      "description": "收集并整理 Expo Skill 的执行反馈，用于改进其任务覆盖。",
+      "category": "其他",
+      "tags": [
+        "上游",
+        "expo",
+        "其他"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-skill-feedback/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-skill-feedback/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Expo Skill Feedback"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-ui",
+      "name": "expo-ui",
+      "description": "为 Expo 应用设计并实现可访问、响应式的界面与组件状态。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "expo",
+        "界面交互"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-ui/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-ui/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Expo UI (`@expo/ui`)"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-upgrade",
+      "name": "expo-upgrade",
+      "description": "规划 Expo SDK 升级，逐项处理依赖、原生工程和兼容性变更。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-upgrade/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-upgrade/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# References"
+      }
+    },
+    {
+      "id": "upstream-expo-skills-plugins-expo-skills-expo-web-to-native",
+      "name": "expo-web-to-native",
+      "description": "把现有 Web 界面和交互逐步转换为 React Native/Expo 实现。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "expo",
+        "开发工具"
+      ],
+      "author": "expo",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/expo/skills/blob/efa52f0a9d2176db75992736281c77da1b714fa3/plugins/expo/skills/expo-web-to-native/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "expo/skills",
+        "commit": "efa52f0a9d2176db75992736281c77da1b714fa3",
+        "path": "plugins/expo/skills/expo-web-to-native/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Web to Native"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-hf-mcp-skills-hf-mcp",
+      "name": "hf-mcp",
+      "description": "通过 Hugging Face MCP 查询模型、数据集、Space 与 Hub 资源。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/hf-mcp/skills/hf-mcp/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "hf-mcp/skills/hf-mcp/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Hugging Face MCP Server"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-hf-cli",
+      "name": "hf-cli",
+      "description": "使用 Hugging Face CLI 登录、上传、下载和管理 Hub 资源。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/hf-cli/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/hf-cli/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# Commands"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-hf-cloud-aws-context-discovery",
+      "name": "hf-cloud-aws-context-discovery",
+      "description": "发现 AWS 账户、区域和现有资源，为 Hugging Face Cloud 部署建立上下文。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/hf-cloud-aws-context-discovery/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/hf-cloud-aws-context-discovery/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：AWS Context Discovery"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-hf-cloud-python-env-setup",
+      "name": "hf-cloud-python-env-setup",
+      "description": "为 Hugging Face Cloud 作业准备可复现的 Python 环境与依赖。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/hf-cloud-python-env-setup/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/hf-cloud-python-env-setup/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Python Environment Setup for SageMaker"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-hf-cloud-sagemaker-deployment-planner",
+      "name": "hf-cloud-sagemaker-deployment-planner",
+      "description": "规划在 SageMaker 上部署 Hugging Face 模型的容量、镜像和网络方案。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/hf-cloud-sagemaker-deployment-planner/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/hf-cloud-sagemaker-deployment-planner/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：SageMaker Deployment Planner"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-hf-cloud-sagemaker-iam-preflight",
+      "name": "hf-cloud-sagemaker-iam-preflight",
+      "description": "在 SageMaker 部署前核查 IAM 权限、角色和资源访问边界。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/hf-cloud-sagemaker-iam-preflight/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/hf-cloud-sagemaker-iam-preflight/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：SageMaker IAM Preflight"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-hf-cloud-sagemaker-production-defaults",
+      "name": "hf-cloud-sagemaker-production-defaults",
+      "description": "为 SageMaker 推理服务设置监控、弹性、日志等生产默认项。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/hf-cloud-sagemaker-production-defaults/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/hf-cloud-sagemaker-production-defaults/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：SageMaker Production Defaults"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-hf-cloud-serving-image-selection",
+      "name": "hf-cloud-serving-image-selection",
+      "description": "根据模型框架和硬件选择 Hugging Face Cloud 推理镜像。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/hf-cloud-serving-image-selection/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/hf-cloud-serving-image-selection/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Serving Image Selection"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-hf-mem",
+      "name": "hf-mem",
+      "description": "估算加载 Hub 上 Safetensors 或 GGUF 模型权重进行推理所需的内存。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/hf-mem/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/hf-mem/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# When to use?"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-best",
+      "name": "huggingface-best",
+      "description": "按任务、基准分数和设备内存约束比较并推荐 Hugging Face 模型。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-best/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-best/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：HuggingFace Best Model Finder"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-community-evals",
+      "name": "huggingface-community-evals",
+      "description": "在本地硬件用 inspect-ai 或 lighteval 评测 Hub 模型，并选择 vLLM、Transformers 或 accelerate 后端。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-community-evals/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-community-evals/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Overview"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-datasets",
+      "name": "huggingface-datasets",
+      "description": "通过 Dataset Viewer API 查询子集与分片元数据、分页行、筛选、Parquet 下载地址和统计信息。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-datasets/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-datasets/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Hugging Face Dataset Viewer"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-gradio",
+      "name": "huggingface-gradio",
+      "description": "用 Gradio 构建模型演示界面并部署为可交互应用。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "huggingface",
+        "界面交互"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-gradio/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-gradio/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Gradio"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-llm-trainer",
+      "name": "huggingface-llm-trainer",
+      "description": "用 TRL 或 Unsloth 和 Hugging Face Jobs 训练或微调语言、视觉语言模型，覆盖 SFT、DPO、GRPO 等方法。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-llm-trainer/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-llm-trainer/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：TRL Training on Hugging Face Jobs"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-local-models",
+      "name": "huggingface-local-models",
+      "description": "在本地下载、加载并运行 Hugging Face 模型，处理硬件与缓存约束。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-local-models/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-local-models/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Hugging Face Local Models"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-lora-space-builder",
+      "name": "huggingface-lora-space-builder",
+      "description": "为用户提供的 LoRA 构建并发布 Gradio Space 演示，按模型卡配置推理与 ZeroGPU。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-lora-space-builder/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-lora-space-builder/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Gradio LoRA Space Builder"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-paper-publisher",
+      "name": "huggingface-paper-publisher",
+      "description": "把研究论文的模型、数据和演示整理为可发布的 Hugging Face 项目。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "huggingface",
+        "内容创作"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-paper-publisher/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-paper-publisher/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Overview"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-papers",
+      "name": "huggingface-papers",
+      "description": "检索、解读和关联 Hugging Face Papers 上的研究论文与实现。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "huggingface",
+        "内容创作"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-papers/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-papers/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Hugging Face Paper Pages"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-spaces",
+      "name": "huggingface-spaces",
+      "description": "创建、配置和维护 Hugging Face Spaces 应用及其运行环境。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-spaces/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-spaces/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Hugging Face Spaces"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-tool-builder",
+      "name": "huggingface-tool-builder",
+      "description": "基于 Hugging Face API 数据编写可复用脚本，抓取、补充或处理 Hub 信息。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-tool-builder/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-tool-builder/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Hugging Face API Tool Builder"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-trackio",
+      "name": "huggingface-trackio",
+      "description": "用 Trackio 记录训练实验、指标、配置和可比较的运行历史。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-trackio/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-trackio/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Trackio - Experiment Tracking for ML Training"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-vision-trainer",
+      "name": "huggingface-vision-trainer",
+      "description": "在 Hugging Face Jobs 云 GPU 上训练或微调目标检测、图像分类和 SAM 分割模型。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-vision-trainer/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-vision-trainer/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Vision Model Training on Hugging Face Jobs"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-huggingface-zerogpu",
+      "name": "huggingface-zerogpu",
+      "description": "为 Space 配置 ZeroGPU 推理，管理排队、显存和硬件兼容性。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/huggingface-zerogpu/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/huggingface-zerogpu/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Hugging Face ZeroGPU"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-train-sentence-transformers",
+      "name": "train-sentence-transformers",
+      "description": "训练句向量模型，用于语义检索、相似度和重排序任务。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/train-sentence-transformers/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/train-sentence-transformers/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Train a sentence-transformers Model"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-transformers-js",
+      "name": "transformers-js",
+      "description": "在浏览器或 Node.js 中使用 Transformers.js 运行模型推理。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/transformers-js/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/transformers-js/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Transformers.js - Machine Learning for JavaScript"
+      }
+    },
+    {
+      "id": "upstream-huggingface-skills-skills-trl-training",
+      "name": "trl-training",
+      "description": "使用 TRL 进行偏好优化、强化学习或监督微调训练。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "huggingface",
+        "开发工具"
+      ],
+      "author": "huggingface",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/huggingface/skills/blob/80f9fa530e46f4ae642fcb9e1725bad0e1979395/skills/trl-training/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "huggingface/skills",
+        "commit": "80f9fa530e46f4ae642fcb9e1725bad0e1979395",
+        "path": "skills/trl-training/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：TRL Training Skill"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-aspnet-core",
+      "name": "aspnet-core",
+      "description": "构建和维护 ASP.NET Core 应用、API、配置和测试。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/aspnet-core/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/aspnet-core/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：ASP.NET Core"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-chatgpt-apps",
+      "name": "chatgpt-apps",
+      "description": "开发 ChatGPT 应用的 MCP 服务、交互界面和提交配置。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/chatgpt-apps/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/chatgpt-apps/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：ChatGPT Apps"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-cli-creator",
+      "name": "cli-creator",
+      "description": "设计命令行工具的命令结构、参数校验、帮助信息和测试。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/cli-creator/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/cli-creator/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：CLI Creator"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-cloudflare-deploy",
+      "name": "cloudflare-deploy",
+      "description": "将应用按 Cloudflare 部署要求构建、配置并发布。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/cloudflare-deploy/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/cloudflare-deploy/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Cloudflare Deploy"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-define-goal",
+      "name": "define-goal",
+      "description": "在开工前把模糊意图定义为具体、可量化的目标与成功条件。",
+      "category": "其他",
+      "tags": [
+        "上游",
+        "openai",
+        "其他"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/define-goal/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/define-goal/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Define Goal"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-figma",
+      "name": "figma",
+      "description": "读取和操作 Figma 设计上下文，连接设计节点与实现任务。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "openai",
+        "界面交互"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/figma/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/figma/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Figma MCP"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-figma-code-connect-components",
+      "name": "figma-code-connect-components",
+      "description": "为 Figma 组件建立 Code Connect 映射，展示真实代码用法。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "openai",
+        "界面交互"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/figma-code-connect-components/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/figma-code-connect-components/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Code Connect Components"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-figma-create-design-system-rules",
+      "name": "figma-create-design-system-rules",
+      "description": "为代码库生成项目专用的设计系统规则，供 Figma 到代码工作流遵循。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "openai",
+        "界面交互"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/figma-create-design-system-rules/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/figma-create-design-system-rules/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Create Design System Rules"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-figma-create-new-file",
+      "name": "figma-create-new-file",
+      "description": "创建新的空白 Figma 或 FigJam 文件。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "openai",
+        "界面交互"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/figma-create-new-file/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/figma-create-new-file/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：create_new_file — Create a New Figma File"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-figma-generate-design",
+      "name": "figma-generate-design",
+      "description": "将应用页面、视图或多区块布局从代码或说明逐段写入 Figma，并复用已有设计令牌。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "openai",
+        "界面交互"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/figma-generate-design/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/figma-generate-design/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Build / Update Screens from Design System"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-figma-generate-library",
+      "name": "figma-generate-library",
+      "description": "从代码或规范生成 Figma 设计系统组件库。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "openai",
+        "界面交互"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/figma-generate-library/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/figma-generate-library/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Design System Builder — Figma MCP Skill"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-figma-implement-design",
+      "name": "figma-implement-design",
+      "description": "将 Figma 节点的布局、样式和资源准确落实为前端代码。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "openai",
+        "界面交互"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/figma-implement-design/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/figma-implement-design/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Implement Design"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-figma-use",
+      "name": "figma-use",
+      "description": "使用 Figma 工具读取、修改节点并完成设计协作操作。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "openai",
+        "界面交互"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/figma-use/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/figma-use/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：use_figma — Figma Plugin API Skill"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-gh-address-comments",
+      "name": "gh-address-comments",
+      "description": "处理 GitHub 审查意见，定位代码、更新实现并回复结论。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/gh-address-comments/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/gh-address-comments/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：PR Comment Handler"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-gh-fix-ci",
+      "name": "gh-fix-ci",
+      "description": "用 gh 检查 GitHub Actions 失败日志并拟定修复方案；仅在用户明确批准后实施。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/gh-fix-ci/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/gh-fix-ci/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Gh Pr Checks Plan Fix"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-hatch-pet",
+      "name": "hatch-pet",
+      "description": "从角色视觉素材创建、修复、视觉验收并打包 Codex 兼容的动画宠物和精灵图。",
+      "category": "视觉设计",
+      "tags": [
+        "上游",
+        "openai",
+        "视觉设计"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/hatch-pet/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/hatch-pet/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Hatch Pet"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-jupyter-notebook",
+      "name": "jupyter-notebook",
+      "description": "创建和维护 Jupyter Notebook，组织可运行单元、结果和说明。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/jupyter-notebook/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/jupyter-notebook/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Jupyter Notebook Skill"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-linear",
+      "name": "linear",
+      "description": "在 Linear 中查询、创建和更新项目问题、计划与状态。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/linear/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/linear/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Linear"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-migrate-to-codex",
+      "name": "migrate-to-codex",
+      "description": "将既有 Agent 工作流迁移到 Codex 的配置、命令和协作方式。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/migrate-to-codex/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/migrate-to-codex/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Migrate to Codex"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-netlify-deploy",
+      "name": "netlify-deploy",
+      "description": "构建并部署网站到 Netlify，处理预览、环境和发布检查。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/netlify-deploy/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/netlify-deploy/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Netlify Deployment Skill"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-notion-knowledge-capture",
+      "name": "notion-knowledge-capture",
+      "description": "把会话或材料沉淀到 Notion，建立可检索的知识条目。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "openai",
+        "内容创作"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/notion-knowledge-capture/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/notion-knowledge-capture/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Knowledge Capture"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-notion-meeting-intelligence",
+      "name": "notion-meeting-intelligence",
+      "description": "结合 Notion 上下文和研究准备议程、预读及贴合与会者的会议材料。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "openai",
+        "内容创作"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/notion-meeting-intelligence/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/notion-meeting-intelligence/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Meeting Intelligence"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-notion-research-documentation",
+      "name": "notion-research-documentation",
+      "description": "在 Notion 中汇总研究来源、结论和可追溯的文档结构。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "openai",
+        "内容创作"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/notion-research-documentation/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/notion-research-documentation/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Research & Documentation"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-notion-spec-to-implementation",
+      "name": "notion-spec-to-implementation",
+      "description": "把 Notion 产品规格拆解为工程任务、实现步骤和验收条件。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/notion-spec-to-implementation/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/notion-spec-to-implementation/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Spec to Implementation"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-openai-docs",
+      "name": "openai-docs",
+      "description": "查询并引用 OpenAI 官方文档，解决产品、API 和配置问题。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/openai-docs/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/openai-docs/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：OpenAI Docs"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-pdf",
+      "name": "pdf",
+      "description": "从 PDF 抽取内容、生成文档并以渲染结果核验版式。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "openai",
+        "内容创作"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/pdf/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/pdf/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：PDF Skill"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-playwright",
+      "name": "playwright",
+      "description": "编写 Playwright 浏览器自动化，验证页面流程和回归行为。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/playwright/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/playwright/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Playwright CLI Skill"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-playwright-interactive",
+      "name": "playwright-interactive",
+      "description": "通过交互式 Playwright 会话检查网页状态、元素和用户路径。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/playwright-interactive/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/playwright-interactive/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Playwright Interactive Skill"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-render-deploy",
+      "name": "render-deploy",
+      "description": "将服务构建并发布到 Render，配置运行环境和部署检查。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/render-deploy/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/render-deploy/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Deploy to Render"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-screenshot",
+      "name": "screenshot",
+      "description": "按需截取桌面、指定应用或窗口、像素区域的系统级截图。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/screenshot/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/screenshot/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Screenshot Capture"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-security-best-practices",
+      "name": "security-best-practices",
+      "description": "在实现前识别常见安全风险，并采用安全编码与配置做法。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/security-best-practices/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/security-best-practices/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Security Best Practices"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-security-ownership-map",
+      "name": "security-ownership-map",
+      "description": "梳理代码库的安全责任边界、关键资产和维护归属。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/security-ownership-map/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/security-ownership-map/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Security Ownership Map"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-security-threat-model",
+      "name": "security-threat-model",
+      "description": "针对代码库枚举资产、攻击面、威胁路径与缓解措施。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/security-threat-model/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/security-threat-model/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Threat Model Source Code Repo"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-sentry",
+      "name": "sentry",
+      "description": "通过 Sentry CLI 只读检查 issue/event，汇总近期生产错误和基础健康数据。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/sentry/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/sentry/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Sentry (Read-only Observability)"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-speech",
+      "name": "speech",
+      "description": "使用语音合成能力生成语音内容并控制输出参数。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "openai",
+        "内容创作"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/speech/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/speech/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Speech Generation Skill"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-transcribe",
+      "name": "transcribe",
+      "description": "将音视频转写为文本，并处理分段、说话人和时间信息。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "openai",
+        "内容创作"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/transcribe/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/transcribe/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Audio Transcribe"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-vercel-deploy",
+      "name": "vercel-deploy",
+      "description": "将应用构建、预览和发布到 Vercel，并验证部署结果。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/vercel-deploy/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/vercel-deploy/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Vercel Deploy"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-winui-app",
+      "name": "winui-app",
+      "description": "创建或维护 WinUI 桌面应用的界面、状态和平台集成。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "openai",
+        "界面交互"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/winui-app/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/winui-app/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：WinUI App"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-curated-yeet",
+      "name": "yeet",
+      "description": "仅在用户明确要求时，用 GitHub CLI 一次完成暂存、提交、推送和创建 PR。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/yeet/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.curated/yeet/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# Prerequisites"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-system-imagegen",
+      "name": "imagegen",
+      "description": "生成或编辑位图视觉资产，并按目标用途检查画面结果。",
+      "category": "视觉设计",
+      "tags": [
+        "上游",
+        "openai",
+        "视觉设计"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.system/imagegen/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.system/imagegen/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Image Generation Skill"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-system-openai-docs",
+      "name": "openai-docs",
+      "description": "查询并引用 OpenAI 官方文档，解决产品、API 和配置问题。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.system/openai-docs/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.system/openai-docs/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：OpenAI Docs"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-system-plugin-creator",
+      "name": "plugin-creator",
+      "description": "搭建 Codex 插件目录、清单和可发布的能力组织。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.system/plugin-creator/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.system/plugin-creator/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Plugin Creator"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-system-skill-creator",
+      "name": "skill-creator",
+      "description": "设计、更新并衡量 Codex Skill 的说明、资源和验证方式。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.system/skill-creator/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.system/skill-creator/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Skill Creator"
+      }
+    },
+    {
+      "id": "upstream-openai-skills-skills-system-skill-installer",
+      "name": "skill-installer",
+      "description": "从受信任目录或 GitHub 路径发现并安装 Codex Skill。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "openai",
+        "开发工具"
+      ],
+      "author": "openai",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.system/skill-installer/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "openai/skills",
+        "commit": "49f948faa9258a0c61caceaf225e179651397431",
+        "path": "skills/.system/skill-installer/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Skill Installer"
+      }
+    },
+    {
+      "id": "upstream-remotion-dev-skills-skills-remotion-best-practices",
+      "name": "remotion-best-practices",
+      "description": "根据视频任务路由到合适的 Remotion 专项 Skill。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "remotion-dev",
+        "视频动画"
+      ],
+      "author": "remotion-dev",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-best-practices/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "remotion-dev/skills",
+        "commit": "cf49eff5d4463b33966b6618c83f7295797dd028",
+        "path": "skills/remotion-best-practices/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# Preserve user changes"
+      }
+    },
+    {
+      "id": "upstream-remotion-dev-skills-skills-remotion-captions",
+      "name": "remotion-captions",
+      "description": "将字幕数据转为可逐词高亮、可排版的 Remotion 视频字幕。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "remotion-dev",
+        "视频动画"
+      ],
+      "author": "remotion-dev",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-captions/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "remotion-dev/skills",
+        "commit": "cf49eff5d4463b33966b6618c83f7295797dd028",
+        "path": "skills/remotion-captions/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# Generating captions"
+      }
+    },
+    {
+      "id": "upstream-remotion-dev-skills-skills-remotion-create",
+      "name": "remotion-create",
+      "description": "从脚本或素材创建 Remotion 组合、场景和时间轴结构。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "remotion-dev",
+        "视频动画"
+      ],
+      "author": "remotion-dev",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-create/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "remotion-dev/skills",
+        "commit": "cf49eff5d4463b33966b6618c83f7295797dd028",
+        "path": "skills/remotion-create/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# Scaffold a project"
+      }
+    },
+    {
+      "id": "upstream-remotion-dev-skills-skills-remotion-docs",
+      "name": "remotion-docs",
+      "description": "查询并运用 Remotion 官方文档，解决 API 和渲染实现问题。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "remotion-dev",
+        "视频动画"
+      ],
+      "author": "remotion-dev",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-docs/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "remotion-dev/skills",
+        "commit": "cf49eff5d4463b33966b6618c83f7295797dd028",
+        "path": "skills/remotion-docs/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# Searching the docs"
+      }
+    },
+    {
+      "id": "upstream-remotion-dev-skills-skills-remotion-interactivity",
+      "name": "remotion-interactivity",
+      "description": "按 Remotion 的约定组织支持交互的 markup 结构。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "remotion-dev",
+        "视频动画"
+      ],
+      "author": "remotion-dev",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-interactivity/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "remotion-dev/skills",
+        "commit": "cf49eff5d4463b33966b6618c83f7295797dd028",
+        "path": "skills/remotion-interactivity/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# Make an HTML element interactive using `Interactive`"
+      }
+    },
+    {
+      "id": "upstream-remotion-dev-skills-skills-remotion-maps",
+      "name": "remotion-maps",
+      "description": "在 Remotion 视频中绘制地图、路线、标记和镜头移动。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "remotion-dev",
+        "视频动画"
+      ],
+      "author": "remotion-dev",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-maps/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "remotion-dev/skills",
+        "commit": "cf49eff5d4463b33966b6618c83f7295797dd028",
+        "path": "skills/remotion-maps/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Remotion Maps"
+      }
+    },
+    {
+      "id": "upstream-remotion-dev-skills-skills-remotion-markup",
+      "name": "remotion-markup",
+      "description": "为 Remotion 视频整理内容、动画和特效的实现最佳实践。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "remotion-dev",
+        "视频动画"
+      ],
+      "author": "remotion-dev",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-markup/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "remotion-dev/skills",
+        "commit": "cf49eff5d4463b33966b6618c83f7295797dd028",
+        "path": "skills/remotion-markup/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# Preserve user changes"
+      }
+    },
+    {
+      "id": "upstream-remotion-dev-skills-skills-remotion-multimedia",
+      "name": "remotion-multimedia",
+      "description": "在 Remotion 项目中使用 Mediabunny 读取、处理和复用媒体数据。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "remotion-dev",
+        "视频动画"
+      ],
+      "author": "remotion-dev",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-multimedia/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "remotion-dev/skills",
+        "commit": "cf49eff5d4463b33966b6618c83f7295797dd028",
+        "path": "skills/remotion-multimedia/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# Getting audio duration"
+      }
+    },
+    {
+      "id": "upstream-remotion-dev-skills-skills-remotion-render",
+      "name": "remotion-render",
+      "description": "配置 Remotion 的本地或云端渲染、编码、并发与产物检查。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "remotion-dev",
+        "视频动画"
+      ],
+      "author": "remotion-dev",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-render/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "remotion-dev/skills",
+        "commit": "cf49eff5d4463b33966b6618c83f7295797dd028",
+        "path": "skills/remotion-render/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# General rendering strategy"
+      }
+    },
+    {
+      "id": "upstream-remotion-dev-skills-skills-remotion-saas",
+      "name": "remotion-saas",
+      "description": "使用 Remotion 构建带视频能力的应用。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "remotion-dev",
+        "视频动画"
+      ],
+      "author": "remotion-dev",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-saas/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "remotion-dev/skills",
+        "commit": "cf49eff5d4463b33966b6618c83f7295797dd028",
+        "path": "skills/remotion-saas/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# Choosing a template or a framework"
+      }
+    },
+    {
+      "id": "upstream-remotion-dev-skills-skills-remotion-studio",
+      "name": "remotion-studio",
+      "description": "使用 Remotion Studio 预览、调试参数并检查时间轴画面。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "remotion-dev",
+        "视频动画"
+      ],
+      "author": "remotion-dev",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-studio/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "remotion-dev/skills",
+        "commit": "cf49eff5d4463b33966b6618c83f7295797dd028",
+        "path": "skills/remotion-studio/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：# Useful flags"
+      }
+    },
+    {
+      "id": "upstream-remotion-dev-skills-skills-remotion-upgrade",
+      "name": "remotion-upgrade",
+      "description": "升级 Remotion 版本并处理依赖、配置和渲染兼容性。",
+      "category": "视频动画",
+      "tags": [
+        "上游",
+        "remotion-dev",
+        "视频动画"
+      ],
+      "author": "remotion-dev",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-upgrade/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "remotion-dev/skills",
+        "commit": "cf49eff5d4463b33966b6618c83f7295797dd028",
+        "path": "skills/remotion-upgrade/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Upgrade Remotion"
+      }
+    },
+    {
+      "id": "upstream-supabase-agent-skills-skills-supabase",
+      "name": "supabase",
+      "description": "使用 Supabase 的数据库、认证、存储、函数和实时能力实现产品功能。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "supabase",
+        "开发工具"
+      ],
+      "author": "supabase",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/supabase/agent-skills/blob/544bfc56c89afe2b87b20017a59b2c6e9502a1fb/skills/supabase/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "supabase/agent-skills",
+        "commit": "544bfc56c89afe2b87b20017a59b2c6e9502a1fb",
+        "path": "skills/supabase/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Supabase"
+      }
+    },
+    {
+      "id": "upstream-supabase-agent-skills-skills-supabase-postgres-best-practices",
+      "name": "supabase-postgres-best-practices",
+      "description": "审查 Postgres 查询、索引、RLS 与模式设计的性能和安全性。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "supabase",
+        "开发工具"
+      ],
+      "author": "supabase",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/supabase/agent-skills/blob/544bfc56c89afe2b87b20017a59b2c6e9502a1fb/skills/supabase-postgres-best-practices/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "官方来源·未逐项运行",
+      "provenance": {
+        "repo": "supabase/agent-skills",
+        "commit": "544bfc56c89afe2b87b20017a59b2c6e9502a1fb",
+        "path": "skills/supabase-postgres-best-practices/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Supabase Postgres Best Practices"
+      }
+    },
+    {
+      "id": "upstream-vercel-labs-agent-skills-skills-composition-patterns",
+      "name": "vercel-composition-patterns",
+      "description": "用组合组件、Context 和 render props 重构可扩展的 React API。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "vercel-labs",
+        "开发工具"
+      ],
+      "author": "vercel-labs",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/composition-patterns/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "vercel-labs/agent-skills",
+        "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+        "path": "skills/composition-patterns/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：React Composition Patterns"
+      }
+    },
+    {
+      "id": "upstream-vercel-labs-agent-skills-skills-deploy-to-vercel",
+      "name": "deploy-to-vercel",
+      "description": "将应用部署到 Vercel，处理项目设置、环境变量和发布验证。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "vercel-labs",
+        "开发工具"
+      ],
+      "author": "vercel-labs",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/deploy-to-vercel/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "vercel-labs/agent-skills",
+        "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+        "path": "skills/deploy-to-vercel/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Deploy to Vercel"
+      }
+    },
+    {
+      "id": "upstream-vercel-labs-agent-skills-skills-react-best-practices",
+      "name": "vercel-react-best-practices",
+      "description": "按 Vercel 的 React 性能规则优化渲染、数据获取和包体积。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "vercel-labs",
+        "开发工具"
+      ],
+      "author": "vercel-labs",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/react-best-practices/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "vercel-labs/agent-skills",
+        "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+        "path": "skills/react-best-practices/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Vercel React Best Practices"
+      }
+    },
+    {
+      "id": "upstream-vercel-labs-agent-skills-skills-react-native-skills",
+      "name": "vercel-react-native-skills",
+      "description": "为 React Native/Expo 应用处理列表性能、动画与原生平台最佳实践。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "vercel-labs",
+        "开发工具"
+      ],
+      "author": "vercel-labs",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/react-native-skills/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "vercel-labs/agent-skills",
+        "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+        "path": "skills/react-native-skills/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：React Native Skills"
+      }
+    },
+    {
+      "id": "upstream-vercel-labs-agent-skills-skills-react-view-transitions",
+      "name": "vercel-react-view-transitions",
+      "description": "在 React 中实现可访问、可回退的 View Transitions 页面过渡。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "vercel-labs",
+        "界面交互"
+      ],
+      "author": "vercel-labs",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/react-view-transitions/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "vercel-labs/agent-skills",
+        "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+        "path": "skills/react-view-transitions/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：React View Transitions"
+      }
+    },
+    {
+      "id": "upstream-vercel-labs-agent-skills-skills-vercel-cli-with-tokens",
+      "name": "vercel-cli-with-tokens",
+      "description": "使用 Vercel CLI 执行需要令牌的项目操作，并避免泄露凭据。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "vercel-labs",
+        "开发工具"
+      ],
+      "author": "vercel-labs",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/vercel-cli-with-tokens/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "vercel-labs/agent-skills",
+        "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+        "path": "skills/vercel-cli-with-tokens/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Vercel CLI with Tokens"
+      }
+    },
+    {
+      "id": "upstream-vercel-labs-agent-skills-skills-vercel-optimize",
+      "name": "vercel-optimize",
+      "description": "基于 Vercel 指标、用量、项目配置和代码扫描，提出可验证的成本与性能优化建议。",
+      "category": "开发工具",
+      "tags": [
+        "上游",
+        "vercel-labs",
+        "开发工具"
+      ],
+      "author": "vercel-labs",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/vercel-optimize/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "vercel-labs/agent-skills",
+        "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+        "path": "skills/vercel-optimize/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Vercel Optimize"
+      }
+    },
+    {
+      "id": "upstream-vercel-labs-agent-skills-skills-web-design-guidelines",
+      "name": "web-design-guidelines",
+      "description": "按 Web Interface Guidelines 审查界面的可用性、可访问性和一致性。",
+      "category": "界面交互",
+      "tags": [
+        "上游",
+        "vercel-labs",
+        "界面交互"
+      ],
+      "author": "vercel-labs",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/web-design-guidelines/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "vercel-labs/agent-skills",
+        "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+        "path": "skills/web-design-guidelines/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Web Interface Guidelines"
+      }
+    },
+    {
+      "id": "upstream-vercel-labs-agent-skills-skills-writing-guidelines",
+      "name": "writing-guidelines",
+      "description": "按 Vercel 的写作规范改善产品文案、技术说明和可读性。",
+      "category": "内容创作",
+      "tags": [
+        "上游",
+        "vercel-labs",
+        "内容创作"
+      ],
+      "author": "vercel-labs",
+      "license": "以源仓库与技能目录许可证为准",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills/blob/063bee94c3f4df8453406c830b0a7df0f2860278/skills/writing-guidelines/SKILL.md",
+      "downloadUrl": null,
+      "packageBytes": null,
+      "sha256": null,
+      "status": "维护者来源·未逐项运行",
+      "provenance": {
+        "repo": "vercel-labs/agent-skills",
+        "commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+        "path": "skills/writing-guidelines/SKILL.md",
+        "checkedAt": "2026-09-28T18:43:21Z",
+        "reason": "已读取 SKILL.md frontmatter 与正文标题：Writing Guidelines"
+      }
+    }
+  ]
+}

@@ -28,6 +28,16 @@ sync_dir() {
 
 # 代码目录（整目录）
 sync_dir app
+# 反套利：酒力权重/浮动/异常判据参数不进公开仓（公开原则隐藏参数）
+if [ -d "$MAIN_REPO/app/config" ]; then
+  mkdir -p "$WORK/public/app/config"
+  for f in "$MAIN_REPO"/app/config/*; do
+    case "$(basename "$f")" in
+      vitality.json) echo "→ 排除 app/config/vitality.json（反套利）" ;;
+      *) cp "$f" "$WORK/public/app/config/" ;;
+    esac
+  done
+fi
 sync_dir agent
 sync_dir hermes
 

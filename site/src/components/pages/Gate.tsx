@@ -6,16 +6,17 @@ import { Btn, Field, Note } from "./FormBits";
 /** 登录墙：群像与窖藏只对群友开放。未登录时给一张表单，不给假预览。 */
 /** children 必须是已渲染的元素（不能是函数）：这一层会被服务端组件直接引用，函数没法跨 RSC 边界传。 */
 export function Gate({ what, why, children }: { what: string; why: string; children: React.ReactNode }) {
-  const { status, user, signIn, signUp, signOut } = useAuth();
+  const { status, user, netErr, signIn, signUp, signOut, refresh } = useAuth();
   const [mode, setMode] = useState<"in" | "up">("in");
   const [u, setU] = useState(""); const [p, setP] = useState(""); const [code, setCode] = useState(""); const [name, setName] = useState("");
   const [names, setNames] = useState<string[]>([]);
   const [busy, setBusy] = useState(false); const [err, setErr] = useState("");
 
-  // 注册页的群昵称下拉：从公开名单取，选中即按微信身份绑定（后端按显示名唯一匹配）
+  // 注册页的群昵称下拉：只在真的要注册时才取公开名单（匿名访客不白请求，登录态更不需要）
   useEffect(() => {
+    if (mode !== "up" || status !== "out") return;
     apiFetch<{ names: string[] }>("/api/members/names").then((d) => setNames(d.names)).catch(() => {});
-  }, []);
+  }, [mode, status]);
 
   if (status === "loading") {
     return <p className="py-10 font-sans text-[14px] text-ink-3">正在验票……</p>;
@@ -45,6 +46,11 @@ export function Gate({ what, why, children }: { what: string; why: string; child
 
   return (
     <div className="grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,340px)]">
+      {netErr && (
+        <div className="rounded-[8px] border border-amber/45 bg-amber-wash/60 px-4 py-3 font-sans text-[13px] text-ink-2 lg:col-span-2">
+          暂时连不上服务器，你的登录票据还在，没有失效。<button type="button" onClick={() => void refresh()} className="ml-1 min-h-11 font-semibold text-blue-text underline underline-offset-2 sm:min-h-0">重试</button>
+        </div>
+      )}
       <div className="min-w-0">
         <h2 className="font-serif text-[26px] font-bold leading-snug text-ink sm:text-[30px]">{what}需要登录</h2>
         <p className="prose-sheet mt-4 text-[16.5px] leading-[1.85] text-ink-2">{why}</p>
@@ -57,13 +63,15 @@ export function Gate({ what, why, children }: { what: string; why: string; child
 
       <form onSubmit={submit} className="rounded-[10px] border border-rule bg-paper-2/50 px-5 py-6 sm:px-6">
         <div className="space-y-4">
-          <Field label="用户名" name="username" autoComplete="username" required value={u} onChange={(e) => setU(e.target.value)} placeholder="群里认得出你的名字" />
+          {mode === "in" && (
+            <Field label="用户名" name="username" autoComplete="username" required value={u} onChange={(e) => setU(e.target.value)} placeholder="群里认得出你的名字" />
+          )}
           <Field label="密码" name="password" type="password" autoComplete={mode === "in" ? "current-password" : "new-password"} required value={p} onChange={(e) => setP(e.target.value)} placeholder="至少 6 位" minLength={6} />
           {mode === "up" && (
             <>
               <label className="block">
                 <span className="label">群昵称（选一个，这就是你的用户名）</span>
-                <select value={name} onChange={(e) => setName(e.target.value)}
+                <select required value={name} onChange={(e) => setName(e.target.value)}
                   className="mt-1.5 block min-h-11 w-full rounded-[4px] border border-rule bg-paper px-3 py-2 font-sans text-[15px] text-ink outline-none transition-colors focus:border-blue-2 focus:bg-paper-2/50">
                   <option value="">选你的群昵称…</option>
                   {names.map((n) => <option key={n} value={n}>{n}</option>)}

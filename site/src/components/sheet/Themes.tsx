@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import type { Theme, Thread } from "@/lib/shared";
 import { pad3 } from "@/lib/shared";
 import { LensPlate } from "./LensPlate";
+import { SpeakerIdentity } from "@/components/ui/SpeakerIdentity";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -99,10 +100,10 @@ export function Themes({ themes, threads, issue, illus = [] }: { themes: Theme[]
             {t.voices.length > 0 && (
               <ul className="mt-6 space-y-2.5 border-l border-rule pl-5 sm:pl-6">
                 {t.voices.map((v, j) => (
-                  <li key={j} className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
-                    <span data-person={v.a} className="shrink-0 font-sans text-[13px] font-semibold text-blue-text">{v.a}</span>
+                  <li key={j} className="flex flex-col items-start gap-x-2.5 gap-y-2 sm:flex-row">
+                    <SpeakerIdentity name={v.a} />
                     {/* 「」压紧 0.18em：CJK 引号自带侧边空隙，不压就会与人名、正文各拉开一个空格 */}
-                    <p className="prose-sheet min-w-0 flex-1 text-[16px] leading-[1.8] text-ink-2">
+                    <p className="prose-sheet min-w-0 w-full text-[16px] leading-[1.8] text-ink-2 sm:w-auto sm:flex-1">
                       <span className="-mr-[0.18em] text-ink-3">「</span>
                       <span dangerouslySetInnerHTML={{ __html: v.v }} />
                       <span className="-ml-[0.18em] text-ink-3">」</span>

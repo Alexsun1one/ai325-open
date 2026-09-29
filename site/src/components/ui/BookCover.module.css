@@ -1,0 +1,76 @@
+.cover {
+  --cover-w: 168px;
+  --cover-h: 248px;
+  position: relative;
+  display: block;
+  width: var(--cover-w);
+  height: var(--cover-h);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 2px 7px 7px 2px;
+  box-shadow: 8px 10px 20px rgb(20 36 58 / 14%), 1px 0 0 rgb(255 255 255 / 34%) inset;
+  color: #172231;
+  isolation: isolate;
+}
+.shelf { --cover-w: 216px; --cover-h: 300px; }
+.library { --cover-w: 148px; --cover-h: 216px; width: min(var(--cover-w), 100%); height: auto; aspect-ratio: 148 / 216; }
+.spine { position: absolute; inset: 0 auto 0 0; z-index: 2; width: 9px; background: rgb(16 30 53 / 22%); box-shadow: 1px 0 0 rgb(255 255 255 / 24%) inset; }
+.pages { position: absolute; inset: 4px 0 4px auto; z-index: 2; width: 5px; border-radius: 0 5px 5px 0; background: repeating-linear-gradient(to bottom, #f4f0e6 0 2px, #cfc9bb 2px 3px); }
+.face { position: relative; z-index: 1; display: flex; height: 100%; flex-direction: column; min-width: 0; padding: 20px 17px 18px 25px; }
+.library .face { padding: 14px 12px 12px 18px; }
+.kicker { font: 600 10px/1.4 var(--font-sans, system-ui), sans-serif; letter-spacing: .16em; opacity: .7; }
+.title { display: flex; min-width: 0; flex-direction: column; gap: 3px; margin-top: 10px; overflow-wrap: anywhere; font: 700 clamp(16px, 1.55vw, 22px)/1.24 var(--font-serif, Georgia), serif; letter-spacing: .01em; }
+.title[data-length="long"] { font-size: clamp(14px, 1.3vw, 18px); line-height: 1.3; }
+.title[data-length="short"] { font-size: clamp(22px, 2.15vw, 30px); line-height: 1.15; }
+.library .title { flex: 0 0 auto; min-height: 0; font-size: clamp(14px, 1.2vw, 18px); line-height: 1.25; }
+/* webkit line-clamp 带 padding 的元素会把截断行漏出边界——clamp 挪到无 padding 的独立内层 */
+.library .titleText { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.library .kicker, .library .category, .library .byline { flex: 0 0 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.owner { font: 600 11px/1.35 var(--font-sans, system-ui), sans-serif; letter-spacing: .02em; opacity: .66; }
+.category { max-width: 100%; margin-top: 7px; overflow-wrap: anywhere; font: 11px/1.45 var(--font-sans, system-ui), sans-serif; opacity: .68; }
+.byline { max-width: 100%; margin-top: auto; overflow-wrap: anywhere; font: 12px/1.45 var(--font-sans, system-ui), sans-serif; opacity: .72; }
+.signal { display: block; width: 100%; height: 1px; margin-top: auto; background: currentColor; opacity: .6; }
+
+/* 六种版式是结构分流，不是只换颜色：短题主位、框内居中、仓库字阶、横题带、侧栏、双色纸面。 */
+.cover[data-variant="0"] .title[data-length="short"] { max-width: 94%; font-size: clamp(25px, 2.6vw, 36px); }
+.cover[data-variant="0"] .signal { width: 36px; height: 36px; margin-top: 24px; border: 1px solid currentColor; background: transparent; }
+.cover[data-variant="1"] .face { margin: 15px; height: calc(100% - 30px); justify-content: center; border: 1px solid currentColor; padding: 20px 15px; text-align: center; }
+.cover[data-variant="1"] .kicker, .cover[data-variant="1"] .category, .cover[data-variant="1"] .byline { align-self: center; }
+.cover[data-variant="1"] .title { margin-top: 15px; align-items: center; }
+.cover[data-variant="1"] .signal { width: 40px; margin: 18px auto 0; }
+.cover[data-kind="repository"][data-variant="2"] .face { padding-top: 28px; }
+.cover[data-kind="repository"][data-variant="2"] .title { font-family: var(--font-sans, system-ui), sans-serif; font-size: clamp(18px, 1.8vw, 26px); letter-spacing: .02em; }
+.cover[data-kind="repository"][data-variant="2"] .owner { font-size: 12px; letter-spacing: .04em; }
+.cover[data-kind="repository"][data-variant="2"] .signal { width: 28px; height: 28px; border: 1px solid currentColor; border-radius: 50%; background: transparent; }
+.cover[data-variant="3"] .face { justify-content: center; }
+.cover[data-variant="3"] .title { margin-left: -25px; padding: 12px 18px 13px 25px; background: #183f70; color: #f5f1e7; }
+.cover[data-variant="3"] .signal { width: 42%; margin-top: 24px; }
+.cover[data-variant="4"] .face { padding-left: 43px; }
+.cover[data-variant="4"] .face::before { content: ""; position: absolute; inset: 0 auto 0 16px; width: 12px; border-right: 1px solid currentColor; background: rgb(255 255 255 / 18%); }
+.cover[data-variant="4"] .category { position: absolute; left: 3px; top: 50%; width: 12px; margin: 0; transform: translateY(-50%); writing-mode: vertical-rl; font-size: 10px; }
+.cover[data-variant="4"] .signal { width: 58px; }
+.cover[data-variant="5"] { background: #5a3029; color: #f8efe3; }
+.cover[data-variant="5"] .face { justify-content: center; }
+.cover[data-variant="5"] .title { margin: 0; padding: 14px 10px; background: #f4eadc; color: #2e2724; text-align: center; }
+.cover[data-variant="5"] .kicker, .cover[data-variant="5"] .category, .cover[data-variant="5"] .byline { color: #f8efe3; }
+.cover[data-variant="5"] .signal { width: 30px; margin: 25px auto 0; background: #f8efe3; }
+
+/* library 封面保持统一紧凑字阶；高 specificity 防止 shelf 变体字号泄漏。 */
+.cover.library .title,
+.cover.library[data-variant="0"] .title[data-length="short"],
+.cover.library[data-kind="repository"][data-variant="2"] .title { font-size: clamp(14px, 1.2vw, 18px); line-height: 1.25; }
+.cover.library .signal { flex: none; width: 42px; height: 1px; margin: 12px 0 0; border: 0; border-radius: 0; background: currentColor; }
+.library.cover[data-variant="1"] .face { margin: 10px; height: calc(100% - 20px); padding: 12px 8px; }
+
+.cover[data-variant="0"] { background: #dce7f3; color: #15365f; }
+.cover[data-variant="1"] { background: #f0eadc; color: #2e302e; }
+.cover[data-variant="2"] { background: #183f70; color: #f5f1e7; }
+.cover[data-variant="3"] { background: #dce3dc; color: #234333; }
+.cover[data-variant="4"] { background: #b8cbe4; color: #172f57; }
+.cover[data-active="true"] { box-shadow: 10px 14px 24px rgb(20 36 58 / 20%), 1px 0 0 rgb(255 255 255 / 34%) inset; }
+
+@media (max-width: 720px) {
+  .shelf { --cover-w: 160px; --cover-h: 236px; }
+  .shelf .face { padding: 14px 11px 12px 17px; }
+  .shelf .title[data-length="long"] { font-size: 14px; }
+}

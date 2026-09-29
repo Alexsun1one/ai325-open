@@ -2,6 +2,7 @@
 import { useState } from "react";
 import type { Quote } from "@/lib/shared";
 import { ToneTag } from "./ToneTag";
+import { SpeakerIdentity } from "@/components/ui/SpeakerIdentity";
 import { renderShareCard } from "@/lib/sharecard";
 
 /**
@@ -54,14 +55,16 @@ export function QuoteWall({ quotes, issue, date, degree }: { quotes: Quote[]; is
             <span aria-hidden className="-mr-[0.12em] font-bold text-amber-text">「</span>{q.t}<span aria-hidden className="-ml-[0.12em] font-bold text-amber-text">」</span>
           </blockquote>
           <figcaption className="mt-3.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-            <div className="flex min-w-0 items-center gap-2.5">
-              <span data-person={q.a} className="truncate font-sans text-[13px] font-semibold text-blue-text">{q.a}</span>
+            <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2.5">
+              <SpeakerIdentity name={q.a} />
               <ToneTag g={q.g} />
               {q.evidence && (
-                <a href={`/cellar/?unit=${q.evidence.unit}${q.evidence.ordinal ? `&at=${q.evidence.ordinal}` : ""}`}
+                <a
+                  href={`/cellar/?unit=${encodeURIComponent(q.evidence.unit)}${Number.isInteger(q.evidence.ordinal) && q.evidence.ordinal! > 0 ? `&at=${q.evidence.ordinal}` : ""}`}
+                  aria-label={`打开凭证 ${q.evidence.unit}${Number.isInteger(q.evidence.ordinal) && q.evidence.ordinal! > 0 ? `，定位第 ${q.evidence.ordinal} 条` : ""}`}
                   className="inline-flex shrink-0 items-center gap-1 rounded-[4px] border border-amber-deep/40 bg-amber-wash/40 px-1.5 py-[2px] font-sans text-[11px] font-semibold text-amber-text no-underline transition-colors hover:border-amber-deep/70 hover:bg-amber-wash">
                   <svg aria-hidden width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/></svg>
-                  凭证 · 话题块 #{q.evidence.unit}
+                  凭证 · 窖藏 {q.evidence.unit}
                 </a>
               )}
             </div>

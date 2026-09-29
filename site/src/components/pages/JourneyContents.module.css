@@ -1,0 +1,42 @@
+.root { max-width: var(--reading-width, 760px); margin: 36px auto 44px; font: 14px/1.7 var(--font-sans); }
+.mobile { border-block: 1px solid var(--rule); }
+.mobile summary { min-height: 56px; padding-block: 16px; color: var(--blue-text); cursor: pointer; }
+.mobile summary > span { display: inline-block; margin-left: 16px; color: var(--ink-3); font-size: 13px; }
+.mobile nav { max-height: min(520px, 60svh); height: auto; padding: 0 4px 12px; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+.list { list-style: none; padding: 0; margin: 0; }
+.list a { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: baseline; gap: 8px; min-height: 44px; padding: 10px 8px; color: var(--ink-2); text-decoration: none; overflow-wrap: anywhere; border-radius: 3px; }
+.number { color: var(--ink-3); font-size: 12px; font-variant-numeric: tabular-nums; }
+.list a[aria-current="location"] { background: var(--blue-wash); color: var(--blue-text); font-weight: 600; }
+.list a[aria-current="location"] .number { color: inherit; }
+.back { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; margin-top: 8px; padding: 8px; color: var(--blue-text); border-top: 1px solid var(--rule); }
+.root :is(a, summary):focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.rail { display: none; }
+
+@media (min-width: 1200px) {
+  .root { margin: 0; }
+  .mobile { display: none; }
+  /* Positioned against the full article, so the sticky rail lasts through its ending. */
+  .rail { display: block; position: absolute; top: 0; bottom: 0; left: calc(100% + 40px); width: 220px; }
+  .sticky { position: sticky; top: calc(var(--nav-h, 110px) + 24px); display: flex; flex-direction: column; max-height: calc(100svh - var(--nav-h, 110px) - 48px); border-top: 2px solid var(--blue); padding-top: 16px; }
+  .heading { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; padding-inline: 8px; }
+  .heading h2 { color: var(--blue-text); font: 600 16px/1.5 var(--font-sans); margin: 0; }
+  .heading > span { color: var(--ink-3); font-size: 12px; }
+  .current { margin: 16px 8px; color: var(--ink-2); font-size: 13px; line-height: 1.7; }
+  .current > span { display: block; color: var(--ink-3); font-size: 12px; margin-bottom: 4px; }
+  .railNav { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; padding: 4px; }
+  .sticky > :not(.railNav) { flex-shrink: 0; }
+}
+
+@media (max-width: 700px) {
+  .root { margin-block: 28px 32px; }
+  .mobile summary > span { margin-left: 12px; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .list a:hover { color: var(--blue-text); text-decoration: underline; text-underline-offset: 4px; }
+  .mobile summary:hover { color: var(--ink); }
+}
+
+@media print {
+  .root { display: none; }
+}

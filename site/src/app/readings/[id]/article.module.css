@@ -1,0 +1,7 @@
+/* Only reading bodies: retain the existing editorial measure and safe Markdown renderer. */
+.body.body { font-size: inherit; line-height: inherit; color: inherit; }
+.body strong { color: var(--blue-text); font-weight: 700; }
+.body :is(code, pre) { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+.body blockquote { border-left-color: var(--blue); padding-left: 1em; }
+.practiceLink { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 16px; color: var(--blue-text); font: 600 15px/1.6 var(--font-sans); }
+.practiceLink:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }

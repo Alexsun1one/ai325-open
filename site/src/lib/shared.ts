@@ -5,7 +5,7 @@ export interface Theme { h: string; when: string; body: string; deep: string; vo
 export interface Event { t: string; h: string; d: string; src?: "digest" | "db" }
 export interface ToneNote { h: string; cls: Tone; body: string }
 export interface Insight { h: string; en: string; body: string }
-export interface Quote { t: string; a: string; g: Tone; evidence?: { unit: number; ordinal?: number } }
+export interface Quote { t: string; a: string; g: Tone; evidence?: { unit: string; ordinal?: number } }
 export interface Glossary { term: string; def: string }
 export interface Arsenal { h: string; body: string }
 export interface Docket { kind: string; h: string; d: string; status: "open" | "closed"; carried_from?: number }
@@ -15,6 +15,7 @@ export interface MemberFocus { name: string; role: string; msgs: number; tone: T
 export interface Newcomer { name: string; note: string; t: string; by?: string; first_words?: string }
 export interface Dimension { name: string; score: number; grade: string; detail: string }
 export interface Thread { id: string; title: string; theme: string; status: "ongoing" | "closed"; first_issue?: number; prev_issue?: number | null }
+export interface ReaderEcho { of_window?: string; anchors?: string[]; text?: string }
 
 export interface Ledger {
   date: string;
@@ -41,6 +42,7 @@ export interface Ledger {
   thanks?: { name: string; why: string }[];
   quality: { overall: number; grade: string; dimensions: Dimension[]; basis: string };
   threads: Thread[];
+  reader_echo?: ReaderEcho;
   credits: { distilled_by: string; reviewed_by: string; generated_at: string };
   footer: string[];
 }

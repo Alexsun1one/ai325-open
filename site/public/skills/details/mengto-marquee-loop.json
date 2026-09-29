@@ -1,0 +1,9 @@
+{
+  "skillMarkdown": "---\nname: marquee-loop\ndescription: \"Apply seamless infinite marquee loops using duplicated items.\"\n---\n\n# Marquee Skill\n\n## Use When\n- A design needs a seamless infinite loop for logos, testimonials, screenshots, tags, or short feature chips.\n\n## Workflow\n1. Duplicate the item sequence so the end and beginning match perfectly.\n2. Animate the track with a linear transform from 0 to -50%.\n3. Keep item widths stable to prevent jumps during the loop.\n4. Mask or fade the edges when the marquee enters or exits a section.\n5. Pause or slow the marquee on hover only when interaction is useful.\n6. Respect prefers-reduced-motion with a static wrap or very slow movement.\n\n## Guardrails\n- Do not animate unique content that users must read carefully.\n- Do not use large CPU-heavy shadows or filters on every moving item.\n",
+  "sourceUrl": "https://github.com/MengTo/skills/blob/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/marquee-loop/SKILL.md",
+  "repositoryUrl": "https://github.com/MengTo/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 6367,
+  "starsCheckedAt": "2026-09-28T18:57:00Z"
+}

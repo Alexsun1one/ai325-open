@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 RUN apt-get update && apt-get install -y --no-install-recommends zstd && rm -rf /var/lib/apt/lists/*
-RUN pip install --no-cache-dir fastapi uvicorn python-multipart
+RUN pip install --no-cache-dir fastapi uvicorn python-multipart cryptography
 WORKDIR /app
 COPY app /app
 RUN mkdir -p /app/static

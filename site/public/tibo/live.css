@@ -1,0 +1,147 @@
+/* live.js companion styles — appended via <link> injected by live.js. */
+.post[hidden] { display:none!important; }
+.live-post { display:block; }
+
+/* Demo-mode marker shown under the state picker when the user is previewing
+   demo states while live data exists or was attempted. */
+.live-badge {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border: 1.5px dashed var(--ink, #20211f);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink, #20211f);
+  background: repeating-linear-gradient(-45deg, transparent 0 10px, rgba(216, 59, 43, .05) 10px 20px);
+}
+.live-badge[hidden] {
+  display: none;
+}
+.live-badge .live-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red, #d83b2b);
+  flex: none;
+}
+body[data-view="live"] .live-badge .live-badge-dot {
+  background: #2e7d32;
+}
+.live-back {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--red, #d83b2b);
+  background: none;
+  border: none;
+  border-bottom: 1.5px solid currentColor;
+  padding: 0 0 1px;
+  cursor: pointer;
+  min-height: 32px;
+}
+.live-back:hover {
+  opacity: .75;
+}
+
+/* "实时" tag replacing the demo-tag inside #timer-label while live. */
+.live-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: #2e7d32;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-left: 6px;
+  vertical-align: 2px;
+  white-space: nowrap;
+}
+
+/* Extra live posts inserted into the feed. Reuses .post base styling. */
+.live-post {
+  position: relative;
+}
+.live-note {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink, #20211f);
+  opacity: .62;
+}
+
+/* Compact meta row inside cloned live posts. */
+.live-post .post-meta {
+  flex-wrap: wrap;
+}
+
+/* Machine-translation label + collapsible original on live posts. */
+.live-tr {
+  margin: 6px 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--ink, #20211f);
+  opacity: .66;
+}
+.live-tr::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 6px;
+  border: 1px solid var(--red, #d83b2b);
+  vertical-align: 1px;
+}
+.live-tr.pending { font-weight: 500; }
+.live-original {
+  margin-top: 6px;
+}
+.live-original summary {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--red, #d83b2b);
+  cursor: pointer;
+  padding: 2px 0;
+  list-style: none;
+}
+.live-original summary::after {
+  content: " ▾";
+}
+.live-original[open] summary::after {
+  content: " ▴";
+}
+.live-original summary:hover {
+  text-decoration: underline;
+}
+.live-original summary:focus-visible {
+  outline: 2px solid var(--red, #d83b2b);
+  outline-offset: 2px;
+}
+.live-original .orig {
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid var(--ink, #20211f);
+  opacity: .8;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .live-badge .live-badge-dot {
+    animation: live-dot-pulse 2.2s ease-in-out infinite;
+  }
+  body[data-view="demo"] .live-badge .live-badge-dot {
+    animation: none;
+  }
+}
+@keyframes live-dot-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .25; }
+}
+
+.ai325-return{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:4px max(20px,calc((100vw - 1320px)/2));border-bottom:1px solid #deddd7;background:#ecebe5;color:#454640;font:600 12px/1.5 system-ui,sans-serif}.ai325-return a{display:inline-flex;align-items:center;min-height:36px;color:inherit;text-decoration:none}.ai325-return a:hover{text-decoration:underline}.ai325-return a:focus-visible{outline:2px solid #d83b2b;outline-offset:3px}

@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-08-29T00:59:16.885041+00:00",
+  "generated_at": "2026-09-28T23:04:17.243984+00:00",
   "window_days": 14,
   "summary": {
-    "days": 6,
-    "passed": 6,
-    "failed": 0,
-    "average_score": 88.7
+    "days": 14,
+    "passed": 12,
+    "failed": 2,
+    "average_score": 71.4
   },
   "days": [
     {
-      "date": "2026-08-23",
+      "date": "2026-09-15",
       "passed": true,
-      "score": 89,
+      "score": 87,
       "grade": "A",
       "redistill_count": 0,
-      "elapsed_ms": 0,
+      "elapsed_ms": 33000,
       "token_usage": {
-        "prompt_tokens": 86511,
-        "completion_tokens": 17299,
-        "total_tokens": 103810
+        "prompt_tokens": 23566,
+        "completion_tokens": 5680,
+        "total_tokens": 29246
       },
       "hard_fail": [],
       "prompt_versions": {
         "ledger": {
-          "artifact": "ledger-v3",
+          "artifact": "ledger-v4",
           "judge": "judge-v1"
         },
         "arsenal": {
@@ -33,21 +33,21 @@
       }
     },
     {
-      "date": "2026-08-24",
+      "date": "2026-09-16",
       "passed": true,
-      "score": 89,
+      "score": 87,
       "grade": "A",
       "redistill_count": 0,
-      "elapsed_ms": 738000,
+      "elapsed_ms": 33000,
       "token_usage": {
-        "prompt_tokens": 98730,
-        "completion_tokens": 30015,
-        "total_tokens": 128745
+        "prompt_tokens": 84033,
+        "completion_tokens": 18239,
+        "total_tokens": 102272
       },
       "hard_fail": [],
       "prompt_versions": {
         "ledger": {
-          "artifact": "ledger-v3",
+          "artifact": "ledger-v4",
           "judge": "judge-v1"
         },
         "arsenal": {
@@ -57,21 +57,21 @@
       }
     },
     {
-      "date": "2026-08-25",
+      "date": "2026-09-17",
       "passed": true,
-      "score": 89,
-      "grade": "A",
+      "score": 82,
+      "grade": "B",
       "redistill_count": 0,
-      "elapsed_ms": 739000,
+      "elapsed_ms": 28000,
       "token_usage": {
-        "prompt_tokens": 116710,
-        "completion_tokens": 26569,
-        "total_tokens": 143279
+        "prompt_tokens": 49849,
+        "completion_tokens": 13540,
+        "total_tokens": 63389
       },
       "hard_fail": [],
       "prompt_versions": {
         "ledger": {
-          "artifact": "ledger-v3",
+          "artifact": "ledger-v4",
           "judge": "judge-v1"
         },
         "arsenal": {
@@ -81,21 +81,48 @@
       }
     },
     {
-      "date": "2026-08-26",
+      "date": "2026-09-18",
+      "passed": false,
+      "score": 0,
+      "grade": "F",
+      "redistill_count": 0,
+      "elapsed_ms": 129000,
+      "token_usage": {
+        "prompt_tokens": 45642,
+        "completion_tokens": 10177,
+        "total_tokens": 55819
+      },
+      "hard_fail": [
+        "ledger: 线索 id 承接率为 0，未接上一期 threads",
+        "arsenal: arsenal 质量判定结果缺失"
+      ],
+      "prompt_versions": {
+        "ledger": {
+          "artifact": "ledger-v4",
+          "judge": "judge-v1"
+        },
+        "arsenal": {
+          "artifact": null,
+          "judge": null
+        }
+      }
+    },
+    {
+      "date": "2026-09-19",
       "passed": true,
-      "score": 88,
+      "score": 85,
       "grade": "A",
       "redistill_count": 0,
-      "elapsed_ms": 534000,
+      "elapsed_ms": 78000,
       "token_usage": {
-        "prompt_tokens": 86813,
-        "completion_tokens": 22977,
-        "total_tokens": 109790
+        "prompt_tokens": 93080,
+        "completion_tokens": 21012,
+        "total_tokens": 114092
       },
       "hard_fail": [],
       "prompt_versions": {
         "ledger": {
-          "artifact": "ledger-v3",
+          "artifact": "ledger-v4",
           "judge": "judge-v1"
         },
         "arsenal": {
@@ -105,21 +132,21 @@
       }
     },
     {
-      "date": "2026-08-27",
+      "date": "2026-09-20",
       "passed": true,
-      "score": 89,
-      "grade": "A",
+      "score": 82,
+      "grade": "B",
       "redistill_count": 0,
-      "elapsed_ms": 600000,
+      "elapsed_ms": 128000,
       "token_usage": {
-        "prompt_tokens": 97984,
-        "completion_tokens": 23312,
-        "total_tokens": 121296
+        "prompt_tokens": 89660,
+        "completion_tokens": 21382,
+        "total_tokens": 111042
       },
       "hard_fail": [],
       "prompt_versions": {
         "ledger": {
-          "artifact": "ledger-v3",
+          "artifact": "ledger-v4",
           "judge": "judge-v1"
         },
         "arsenal": {
@@ -129,21 +156,191 @@
       }
     },
     {
-      "date": "2026-08-28",
+      "date": "2026-09-21",
       "passed": true,
-      "score": 88,
+      "score": 85,
       "grade": "A",
       "redistill_count": 0,
-      "elapsed_ms": 0,
+      "elapsed_ms": 79000,
       "token_usage": {
-        "prompt_tokens": 85066,
-        "completion_tokens": 20515,
-        "total_tokens": 105581
+        "prompt_tokens": 93085,
+        "completion_tokens": 21752,
+        "total_tokens": 114837
       },
       "hard_fail": [],
       "prompt_versions": {
         "ledger": {
-          "artifact": "ledger-v3",
+          "artifact": "ledger-v4",
+          "judge": "judge-v1"
+        },
+        "arsenal": {
+          "artifact": "arsenal-v3",
+          "judge": "judge-v1"
+        }
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "passed": false,
+      "score": 0,
+      "grade": "F",
+      "redistill_count": 0,
+      "elapsed_ms": 134000,
+      "token_usage": {
+        "prompt_tokens": 57692,
+        "completion_tokens": 13445,
+        "total_tokens": 71137
+      },
+      "hard_fail": [
+        "arsenal: arsenal 质量判定结果缺失"
+      ],
+      "prompt_versions": {
+        "ledger": {
+          "artifact": "ledger-v4",
+          "judge": "judge-v1"
+        },
+        "arsenal": {
+          "artifact": null,
+          "judge": null
+        }
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "passed": true,
+      "score": 83,
+      "grade": "B",
+      "redistill_count": 0,
+      "elapsed_ms": 31000,
+      "token_usage": {
+        "prompt_tokens": 86288,
+        "completion_tokens": 22363,
+        "total_tokens": 108651
+      },
+      "hard_fail": [],
+      "prompt_versions": {
+        "ledger": {
+          "artifact": "ledger-v4",
+          "judge": "judge-v1"
+        },
+        "arsenal": {
+          "artifact": "arsenal-v3",
+          "judge": "judge-v1"
+        }
+      }
+    },
+    {
+      "date": "2026-09-24",
+      "passed": true,
+      "score": 79,
+      "grade": "B",
+      "redistill_count": 0,
+      "elapsed_ms": 35000,
+      "token_usage": {
+        "prompt_tokens": 150681,
+        "completion_tokens": 31249,
+        "total_tokens": 181930
+      },
+      "hard_fail": [],
+      "prompt_versions": {
+        "ledger": {
+          "artifact": "ledger-v4",
+          "judge": "judge-v1"
+        },
+        "arsenal": {
+          "artifact": "arsenal-v3",
+          "judge": "judge-v1"
+        }
+      }
+    },
+    {
+      "date": "2026-09-25",
+      "passed": true,
+      "score": 83,
+      "grade": "B",
+      "redistill_count": 0,
+      "elapsed_ms": 84000,
+      "token_usage": {
+        "prompt_tokens": 135094,
+        "completion_tokens": 30457,
+        "total_tokens": 165551
+      },
+      "hard_fail": [],
+      "prompt_versions": {
+        "ledger": {
+          "artifact": "ledger-v4",
+          "judge": "judge-v1"
+        },
+        "arsenal": {
+          "artifact": "arsenal-v3",
+          "judge": "judge-v1"
+        }
+      }
+    },
+    {
+      "date": "2026-09-26",
+      "passed": true,
+      "score": 84,
+      "grade": "B",
+      "redistill_count": 1,
+      "elapsed_ms": 34000,
+      "token_usage": {
+        "prompt_tokens": 267262,
+        "completion_tokens": 64535,
+        "total_tokens": 331797
+      },
+      "hard_fail": [],
+      "prompt_versions": {
+        "ledger": {
+          "artifact": "ledger-v4",
+          "judge": "judge-v1"
+        },
+        "arsenal": {
+          "artifact": "arsenal-v3",
+          "judge": "judge-v1"
+        }
+      }
+    },
+    {
+      "date": "2026-09-27",
+      "passed": true,
+      "score": 78,
+      "grade": "B",
+      "redistill_count": 0,
+      "elapsed_ms": 36000,
+      "token_usage": {
+        "prompt_tokens": 147628,
+        "completion_tokens": 30913,
+        "total_tokens": 178541
+      },
+      "hard_fail": [],
+      "prompt_versions": {
+        "ledger": {
+          "artifact": "ledger-v4",
+          "judge": "judge-v1"
+        },
+        "arsenal": {
+          "artifact": "arsenal-v3",
+          "judge": "judge-v1"
+        }
+      }
+    },
+    {
+      "date": "2026-09-28",
+      "passed": true,
+      "score": 85,
+      "grade": "A",
+      "redistill_count": 0,
+      "elapsed_ms": 38000,
+      "token_usage": {
+        "prompt_tokens": 240902,
+        "completion_tokens": 46464,
+        "total_tokens": 287366
+      },
+      "hard_fail": [],
+      "prompt_versions": {
+        "ledger": {
+          "artifact": "ledger-v4",
           "judge": "judge-v1"
         },
         "arsenal": {

@@ -1,0 +1,190 @@
+/* intent.js companion styles — machine reading section between hero and
+   .info-grid. Reuses page tokens and .section-heading / .section-note. */
+.intent {
+  border-top: 1px solid var(--ink, #20211f);
+  padding: 34px 0 30px;
+}
+.intent[hidden] {
+  display: none;
+}
+.intent-state {
+  font-size: 13px;
+  color: var(--muted, #696960);
+  padding: 14px 0;
+}
+.intent[data-state="expired"] .intent-state,
+.intent[data-state="error"] .intent-state {
+  color: var(--red, #d83b2b);
+}
+.intent-lead {
+  max-width: 720px;
+}
+.intent-outlook {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1.25;
+}
+.intent-outlook[data-outlook="reset_reported"] {
+  color: var(--gold, #a97619);
+}
+.intent-outlook[data-outlook="reset_signals"] {
+  color: var(--red, #d83b2b);
+}
+.intent-outlook[data-outlook="no_reset_signal"],
+.intent-outlook[data-outlook="unclear"],
+.intent-outlook[data-outlook="product_teasing"] {
+  color: var(--ink, #20211f);
+}
+.intent-summary {
+  font-size: 14px;
+  line-height: 1.7;
+  margin-top: 10px;
+}
+.intent-confidence {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--muted, #696960);
+  margin-top: 14px;
+}
+.intent-confidence b {
+  color: var(--ink, #20211f);
+}
+.intent-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--red, #d83b2b);
+  border: 1.5px dashed var(--red, #d83b2b);
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+.intent-confidence small {
+  flex-basis: 100%;
+  font-size: 10px;
+}
+.intent-cols {
+  display: grid;
+  grid-template-columns: 56% 1fr;
+  gap: 40px;
+  margin-top: 26px;
+}
+.intent h3 {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  color: var(--muted, #696960);
+}
+.intent-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.intent-item {
+  border-top: 1px solid var(--line, #d2d1c9);
+  padding: 14px 0 16px;
+}
+.intent-item-top {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.intent-chip {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--red, #d83b2b);
+  border: 1px solid #d9a99e;
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+.intent-chip.subtle {
+  color: var(--muted, #696960);
+  border-color: var(--line, #d2d1c9);
+}
+.intent-quote {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.65;
+  margin-top: 9px;
+}
+.intent-reading {
+  font-size: 12px;
+  line-height: 1.65;
+  margin-top: 7px;
+}
+.intent-relevance {
+  font-size: 11px;
+  color: var(--muted, #696960);
+  margin-top: 5px;
+}
+.intent-item-foot {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 10px;
+}
+.intent-source {
+  display: inline-block;
+  font-size: 10px;
+  border-bottom: 1px solid var(--line, #d2d1c9);
+}
+.intent-time {
+  font-size: 10px;
+  color: var(--muted, #696960);
+}
+.intent-aside {
+  border-left: 1px solid var(--line, #d2d1c9);
+  padding-left: 32px;
+}
+.intent-block + .intent-block {
+  margin-top: 20px;
+  border-top: 1px solid var(--line, #d2d1c9);
+  padding-top: 18px;
+}
+.intent-block p {
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 8px;
+}
+.intent-foot {
+  font-size: 10px;
+  color: var(--muted, #696960);
+  border-top: 1px solid var(--line, #d2d1c9);
+  margin-top: 24px;
+  padding-top: 14px;
+}
+
+@media (max-width: 1100px) {
+  .intent-cols {
+    gap: 26px;
+  }
+  .intent-aside {
+    padding-left: 22px;
+  }
+  .intent-outlook {
+    font-size: 28px;
+  }
+}
+@media (max-width: 760px) {
+  .intent {
+    padding: 26px 0;
+  }
+  .intent-outlook {
+    font-size: 25px;
+  }
+  .intent-cols {
+    display: block;
+  }
+  .intent-aside {
+    border-left: 0;
+    padding-left: 0;
+    margin-top: 22px;
+  }
+  .intent-block:first-child {
+    border-top: 1px solid var(--line, #d2d1c9);
+    padding-top: 18px;
+  }
+}

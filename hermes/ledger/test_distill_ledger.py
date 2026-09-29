@@ -328,7 +328,7 @@ class LedgerDistillTests(unittest.TestCase):
             ]
         }
         with patch.object(ledger, "deepseek_request", return_value=json.dumps(response, ensure_ascii=False)):
-            chunks = ledger.extract_chunks(
+            chunks, missing = ledger.extract_chunks(
                 "[08-23 00:01] A: 一条消息\n",
                 self.date,
                 "key",
@@ -339,13 +339,14 @@ class LedgerDistillTests(unittest.TestCase):
                 ledger.DEFAULT_CHUNK_SIZE,
             )
         self.assertEqual(len(chunks), 1)
+        self.assertEqual(missing, [])
         self.assertEqual(len(chunks[0]["evidence"]), 25)
         self.assertEqual(chunks[0]["evidence"][-1]["id"], "c01-e25")
 
     def test_chunk_extraction_salvages_truncated_last_evidence_without_retry(self) -> None:
         raw = '{"evidence":[{"type":"quote","data":{"line":"L0001","a":"A","fragment":"一条 消息...","g":"s"}},{"type":"event","data":{"t":"01:2'
         with patch.object(ledger, "deepseek_request", return_value=raw) as mocked:
-            chunks = ledger.extract_chunks(
+            chunks, _missing = ledger.extract_chunks(
                 "[08-23 00:01] A: 一条消息……\n",
                 self.date,
                 "key",
@@ -391,11 +392,81 @@ class LedgerDistillTests(unittest.TestCase):
                     )
             self.assertEqual(len(list(cache.glob("chunk-001-*.json"))), 1)
             with patch.object(ledger, "deepseek_request", return_value=success) as mocked:
-                chunks = ledger.extract_chunks(
+                chunks, missing = ledger.extract_chunks(
                     transcript, self.date, "key", "model", "https://example.invalid", 1, 1, 30, cache
                 )
             self.assertEqual(len(chunks), 2)
+            self.assertEqual(missing, [])
             self.assertEqual(mocked.call_count, 1)
+
+    def test_extract_json_quotes_bare_line_id_values(self) -> None:
+        # 09-15 切片 3/6 实测死因：模型把行号当裸标识符吐出来（Expecting value char 44）
+        raw = '{"evidence":[{"type":"quote","data":{"line":L0001,"a":"A","fragment":"一条 消息","g":"s"}}]}'
+        payload = ledger.extract_json(raw)
+        self.assertEqual(payload["evidence"][0]["data"]["line"], "L0001")
+
+    def test_extract_json_repairs_trailing_commas_and_python_literals(self) -> None:
+        raw = '{"evidence":[{"type":"event","data":{"t":"00:01","h":None,},}]}'
+        payload = ledger.extract_json(raw)
+        self.assertEqual(payload["evidence"][0]["data"]["h"], None)
+
+    def test_extract_json_takes_first_complete_object_past_prose(self) -> None:
+        raw = '好的，下面是 JSON：\n```json\n{"evidence":[{"type":"event","data":{"t":"00:01"}}]}\n```\n以上是结果。'
+        payload = ledger.extract_json(raw)
+        self.assertEqual(len(payload["evidence"]), 1)
+
+    def test_failed_chunk_dumps_raw_and_does_not_sink_issue(self) -> None:
+        transcript = "\n".join(
+            f"[08-23 00:0{index}] A: 第{index}条消息" for index in range(1, 7)
+        ) + "\n"
+        ok = json.dumps({"evidence": [{"type": "event", "data": {"t": "00:01", "h": "事件"}}]})
+        bad = "not json at all"
+        with tempfile.TemporaryDirectory() as temp_dir:
+            dump_dir = Path(temp_dir) / "raw"
+            with patch.object(
+                ledger, "deepseek_request", side_effect=[ok, ok, bad, ok, ok, ok]
+            ):
+                chunks, missing = ledger.extract_chunks(
+                    transcript,
+                    self.date,
+                    "key",
+                    "model",
+                    "https://example.invalid",
+                    1,
+                    1,
+                    30,
+                    None,
+                    None,
+                    dump_dir,
+                )
+            self.assertEqual(len(chunks), 5)
+            self.assertEqual(len(missing), 1)
+            self.assertEqual(missing[0]["chunk"], 3)
+            dumped = (dump_dir / "chunk-003-attempt-1.txt").read_text(encoding="utf-8")
+            self.assertEqual(dumped, bad)
+            self.assertTrue((dump_dir / "chunk-003-attempt-1.err").exists())
+
+    def test_failed_chunk_retries_with_smaller_granularity(self) -> None:
+        long_line = "[08-23 00:01] A: " + "很长的消息" * 400 + "\n"
+        transcript = long_line + "[08-23 00:02] B: 短消息\n"
+        bad = "still not json"
+        ok = json.dumps({"evidence": [{"type": "event", "data": {"t": "00:01", "h": "事件"}}]})
+        with patch.object(ledger, "deepseek_request", side_effect=[bad, ok, ok, ok]) as mocked:
+            chunks, missing = ledger.extract_chunks(
+                transcript,
+                self.date,
+                "key",
+                "model",
+                "https://example.invalid",
+                1,
+                1,
+                ledger.DEFAULT_CHUNK_SIZE,
+            )
+        # 整片 1 次失败 → 两个半片各成功 → 证据合并，整期不丢
+        self.assertEqual(mocked.call_count, 3)
+        self.assertEqual(missing, [])
+        self.assertEqual(len(chunks), 1)
+        self.assertEqual(len(chunks[0]["evidence"]), 2)
 
     def test_extraction_cache_key_changes_when_prompt_changes(self) -> None:
         cache = Path("/tmp/cache-key-only")
@@ -546,7 +617,7 @@ class LedgerDistillTests(unittest.TestCase):
             + [json.dumps(skeleton, ensure_ascii=False), json.dumps(final_content, ensure_ascii=False)]
         )
         with patch.object(ledger, "deepseek_request", side_effect=responses) as mocked:
-            result, warnings, checks, used_chunks = ledger.assemble_real(
+            result, warnings, checks, used_chunks, missing = ledger.assemble_real(
                 self.date,
                 self.material,
                 {},
@@ -558,15 +629,21 @@ class LedgerDistillTests(unittest.TestCase):
                 ledger.DEFAULT_CHUNK_SIZE,
             )
         self.assertEqual(used_chunks, chunk_count)
+        self.assertEqual(missing, [])
         self.assertEqual(mocked.call_count, chunk_count + 2)
         self.assertEqual(warnings, [])
         self.assertEqual(checks["quotes_verified"], 6)
         self.assertEqual(len(result["themes"]), 3)
+        extract_prompt = mocked.call_args_list[0].args[0][-1]["content"]
         skeleton_prompt = mocked.call_args_list[chunk_count].args[0][-1]["content"]
         fill_prompt = mocked.call_args_list[chunk_count + 1].args[0][-1]["content"]
+        self.assertNotIn("读者关注面", extract_prompt)
+        self.assertNotIn("reader-attention", extract_prompt)
         self.assertIn("骨架", skeleton_prompt)
         self.assertIn("只按下列骨架填充", fill_prompt)
         self.assertIn("L000", fill_prompt)
+        self.assertIn("读者关注面", skeleton_prompt)
+        self.assertIn("reader_echo", fill_prompt)
 
     def test_redaction_removes_password_and_phone(self) -> None:
         sample = "[08-23 03:44] A: syntheticSecretToken12345\n[08-23 03:45] B: 电话 19999999999"
@@ -577,6 +654,108 @@ class LedgerDistillTests(unittest.TestCase):
 
     def test_public_url_is_not_mistaken_for_a_secret(self) -> None:
         self.assertFalse(ledger.is_sensitive("https://github.com/example-owner/example-project"))
+
+    def test_fake_reader_echo_is_cleared(self) -> None:
+        content = self.fixed()
+        content["reader_echo"] = {
+            "of_window": "2026-08-24..2026-08-30",
+            "anchors": ["2026-08-25#themes-p2"],
+            "text": "上一期你们盯着的是量子力学与暗物质，今天这条线有了新进展。",
+        }
+        warnings: list[str] = []
+        normalized = ledger.normalize_content(
+            content, self.material["transcript"], self.material["stats"], {}, self.date, "deepseek-chat", warnings
+        )
+        self.assertNotIn("reader_echo", normalized)
+        self.assertTrue(any("无重叠" in warning for warning in warnings))
+
+    def test_overlapping_reader_echo_is_kept(self) -> None:
+        content = self.fixed()
+        content["reader_echo"] = {
+            "of_window": "2026-08-24..2026-08-30",
+            "anchors": ["2026-08-25#themes-p2"],
+            "text": "上一期你们盯着的是知识库，今天这条线有了新进展。",
+        }
+        warnings: list[str] = []
+        normalized = ledger.normalize_content(
+            content, self.material["transcript"], self.material["stats"], {}, self.date, "deepseek-chat", warnings
+        )
+        self.assertEqual(normalized["reader_echo"]["text"], "上一期你们盯着的是知识库，今天这条线有了新进展。")
+        self.assertFalse(any("reader_echo" in warning for warning in warnings))
+
+    def test_sanitize_quote_plan_drops_non_quote_and_backfills(self) -> None:
+        chunks = [
+            {
+                "evidence": [
+                    {"id": "c01-e01", "type": "quote", "data": {"a": "A", "v": "一句金句", "g": "s"}},
+                    {"id": "c01-e02", "type": "event", "data": {"h": "事件"}},
+                    {"id": "c01-e03", "type": "quote", "data": {"a": "B", "v": "另一句", "g": "j"}},
+                    {"id": "c03-e03", "type": "fragment", "data": {"v": "不是金句"}},
+                ]
+            }
+        ]
+        plan, notes = ledger.sanitize_quote_plan(["c01-e01", "c03-e03", "ghost"], chunks)
+        self.assertIn("c01-e01", plan)
+        self.assertNotIn("c03-e03", plan)
+        self.assertNotIn("ghost", plan)
+        self.assertTrue(any("剔除" in note for note in notes))
+        self.assertIn("c01-e03", plan)  # backfill
+
+    def test_validate_skeleton_accepts_illegal_quote_ids_after_sanitize(self) -> None:
+        chunks = [
+            {
+                "evidence": [
+                    {"id": f"c01-e{i:02d}", "type": "quote", "data": {"a": "A", "v": f"句{i}", "g": "s"}}
+                    for i in range(1, 5)
+                ]
+                + [
+                    {"id": "c03-e03", "type": "event", "data": {"h": "非金句"}},
+                    {"id": "c02-e01", "type": "fragment", "data": {"v": "碎片"}},
+                    {"id": "c02-e02", "type": "tone", "data": {"cls": "s"}},
+                ]
+            }
+        ]
+        # Pad evidence so theme/event/member checks pass.
+        for idx in range(5, 10):
+            chunks[0]["evidence"].append(
+                {"id": f"c01-e{idx:02d}", "type": "fragment", "data": {"v": f"证{idx}"}}
+            )
+        all_ids = [str(item["id"]) for item in chunks[0]["evidence"]]
+        payload = {
+            "title": "测",
+            "lead_angle": "角度",
+            "event_plan": [{"evidence_ids": [all_ids[0]], "angle": "时间线"}],
+            "theme_plan": [
+                {
+                    "h": "幕1",
+                    "thread_id": "t1",
+                    "thread_title": "线1",
+                    "thread_status": "ongoing",
+                    "evidence_ids": all_ids[:3],
+                    "deep_question": "没说破",
+                }
+            ],
+            "tone_plan": [
+                {"cls": "s", "evidence_id": all_ids[0], "reason": "认真"},
+                {"cls": "j", "evidence_id": all_ids[1], "reason": "玩笑"},
+                {"cls": "h", "evidence_id": all_ids[2], "reason": "半真"},
+            ],
+            # Illegal non-quote id — previously hard-failed the whole issue.
+            "quote_plan": ["c01-e01", "c03-e03", "c01-e02"],
+            "member_plan": [{"name": "孙务远", "evidence_ids": [all_ids[0]]}],
+            "growth_plan": {"takeaways": ["a"], "actions": ["写一页"]},
+            "extension_plan": {
+                "insights": [],
+                "glossary": [],
+                "arsenal": [],
+                "docket": [],
+                "clashes": [],
+                "newcomers": [],
+            },
+        }
+        validated = ledger.validate_skeleton(payload, chunks)
+        self.assertNotIn("c03-e03", validated["quote_plan"])
+        self.assertGreaterEqual(len(validated["quote_plan"]), 2)
 
 
 if __name__ == "__main__":

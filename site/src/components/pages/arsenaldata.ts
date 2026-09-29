@@ -23,15 +23,49 @@ const DIR = path.join(process.cwd(), "content", "arsenal");
 /** seed.json 是打底，YYYY-MM-DD.json 是每天新到的；同 id 以晚的为准。 */
 export function readArsenal(): ArsenalItem[] {
   if (!fs.existsSync(DIR)) return [];
-  const files = fs.readdirSync(DIR).filter((f) => f.endsWith(".json")).sort();
+  const files = fs.readdirSync(DIR).filter((f) => f.endsWith(".json") && !f.endsWith(".gap.json")).sort();
   const byId = new Map<string, ArsenalItem>();
   for (const f of files) {
     try {
       const arr = JSON.parse(fs.readFileSync(path.join(DIR, f), "utf-8")) as ArsenalItem[];
+      if (!Array.isArray(arr)) continue;
       for (const it of arr) if (it?.id) byId.set(it.id, it);
     } catch { /* 单个文件坏了不拖垮整架 */ }
   }
   return [...byId.values()].filter((x) => x.status !== "retired");
+}
+
+/** 后端契约：那批军火没过审时写 <date>.gap.json，不写 <date>.json。 */
+export interface ArsenalGap {
+  date: string;
+  reason: string;
+}
+
+function parseGap(f: string): ArsenalGap | null {
+  try {
+    const raw = JSON.parse(fs.readFileSync(path.join(DIR, f), "utf-8"));
+    const date = typeof raw?.date === "string" ? raw.date : f.slice(0, 10);
+    const reason = typeof raw?.reason === "string" && raw.reason ? raw.reason : "这一批没过审";
+    return { date, reason };
+  } catch {
+    return { date: f.slice(0, 10), reason: "这一批没过审" };
+  }
+}
+
+export function readArsenalGaps(): ArsenalGap[] {
+  if (!fs.existsSync(DIR)) return [];
+  return fs
+    .readdirSync(DIR)
+    .filter((f) => f.endsWith(".gap.json"))
+    .sort()
+    .map(parseGap)
+    .filter((g): g is ArsenalGap => g !== null);
+}
+
+export function arsenalGapFor(date: string): ArsenalGap | null {
+  const p = path.join(DIR, `${date}.gap.json`);
+  if (!fs.existsSync(p)) return null;
+  return parseGap(`${date}.gap.json`);
 }
 
 export function artFile(name: string) {
@@ -40,4 +74,4 @@ export function artFile(name: string) {
 }
 
 /** 六个架位，固定顺序；数据里出现的其他 kind 排在后面。 */
-export const SHELVES = ["技能", "提示词", "方法", "文章", "案例", "工具", "论文", "拆书"];
+export const SHELVES = ["技能", "提示词", "方法", "文章", "案例", "工具", "产品", "论文", "拆书"];

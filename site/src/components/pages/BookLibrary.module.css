@@ -1,0 +1,54 @@
+/* 全量研读目录：纸色/蓝色，紧凑列表行（与精选旋转书架区分）；仅局部样式 */
+.lib { display: flex; flex-direction: column; gap: 14px; }
+.tier { margin: 0; font-family: var(--font-sans); font-size: 13px; line-height: 1.6; color: var(--ink-3); }
+.tier a { color: var(--blue-text); }
+.status, .notice { margin: 0 0 12px; font-family: var(--font-sans); font-size: 13px; line-height: 1.6; color: var(--ink-2); }
+.controls { display: flex; flex-direction: column; gap: 12px; }
+.search { width: 100%; max-width: 420px; min-height: 44px; padding: 0 14px; border: 1px solid var(--rule-strong); border-radius: 999px; font-family: var(--font-sans); font-size: 16px; background: var(--paper); color: var(--ink); }
+.search::placeholder { color: var(--ink-3); }
+.search:focus-visible { outline: 2px solid var(--blue-2); outline-offset: 1px; }
+.cats { display: flex; flex-wrap: wrap; gap: 8px; }
+.cats button { min-height: 44px; padding: 0 14px; border: 1px solid var(--rule); border-radius: 999px; background: transparent; font-family: var(--font-sans); font-size: 13.5px; color: var(--ink-2); cursor: pointer; white-space: nowrap; }
+.cats button:hover { border-color: var(--blue-2); color: var(--blue-text); }
+.cats button:focus-visible, .pager button:focus-visible, .retry:focus-visible, .clearBtn:focus-visible { outline: 2px solid var(--blue-2); outline-offset: 2px; }
+.cats .catOn, .cats button.catOn { background: var(--blue); color: #fff; border-color: var(--blue); }
+.viewBar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 2px; color: var(--ink-3); font: 12.5px/1.5 var(--font-sans); }
+.viewBar button { min-height: 44px; padding: 0 13px; border: 1px solid var(--rule); border-radius: 999px; background: transparent; color: var(--ink-2); font: 13px/1 var(--font-sans); cursor: pointer; }
+.viewBar button:hover { border-color: var(--blue-2); color: var(--blue-text); }
+.viewBar button:focus-visible { outline: 2px solid var(--blue-2); outline-offset: 2px; }
+.viewBar .viewOn { border-color: var(--blue); background: var(--blue); color: #fff; }
+.range { margin: 0; font-family: var(--font-sans); font-size: 13px; line-height: 1.6; color: var(--ink-2); }
+.clearBtn, .retry { display: inline-flex; align-items: center; min-height: 44px; margin-left: 10px; padding: 0 12px; border: 1px solid var(--blue-2); border-radius: 999px; background: transparent; font-family: var(--font-sans); font-size: 13.5px; color: var(--blue-text); cursor: pointer; }
+.retry { margin: 0 0 12px; }
+.errBox { display: flex; flex-direction: column; align-items: flex-start; }
+.errBox p { margin: 0 0 8px; font-family: var(--font-sans); font-size: 14px; color: var(--ink-2); }
+.fallWrap { width: 100%; }
+.listWrap { outline: none; scroll-margin-top: 96px; }
+.coverList { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 20px; margin: 0; padding: 8px 0 2px; list-style: none; }
+.coverItem { min-width: 0; }
+.coverLink { display: flex; min-height: 44px; flex-direction: column; align-items: flex-start; gap: 8px; color: inherit; text-decoration: none; }
+.coverLink:focus-visible { outline: 2px solid var(--blue-2); outline-offset: 6px; border-radius: 3px; }
+.coverTitle { width: 100%; overflow-wrap: anywhere; color: var(--ink); font: 600 15px/1.42 var(--font-serif); }
+.coverLink:hover .coverTitle { color: var(--blue-text); }
+.coverMeta { width: 100%; overflow-wrap: anywhere; color: var(--ink-3); font: 12px/1.5 var(--font-sans); }
+@media (min-width: 1050px) {
+  .coverList { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.item { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 42%); gap: 4px 16px; align-items: baseline; min-height: 44px; padding: 8px 0; border-bottom: 1px solid var(--rule-soft); text-decoration: none; }
+.itemTitle { font-family: var(--font-serif); font-size: 16px; font-weight: 600; line-height: 1.45; color: var(--ink); overflow-wrap: anywhere; }
+.item:hover .itemTitle { color: var(--blue-text); }
+.item:focus-visible { outline: 2px solid var(--blue-2); outline-offset: -2px; }
+.itemMeta { font-family: var(--font-sans); font-size: 12.5px; line-height: 1.5; color: var(--ink-3); text-align: right; overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .coverList { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
+  .item { grid-template-columns: minmax(0, 1fr); }
+  .itemMeta { text-align: left; }
+  .cats { flex-wrap: nowrap; overflow-x: auto; margin: 0 -20px; padding: 0 20px 4px; scrollbar-width: none; scroll-snap-type: x proximity; overscroll-behavior-x: contain; }
+  .cats::-webkit-scrollbar { display: none; }
+  .cats button { flex: 0 0 auto; scroll-snap-align: start; }
+  .search { max-width: none; }
+}
+.pager { display: flex; align-items: center; gap: 16px; font-family: var(--font-sans); font-size: 13.5px; color: var(--ink-2); }
+.pager button { min-height: 44px; padding: 0 18px; border: 1px solid var(--rule-strong); border-radius: 999px; background: var(--paper); color: var(--ink); cursor: pointer; }
+.pager button:disabled { opacity: .4; cursor: default; }

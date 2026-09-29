@@ -1,0 +1,133 @@
+/* prediction.js companion styles — signal-index card inside #forecast,
+   between .signals and #reasoning. Reuses page tokens. */
+.pred {
+  border-top: 1px solid var(--line, #d2d1c9);
+  margin-top: 18px;
+  padding: 16px 0 4px;
+}
+.pred[hidden] {
+  display: none;
+}
+.pred-status {
+  font-size: 12px;
+  color: var(--muted, #696960);
+  margin: 2px 0 8px;
+}
+.pred-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted, #696960);
+}
+.pred-title strong {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--ink, #20211f);
+}
+.pred-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--red, #d83b2b);
+  border: 1.5px dashed var(--red, #d83b2b);
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+.pred-score {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 8px;
+}
+.pred-score b {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1;
+  color: var(--ink, #20211f);
+}
+.pred-scale {
+  font-size: 11px;
+  color: var(--muted, #696960);
+}
+.pred-meter {
+  margin-top: 8px;
+  height: 6px;
+  border: 1px solid var(--ink, #20211f);
+  background: transparent;
+}
+.pred-meter i {
+  display: block;
+  height: 100%;
+  background: var(--red, #d83b2b);
+}
+.pred-sum {
+  font-size: 13px;
+  line-height: 1.65;
+  margin-top: 10px;
+}
+.pred-win {
+  font-size: 11px;
+  color: var(--muted, #696960);
+  margin-top: 6px;
+}
+.pred-sigs {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+.pred-sigs li {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  border-top: 1px solid var(--line, #d2d1c9);
+  padding: 8px 0;
+}
+.pred-chip {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--red, #d83b2b);
+  border: 1px solid #d9a99e;
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+.pred-chip[data-code="cancellation"] {
+  color: var(--muted, #696960);
+  border-color: var(--line, #d2d1c9);
+}
+.pred-pts {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink, #20211f);
+  min-width: 34px;
+}
+.pred-quote {
+  font-size: 12px;
+  line-height: 1.55;
+  quotes: "“" "”";
+  flex: 1 1 220px;
+}
+.pred-src {
+  font-size: 10px;
+  border-bottom: 1px solid var(--line, #d2d1c9);
+}
+.pred-unc {
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted, #696960);
+  margin-top: 10px;
+}
+.pred-unc b {
+  color: var(--ink, #20211f);
+}
+.pred-note {
+  font-size: 10px;
+  color: var(--muted, #696960);
+  border-top: 1px solid var(--line, #d2d1c9);
+  margin-top: 12px;
+  padding-top: 10px;
+}

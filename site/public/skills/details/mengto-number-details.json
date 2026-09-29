@@ -1,0 +1,9 @@
+{
+  "skillMarkdown": "---\nname: number-details\ndescription: \"Add decorative 01, 02, 03 numeric detail markers.\"\n---\n\n# Number Details Skill\n\n## Use When\n- A section needs subtle 01, 02, 03 markers for process steps, feature groups, cards, or editorial rhythm.\n\n## Workflow\n1. Add numeric markers as secondary visual structure, not primary content.\n2. Use two-digit numbers such as 01, 02, 03 for consistency.\n3. Place markers in predictable positions: card corners, section gutters, timeline rails, or beside headings.\n4. Use mono or narrow uppercase typography with low contrast so the detail feels architectural.\n5. Keep spacing and alignment consistent across all numbered elements.\n\n## Guardrails\n- Do not let decorative numbers compete with headings or CTAs.\n- Do not mix numbering styles in the same section.\n",
+  "sourceUrl": "https://github.com/MengTo/skills/blob/9fb3bfb96c6917cb401bcb7dd063faa880a2bb01/agent-skills/web-design/number-details/SKILL.md",
+  "repositoryUrl": "https://github.com/MengTo/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 6367,
+  "starsCheckedAt": "2026-09-28T18:57:00Z"
+}

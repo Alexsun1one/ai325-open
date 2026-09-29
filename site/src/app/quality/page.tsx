@@ -93,7 +93,7 @@ export default function QualityPage() {
       </Section>
 
       <Section id="dims" label={`第 ${pad3(latest.issue)} 批五维`} sub="悬停任一行看这一维的证据">
-        <ScoreGrid dims={q.dimensions} overall={q.overall} grade={q.grade} basis={q.basis} />
+        <ScoreGrid dims={q.dimensions} overall={q.overall} grade={q.grade} basis={q.basis} caliberHref="#mapping" />
         <p className="mt-6 font-sans text-[13px] text-ink-3">
           这一批是这么算出来的：{q.basis}。整锅台账见 <Link href={`/ledger/${latest.date}/`} className="text-blue-text no-underline hover:underline">第 {pad3(latest.issue)} 批 · {latest.title}</Link>。
         </p>

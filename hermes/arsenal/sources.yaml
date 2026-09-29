@@ -72,46 +72,42 @@ sources:
     max_items: 15
 
   - name: 机器之心
-    url: https://www.jiqizhixin.com/
-    kind: html
+    url: "https://news.google.com/rss/search?q=site%3Ajiqizhixin.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans"
+    kind: rss
     lang: zh
-    parser: html_links
-    include_url_regex: ^https://(?:pro\.)?jiqizhixin\.com/(?:reference|article|articles)/
+    parser: feed
+    timeout: 12
     max_items: 12
     fallbacks:
-      - url: "https://news.google.com/rss/search?q=site%3Ajiqizhixin.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans"
-        parser: feed
-        timeout: 12
+      - url: https://www.jiqizhixin.com/
+        parser: html_links
+        include_url_regex: ^https://(?:pro\.)?jiqizhixin\.com/(?:reference|article|articles)/
+        timeout: 6
 
   - name: 量子位
-    url: https://www.qbitai.com/
-    kind: html
+    url: "https://news.google.com/rss/search?q=site%3Aqbitai.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans"
+    kind: rss
     lang: zh
-    parser: html_links
-    include_url_regex: ^https://www\.qbitai\.com/\d{4}/\d{2}/\d+\.html$
+    parser: feed
+    timeout: 12
     max_items: 15
     fallbacks:
       - url: "https://rsshub.app/qbitai/category/%E8%B5%84%E8%AE%AF"
         parser: feed
-        timeout: 10
-      - url: "https://news.google.com/rss/search?q=site%3Aqbitai.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans"
-        parser: feed
-        timeout: 12
+        timeout: 8
 
   - name: 少数派 AI
-    url: https://sspai.com/feed
+    url: "https://news.google.com/rss/search?q=site%3Asspai.com%20AI&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans"
     kind: rss
     lang: zh
     parser: feed
+    timeout: 12
     keywords: [AI, 人工智能, 智能体, Agent, LLM, 模型, 提示词, 知识库]
     max_items: 12
     fallbacks:
-      - url: "https://rsshub.app/sspai/index"
+      - url: https://sspai.com/feed
         parser: feed
-        timeout: 10
-      - url: "https://news.google.com/rss/search?q=site%3Asspai.com%20AI&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans"
-        parser: feed
-        timeout: 12
+        timeout: 6
 
   - name: 阮一峰科技爱好者周刊
     url: https://www.ruanyifeng.com/blog/weekly/
@@ -128,3 +124,90 @@ sources:
     parser: feed
     keywords: [AI, agent, LLM, model, automation, copilot, assistant, MCP]
     max_items: 15
+
+  # ── 2026-09-18 扩源：Sun 要「多补充 AI 知识和新闻」。
+  # 上面 20 个源偏资讯与论文，这批重在「能直接拿去用的方法」与「有判断的行业动态」。
+  # 全部实测可抓（feed 返回 200 且是 rss/atom）。
+  - name: Lilian Weng
+    url: https://lilianweng.github.io/index.xml
+    kind: atom
+    lang: en
+    parser: feed
+    max_items: 8
+
+  - name: Eugene Yan
+    url: https://eugeneyan.com/rss/
+    kind: rss
+    lang: en
+    parser: feed
+    max_items: 8
+
+  - name: Hamel Husain
+    url: https://hamel.dev/index.xml
+    kind: atom
+    lang: en
+    parser: feed
+    max_items: 8
+
+  - name: Chip Huyen
+    url: https://huyenchip.com/feed.xml
+    kind: atom
+    lang: en
+    parser: feed
+    max_items: 8
+
+  - name: Sebastian Raschka
+    url: https://magazine.sebastianraschka.com/feed
+    kind: rss
+    lang: en
+    parser: feed
+    max_items: 8
+
+  - name: OpenAI Cookbook
+    url: https://github.com/openai/openai-cookbook/commits/main.atom
+    kind: atom
+    lang: en
+    parser: feed
+    max_items: 10
+
+  - name: Anthropic Cookbook
+    url: https://github.com/anthropics/anthropic-cookbook/commits/main.atom
+    kind: atom
+    lang: en
+    parser: feed
+    max_items: 10
+
+  - name: Google Research Blog
+    url: https://research.google/blog/rss/
+    kind: rss
+    lang: en
+    parser: feed
+    max_items: 10
+
+  - name: Import AI
+    url: https://importai.substack.com/feed
+    kind: rss
+    lang: en
+    parser: feed
+    max_items: 8
+
+  - name: TLDR AI
+    url: https://tldr.tech/api/rss/ai
+    kind: rss
+    lang: en
+    parser: feed
+    max_items: 12
+
+  - name: TechCrunch AI
+    url: https://techcrunch.com/category/artificial-intelligence/feed/
+    kind: rss
+    lang: en
+    parser: feed
+    max_items: 12
+
+  - name: MIT Tech Review AI
+    url: https://www.technologyreview.com/topic/artificial-intelligence/feed
+    kind: rss
+    lang: en
+    parser: feed
+    max_items: 10

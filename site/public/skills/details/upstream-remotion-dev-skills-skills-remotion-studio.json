@@ -1,0 +1,35 @@
+{
+  "skillMarkdown": "---\nname: remotion-studio\ndescription: Preview a Remotion video\nversion: 4.0.529\n---\n\nExecute the following command:\n\n```bash\nnpx remotion studio --no-open\n```\n\nIf the Studio is already opened, the URL will be printed and the command will exit.\nOtherwise, a long-running process will start, and the URL will be printed.\n\nOpen the URL in the browser.\n\n## Useful flags\n\n| Argument          | Purpose                                                                                       |\n| ----------------- | --------------------------------------------------------------------------------------------- |\n| `--log=<level>`   | Set `error`, `warn`, `info` (default), or `verbose` logging.                                  |\n| `--port=<number>` | Request a Studio server port; otherwise Remotion finds a free port.                           |\n| `--force-new`     | Start another Studio instance even when one is already running for the same project and port. |\n",
+  "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-studio/SKILL.md",
+  "repositoryUrl": "https://github.com/remotion-dev/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 4754,
+  "starsCheckedAt": "2026-09-28T18:57:03Z",
+  "editorial": {
+    "overview": "这项技能专门处理 Remotion Studio 预览服务的启动和访问。公开版本使用不自动打开浏览器的启动方式，让进程打印预览地址；如果同一项目已有服务，则可以得到现有地址，而不必反复启动新实例。它还给出日志级别、请求端口和强制新建实例的选项，供排查启动和访问问题时使用。\n\n这些能力解决的是怎样进入正确的预览现场，并不说明视频内容已经检查完毕。使用者需要确认自己打开的是当前工程与目标 composition，代码更新后也要重新查看实际画面。本站建议检查首尾与关键场景，同时记录预览服务是否仍在运行；预览地址可访问和导出的视频正确属于不同验收。这里按所链研读版本归纳，不把常用端口写成固定事实，也不保证每个环境都有可操作浏览器。若访问失败，应先核对日志、地址与进程状态，避免为了尝试连接而无目的地连续开启多个服务。",
+    "useCases": [
+      "打开既有视频工程的预览",
+      "排查Studio地址或实例冲突"
+    ],
+    "inputs": [
+      "Remotion工程位置",
+      "目标composition和已有服务信息"
+    ],
+    "outputs": [
+      "实际预览地址与进程状态",
+      "针对关键场景的预览检查记录"
+    ],
+    "steps": [
+      "在正确工程中启动或复用Studio，读取打印的地址。",
+      "确认打开目标composition，再查看需要检查的画面。",
+      "遇到访问问题先核对日志与端口，不盲目创建多实例。"
+    ],
+    "limitations": [
+      "本站未启动Studio或打开浏览器，预览效果未实测。",
+      "这项技能不负责导出成片，服务可访问也不等于内容验收通过。"
+    ],
+    "reviewedAt": "2026-09-22",
+    "sourceUrl": "https://github.com/remotion-dev/skills/blob/9682e994989f951c75912fbc49aa10332a512685/skills/remotion-studio/SKILL.md"
+  }
+}

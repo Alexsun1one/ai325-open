@@ -26,6 +26,7 @@ import { DoubleRule } from "./DoubleRule";
 import { ParagraphTools } from "./ParagraphTools";
 import { Highlights } from "./Highlights";
 import { PersonHover } from "./PersonHover";
+import { ArticleComments } from "@/components/pages/ArticleComments";
 
 const SECTIONS = [
   { id: "intake", label: "进料" },
@@ -45,7 +46,7 @@ const SECTIONS = [
 type Neighbor = { date: string; issue: number; title: string } | null;
 /** 首屏子集：群像高光与新面孔卡片数据不内嵌（页尾懒加载），由整刊 JSON 按需取；newcomers 计数保留给进料栏。 */
 type LedgerCore = Omit<Ledger, "members_focus" | "thanks">;
-export function LedgerSheet({ l, prevOpen = 0, totalIssues = 1, prev = null, next = null, illus = [], spots = {} }: { l: LedgerCore; prevOpen?: number; totalIssues?: number; prev?: Neighbor; next?: Neighbor; illus?: (string | null)[]; spots?: Record<string, string> }) {
+export function LedgerSheet({ l, prevOpen = 0, totalIssues = 1, prev = null, next = null, illus = [], spots = {}, arsenalGap = null }: { l: LedgerCore; prevOpen?: number; totalIssues?: number; prev?: Neighbor; next?: Neighbor; illus?: (string | null)[]; spots?: Record<string, string>; arsenalGap?: { date: string; reason: string } | null }) {
   const ref = useRef<HTMLDivElement>(null);
   const intake = [
     { k: "消息", v: l.stats.msgs, note: "含建群日档案" },
@@ -111,7 +112,7 @@ export function LedgerSheet({ l, prevOpen = 0, totalIssues = 1, prev = null, nex
       </Section>
 
       <Section id="glossary" spot={spots["glossary"]} label="黑话 · 弹药" sub="想听懂这个群先学这些词">
-        <Glossary items={l.glossary} arsenal={l.arsenal} />
+        <Glossary items={l.glossary} arsenal={l.arsenal} gap={arsenalGap} />
       </Section>
 
       <Section id="members" spot={spots["members"]} label="成员高光" sub="新面孔先出卡，再看本期最值得看见的人">
@@ -129,6 +130,9 @@ export function LedgerSheet({ l, prevOpen = 0, totalIssues = 1, prev = null, nex
 
       </div>
       <SheetFooter l={l} prev={prev} next={next} />
+      <div className="no-print">
+        <ArticleComments anchor={`${l.date}#article`} date={l.date} />
+      </div>
     </main>
   );
 }

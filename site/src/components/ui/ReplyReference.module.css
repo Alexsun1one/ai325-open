@@ -1,0 +1,54 @@
+/* 回复引用行：紧凑折线 + 名字 + 摘录。目标聚焦用全局类 reply-flash。 */
+.ref {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 2px 0;
+  margin-bottom: 2px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-3);
+  text-align: left;
+  cursor: pointer;
+}
+.ref:hover .quote { color: var(--ink-2); }
+.ref:focus-visible { outline: 2px solid var(--blue-text); outline-offset: 2px; border-radius: 4px; }
+
+.elbow {
+  flex: none;
+  align-self: flex-start;
+  width: 10px;
+  height: 7px;
+  margin-top: 6px;
+  border-left: 2px solid var(--rule-strong);
+  border-top: 2px solid var(--rule-strong);
+  border-top-left-radius: 5px;
+}
+.who {
+  flex-shrink: 0;
+  min-width: 0;
+  max-width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--blue-text);
+}
+.quote {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.missing { cursor: default; }
+.missing .elbow { border-color: var(--rule); }
+
+/* 跳回目标的短暂定位反馈：短时描边即可，不播动画（键盘触发同样不违约）。 */
+:global(.reply-flash) {
+  outline: 2px solid var(--blue-2);
+  outline-offset: 3px;
+  border-radius: 8px;
+}

@@ -1,0 +1,9 @@
+{
+  "skillMarkdown": "---\nname: remotion-saas\ndescription: Build an app with Remotion\nversion: 4.0.529\n---\n\nOne can build apps with Remotion.  \nIt is possible to have a simple form and hook it up to a render, or have a complex video editor.\n\n## Choosing a template or a framework\n\nWe have several templates for SaaS which can be cloned or used as a reference.\nSee [Choosing a framework](framework.md) for help choosing a template or framework.\n\n## The `<Player>`\n\nThis component allows embedding a Remotion preview in a React app. See [Player](player.md) for more information about the Player.\n\n## Rendering\n\nThere are client-side and server-side rendering options available. See [Rendering](rendering.md) for advice on how to choose, and about the Lambda, Vercel, Node.js and Cloudflare options.\n\n## With Vue\n\nSee https://www.remotion.dev/docs/vue.md for how to use Remotion with Vue.\n\n## Angular\n\nSee https://www.remotion.dev/docs/angular.md for how to use Remotion with Angular.\n\n## Svelte\n\nSee https://www.remotion.dev/docs/svelte.md for how to use Remotion with Svelte.\n",
+  "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-saas/SKILL.md",
+  "repositoryUrl": "https://github.com/remotion-dev/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 4754,
+  "starsCheckedAt": "2026-09-28T18:57:03Z"
+}

@@ -217,10 +217,105 @@ class DistillTests(unittest.TestCase):
         ) as post:
             result, warnings = call_deepseek([candidate], THREADS, "2026-08-23", "test-key", 2, 1)
         self.assertEqual(len(result), 1)
-        self.assertTrue(any("低于建议 8 条" in item for item in warnings))
+        self.assertTrue(any("低于建议 12 条" in item for item in warnings), warnings)
         retry_messages = post.call_args_list[1].kwargs["json"]["messages"]
         self.assertEqual(retry_messages[-2]["role"], "assistant")
         self.assertIn("takeaways", retry_messages[-1]["content"])
+
+    def _truncation_fixtures(self, count: int):
+        candidates = [
+            {
+                "title": f"Candidate {index}",
+                "url": f"https://example.com/c{index}",
+                "source": "Source",
+                "published": "2026-08-20",
+                "summary_raw": f"summary {index}",
+                "lang": "en",
+            }
+            for index in range(count)
+        ]
+
+        def entry_for(candidate):
+            entry = json.loads(json.dumps(dry_run_entries("2026-08-23", THREADS)[0]))
+            entry["source"] = {
+                "name": candidate["source"],
+                "url": candidate["url"],
+                "author": "",
+                "published_at": candidate["published"],
+            }
+            return entry
+
+        class FakeResponse:
+            def __init__(self, content, finish_reason="stop"):
+                self.content = content
+                self.finish_reason = finish_reason
+
+            def raise_for_status(self):
+                return None
+
+            def json(self):
+                return {"choices": [{"message": {"content": self.content}, "finish_reason": self.finish_reason}]}
+
+        return candidates, entry_for, FakeResponse
+
+    def test_length_truncation_falls_back_to_chunked_distill(self) -> None:
+        candidates, entry_for, FakeResponse = self._truncation_fixtures(6)
+
+        def responder(url, **kwargs):
+            # 顶层调用 user 消息含全部候选 url → 截断；半区调用只含半区 url → 返回该区一条
+            user = next(m["content"] for m in kwargs["json"]["messages"] if m["role"] == "user")
+            hits = [c for c in candidates if c["url"] in user]
+            if len(hits) >= len(candidates):
+                return FakeResponse('{"items": [{"id": "x"', finish_reason="length")
+            return FakeResponse(json.dumps({"items": [entry_for(hits[0])]}))
+
+        with patch("distill.requests.post", side_effect=responder) as post:
+            entries, warnings = call_deepseek(candidates, THREADS, "2026-08-23", "k", 1, 1)
+        urls = {e["source"]["url"] for e in entries}
+        self.assertEqual(len(entries), 2)
+        self.assertTrue(all("example.com" in u for u in urls))
+        self.assertGreaterEqual(post.call_count, 3)  # 顶层截断 + 两半各一次
+        self.assertTrue(all("未编造条目" in w for w in warnings), warnings)
+
+    def test_length_truncation_recurses_beyond_first_split(self) -> None:
+        candidates, entry_for, FakeResponse = self._truncation_fixtures(8)
+
+        def responder(url, **kwargs):
+            # 候选数 >2 的调用一律截断；只有 ≤2 候选的子调用才返回成功
+            user = next(m["content"] for m in kwargs["json"]["messages"] if m["role"] == "user")
+            hits = [c for c in candidates if c["url"] in user]
+            if len(hits) > 2:
+                return FakeResponse('{"items": [{"id": "x"', finish_reason="length")
+            return FakeResponse(json.dumps({"items": [entry_for(hits[0])]}))
+
+        with patch("distill.requests.post", side_effect=responder) as post:
+            entries, warnings = call_deepseek(candidates, THREADS, "2026-08-23", "k", 1, 1)
+        urls = {e["source"]["url"] for e in entries}
+        self.assertEqual(len(entries), 4)
+        self.assertTrue(all("example.com" in u for u in urls))
+        self.assertGreaterEqual(post.call_count, 7)  # 顶层 + 两半 + 四个四分之一区
+        system_msgs = [c.kwargs["json"]["messages"][0]["content"] for c in post.call_args_list]
+        self.assertTrue(any("6–12" in m for m in system_msgs), system_msgs)
+
+    def test_non_length_failure_does_not_fallback(self) -> None:
+        candidates, _, FakeResponse = self._truncation_fixtures(6)
+        with patch(
+            "distill.requests.post",
+            side_effect=[FakeResponse("not json at all", finish_reason="stop")] * 2,
+        ):
+            with self.assertRaises(SystemExit):
+                call_deepseek(candidates, THREADS, "2026-08-23", "k", 2, 1)
+
+    def test_truncation_depth_guard_no_infinite_recursion(self) -> None:
+        candidates, _, FakeResponse = self._truncation_fixtures(4)
+
+        class AlwaysTrunc(FakeResponse):
+            def __init__(self):
+                super().__init__('{"items":[', finish_reason="length")
+
+        with patch("distill.requests.post", side_effect=lambda *a, **k: AlwaysTrunc()):
+            with self.assertRaises(SystemExit):
+                call_deepseek(candidates, THREADS, "2026-08-23", "k", 1, 1)
 
     def test_sun_deposit_exception_matches_schema(self) -> None:
         entry = dry_run_entries("2026-08-23", THREADS)[0]

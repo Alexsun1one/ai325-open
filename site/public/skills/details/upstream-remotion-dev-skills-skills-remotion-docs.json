@@ -1,0 +1,9 @@
+{
+  "skillMarkdown": "---\nname: remotion-docs\ndescription: Search Remotion documentation\nversion: 4.0.529\n---\n\nThis skill teaches you how to discover and read current Remotion documentation.\nIf this is not relevant, load Remotion Best Practices instead.\n\n## Searching the docs\n\nUse the Algolia search API to find relevant documentation pages:\n\n```\nPOST https://plsduol1ca-dsn.algolia.net/1/indexes/*/queries?x-algolia-api-key=3e42dbd4f895fe93ff5cf40d860c4a85&x-algolia-application-id=PLSDUOL1CA\nContent-Type: application/x-www-form-urlencoded\n\n{\n  \"requests\": [\n    {\n      \"query\": \"<your search query>\",\n      \"indexName\": \"remotion\",\n      \"params\": \"attributesToRetrieve=[\\\"hierarchy.lvl0\\\",\\\"hierarchy.lvl1\\\",\\\"hierarchy.lvl2\\\",\\\"url\\\"]&hitsPerPage=10\"\n    }\n  ]\n}\n```\n\nEach hit contains a `url` field pointing to the documentation page.\n\n## Fetching a page as Markdown\n\nAppend `.md` to any Remotion docs URL to retrieve its Markdown source (saves tokens):\n\n```\nhttps://www.remotion.dev/docs/use-video-config.md\nhttps://www.remotion.dev/docs/sequence.md\nhttps://www.remotion.dev/docs/lambda/rendermediaonlambda.md\n```\n\n## Workflow\n\n1. Search Algolia for the concept or API you need.\n2. Pick the most relevant URL(s) from the results.\n3. Fetch each URL with the `.md` suffix.\n4. Implement using the current documentation rather than memorized API knowledge.\n",
+  "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-docs/SKILL.md",
+  "repositoryUrl": "https://github.com/remotion-dev/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 4754,
+  "starsCheckedAt": "2026-09-28T18:57:03Z"
+}

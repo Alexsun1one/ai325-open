@@ -12,10 +12,12 @@ export function MembersFocus({ items, thanks = [] }: { items: MemberFocus[]; tha
   // 头像与上方的 FocusFaces 同源（loadPeople 模块级缓存，这里是第二个读者，不多发一次请求）。
   // 首帧先渲染姓名首字圆牌，图片到位后就地替换——尺寸一致，不会有跳版。
   const [avatars, setAvatars] = useState<Record<string, string>>({});
+  const [peopleCount, setPeopleCount] = useState<number | null>(null);
   useEffect(() => {
     let alive = true;
     loadPeople().then((ps: Person[]) => {
       if (!alive) return;
+      setPeopleCount(ps.length);
       const m: Record<string, string> = {};
       for (const it of items) {
         const p = ps.find((x) => x.name === it.name || x.aliases.includes(it.name));
@@ -43,9 +45,9 @@ export function MembersFocus({ items, thanks = [] }: { items: MemberFocus[]; tha
       <ul className="grid gap-x-10 gap-y-6 sm:grid-cols-2 xl:grid-cols-3">
         {items.map((m, i) => (
           // 左侧 28px 挂头像（悬挂缩进），名字/角色/引语都从第二列同一条左边线起排，ruled 行不变
-          <li key={i} className="grid min-w-0 grid-cols-[28px_minmax(0,1fr)] gap-x-3 border-t border-rule-soft pt-3.5">
+          <li key={i} className="grid min-w-0 grid-cols-[32px_minmax(0,1fr)] gap-x-3 border-t border-rule-soft pt-3.5">
             <span className="col-start-1 row-start-1 flex items-center justify-center">
-              <Avatar f={{ name: m.name, role: m.role, avatar: avatars[m.name] }} size={26} />
+              <Avatar f={{ name: m.name, role: m.role, avatar: avatars[m.name] }} size={32} />
             </span>
             {/* 名字与条数同基线：条数是仪器读数，永远靠右、永远 tabular */}
             <div className="col-start-2 row-start-1 flex items-baseline justify-between gap-3">
@@ -67,7 +69,7 @@ export function MembersFocus({ items, thanks = [] }: { items: MemberFocus[]; tha
           href="/members/"
           className="inline-flex items-center gap-2 rounded-md border border-blue bg-blue-wash px-3.5 py-2 font-medium text-blue-text no-underline transition-colors duration-200 ease-[var(--ease-out-expo)] hover:bg-blue-wash-2 active:bg-blue-wash-2"
         >
-          看全部 51 人画像与头像
+          看全部 {peopleCount ?? "…"} 人画像与头像
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="shrink-0"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
         </Link>
         <span className="text-ink-3">群友凭邀请码登录；真人头像与姓名不对外。</span>

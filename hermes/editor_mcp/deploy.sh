@@ -41,7 +41,7 @@ fi
 
 [[ -f "$CONFIG" ]] || { echo "missing Hermes config: $CONFIG" >&2; exit 1; }
 [[ -x "$HERMES_BIN" ]] || { echo "missing Hermes CLI: $HERMES_BIN" >&2; exit 1; }
-[[ -f "$SOURCE/server.py" && -f "$SOURCE/requirements.txt" && -f "$SOURCE/date-context.sh" ]] || {
+[[ -f "$SOURCE/server.py" && -f "$SOURCE/selfheal_cli.py" && -f "$SOURCE/requirements.txt" && -f "$SOURCE/date-context.sh" ]] || {
   echo "missing editor MCP source under $SOURCE" >&2
   exit 1
 }
@@ -57,7 +57,7 @@ if [[ -f "$CRON_FILE" ]]; then cp -p "$CRON_FILE" "$CRON_BACKUP"; fi
 if [[ -d "$TARGET" ]]; then cp -a "$TARGET" "$CODE_BACKUP"; fi
 
 install -d -m 0755 "$TARGET" "$HERMES_HOME/scripts"
-install -m 0644 "$SOURCE/server.py" "$SOURCE/__init__.py" "$SOURCE/requirements.txt" "$TARGET/"
+install -m 0644 "$SOURCE/server.py" "$SOURCE/selfheal_cli.py" "$SOURCE/__init__.py" "$SOURCE/requirements.txt" "$TARGET/"
 if [[ ! -x "$TARGET/.venv/bin/python" ]]; then "$PYTHON_BIN" -m venv "$TARGET/.venv"; fi
 "$TARGET/.venv/bin/pip" install -q -r "$TARGET/requirements.txt"
 
@@ -80,7 +80,7 @@ printf 'y\n' | "$HERMES_BIN" mcp add ai325_editor \
     AI325_HEALTH_DAILY="$REPO/site/public/health/daily.json" \
     AI325_EDITOR_LOCK_FILE=/opt/xfsite/logs/ai325-editor.lock \
     AI325_SERVER_DAILY="$REPO/scripts/server-daily.sh" \
-    AI325_PUBLIC_BASE_URL="${AI325_PUBLIC_BASE_URL:-}" \
+    AI325_PUBLIC_BASE_URL="${AI325_PUBLIC_BASE_URL:-https://www.ai325.com}" \
   --args "$TARGET/server.py"
 
 PLATFORM_JSON="$($HERMES_BIN config get platform_toolsets.wecom --json 2>/dev/null || true)"

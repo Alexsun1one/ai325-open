@@ -1,0 +1,2 @@
+/* Hermes 专属头像主题：随 IdentityAvatar 加载，不依赖某个页面 CSS。 */
+.hermes { border-color:var(--blue-wash-2); background:var(--blue-wash); color:var(--blue-text); }

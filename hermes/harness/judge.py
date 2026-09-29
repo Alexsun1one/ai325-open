@@ -24,7 +24,13 @@ PROMPT_VERSION = "judge-v1"
 MIN_LEDGER_QUOTES = 6
 MAX_LEDGER_QUOTES = 12
 TONE_CLASSES = {"s", "j", "h"}
+# Keep the original Arsenal enum intact.  Library guides use a separate group so
+# adding this lane cannot silently make an Arsenal item valid (or change its
+# existing scoring semantics).
 ARSENAL_KINDS = {"提示词", "方法", "拆书", "工具", "论文", "文章", "案例"}
+LIBRARY_KINDS = {"文库导读"}
+KIND_GROUPS = {"arsenal": ARSENAL_KINDS, "library": LIBRARY_KINDS}
+SUPPORTED_KINDS = set().union(*KIND_GROUPS.values())
 ENGINEERING_SLOP = ("口径", "治理产物", "端点", "静态", "渲染", "数据层", "接线", "缺口", "闭环", "赋能")
 ACTION_PREFIXES = (
     "写",
@@ -60,6 +66,21 @@ SECRET_RE = re.compile(
     r"(?i)(?:password|passwd|secret|token|密码|口令|密钥)\s*[:=：]\s*[^\s,;，；]{4,}"
 )
 LONG_TOKEN_RE = re.compile(r"(?<![A-Za-z0-9])[A-Za-z0-9+/=_]{32,}(?![A-Za-z0-9])")
+# 真令牌是一整段高熵串；`decides/classifies/routes/scores` 这类斜杠连写的英文不是。
+_TOKEN_SEG_RE = re.compile(r"[A-Za-z0-9]+")
+
+
+def looks_like_long_token(text: str) -> bool:
+    """真令牌 vs 斜杠连写的英文（decides/classifies/routes/scores）。"""
+    for m in LONG_TOKEN_RE.finditer(text):
+        segs = _TOKEN_SEG_RE.findall(m.group(0))
+        if not segs:
+            continue
+        # 由多个普通英文词用 / + _ = 连起来的，不是令牌
+        if len(segs) >= 2 and all(seg.isalpha() and len(seg) <= 20 for seg in segs):
+            continue
+        return True
+    return False
 
 
 class JudgeError(Exception):
@@ -134,7 +155,7 @@ def privacy_hits(text: str) -> list[str]:
         hits.append("身份证形态")
     if SECRET_RE.search(scrubbed):
         hits.append("密码/密钥形态")
-    if LONG_TOKEN_RE.search(scrubbed):
+    if looks_like_long_token(scrubbed):
         hits.append("长令牌形态")
     return hits
 
@@ -145,6 +166,62 @@ def latest_previous(directory: Path | None, date_value: str) -> dict[str, Any]:
     paths = sorted(path for path in directory.glob("*.json") if path.stem < date_value)
     payload = load_json(paths[-1], {}) if paths else {}
     return payload if isinstance(payload, dict) else {}
+
+
+_ECHO_GENERIC_PHRASES = (
+    "上一期你们盯着的是", "上一期你们盯着", "上回你们盯着的", "上回你们盯着",
+    "盯着的是", "有了新进展", "新进展", "上一期", "上期", "上回", "你们",
+    "今天", "这条线", "这条", "线索", "读者", "关注", "回声", "划过",
+    "最多", "如果", "还在", "写在", "这里", "没有", "就留", "盯着",
+)
+
+
+def _echo_tokens(value: str) -> set[str]:
+    text = plain(value)
+    for phrase in _ECHO_GENERIC_PHRASES:
+        text = text.replace(phrase, " ")
+    text = re.sub(r"[^\w\u4e00-\u9fff]+", " ", text.lower())
+    tokens: set[str] = set()
+    for part in text.split():
+        if len(part) < 2:
+            continue
+        tokens.add(part)
+        tokens.update(part[index : index + 2] for index in range(len(part) - 1))
+        if len(part) >= 3:
+            tokens.update(part[index : index + 3] for index in range(len(part) - 2))
+    return tokens
+
+
+def scrub_reader_echo(artifact: dict[str, Any], soft: list[str], suggestions: list[str]) -> None:
+    """Mechanical gate: fake reader_echo is emptied, never a hard fail."""
+    raw = artifact.get("reader_echo")
+    if raw is None:
+        return
+    if not isinstance(raw, dict):
+        artifact.pop("reader_echo", None)
+        soft.append("reader_echo 不是对象，已清空")
+        return
+    text = plain(raw.get("text"))
+    if not text:
+        artifact.pop("reader_echo", None)
+        return
+    needles = _echo_tokens(text)
+    parts: list[str] = []
+    for theme in artifact.get("themes") or []:
+        if not isinstance(theme, dict):
+            continue
+        parts.extend([str(theme.get("h") or ""), str(theme.get("body") or ""), str(theme.get("deep") or "")])
+        for voice in theme.get("voices") or []:
+            if isinstance(voice, dict):
+                parts.append(str(voice.get("v") or ""))
+    for quote in artifact.get("quotes") or []:
+        if isinstance(quote, dict):
+            parts.append(str(quote.get("t") or ""))
+    hay = _echo_tokens("\n".join(parts))
+    if not needles or not (needles & hay):
+        artifact.pop("reader_echo", None)
+        soft.append("reader_echo 与当日主题/金句无重叠，已清空")
+        suggestions.append("今日没碰到读者关注面时，reader_echo 必须留空，不许补戏")
 
 
 def source_newcomer_names(value: Any) -> set[str]:
@@ -180,6 +257,15 @@ def ledger_mechanical(
     missing_sections = [name for name, present in sections.items() if not present]
     if missing_sections:
         hard.append(f"八段缺失：{', '.join(missing_sections)}")
+
+    if artifact.get("complete") is False:
+        hard.append("本期标记未完成（complete=false），不可发布")
+    coverage = artifact.get("coverage") if isinstance(artifact.get("coverage"), dict) else {}
+    missing_segments = coverage.get("missing_segments")
+    if isinstance(missing_segments, list) and missing_segments:
+        soft.append(
+            f"进料缺失 {len(missing_segments)} 个切片（coverage 已标注），按现有证据出刊"
+        )
 
     quotes = artifact.get("quotes", []) if isinstance(artifact.get("quotes"), list) else []
     if len(quotes) > MAX_LEDGER_QUOTES:
@@ -300,6 +386,7 @@ def ledger_mechanical(
         suggestions.append("金句只从 transcript 逐字复制，不要润色标点或改写署名")
     if any("deep" in item for item in hard):
         suggestions.append("每幕 deep 用至少 3 条碎片推出“没说破的：”，然后落到一个动作")
+    scrub_reader_echo(artifact, soft, suggestions)
 
     hard_penalty = min(60, 12 * len(hard))
     soft_penalty = min(25, 3 * len(soft) + min(10, sum(slop_counts.values())))
@@ -370,15 +457,21 @@ def candidate_urls(path: Path | None) -> set[str]:
 
 
 def arsenal_mechanical(
-    artifact: Any, candidates_path: Path | None, previous: dict[str, Any]
+    artifact: Any,
+    candidates_path: Path | None,
+    previous: dict[str, Any],
+    *,
+    allowed_kinds: set[str] | None = None,
+    kind_label: str = "arsenal",
 ) -> tuple[int, list[str], list[str], list[str], dict[str, Any], dict[str, Any]]:
     hard: list[str] = []
     soft: list[str] = []
     suggestions: list[str] = []
+    allowed_kinds = allowed_kinds or ARSENAL_KINDS
     if not isinstance(artifact, list):
-        return 0, ["arsenal 顶层必须是数组"], [], [], {"items": 0}, {"items": []}
-    if not 8 <= len(artifact) <= 15:
-        hard.append(f"arsenal 必须 8–15 条，当前 {len(artifact)}")
+        return 0, [f"{kind_label} 顶层必须是数组"], [], [], {"items": 0}, {"items": []}
+    if not 12 <= len(artifact) <= 24:
+        hard.append(f"{kind_label} 必须 12–24 条，当前 {len(artifact)}")
     urls = candidate_urls(candidates_path)
     previous_threads = {
         str(item.get("id"))
@@ -392,7 +485,7 @@ def arsenal_mechanical(
         if not isinstance(item, dict):
             hard.append(f"items[{index}] 必须是对象")
             continue
-        if item.get("kind") not in ARSENAL_KINDS:
+        if item.get("kind") not in allowed_kinds:
             hard.append(f"items[{index}].kind 不在枚举中")
         source = item.get("source")
         if not isinstance(source, dict):
@@ -538,7 +631,7 @@ def load_usage(paths: list[Path]) -> dict[str, int]:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("artifact", type=Path)
-    parser.add_argument("--kind", choices=("ledger", "arsenal"), required=True)
+    parser.add_argument("--kind", choices=("ledger", "arsenal", "library"), required=True)
     parser.add_argument("--transcript", type=Path)
     parser.add_argument("--candidates", type=Path)
     parser.add_argument("--previous", type=Path)
@@ -578,7 +671,11 @@ def main() -> int:
         )
     else:
         mechanical, hard, soft, suggestions, metrics, llm_context = arsenal_mechanical(
-            artifact, args.candidates, previous
+            artifact,
+            args.candidates,
+            previous,
+            allowed_kinds=KIND_GROUPS[args.kind],
+            kind_label=args.kind,
         )
         artifact_prompt_version = args.artifact_prompt_version
 

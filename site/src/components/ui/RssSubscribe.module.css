@@ -1,0 +1,114 @@
+/* RSS 订阅小面板：原生 details，行内折叠，不撑卡片墙；明暗 token 同源。 */
+.rss {
+  display: inline-block;
+  max-width: 100%;
+}
+.summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--blue-text);
+  font-size: 14px;
+  list-style: none;
+}
+.summary::-webkit-details-marker { display: none; }
+.summary::after {
+  content: "▸";
+  margin-left: 4px;
+  font-size: 11px;
+  transition: transform 0.15s;
+}
+.rss[open] .summary::after { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) {
+  .summary::after { transition: none; }
+}
+.summary:hover { text-decoration: underline; text-underline-offset: 2px; }
+.summary:focus-visible {
+  outline: 2px solid var(--blue-text);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.panel {
+  margin-top: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--paper-2, var(--paper));
+  min-width: 260px;
+  max-width: min(420px, 90vw);
+  box-sizing: border-box;
+}
+.hint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  min-width: 0;
+}
+.addr {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.addr:focus-visible {
+  outline: 2px solid var(--blue-text);
+  outline-offset: 1px;
+}
+.copy {
+  flex: none;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--blue);
+  border-radius: 5px;
+  background: var(--blue);
+  color: var(--paper);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.copy:hover { opacity: 0.9; }
+.copy:focus-visible {
+  outline: 2px solid var(--blue-text);
+  outline-offset: 2px;
+}
+.more {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+.more a {
+  color: var(--blue-text);
+  text-decoration: none;
+}
+.more a:hover { text-decoration: underline; }
+.more a:focus-visible {
+  outline: 2px solid var(--blue-text);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.fail { color: var(--amber-text, #92610a); }
+.msg {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+@media (max-width: 639px) {
+  .panel { min-width: 0; }
+}

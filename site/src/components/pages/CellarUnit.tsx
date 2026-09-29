@@ -1,164 +1,351 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { apiFetch, ApiError, getToken, useAuth } from "@/lib/auth";
 import { Note } from "./FormBits";
 import { Gate } from "./Gate";
+import { SpeakerIdentity } from "@/components/ui/SpeakerIdentity";
+import { RichMessage } from "@/components/ui/RichMessage";
+import { clock, participantName, type UnitParticipant, type UnitSummary } from "./CellarList";
 
-/** 契约（backend 追加节待定稿，见报告契约缺口节）：
- *  GET /api/context-units/{id} → { id, date, topic, start_at, end_at,
- *    participants: [{name}], messages: [{ id, ordinal, time, sender, text, likes, liked }] }
- *  评论复用 /api/comments，anchor = `unit:{unitId}:{ordinal}`
- *  点赞 POST /api/context-unit-messages/{messageId}/like → { likes }   // 待 backend 追加
- */
-interface UnitMessage { id: number; ordinal: number; time?: string; sender: string; text: string; likes?: number; liked?: boolean }
-interface UnitDetail {
-  id: number; date: string; topic?: string; start_at?: string; end_at?: string;
-  participants?: { name: string }[]; messages: UnitMessage[];
+interface UnitMessage {
+  id: number | null;
+  ordinal: number;
+  time?: string | null;
+  at?: string | null;
+  sender?: string | null;
+  sender_name?: string | null;
+  text: string;
+  likes?: number;
+  liked?: boolean;
+  comment_anchor?: string | null;
 }
-interface ThreadComment { id: number | string; user: string; text: string; at: string; agent?: { display_name?: string; mentor_username?: string } | null }
 
-const threadAnchor = (unitId: number, ordinal: number) => `unit:${unitId}:${ordinal}`;
+interface UnitDetail extends UnitSummary {
+  locked?: boolean;
+  messages?: UnitMessage[] | null;
+}
 
-function MessageRow({ m, unitId, date, hl, onToggle }: {
-  m: UnitMessage; unitId: number; date: string; hl: boolean; onToggle: (ordinal: number) => void;
-}) {
+interface ThreadComment {
+  id: number | string;
+  user?: string;
+  text: string;
+  at?: string;
+  status?: string;
+  reply_to?: number | string | null;
+  via?: string | null;
+  via_label?: string | null;
+  agent?: { display_name?: string; mentor_username?: string; avatar_key?: string } | null;
+}
+
+interface LikeResponse {
+  likes: number;
+  liked?: boolean;
+}
+
+function unitAnchor(unitId: string, ordinal: number) {
+  return `atom:${unitId}:${ordinal}`;
+}
+
+function messageId(unitId: string, ordinal: number) {
+  return `cellar-message-${unitId}-${ordinal}`;
+}
+
+function parseOrdinal(raw: string | null) {
+  if (!raw || !/^[1-9]\d*$/.test(raw)) return null;
+  const value = Number(raw);
+  return Number.isSafeInteger(value) ? value : null;
+}
+
+function messageSender(message: UnitMessage) {
+  return message.sender?.trim() || message.sender_name?.trim() || "群友";
+}
+
+function messageTime(message: UnitMessage) {
+  return clock(message.time ?? message.at);
+}
+
+function UnitHeader({ unit }: { unit: UnitDetail }) {
+  const people = (unit.participants ?? []).map((person: UnitParticipant) => participantName(person)).filter(Boolean);
+  const title = unit.title?.trim() || "无题的一坛";
+  const start = clock(unit.start_at);
+  const end = clock(unit.end_at);
+  return (
+    <header className="border-b border-rule pb-7">
+      <a href="/cellar/" className="inline-flex min-h-11 items-center gap-1.5 font-sans text-[13px] font-semibold text-blue-text no-underline hover:underline sm:min-h-0">
+        <svg aria-hidden width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M15 6l-6 6 6 6" /></svg>
+        回原浆目录
+      </a>
+      <div className="mt-5 flex flex-wrap items-start justify-between gap-5">
+        <div className="min-w-0">
+          <div className="label">窖藏 · 原浆坛</div>
+          <h1 className="mt-2 font-serif text-[30px] font-black leading-[1.2] tracking-[0.01em] text-ink sm:text-[38px]">{title}</h1>
+        </div>
+        <div className="shrink-0 rotate-[-2deg] border border-blue px-3 py-2 text-right text-blue-text">
+          <div className="label text-[10px]">窖藏编号</div>
+          <div className="num mt-0.5 text-[12px] font-semibold tracking-[0.04em]">{unit.id}</div>
+        </div>
+      </div>
+      <p className="prose-sheet mt-4 max-w-[42em] text-[16px] leading-[1.85] text-ink-2">{unit.summary || "这一坛没有另外的摘要，登录后可读逐字原浆。"}</p>
+      <dl className="mt-5 grid grid-cols-2 gap-x-5 gap-y-3 border-t border-rule pt-4 font-sans text-[12.5px] sm:grid-cols-4">
+        <div><dt className="label">日期</dt><dd className="num mt-0.5 text-ink">{unit.date}</dd></div>
+        <div><dt className="label">时间</dt><dd className="num mt-0.5 text-ink">{start ? `${start}${end && end !== start ? ` – ${end}` : ""}` : "—"}</dd></div>
+        <div><dt className="label">原话</dt><dd className="num mt-0.5 text-ink">{typeof unit.message_count === "number" ? unit.message_count : "—"} 句</dd></div>
+        <div><dt className="label">在场</dt><dd className="mt-0.5 text-ink">{people.length || "—"} 人</dd></div>
+      </dl>
+      {people.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {people.map((name, index) => <span key={`${name}-${index}`} data-person={name} className="rounded-[3px] bg-blue-wash px-1.5 py-[2px] font-sans text-[11.5px] text-blue-text">{name}</span>)}
+        </div>
+      )}
+      {unit.has_gap && <div className="mt-5"><Note tone="ink">这一坛的原始时段有缺口，时间线照现有记录呈现，不把缺口补成连续聊天。</Note></div>}
+    </header>
+  );
+}
+
+function MessageRow({ message, unitId, date, highlighted }: { message: UnitMessage; unitId: string; date: string; highlighted: boolean }) {
   const [open, setOpen] = useState(false);
-  const [items, setItems] = useState<ThreadComment[] | null>(null);
+  const [comments, setComments] = useState<ThreadComment[] | null>(null);
   const [draft, setDraft] = useState("");
-  const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [likes, setLikes] = useState(m.likes ?? 0);
-  const [liked, setLiked] = useState(!!m.liked);
+  const [likeBusy, setLikeBusy] = useState(false);
+  const [likes, setLikes] = useState(message.likes ?? 0);
+  const [liked, setLiked] = useState(Boolean(message.liked));
+  const [notice, setNotice] = useState("");
+  const [error, setError] = useState("");
+  const expectedAnchor = unitAnchor(unitId, message.ordinal);
+  const anchor = message.comment_anchor === expectedAnchor ? message.comment_anchor : expectedAnchor;
+  const sender = messageSender(message);
+  const time = messageTime(message);
 
-  const loadThread = useCallback(async () => {
-    setItems(null);
+  const loadComments = useCallback(async () => {
+    setComments(null);
+    setError("");
     try {
-      const d = await apiFetch<{ items: ThreadComment[] }>(`/api/comments?anchor=${encodeURIComponent(threadAnchor(unitId, m.ordinal))}`);
-      setItems(d.items ?? []);
-    } catch { setItems([]); }
-  }, [unitId, m.ordinal]);
+      const data = await apiFetch<{ items?: ThreadComment[] }>(`/api/comments?anchor=${encodeURIComponent(anchor)}`);
+      setComments(data.items ?? []);
+    } catch (cause) {
+      setComments([]);
+      setError(cause instanceof ApiError ? cause.message : "评论暂时取不到，请再试一次。");
+    }
+  }, [anchor]);
 
-  const toggleOpen = () => {
-    setOpen((v) => !v);
-    if (!open) void loadThread();
-  };
-
-  const post = async () => {
-    if (!draft.trim()) return;
-    setBusy(true); setErr(null);
-    try {
-      await apiFetch("/api/comments", { method: "POST", body: JSON.stringify({ anchor: threadAnchor(unitId, m.ordinal), date, text: draft.trim() }) });
-      setDraft(""); await loadThread();
-    } catch (e) { setErr(e instanceof ApiError ? (e.status === 401 ? "先登录再说话。" : e.message) : "没发出去"); }
-    finally { setBusy(false); }
+  const toggleComments = () => {
+    const next = !open;
+    setOpen(next);
+    if (next && comments === null) void loadComments();
   };
 
   const like = async () => {
-    if (!getToken()) return;
+    if (liked || likeBusy) return;
+    if (!getToken()) {
+      setError("登录票据已失效，请重新登录后再赞。");
+      return;
+    }
+    if (message.id == null) {
+      setError("这条原浆暂时没有可用的消息凭证。");
+      return;
+    }
+    setLikeBusy(true);
+    setError("");
     try {
-      const d = await apiFetch<{ likes: number }>(`/api/context-unit-messages/${m.id}/like`, { method: "POST" });
-      setLikes(d.likes); setLiked(true);
-    } catch { /* 契约未落地时静默 */ }
+      const data = await apiFetch<LikeResponse>(`/api/context-unit-messages/${message.id}/like`, { method: "POST" });
+      setLikes(data.likes);
+      setLiked(data.liked ?? true);
+      setNotice("已赞");
+    } catch (cause) {
+      setError(cause instanceof ApiError ? cause.message : "没赞上，请再试一次。");
+    } finally {
+      setLikeBusy(false);
+    }
+  };
+
+  const postComment = async () => {
+    const text = draft.trim();
+    if (!text || busy) return;
+    setBusy(true);
+    setError("");
+    setNotice("");
+    try {
+      const created = await apiFetch<ThreadComment & { moderation_queue_id?: number | string }>("/api/comments", {
+        method: "POST",
+        body: JSON.stringify({ anchor, date, text, reply_to: null }),
+      });
+      setDraft("");
+      setComments((current) => [...(current ?? []), created]);
+      setNotice(created.status === "pending" ? "已提交，审核后会显示。" : "评论已发出。");
+    } catch (cause) {
+      setError(cause instanceof ApiError ? (cause.status === 401 ? "先登录再说话。" : cause.message) : "没发出去，请再试一次。");
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
-    <li id={`msg-${m.ordinal}`} className={`group relative border-l border-rule pl-5 pb-7 ${hl ? "rounded-r-[8px] bg-amber-wash/35 py-1 pr-3" : ""}`}>
-      {/* 时间标尺点 */}
-      <span aria-hidden className="absolute -left-[5px] top-[7px] h-[9px] w-[9px] rounded-full border border-rule bg-paper" />
-      {m.time && <span className="num absolute -left-[4px] top-[19px] w-14 -translate-x-full pr-3 text-right font-sans text-[11px] leading-none text-ink-3">{m.time.slice(0, 5)}</span>}
-      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-        <span data-person={m.sender} className="font-sans text-[13px] font-semibold text-blue-text">{m.sender}</span>
-        {/* hover 工具：点赞 / 评论。不常显——触屏上没有 hover，靠 group-hover 之外再给焦点可达 */}
-        <span className="inline-flex items-center gap-1 opacity-0 transition-opacity duration-200 focus-within:opacity-100 group-hover:opacity-100">
-          <button type="button" onClick={like} aria-label="点赞这条" aria-pressed={liked}
-            className="inline-flex h-[22px] items-center gap-1 rounded-[5px] px-1.5 font-sans text-[12px] leading-none text-ink-3 transition-colors hover:bg-paper-2 hover:text-ink">
-            <svg aria-hidden width="11" height="11" viewBox="0 0 24 24" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2"><path d="M12 20s-7-4.6-9.2-9A5.2 5.2 0 0 1 12 6.6 5.2 5.2 0 0 1 21.2 11C19 15.4 12 20 12 20Z"/></svg>
+    <li
+      id={messageId(unitId, message.ordinal)}
+      data-ordinal={message.ordinal}
+      aria-current={highlighted ? "location" : undefined}
+      className={`group relative ml-16 border-l border-rule pb-8 pl-5 sm:ml-20 sm:pl-6 ${highlighted ? "rounded-r-[8px] bg-amber-wash/55 py-2 pr-3" : ""}`}
+    >
+      <span aria-hidden className="absolute -left-[5px] top-[8px] h-[9px] w-[9px] rounded-full border border-rule bg-paper" />
+      {time && <time dateTime={message.time ?? message.at ?? undefined} className="num absolute -left-[4.25rem] top-[5px] w-14 text-right font-sans text-[11px] leading-none text-ink-3 sm:-left-[5.25rem]">{time}</time>}
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <SpeakerIdentity name={sender} />
+        <span className="num font-sans text-[11.5px] text-ink-3">第 {message.ordinal} 条</span>
+        <div className="ml-auto flex items-center gap-1 font-sans text-[12px] text-ink-3">
+          <button
+            type="button"
+            onClick={() => void like()}
+            disabled={liked || likeBusy}
+            aria-label={liked ? "已点赞这条原浆" : "点赞这条原浆"}
+            aria-pressed={liked}
+            className="inline-flex min-h-9 items-center gap-1 rounded-[5px] px-1.5 transition-colors hover:bg-paper-2 hover:text-ink disabled:cursor-default disabled:opacity-75"
+          >
+            <svg aria-hidden width="13" height="13" viewBox="0 0 24 24" fill={liked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2"><path d="M12 20s-7-4.6-9.2-9A5.2 5.2 0 0 1 12 6.6 5.2 5.2 0 0 1 21.2 11C19 15.4 12 20 12 20Z" /></svg>
             <span className="num">{likes}</span>
           </button>
-          <button type="button" onClick={toggleOpen} aria-expanded={open} aria-label="评论这条"
-            className="inline-flex h-[22px] items-center gap-1 rounded-[5px] px-1.5 font-sans text-[12px] leading-none text-ink-3 transition-colors hover:bg-paper-2 hover:text-ink">
-            <svg aria-hidden width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>
+          <button
+            type="button"
+            onClick={toggleComments}
+            aria-expanded={open}
+            aria-controls={`${messageId(unitId, message.ordinal)}-comments`}
+            aria-label={`评论第 ${message.ordinal} 条原浆`}
+            className="inline-flex min-h-9 items-center gap-1 rounded-[5px] px-1.5 transition-colors hover:bg-paper-2 hover:text-ink"
+          >
+            <svg aria-hidden width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z" /></svg>
             评
           </button>
-        </span>
+        </div>
       </div>
-      <p className="prose-sheet mt-1 text-[17px] leading-[1.9] text-ink">{m.text}</p>
+      <p className="prose-sheet mt-2 whitespace-pre-wrap text-[17px] leading-[1.9] text-ink">{message.text}</p>
+      {highlighted && <span className="mt-1 inline-flex rounded-[3px] bg-amber-wash px-1.5 py-[2px] font-sans text-[11px] font-semibold text-amber-text">凭证定位 · 第 {message.ordinal} 条</span>}
+      {(notice || error) && <p role={error ? "alert" : "status"} className={`mt-2 font-sans text-[12px] ${error ? "text-cinnabar-text" : "text-teal-text"}`}>{error || notice}</p>}
       {open && (
-        <div className="mt-3 rounded-[8px] border border-rule bg-paper-2/50 px-3 py-3">
-          <ul className="space-y-2.5">
-            {items === null && <li className="font-sans text-[12.5px] text-ink-3">正在取…</li>}
-            {items && items.length === 0 && <li className="font-sans text-[12.5px] text-ink-3">这条还没有人评。</li>}
-            {items?.map((c) => (
-              <li key={c.id} className="text-[14px] leading-[1.7]">
-                <span className="font-sans text-[12.5px] font-semibold text-ink">{c.user}</span>
-                <span className="ml-2 font-sans text-[13px] leading-[1.7] text-ink-2">{c.text}</span>
+        <div id={`${messageId(unitId, message.ordinal)}-comments`} className="mt-4 rounded-[8px] border border-rule bg-paper-2/55 px-3.5 py-3.5">
+          <div className="flex items-baseline justify-between gap-3">
+            <h3 className="label">这条的评论</h3>
+            <span className="num font-sans text-[11px] text-ink-3">{anchor}</span>
+          </div>
+          <ul className="mt-2.5 space-y-2.5">
+            {comments === null && <li className="font-sans text-[12.5px] text-ink-3">正在取评论…</li>}
+            {comments?.length === 0 && !error && <li className="font-sans text-[12.5px] text-ink-3">这条还没有人评。</li>}
+            {comments?.map((comment) => (
+              <li key={comment.id} className="text-[14px] leading-[1.7]">
+                <SpeakerIdentity name={comment.via === "agent" || comment.agent ? comment.agent?.display_name || comment.via_label || comment.user || "学徒" : comment.user || "群友"} kind={comment.via === "agent" || comment.agent ? "agent" : "human"} master={comment.agent?.mentor_username} avatarKey={comment.agent?.avatar_key} />
+                <RichMessage text={comment.text} className="mt-1.5 text-ink-2" />
+                {comment.status === "pending" && <span className="ml-2 font-sans text-[11px] text-amber-text">待审核</span>}
               </li>
             ))}
           </ul>
-          {err && <p className="mt-2 font-sans text-[12.5px] text-amber-text">{err}</p>}
-          <div className="mt-2.5 flex gap-2">
-            <input value={draft} onChange={(e) => setDraft(e.target.value)} maxLength={500} placeholder={getToken() ? "评一句（1–500 字）" : "先登录才能评"}
-              className="min-h-10 flex-1 rounded-[4px] border border-rule bg-paper px-3 py-1.5 font-sans text-[14px] text-ink outline-none focus:border-blue-2" />
-            <button type="button" disabled={busy || !getToken()} onClick={() => void post()} aria-label="提交这条的评论"
-              className="inline-flex min-h-10 items-center rounded-[4px] border border-blue bg-blue px-3 py-1 font-sans text-[12.5px] font-semibold text-paper transition-opacity hover:opacity-90 disabled:opacity-45">评</button>
+          <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+            <input
+              value={draft}
+              onChange={(event) => setDraft(event.target.value)}
+              onKeyDown={(event) => { if ((event.metaKey || event.ctrlKey) && event.key === "Enter") void postComment(); }}
+              maxLength={500}
+              placeholder="评一句（1–500 字）"
+              aria-label={`评论第 ${message.ordinal} 条原浆`}
+              className="min-h-11 min-w-0 flex-1 rounded-[4px] border border-rule bg-paper px-3 py-1.5 font-sans text-[14px] text-ink outline-none focus:border-blue-2"
+            />
+            <button
+              type="button"
+              disabled={busy || !draft.trim()}
+              onClick={() => void postComment()}
+              className="inline-flex min-h-11 items-center justify-center rounded-[4px] border border-blue bg-blue px-4 py-1 font-sans text-[12.5px] font-semibold text-paper transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-45"
+            >
+              {busy ? "发出中…" : "评"}
+            </button>
           </div>
+          <p className="mt-2 font-sans text-[11.5px] leading-relaxed text-ink-3">评论会挂在 {anchor} 下；⌘/Ctrl + Enter 可提交。</p>
         </div>
       )}
     </li>
   );
 }
 
-export function CellarUnit({ id }: { id: number }) {
-  const { status } = useAuth();
-  const [unit, setUnit] = useState<UnitDetail | null>(null);
-  const [err, setErr] = useState("");
-  const params = useSearchParams();
-  const hlOrdinal = Number(params?.get("at") ?? 0) || 0;
-  const scrolled = useRef(false);
+function UnitTranscript({ detail, highlightOrdinal }: { detail: UnitDetail; highlightOrdinal: number | null }) {
+  const unitId = detail.id;
+  const date = detail.date;
+  const messages = useMemo(() => (detail.messages ?? []).slice().sort((a, b) => a.ordinal - b.ordinal), [detail.messages]);
 
-  const load = useCallback(async () => {
-    try {
-      const d = await apiFetch<UnitDetail>(`/api/context-units/${id}`);
-      setUnit(d); setErr("");
-    } catch (e) { setUnit(null); setErr(e instanceof ApiError ? e.message : "这一坛打不开"); }
-  }, [id]);
-
-  useEffect(() => { void load(); }, [load]);
-
-  // 凭证下钻：滚动到高亮消息
   useEffect(() => {
-    if (!unit || !hlOrdinal || scrolled.current) return;
-    const el = document.getElementById(`msg-${hlOrdinal}`);
-    if (el) { el.scrollIntoView({ block: "center" }); scrolled.current = true; }
-  }, [unit, hlOrdinal]);
+    if (!messages.length || !highlightOrdinal) return;
+    const target = document.getElementById(messageId(unitId, highlightOrdinal));
+    if (!target) return;
+    target.scrollIntoView({ block: "center", behavior: "smooth" });
+  }, [messages, unitId, highlightOrdinal]);
 
-  if (status !== "in") {
-    return <Gate what="窖藏原浆" why="原浆是群里没蒸馏过的原话，只对群友开。要看一坛，先登录——和群像一个门槛。" >{null}</Gate>;
-  }
-  if (err && !unit) return <Note tone="bad">{err}</Note>;
-  if (!unit) return <p className="py-8 font-sans text-[14px] text-ink-3">正在开坛……</p>;
+  if (detail.locked || !Array.isArray(detail.messages)) return <Note tone="bad">登录票据没有打开逐字层，请退出后重新登录。</Note>;
+  if (!messages.length) return <Note tone="ink">这一坛目前没有可展示的逐字记录。</Note>;
 
-  const participants = unit.participants ?? [];
+  const missing = highlightOrdinal != null && !messages.some((message) => message.ordinal === highlightOrdinal);
   return (
-    <div className="mx-auto max-w-[640px]">
-      <header className="pb-6 pt-2">
-        <div className="label">窖藏 · 原浆坛 #{unit.id} · {unit.date}</div>
-        <h1 className="mt-3 font-serif text-[30px] font-black leading-[1.2] tracking-[0.01em] text-ink sm:text-[36px]">{unit.topic || "无题的一坛"}</h1>
-        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 font-sans text-[13px] text-ink-3">
-          {unit.start_at && unit.end_at && <span className="num">{unit.start_at.slice(11, 16)} – {unit.end_at.slice(11, 16)}</span>}
-          {participants.length > 0 && <span>在场：{participants.map((p) => p.name).join(" · ")}</span>}
-          <span className="num">{unit.messages.length} 句</span>
-        </div>
-      </header>
-      <ol>
-        {unit.messages.map((m) => (
-          <MessageRow key={m.id} m={m} unitId={unit.id} date={unit.date} hl={hlOrdinal === m.ordinal} onToggle={() => {}} />
+    <div>
+      <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-y border-rule py-3 font-sans text-[12.5px] text-ink-3">
+        <span>登录可见 · 逐字层已开</span>
+        <span className="num">{messages.length} 条 · 按时间顺序</span>
+      </div>
+      {missing && <div className="mb-4"><Note tone="ink">凭证要定位的第 {highlightOrdinal} 条不在这一坛，先展示完整时间线。</Note></div>}
+      <ol aria-label={`${unitId} 逐字原浆`}>
+        {messages.map((message) => (
+          <MessageRow key={`${message.id ?? "message"}-${message.ordinal}`} message={message} unitId={unitId} date={date} highlighted={highlightOrdinal === message.ordinal} />
         ))}
       </ol>
-      <p className="mt-4 border-t border-rule pt-4 font-sans text-[12.5px] leading-relaxed text-ink-3">
-        这是蒸馏前的原浆，逐字未动，只做了脱敏。想看蒸馏后的说法，回<a href="/ledger/2026-08-23/" className="text-blue-text underline underline-offset-2">第 002 批日报</a>，或回<a href="/cellar/" className="text-blue-text underline underline-offset-2">窖藏目录</a>。
-      </p>
+      <p className="mt-2 border-t border-rule pt-4 font-sans text-[12px] leading-relaxed text-ink-3">原文只在登录后的成员层展示；页面上的人名已按公开规则脱敏，评论和点赞也只作用于这条原浆。</p>
+    </div>
+  );
+}
+
+export function CellarUnit({ id }: { id: string }) {
+  const { status, user } = useAuth();
+  // 账号维度 remount：登录/登出/换账号整棵重来，前人私密正文不残留
+  const accountKey = status === "in" && user ? user.username : status === "out" ? "anon" : null;
+  if (accountKey === null) return <p className="py-8 font-sans text-[14px] text-ink-3">正在验票……</p>;
+  return <UnitBody key={`${accountKey}:${id}`} id={id} />;
+}
+
+function UnitBody({ id }: { id: string }) {
+  const params = useSearchParams();
+  const highlightOrdinal = parseOrdinal(params?.get("at") ?? null);
+  const [unit, setUnit] = useState<UnitDetail | null>(null);
+  const [error, setError] = useState("");
+  const [nonce, setNonce] = useState(0); // 显式重试
+
+  // 单次取 detail：匿名拿摘要层、登录拿逐字层；登录态变化由外层 key remount 重新取，不复用前人响应
+  useEffect(() => {
+    let alive = true;
+    const c = new AbortController();
+    apiFetch<UnitDetail>(`/api/context-units/${encodeURIComponent(id)}`, { signal: c.signal })
+      .then((data) => { if (alive && !c.signal.aborted) setUnit(data); })
+      .catch((cause) => {
+        if (c.signal.aborted || (cause instanceof DOMException && cause.name === "AbortError")) return;
+        if (alive) setError(cause instanceof ApiError ? cause.message : "这一坛打不开，请再试一次。");
+      });
+    return () => { alive = false; c.abort(); };
+  }, [id, nonce]);
+
+  if (error) {
+    return <Note tone="bad">{error} <button type="button" onClick={() => { setError(""); setUnit(null); setNonce((n) => n + 1); }} className="inline-flex min-h-11 items-center px-3 font-semibold text-blue-text underline underline-offset-2">重试</button></Note>;
+  }
+  if (!unit) return <p className="py-8 font-sans text-[14px] text-ink-3">正在开坛……</p>;
+
+  return (
+    <div className="mx-auto max-w-[760px]">
+      <UnitHeader unit={unit} />
+      <section className="pt-8" aria-labelledby="cellar-transcript-heading">
+        <div className="mb-5 flex flex-wrap items-baseline justify-between gap-3">
+          <div>
+            <div className="label">原浆逐字层</div>
+            <h2 id="cellar-transcript-heading" className="mt-1 font-serif text-[23px] font-bold leading-snug text-ink">下窖读原话</h2>
+          </div>
+          <span className="font-sans text-[12px] text-ink-3">未登录只见上面的块摘要</span>
+        </div>
+        <Gate what="窖藏原浆" why="原浆是群里还没蒸馏过的原话，只对群友开。登录后可以沿时间标尺逐条阅读、点赞和评论。">
+          <UnitTranscript detail={unit} highlightOrdinal={highlightOrdinal} />
+        </Gate>
+      </section>
     </div>
   );
 }

@@ -1,0 +1,35 @@
+{
+  "skillMarkdown": "---\nname: remotion-multimedia\ndescription: Interacting with Mediabunny\nversion: 4.0.529\n---\n\nMediabunny is a multimedia library for dealing with audio and video in the browser.\nHere is a compact overview of its capabilities: https://mediabunny.dev/llms.txt\n\n## Getting audio duration\n\nSee [get-audio-duration.md](get-audio-duration.md) for getting the duration of an audio file in seconds with Mediabunny.\n\n## Getting video dimensions\n\nSee [get-video-dimensions.md](get-video-dimensions.md) for getting the width and height of a video file with Mediabunny.\n\n## Getting video duration\n\nSee [get-video-duration.md](get-video-duration.md) for getting the duration of a video file in seconds with Mediabunny.\n",
+  "sourceUrl": "https://github.com/remotion-dev/skills/blob/cf49eff5d4463b33966b6618c83f7295797dd028/skills/remotion-multimedia/SKILL.md",
+  "repositoryUrl": "https://github.com/remotion-dev/skills",
+  "redacted": false,
+  "redactions": [],
+  "repositoryStars": 4754,
+  "starsCheckedAt": "2026-09-28T18:57:03Z",
+  "editorial": {
+    "overview": "这项技能把媒体文件的基础信息读取交给 Mediabunny，并按任务分流到音频时长、视频时长和视频尺寸的具体说明。公开示例先建立输入源，再读取时长或主要视频轨道的信息，最后将结果提供给视频工程使用。这样可以依据素材本身决定布局和时间安排，减少把文件长度或横竖比例手工写错的情况。\n\n配套文档区分网络地址与本地文件来源，也说明 Remotion 公共素材路径的引用方式。读取视频尺寸时，需要检查是否真的存在视频轨道；只有声音的文件不能因为扩展名看似视频就被当作有画面素材。本站建议把读取结果与一段人工可确认的样本对照，并处理加载失败或轨道缺失，不以一个空值继续完成排版。本条按所链研读版本归纳，仅覆盖已经读取的元数据路线，不把这个简短入口扩写成任意转码或媒体编辑能力。时长与尺寸可读，也不保证整个文件在目标播放器中能够完整解码。",
+    "useCases": [
+      "按素材真实时长安排场景",
+      "读取视频尺寸后选择画面布局"
+    ],
+    "inputs": [
+      "获准访问的媒体地址或文件",
+      "需要读取的时长、尺寸等字段"
+    ],
+    "outputs": [
+      "媒体时长或显示尺寸",
+      "读取失败及轨道缺失的明确结果"
+    ],
+    "steps": [
+      "根据网络或本地来源建立输入，选择对应读取方法。",
+      "获取时长或主要视频轨道，检查缺失和异常。",
+      "把结果交给布局时间轴，并用样本核对实际含义。"
+    ],
+    "limitations": [
+      "本站未读取真实媒体，解码兼容和数据准确性未实测。",
+      "这里只说明已核对的元数据用法，不承诺完整转码或剪辑功能。"
+    ],
+    "reviewedAt": "2026-09-22",
+    "sourceUrl": "https://github.com/remotion-dev/skills/blob/9682e994989f951c75912fbc49aa10332a512685/skills/remotion-multimedia/SKILL.md"
+  }
+}

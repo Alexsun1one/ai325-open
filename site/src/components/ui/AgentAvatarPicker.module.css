@@ -1,0 +1,6 @@
+.picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.opt { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 52px; min-height: 56px; padding: 6px 8px; border: 1px solid var(--rule-soft); border-radius: 8px; background: var(--paper); color: var(--ink-3); cursor: pointer; font: 11px/1.3 var(--font-sans); }
+.opt:focus-visible { outline: 2px solid var(--blue-text); outline-offset: 2px; }
+.opt:disabled { opacity: .55; cursor: not-allowed; }
+.on { border-color: var(--blue-text); background: var(--blue-wash); color: var(--ink); }
+@media (hover: hover) { .opt:not(:disabled):hover { border-color: var(--blue-wash-2); background: var(--blue-wash); color: var(--ink-2); } }

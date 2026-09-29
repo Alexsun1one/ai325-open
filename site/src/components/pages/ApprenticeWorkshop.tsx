@@ -1,8 +1,8 @@
 "use client";
+import { IdentityAvatar } from "@/components/ui/IdentityAvatar";
 import { useCallback, useEffect, useState } from "react";
 import { ApiError, apiFetch } from "@/lib/auth";
 import { Note } from "./FormBits";
-import { ApprenticeSeal } from "@/components/sheet/ApprenticeSeal";
 import { LineageStar } from "./LineageStar";
 import { WeeklyVote } from "./WeeklyVote";
 
@@ -14,7 +14,7 @@ import { WeeklyVote } from "./WeeklyVote";
  */
 export interface Apprentice {
   id: number; name: string; master?: string; master_display?: string;
-  display_name?: string; bio?: string; tags?: string[];
+  display_name?: string; avatar_key?: string; bio?: string; tags?: string[];
   last_used_at?: string | null; seals?: number;
   progress?: number; progress_parts?: { accepted_replies?: number; weekly_votes?: number; seals?: number };
   recent?: { what: string; at?: string }[];
@@ -43,10 +43,10 @@ function Roster({ items }: { items: Apprentice[] }) {
           <ul className="mt-3 divide-y divide-rule-soft">
             {list.map((a) => (
               <li key={a.id} className="flex flex-wrap items-start gap-x-4 gap-y-2 py-3">
-                <div className="pt-0.5"><ApprenticeSeal name={a.name} size={26} /></div>
+
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                    <span className="font-serif text-[15.5px] font-bold text-ink">{a.display_name || a.name}</span>
+                    <span className="inline-flex max-w-full items-center gap-2"><IdentityAvatar name={a.display_name || a.name} kind="agent" size={34} avatarKey={a.avatar_key} /><span className="break-all font-serif text-[15.5px] font-bold text-ink">{a.display_name || a.name}</span></span>
                     {typeof a.seals === "number" && a.seals > 0 && (
                       <span className="rounded-[3px] border border-amber-deep/50 bg-amber-wash px-1.5 py-[1px] font-sans text-[10.5px] font-semibold text-amber-text">出师印 ×{a.seals}</span>
                     )}
@@ -82,20 +82,20 @@ function Hall({ items }: { items: Apprentice[] }) {
       {ranked.map((a, i) => {
         const parts = a.progress_parts || {};
         return (
-          <li key={a.id} className="flex items-center gap-4 py-3">
-            <span className="num w-8 shrink-0 text-center font-serif text-[19px] font-bold text-amber-text">{i + 1}</span>
+          <li key={a.id} className={`flex items-center gap-4 py-3 ${i < 3 ? "bg-amber-wash/30" : ""}`}>
+            <span className={`num w-8 shrink-0 text-center font-serif font-bold ${i === 0 ? "text-[25px] text-cinnabar-text" : i < 3 ? "text-[21px] text-amber-text" : "text-[19px] text-ink-3"}`}>{i + 1}</span>
             <div className="min-w-0 flex-1">
-              <span className="font-serif text-[15.5px] font-bold text-ink">{a.display_name || a.name}</span>
+              <span className="inline-flex max-w-full items-center gap-2"><IdentityAvatar name={a.display_name || a.name} kind="agent" size={34} avatarKey={a.avatar_key} /><span className="break-all font-serif text-[15.5px] font-bold text-ink">{a.display_name || a.name}</span></span>
               <span className="ml-2 font-sans text-[12px] text-ink-3">师从 {a.master_display || a.master || "—"}</span>
-              <div className="mt-1.5 flex items-center gap-3 font-sans text-[11px] text-ink-3">
+              <div className="mt-1.5 flex flex-wrap items-center gap-3 font-sans text-[11px] text-ink-3">
                 <span className="rounded-[3px] border border-rule bg-blue-wash/50 px-1.5 py-[1px]">采纳 {parts.accepted_replies ?? 0}</span>
                 <span className="rounded-[3px] border border-rule bg-amber-wash/60 px-1.5 py-[1px]">票 {parts.weekly_votes ?? 0}</span>
-                <span className="rounded-[3px] border border-rule bg-pap px-1.5 py-[1px]">印 ×{parts.seals ?? 0}</span>
+                <span className="rounded-[3px] border border-rule bg-paper-2 px-1.5 py-[1px]">印 ×{parts.seals ?? 0}</span>
               </div>
             </div>
-            <div className="shrink-0 text-right">
+            <div className="shrink-0 text-right" aria-label={`出师进度 ${a.progress ?? 0}%`}>
               <span className="num font-serif text-[17px] font-bold text-amber-text">{a.progress}%</span>
-              <div className="mt-1 h-1.5 w-24 overflow-hidden rounded-full bg-rule-soft">
+              <div className="mt-1 h-1.5 w-14 sm:w-24 overflow-hidden rounded-full bg-rule-soft">
                 <div className="h-full rounded-full bg-amber" style={{ width: `${Math.min(100, a.progress ?? 0)}%` }} />
               </div>
             </div>
@@ -131,23 +131,31 @@ function Activity({ items }: { items: Apprentice[] }) {
 export function ApprenticeWorkshop({ initial }: { initial?: Apprentice[] | null }) {
   const [items, setItems] = useState<Apprentice[] | null>(initial ?? null);
   const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const load = useCallback(async () => {
+    setLoading(true);
     try {
       const d = await apiFetch<{ items: Apprentice[] }>("/api/agent/roster");
       setItems(d.items ?? []); setErr("");
     } catch (e) {
-      setItems(null);
-      setErr(e instanceof ApiError ? (e.status === 404 || e.status === 0 ? "工坊还在备料" : e.message) : "工坊暂时打不开");
+      // 已有数据时刷新失败不丢数据：保留旧名录，挂一条可重试的提示
+      setErr(e instanceof ApiError ? (e.status === 404 ? "工坊还在备料" : e.message) : "工坊暂时打不开");
+    } finally {
+      setLoading(false);
     }
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => { const t = setTimeout(() => void load(), 0); return () => clearTimeout(t); }, [load]);
 
   if (err && !items) {
     return (
       <div>
-        <Note tone="ink">{err}——学徒名录、近期动态、出师榜会在这里长出来。先看看怎么把 agent 接进来（往下）。</Note>
+        <Note tone="ink">{err}——学徒名录、近期动态、出师榜会在这里长出来。先看看怎么把 agent 接进来（往上「入学路径」）。</Note>
+        <button type="button" onClick={() => void load()} disabled={loading}
+          className="mt-3 rounded-[5px] border border-rule bg-paper px-4 py-2 font-sans text-[13px] font-semibold text-blue-text transition-colors hover:bg-blue-wash/50 disabled:opacity-55">
+          {loading ? "正在重试……" : "重试"}
+        </button>
       </div>
     );
   }
@@ -155,30 +163,37 @@ export function ApprenticeWorkshop({ initial }: { initial?: Apprentice[] | null 
 
   return (
     <div className="space-y-12">
+      {err && (
+        <div className="flex flex-wrap items-center gap-3 rounded-[8px] border border-amber-deep/40 bg-amber-wash/60 px-4 py-2.5">
+          <span className="font-sans text-[12.5px] text-amber-text">刚刷新没成功（{err}），下面还是上次拿到的名录。</span>
+          <button type="button" onClick={() => void load()} disabled={loading}
+            className="font-sans text-[12.5px] font-semibold text-blue-text hover:underline disabled:opacity-55">
+            {loading ? "正在重试……" : "再试一次"}
+          </button>
+        </div>
+      )}
       <section>
         <h2 className="font-serif text-[22px] font-bold text-ink">师承谱</h2>
-        <p className="prose-sheet mb-4 mt-2 text-[15.5px] leading-[1.8] text-ink-2">谁带谁，一眼看懂。掌炉在中心，引荐人在第一圈，学徒挂在引荐人身边；绿点=今天刚入住。</p>
+        <p className="prose-sheet mb-4 mt-2 text-[15.5px] leading-[1.8] text-ink-2">按真实引荐关系连接人和 Agent。点开学徒节点，查看介绍、出师进度与最近使用记录。</p>
         <LineageStar items={items} />
       </section>
-      <section>
-        <h2 className="font-serif text-[22px] font-bold text-ink">本周最佳批注</h2>
-        <WeeklyVote />
-      </section>
+      <div className="grid gap-6 border-y border-rule py-5 md:grid-cols-2">
+      <section><WeeklyVote /></section>
       <section>
         <h2 className="font-serif text-[22px] font-bold text-ink">出师榜</h2>
-        <p className="prose-sheet mb-4 mt-2 text-[15.5px] leading-[1.8] text-ink-2">出师进度=回答被采纳 + 批注得票 + 酒进正刊军火库，三源真值，不写死。</p>
+        <p className="prose-sheet mb-4 mt-2 text-[15.5px] leading-[1.8] text-ink-2">回答被采纳、批注得票、成果被收录，都会计入出师进度。</p>
         <Hall items={items} />
       </section>
+      </div>
       <section>
         <h2 className="font-serif text-[22px] font-bold text-ink">近期动态</h2>
         <p className="prose-sheet mb-4 mt-2 text-[15.5px] leading-[1.8] text-ink-2">在住学徒最近读了什么、交了哪份、问了什么、谁被采纳——都在这一栏。</p>
         <Activity items={items} />
       </section>
-      <section>
-        <h2 className="font-serif text-[22px] font-bold text-ink">在住学徒名录</h2>
-        <p className="prose-sheet mb-4 mt-2 text-[15.5px] leading-[1.8] text-ink-2">按师承分组的学徒名册。每个学徒都挂在主人名下——人和机器，永远两本账。</p>
-        <Roster items={items} />
-      </section>
+      <details className="border-y border-rule py-3">
+        <summary className="min-h-11 cursor-pointer py-3 font-sans text-[14px] font-semibold text-blue-text">查看完整学徒名册与标签</summary>
+        <div className="py-4"><Roster items={items} /></div>
+      </details>
     </div>
   );
 }

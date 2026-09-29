@@ -7,6 +7,7 @@ import argparse
 import difflib
 import email.utils
 import html
+import concurrent.futures
 import json
 import os
 import re
@@ -99,9 +100,9 @@ def normalize_published(value: Any) -> str:
 def build_session() -> requests.Session:
     retry = Retry(
         total=2,
-        connect=2,
+        connect=1,  # 连不上就是连不上，重试只会拖长采集窗口
         read=2,
-        backoff_factor=0.5,
+        backoff_factor=0.3,
         status_forcelist=(429, 500, 502, 503, 504),
         allowed_methods=frozenset({"GET"}),
     )
@@ -119,7 +120,9 @@ def build_session() -> requests.Session:
 
 def fetch(session: requests.Session, url: str, timeout: float) -> requests.Response:
     try:
-        response = session.get(url, timeout=timeout)
+        # 连接阶段单独压短：连不上的站点（被墙/DNS 黑洞）6 秒足够判定，
+        # 否则 connect 超时会被 Retry 与主备串行叠加放大（实测量子位 253s）。
+        response = session.get(url, timeout=(min(6.0, timeout), timeout))
         response.raise_for_status()
     except requests.RequestException as exc:
         raise CollectionError(str(exc)) from exc
@@ -380,14 +383,20 @@ def source_attempts(source: dict[str, Any]) -> list[dict[str, Any]]:
 def collect(
     sources: list[dict[str, Any]], timeout: float, limit: int
 ) -> tuple[list[dict[str, str]], list[str], list[str]]:
-    session = build_session()
     collected: list[dict[str, str]] = []
     failures: list[str] = []
     fallbacks_used: list[str] = []
-    for source in sources:
+
+    # 2026-09-18：信源从 15 扩到 27 后，串行抓取（单源最坏 18s 超时 + 主备重试）
+    # 会把采集拖到十几分钟，压迫 07:00 出刊窗口。改为按源并发，源内主备顺序不变。
+    # 每个线程用自己的 session：requests.Session 不保证线程安全。
+    def collect_one(source: dict[str, Any]) -> tuple[list[dict[str, str]], list[str], list[str], list[str]]:
+        session = build_session()
         name = str(source["name"])
         attempt_errors: list[str] = []
         selected: list[dict[str, str]] = []
+        local_fallbacks: list[str] = []
+        logs: list[str] = []
         try:
             attempts = source_attempts(source)
         except CollectionError as exc:
@@ -404,20 +413,33 @@ def collect(
                 selected = filtered[:source_limit]
                 if not selected:
                     raise CollectionError(f"解析 {len(parsed)} 条，但关键词过滤后为 0")
-                collected.extend(selected)
                 route = "primary" if attempt_index == 0 else f"fallback#{attempt_index}"
-                print(f"[ok] {name} via {route}: {len(selected)} / {len(parsed)}", file=sys.stderr)
+                logs.append(f"[ok] {name} via {route}: {len(selected)} / {len(parsed)}")
                 if attempt_index > 0:
-                    fallbacks_used.append(f"{name}: {attempt_url}")
+                    local_fallbacks.append(f"{name}: {attempt_url}")
                 break
             except (CollectionError, requests.RequestException, ValueError, KeyError, json.JSONDecodeError) as exc:
                 attempt_errors.append(f"{attempt_url} -> {exc}")
                 if attempt_index + 1 < len(attempts):
-                    print(f"[warn] {name} 尝试失败，切备用：{attempt_errors[-1]}", file=sys.stderr)
+                    logs.append(f"[warn] {name} 尝试失败，切备用：{attempt_errors[-1]}")
+        local_failures: list[str] = []
         if not selected:
             reason = f"{name}: " + " | ".join(attempt_errors)
-            failures.append(reason)
-            print(f"[fail] {reason}", file=sys.stderr)
+            local_failures.append(reason)
+            logs.append(f"[fail] {reason}")
+        return selected, local_failures, local_fallbacks, logs
+
+    # 顺序稳定：结果按 sources 原序合并，保证去重/优先级与串行时一致。
+    # 批次越少总耗时越短：27 源 × 8 并发要 4 批（实测 761s），16 并发 2 批即可。
+    max_workers = min(16, max(1, len(sources)))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
+        results = list(pool.map(collect_one, sources))
+    for selected, local_failures, local_fallbacks, logs in results:
+        for line in logs:
+            print(line, file=sys.stderr)
+        collected.extend(selected)
+        failures.extend(local_failures)
+        fallbacks_used.extend(local_fallbacks)
     return deduplicate(collected, limit), failures, fallbacks_used
 
 
@@ -426,7 +448,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--date", default=today_cst(), help="输出日期，YYYY-MM-DD（默认上海当天）")
     parser.add_argument("--sources", type=Path, default=HERE / "sources.yaml")
     parser.add_argument("--output", type=Path, help="覆盖输出文件；默认 candidates/YYYY-MM-DD.jsonl")
-    parser.add_argument("--limit", type=int, default=120, help="全局条数上限，最大 120")
+    parser.add_argument("--limit", type=int, default=220, help="候选池全局条数上限（2026-09-18：信源 15→27，池子跟着从 120 放到 220，否则扩源被截断等于白扩）")
     parser.add_argument("--timeout", type=float, default=18.0, help="单请求超时秒数")
     return parser.parse_args()
 
@@ -438,7 +460,7 @@ def main() -> int:
     except ValueError:
         print("--date 必须是 YYYY-MM-DD", file=sys.stderr)
         return 2
-    limit = max(1, min(args.limit, 120))
+    limit = max(1, min(args.limit, 220))
     output = args.output or HERE / "candidates" / f"{args.date}.jsonl"
     sources = load_sources(args.sources)
     items, failures, fallbacks_used = collect(sources, args.timeout, limit)

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/copy-ledger-json.mjs",
+    "build": "next build && node scripts/copy-ledger-json.mjs && node scripts/copy-agent-client.mjs && node scripts/copy-journey.mjs",
     "start": "next start",
     "lint": "eslint"
   },

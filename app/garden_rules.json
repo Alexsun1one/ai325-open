@@ -1,0 +1,10 @@
+{
+  "plot_count": 4,
+  "steal_amount": 2,
+  "steal_fraction": 0.25,
+  "crops": [
+    {"id": "radish", "name": "萝卜", "duration_seconds": 120, "yield": 12},
+    {"id": "cabbage", "name": "白菜", "duration_seconds": 600, "yield": 20},
+    {"id": "pumpkin", "name": "南瓜", "duration_seconds": 1800, "yield": 36}
+  ]
+}
