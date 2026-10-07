@@ -27,6 +27,8 @@ export function CuratedBoard({ data }: { data: ExternalCuration | null }) {
   }, [view, focusedEvent]);
   const edition = data?.editions.find(e => e.date === day);
   const events = data?.events.filter(e => e.heat > 0 || e.id === focusedEvent) ?? [];
+  const hotCount = data?.events.filter(e => e.heat > 0).length ?? 0;
+  const showingArchive = data?.events.some(e => e.id === focusedEvent && e.heat === 0) ?? false;
   return <section className={styles.curated} aria-labelledby="curated-title">
     <header className={styles.heading}>
       <p className={styles.eyebrow}>公开资料 · 自动精选 · 原文可查</p>
@@ -43,7 +45,7 @@ export function CuratedBoard({ data }: { data: ExternalCuration | null }) {
       <div className={styles.curationTools}>
         <div className={styles.filter} aria-label="精选视图">
           <button className={styles.filterLink} aria-pressed={view === "digest"} onClick={() => setView("digest")}>每日精选</button>
-          <button className={styles.filterLink} aria-pressed={view === "hot"} onClick={() => setView("hot")}>近期热点 <span className={styles.count}>{events.length}</span></button>
+          <button className={styles.filterLink} aria-pressed={view === "hot"} onClick={() => setView("hot")}>近期热点 <span className={styles.count}>{hotCount}</span></button>
         </div>
         {view === "digest" && <label>阅读日期 <select value={day} onChange={e => setDay(e.target.value)}>{data.editions.map(e => <option key={e.date} value={e.date}>{e.date} · {editionText[e.status]}</option>)}</select></label>}
       </div>
@@ -61,7 +63,7 @@ export function CuratedBoard({ data }: { data: ExternalCuration | null }) {
           </div>
         </li>)}</ol>}
       </div> : <div>
-        <h2 className={styles.curationTitle}>最近 {data.rules.hotWindowHours} 小时的热点</h2>
+        <h2 className={styles.curationTitle}>{showingArchive ? "事件出处与近期热点" : `最近 ${data.rules.hotWindowHours} 小时的热点`}</h2>
         <p className={styles.about}>按独立发布方的报道计算，同一家只计一次，权重每 {data.rules.hotHalfLifeHours} 小时减半。热度代表报道覆盖，收录不代表效果实测。</p>
         {!events.length && <p className={styles.noItems}>当前窗口内暂无通过筛选的热点。历史内容仍可在每日精选中阅读。</p>}
         <ol className={styles.articles}>{events.map((event, i) => <li className={styles.article} id={event.id} key={event.id}>
