@@ -1,11 +1,63 @@
 {
   "schemaVersion": 1,
-  "limits": { "timeoutSeconds": 15, "maxBytes": 3000000, "maxItemsPerSource": 30 },
+  "limits": {
+    "timeoutSeconds": 15,
+    "maxBytes": 3000000,
+    "maxItemsPerSource": 30
+  },
   "sources": [
-    { "id": "openai-news", "name": "OpenAI News", "feedUrl": "https://openai.com/news/rss.xml", "homepage": "https://openai.com/news", "tags": ["官方博客", "模型与产品"] },
-    { "id": "huggingface-blog", "name": "Hugging Face Blog", "feedUrl": "https://huggingface.co/blog/feed.xml", "homepage": "https://huggingface.co/blog", "tags": ["官方博客", "开源模型"] },
-    { "id": "deepmind-blog", "name": "Google DeepMind Blog", "feedUrl": "https://deepmind.google/blog/rss.xml", "homepage": "https://deepmind.google/blog/", "tags": ["官方博客", "研究"] },
-    { "id": "google-developers", "name": "Google Developers Blog", "feedUrl": "https://developers.googleblog.com/feeds/posts/default/", "homepage": "https://developers.googleblog.com/", "tags": ["官方博客", "工程实践"] },
-    { "id": "github-ai", "name": "GitHub Blog · AI & ML", "feedUrl": "https://github.blog/ai-and-ml/feed/", "homepage": "https://github.blog/ai-and-ml/", "tags": ["官方博客", "工程实践"] }
+    {
+      "id": "openai-news",
+      "name": "OpenAI News",
+      "feedUrl": "https://openai.com/news/rss.xml",
+      "homepage": "https://openai.com/news",
+      "tags": [
+        "官方博客",
+        "模型与产品"
+      ]
+    },
+    {
+      "id": "huggingface-blog",
+      "name": "Hugging Face Blog",
+      "feedUrl": "https://huggingface.co/blog/feed.xml",
+      "homepage": "https://huggingface.co/blog",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ]
+    },
+    {
+      "id": "deepmind-blog",
+      "name": "Google DeepMind Blog",
+      "feedUrl": "https://deepmind.google/blog/rss.xml",
+      "homepage": "https://deepmind.google/blog/",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "articleHosts": [
+        "blog.google"
+      ]
+    },
+    {
+      "id": "google-developers",
+      "name": "Google Developers Blog",
+      "feedUrl": "https://developers.googleblog.com/feeds/posts/default/",
+      "homepage": "https://developers.googleblog.com/",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ]
+    },
+    {
+      "id": "github-ai",
+      "name": "GitHub Blog · AI & ML",
+      "feedUrl": "https://github.blog/ai-and-ml/feed/",
+      "homepage": "https://github.blog/ai-and-ml/",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ]
+    }
   ]
 }

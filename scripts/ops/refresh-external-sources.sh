@@ -13,4 +13,15 @@ rc=$?
 if [ "$rc" -ne 0 ]; then
   echo "[sources] refresh incomplete (exit=$rc); source status and last successful items are retained" >&2
 fi
-exit "$rc"
+# Reuse the established Hermes provider without printing or copying credentials.
+if [ -z "${DEEPSEEK_API_KEY:-}" ] && [ -f "${HERMES_ENV_FILE:-/data/second-brain/hermes/.env}" ]; then
+  set -a
+  source "${HERMES_ENV_FILE:-/data/second-brain/hermes/.env}" >/dev/null 2>&1
+  set +a
+fi
+python3 "$REPO/scripts/ops/curate_external_sources.py"
+curation_rc=$?
+if [ "$curation_rc" -ne 0 ]; then
+  echo "[sources] curation incomplete (exit=$curation_rc); inspect selection status" >&2
+fi
+[ "$rc" -eq 0 ] && [ "$curation_rc" -eq 0 ]

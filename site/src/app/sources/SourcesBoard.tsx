@@ -85,7 +85,7 @@ export function SourcesBoard({ data }: { data: ExternalSourcesData }) {
     <>
       <header className={styles.heading}>
         <p className={styles.eyebrow}>公开资料 · 不是群聊</p>
-        <h1>外部知识来源</h1>
+        <h2 id="raw-sources">全部原始来源</h2>
         <p className={styles.intro}>研究、工程与产品的公开更新。标题和摘要留在这里，核对请回原文。</p>
         <div className={styles.edition}>
           <span>{data.sources.length} 个来源 · {data.items.length} 条收录</span>

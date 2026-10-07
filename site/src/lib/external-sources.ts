@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { readExternalCuration } from "./external-curation";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import type { DiscoveryItem } from "./discovery";
@@ -53,6 +54,17 @@ export function readExternalSources(): ExternalSourcesData {
 
 /** Dated items only: discovery requires a real date, and undated items never get a fabricated one. url is a site path (/sources/#id); sourceUrl is the original https link. */
 export function readExternalDiscovery(): DiscoveryItem[] {
+  const curated = readExternalCuration();
+  if (curated) return curated.events.map(event => {
+    const source = event.reports[event.reports.length - 1];
+    return {
+      id: `resource:${createHash("sha256").update(`curated:${event.id}`).digest("hex").slice(0, 24)}`,
+      kind: "resource" as const, title: event.title, summary: event.summary,
+      url: `/sources/#${event.id}`, date: new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Shanghai", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(event.updatedAt)),
+      tags: ["外部精选", ...event.tags],
+      ...(source.url.startsWith("https://") ? { sourceUrl: source.url } : {}),
+    };
+  });
   return readExternalSources().items.filter((e) => e.publishedAt).map((e) => ({
     id: `resource:${createHash("sha256").update(`external:${e.id}`).digest("hex").slice(0, 24)}`,
     kind: "resource" as const,

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { PageShell } from "@/components/pages/PageHead";
 import { readExternalSources } from "@/lib/external-sources";
+import { readExternalCuration } from "@/lib/external-curation";
+import { CuratedBoard } from "./CuratedBoard";
 import { SourcesBoard } from "./SourcesBoard";
 
 export const metadata: Metadata = {
@@ -11,6 +13,7 @@ export const metadata: Metadata = {
 export default function SourcesPage() {
   return (
     <PageShell>
+      <CuratedBoard data={readExternalCuration()} />
       <SourcesBoard data={readExternalSources()} />
     </PageShell>
   );

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "policyVersion": "ai325-curation-v1",
+  "lookbackDays": 14,
+  "maxItemsPerRun": 40,
+  "maxCallsPerRun": 240,
+  "maxCallsPerDay": 600,
+  "maxRuntimeSeconds": 900,
+  "requestTimeoutSeconds": 60,
+  "maxAttempts": 3,
+  "retryAfterMinutes": 30,
+  "maxOutputTokens": 1200,
+  "scoreThresholds": {
+    "official": 65,
+    "community": 75,
+    "media": 80
+  },
+  "maxScoreDisagreement": 25,
+  "hotWindowHours": 48,
+  "hotHalfLifeHours": 24,
+  "trendWindowHours": 6,
+  "maxClusterCandidates": 8,
+  "digestLimit": 12,
+  "sourcePolicy": {
+    "openai-news": {
+      "tier": "official",
+      "publisher": "openai"
+    },
+    "huggingface-blog": {
+      "tier": "official",
+      "publisher": "huggingface"
+    },
+    "deepmind-blog": {
+      "tier": "official",
+      "publisher": "google"
+    },
+    "google-developers": {
+      "tier": "official",
+      "publisher": "google"
+    },
+    "github-ai": {
+      "tier": "official",
+      "publisher": "github"
+    }
+  },
+  "articleTimeoutSeconds": 15,
+  "articleMaxBytes": 1500000,
+  "articleMaxChars": 6000
+}

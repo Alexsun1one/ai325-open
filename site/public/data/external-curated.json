@@ -1,0 +1,1974 @@
+{
+  "schemaVersion": 1,
+  "policyVersion": "ai325-curation-v1",
+  "generatedAt": "2026-10-07T10:28:00Z",
+  "lastSuccessAt": "2026-10-07T10:28:00Z",
+  "run": {
+    "status": "ok",
+    "attemptedAt": "2026-10-07T10:28:00Z",
+    "counts": {
+      "archived": 49,
+      "rejected": 28,
+      "selected": 23,
+      "undated": 20
+    },
+    "callsThisRun": 0,
+    "processedThisRun": 0,
+    "failedThisRun": 0,
+    "failedSources": 0
+  },
+  "rules": {
+    "hotWindowHours": 48,
+    "hotHalfLifeHours": 24,
+    "digestLimit": 12,
+    "maxItemsPerRun": 40
+  },
+  "events": [
+    {
+      "id": "event-da29661ac9859789ccfc",
+      "title": "EmbeddingGemma 2：开源轻量多模态嵌入模型",
+      "summary": "Google DeepMind 发布 EmbeddingGemma 2，一个开源轻量多模态嵌入模型，可将文本、图像、音频和视频映射到统一嵌入空间。该模型基于 Gemma 4 架构，采用 Apache 2.0 许可，拥有 7.4 亿参数，面向端侧推理。相比前代，其代码性能在 MTEB Code 上从 68.76 提升至 78.68，并支持 8K token 上下文窗口。模型采用模块化设计，文本任务最低需 270M 参数，可选视觉和音频编码器。",
+      "reason": "该模型展示了端侧多模态嵌入的进展，对开发本地搜索、RAG 和跨模态检索的开发者有参考价值，且开源许可便于实践。",
+      "tags": [
+        "多模态嵌入",
+        "端侧AI",
+        "开源模型",
+        "Gemma"
+      ],
+      "publishedAt": "2026-10-06T19:57:04Z",
+      "updatedAt": "2026-10-06T19:57:04Z",
+      "heat": 0.6576,
+      "independentSources": 1,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-deepmind-blog-2ee55c894d54",
+          "sourceId": "deepmind-blog",
+          "sourceName": "Google DeepMind Blog",
+          "url": "https://deepmind.google/blog/embeddinggemma-2-an-open-lightweight-multimodal-embedding-model/",
+          "canonicalUrl": "https://deepmind.google/blog/embeddinggemma-2-an-open-lightweight-multimodal-embedding-model",
+          "title": "EmbeddingGemma 2：开源轻量多模态嵌入模型",
+          "summary": "Google DeepMind 发布 EmbeddingGemma 2，一个开源轻量多模态嵌入模型，可将文本、图像、音频和视频映射到统一嵌入空间。该模型基于 Gemma 4 架构，采用 Apache 2.0 许可，拥有 7.4 亿参数，面向端侧推理。相比前代，其代码性能在 MTEB Code 上从 68.76 提升至 78.68，并支持 8K token 上下文窗口。模型采用模块化设计，文本任务最低需 270M 参数，可选视觉和音频编码器。",
+          "tags": [
+            "多模态嵌入",
+            "端侧AI",
+            "开源模型",
+            "Gemma"
+          ],
+          "publishedAt": "2026-10-06T19:57:04Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "该模型展示了端侧多模态嵌入的进展，对开发本地搜索、RAG 和跨模态检索的开发者有参考价值，且开源许可便于实践。",
+          "evidenceQuotes": [
+            "EmbeddingGemma 2 is the most capable model for on-device multimodal embeddings, natively mapping combinations of text,"
+          ],
+          "scores": [
+            91,
+            91
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 24,
+              "reason": "该资料介绍 Google DeepMind 发布的 EmbeddingGemma 2 多模态嵌入模型，与 AI 高度相关。内容包含具体新信息：740M 参数、Apache 2.0 许可、模块化编码器、MRL 向量截断、8K 上下文、MTEB Code 提升 9.92 分、端侧内存占用等，信息密度高。依据来自官方博客并提及模型卡、基准名称和部署工具，可核验性较好，但缺少完整评测数据链接和第三方验证。对开发者学习端侧多模态检索、RAG 和部署实践有较高价值，但部分宣传性表述需谨慎看待。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 24,
+              "reason": "该资料介绍 EmbeddingGemma 2 多模态嵌入模型，AI 相关性极高。提供了具体新信息：740M 参数、Apache 2.0 许可、模块化编码器、MRL 维度截断、8K 上下文、MTEB Code 从 68.76 提升至 78.68 等。来源为 Google DeepMind 官方博客，有模型卡和基准指向，可核验性较好，但部分性能声明依赖官方自评。对开发者学习与实践价值高，涵盖部署工具、量化内存占用和微调指南，适合端侧 RAG 与多模态检索场景。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "EmbeddingGemma 2: an open, lightweight multimodal embedding model",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "google",
+          "selectedAt": "2026-10-07T10:21:43Z"
+        }
+      ]
+    },
+    {
+      "id": "event-d2ff147d8fd870a0d5d2",
+      "title": "OpenAI发布内部前沿模型在数学开放问题上的新结果",
+      "summary": "OpenAI发布了内部前沿模型在数学开放问题上取得的新结果，并在GitHub上分享了Lean证明形式化及研究细节。该进展与数学研究及AI辅助证明的实践相关。",
+      "reason": "了解AI在数学开放问题上的最新进展，以及Lean证明形式化与研究细节的公开分享。",
+      "tags": [
+        "AI",
+        "数学",
+        "Lean",
+        "OpenAI"
+      ],
+      "publishedAt": "2026-10-06T12:00:00Z",
+      "updatedAt": "2026-10-06T12:00:00Z",
+      "heat": 0.5226,
+      "independentSources": 1,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-openai-news-00427e47df5e",
+          "sourceId": "openai-news",
+          "sourceName": "OpenAI News",
+          "url": "https://openai.com/index/sharing-ai-progress-in-mathematics",
+          "canonicalUrl": "https://openai.com/index/sharing-ai-progress-in-mathematics",
+          "title": "OpenAI发布内部前沿模型在数学开放问题上的新结果",
+          "summary": "OpenAI发布了内部前沿模型在数学开放问题上取得的新结果，并在GitHub上分享了Lean证明形式化及研究细节。该进展与数学研究及AI辅助证明的实践相关。",
+          "tags": [
+            "AI",
+            "数学",
+            "Lean",
+            "OpenAI"
+          ],
+          "publishedAt": "2026-10-06T12:00:00Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "了解AI在数学开放问题上的最新进展，以及Lean证明形式化与研究细节的公开分享。",
+          "evidenceQuotes": [
+            "OpenAI publishes new results on open problems in mathematics from an internal frontier model",
+            "shares Lean proof"
+          ],
+          "scores": [
+            72,
+            72
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 22,
+              "novelty": 18,
+              "evidence": 15,
+              "utility": 17,
+              "reason": "标题与摘要直接涉及AI在数学开放问题上的进展，AI相关性高。摘要提到OpenAI发布内部前沿模型的新结果，并公开Lean证明形式化与GitHub研究细节，属于具体新信息，但仅有摘要、无正文片段，无法核验具体问题、证明正确性或模型细节，证据分受限。对关注AI数学推理与形式化验证的学习者有实践参考价值，但缺乏可操作细节，故未给满分。"
+            },
+            {
+              "relevance": 22,
+              "novelty": 18,
+              "evidence": 15,
+              "utility": 17,
+              "reason": "标题与摘要明确指向AI在数学开放问题上的进展，AI相关性高。摘要提到内部前沿模型的新结果、Lean证明形式化及GitHub研究细节，属于具体新信息，但未给出具体问题、模型名称或结果数据，新信息有限。可核验依据方面，仅提及GitHub和Lean形式化，未提供链接、仓库名或论文，核验线索不足。学习/实践价值中等，Lean形式化对数学与AI交叉研究有参考意义，但缺乏可操作细节。整体因信息具体度与可核验性不足，未达高分。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "feed",
+          "originalTitle": "Sharing AI progress in mathematics",
+          "originalSummary": "OpenAI publishes new results on open problems in mathematics from an internal frontier model and shares Lean proof formalizations and research details on GitHub.",
+          "relation": "new",
+          "publisher": "openai",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-9567ab8bacf48fe35708",
+      "title": "Falcon-Emirati：让大语言模型学习阿联酋方言、文化与细微差别",
+      "summary": "Falcon-Emirati-7B 是在 Falcon-H1-Arabic 基础上构建的方言专用模型，旨在理解和生成阿联酋阿拉伯语，包括词汇、语气和文化背景。文章指出阿联酋方言以口语为主、书面语料少，且含义常非字面，因此方言适配困难。团队通过真实方言网络数据、关于阿联酋文化的 MSA 数据以及受词汇表和风格规则约束的合成数据来构建数据管道，并尝试不同数据混合与训练阶段。",
+      "reason": "文章具体说明方言适配为何困难，并公开了数据来源与训练策略，对关注阿拉伯语 NLP、方言模型或低资源语言适配的读者有参考价值。",
+      "tags": [
+        "阿联酋方言",
+        "Falcon-Emirati",
+        "阿拉伯语NLP",
+        "方言适配"
+      ],
+      "publishedAt": "2026-10-06T06:44:39Z",
+      "updatedAt": "2026-10-06T06:44:39Z",
+      "heat": 0.449,
+      "independentSources": 1,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-huggingface-blog-fe424883c3ca",
+          "sourceId": "huggingface-blog",
+          "sourceName": "Hugging Face Blog",
+          "url": "https://huggingface.co/blog/tiiuae/falcon-emirati",
+          "canonicalUrl": "https://huggingface.co/blog/tiiuae/falcon-emirati",
+          "title": "Falcon-Emirati：让大语言模型学习阿联酋方言、文化与细微差别",
+          "summary": "Falcon-Emirati-7B 是在 Falcon-H1-Arabic 基础上构建的方言专用模型，旨在理解和生成阿联酋阿拉伯语，包括词汇、语气和文化背景。文章指出阿联酋方言以口语为主、书面语料少，且含义常非字面，因此方言适配困难。团队通过真实方言网络数据、关于阿联酋文化的 MSA 数据以及受词汇表和风格规则约束的合成数据来构建数据管道，并尝试不同数据混合与训练阶段。",
+          "tags": [
+            "阿联酋方言",
+            "Falcon-Emirati",
+            "阿拉伯语NLP",
+            "方言适配"
+          ],
+          "publishedAt": "2026-10-06T06:44:39Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "文章具体说明方言适配为何困难，并公开了数据来源与训练策略，对关注阿拉伯语 NLP、方言模型或低资源语言适配的读者有参考价值。",
+          "evidenceQuotes": [
+            "A model that only knows MSA can translate every word of an Emirati sentence and still miss what it actually means.",
+            "Emirat"
+          ],
+          "scores": [
+            87,
+            83
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 18,
+              "utility": 22,
+              "reason": "该资料介绍Falcon-Emirati-7B，聚焦阿联酋方言LLM，AI相关性高。内容具体：基于Falcon-H1-Arabic、7B规模、三类数据来源（真实方言网页、MSA文化资料、受词表约束的合成数据）及方言适配难点，属于较新的具体技术信息。但摘要为空，正文为博客自述，缺少可核验的基准分数、数据规模、训练细节或外部链接，证据强度一般。对关注阿拉伯语/方言LLM的研究与工程实践有参考价值。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 20,
+              "evidence": 18,
+              "utility": 20,
+              "reason": "内容聚焦Falcon-Emirati-7B这一阿联酋方言专用大模型，AI相关性高。摘要和正文片段提供了具体新信息：基于Falcon-H1-Arabic、7B规模选择理由、方言适配难点、三类数据来源（真实方言网页、MSA文化资料、受词表约束的合成数据）等，非空泛营销。可核验依据方面，有模型名称、架构描述、数据管线说明，但缺少具体评测分数、数据量、训练细节等硬指标，证据强度中等。学习/实践价值较高，对方言适配的数据策略和训练权衡有参考意义，但正文片段在'Finding the Right Adaptation Recipe'处截断，部分内容不完整。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Falcon-Emirati: When an LLM Learns the Dialect, the Culture, and the Nuance",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "huggingface",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-3f3343fca78a81543359",
+      "title": "ReviewBench：面向AI代码审查的开放基准",
+      "summary": "GitHub发布ReviewBench，一个基于代表性GitHub拉取请求的代码审查智能体基准，包含多源黄金标准、校准评估和生产对齐指标。该基准分析1.039亿个拉取请求，包含219个拉取请求、19种语言，采用多源发现和统一评分标准，并已由资深工程师独立验证。对学习或实践而言，它提供了可复现的离线评估方法，帮助理解不同审查系统的优劣和权衡。",
+      "reason": "了解如何构建可信的AI代码审查基准，以及离线评估如何预测生产实验方向，对开发或选用代码审查智能体有参考价值。",
+      "tags": [
+        "代码审查",
+        "基准测试",
+        "AI智能体",
+        "GitHub"
+      ],
+      "publishedAt": "2026-10-05T15:59:40Z",
+      "updatedAt": "2026-10-05T15:59:40Z",
+      "heat": 0.2933,
+      "independentSources": 1,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-github-ai-d8885d98544b",
+          "sourceId": "github-ai",
+          "sourceName": "GitHub Blog · AI & ML",
+          "url": "https://github.blog/ai-and-ml/github-copilot/reviewbench-an-open-benchmark-for-ai-code-review/",
+          "canonicalUrl": "https://github.blog/ai-and-ml/github-copilot/reviewbench-an-open-benchmark-for-ai-code-review",
+          "title": "ReviewBench：面向AI代码审查的开放基准",
+          "summary": "GitHub发布ReviewBench，一个基于代表性GitHub拉取请求的代码审查智能体基准，包含多源黄金标准、校准评估和生产对齐指标。该基准分析1.039亿个拉取请求，包含219个拉取请求、19种语言，采用多源发现和统一评分标准，并已由资深工程师独立验证。对学习或实践而言，它提供了可复现的离线评估方法，帮助理解不同审查系统的优劣和权衡。",
+          "tags": [
+            "代码审查",
+            "基准测试",
+            "AI智能体",
+            "GitHub"
+          ],
+          "publishedAt": "2026-10-05T15:59:40Z",
+          "fetchedAt": "2026-10-07T05:05:10Z",
+          "reason": "了解如何构建可信的AI代码审查基准，以及离线评估如何预测生产实验方向，对开发或选用代码审查智能体有参考价值。",
+          "evidenceQuotes": [
+            "We built ReviewBench , a new code review offline benchmark , to address that gap, and it is available for you to use",
+            "96.6"
+          ],
+          "scores": [
+            90,
+            90
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 23,
+              "reason": "该资料介绍GitHub推出的ReviewBench代码审查基准，直接属于AI代码审查代理评估领域，AI相关性高。内容具体：基于1.039亿PR分析、219个PR、19种语言、多源黄金集、六项指标、96.6%专家一致性等，提供了可核验的构建方法和数据，新信息较充分。证据方面有公开数据集、评分标准、LLM评分器说明，但正文片段未完整展示全部指标细节，略有不足。对构建和评估代码审查代理有明确实践价值，可指导离线评估与生产对齐。整体不是营销口号，评分较高。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 23,
+              "reason": "该资料介绍GitHub推出的AI代码审查基准ReviewBench，直接聚焦AI代码审查代理的评估，AI相关性极高。内容具体：基于1.039亿PR分析、219个PR、19种语言、多源黄金集、六项指标、96.6%专家一致性、离线信号与生产实验对齐，提供了可操作的新信息。证据方面给出了构建方法、评分标准、数据规模和验证流程，但部分关键细节（如完整指标定义、数据集链接）在片段中未完全展开，可核验性略受影响。对构建或评估代码审查代理的团队有明确实践价值，可用于选型与离线评估。整体非营销空泛内容，得分较高。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "ReviewBench: An open benchmark for AI code review",
+          "originalSummary": "We’re launching ReviewBench, a benchmark for code review agents built on representative GitHub pull requests, multi-source ground truth, calibrated evaluation, and production-aligned metrics. The post ReviewBench: An open benchmark for AI code review appeared first on The GitHub Blog .",
+          "relation": "new",
+          "publisher": "github",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-09599b271b808d83d386",
+      "title": "OpenAI 在 ChatGPT 中推出新视觉广告格式并扩展广告衡量工具",
+      "summary": "OpenAI 宣布在 ChatGPT 中引入一种新的视觉广告格式，并扩展面向广告主的衡量工具、归因合作与品牌适用性功能。该消息来自 OpenAI News，发布时间为 2026 年 10 月 5 日。对于学习或实践而言，这反映了 AI 对话产品中广告形态与效果衡量方式正在发生变化，但公开摘要未提供具体格式细节、合作方或效果数据。",
+      "reason": "了解 ChatGPT 中广告产品的最新动向，以及 AI 对话场景下广告衡量与品牌适用性的扩展方向。",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "广告格式",
+        "衡量工具"
+      ],
+      "publishedAt": "2026-10-05T10:00:00Z",
+      "updatedAt": "2026-10-05T10:00:00Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-openai-news-2d8e70fb45ce",
+          "sourceId": "openai-news",
+          "sourceName": "OpenAI News",
+          "url": "https://openai.com/index/new-chatgpt-ads-format-and-measurement",
+          "canonicalUrl": "https://openai.com/index/new-chatgpt-ads-format-and-measurement",
+          "title": "OpenAI 在 ChatGPT 中推出新视觉广告格式并扩展广告衡量工具",
+          "summary": "OpenAI 宣布在 ChatGPT 中引入一种新的视觉广告格式，并扩展面向广告主的衡量工具、归因合作与品牌适用性功能。该消息来自 OpenAI News，发布时间为 2026 年 10 月 5 日。对于学习或实践而言，这反映了 AI 对话产品中广告形态与效果衡量方式正在发生变化，但公开摘要未提供具体格式细节、合作方或效果数据。",
+          "tags": [
+            "OpenAI",
+            "ChatGPT",
+            "广告格式",
+            "衡量工具"
+          ],
+          "publishedAt": "2026-10-05T10:00:00Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "了解 ChatGPT 中广告产品的最新动向，以及 AI 对话场景下广告衡量与品牌适用性的扩展方向。",
+          "evidenceQuotes": [
+            "OpenAI introduces a new visual ad format in ChatGPT and expands measurement tools, attribution partnerships, and brand"
+          ],
+          "scores": [
+            66,
+            66
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 22,
+              "novelty": 18,
+              "evidence": 12,
+              "utility": 14,
+              "reason": "标题与摘要聚焦OpenAI在ChatGPT中引入新视觉广告格式并扩展测量、归因与品牌适配工具，属于AI产品商业化动态，AI相关性较高。但内容仅为官方发布摘要，缺少具体格式细节、技术实现、数据指标或可核验链接，证据支撑较弱；对广告从业者有一定参考价值，但对AI学习者的实践指导有限，且存在营销发布性质。"
+            },
+            {
+              "relevance": 22,
+              "novelty": 18,
+              "evidence": 12,
+              "utility": 14,
+              "reason": "标题与摘要直接涉及 ChatGPT 中的广告格式与衡量工具，AI 相关性较高。但内容仅为产品发布概述，缺少具体技术细节、数据或可复现方法；来源为 OpenAI 官方新闻，权威性尚可，但正文片段缺失，无法核验具体主张。对学习 AI 广告实践有一定参考价值，但信息密度低，营销发布性质明显，故证据与实用价值得分受限。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "feed",
+          "originalTitle": "Building advertising for the way people use AI",
+          "originalSummary": "OpenAI introduces a new visual ad format in ChatGPT and expands measurement tools, attribution partnerships, and brand suitability for advertisers.",
+          "relation": "new",
+          "publisher": "openai",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-21565f79b2b116956961",
+      "title": "ThinkingBox：以数据库终态而非工具调用评估AI智能体可靠性",
+      "summary": "微软与Hugging Face联合发布ThinkingBox基准，通过507个有状态业务工作流、每个任务重复20次，评估AI智能体留下的后端状态和副作用，而非仅看工具调用或最终回复。在121,680次有效试验中，79,853次未通过可执行检查，其中67.24%仍干净终止且无工具错误，但可执行检查发现77.61%存在字段值错误。文章强调一次成功不等于可靠，并讨论一致性成本与失败特征。",
+      "reason": "揭示智能体评估中工具调用与真实数据库状态之间的关键差距，提供可复现的基准方法，对构建可靠企业级智能体有直接参考价值。",
+      "tags": [
+        "AI智能体",
+        "基准测试",
+        "可靠性",
+        "数据库状态"
+      ],
+      "publishedAt": "2026-10-03T22:56:48Z",
+      "updatedAt": "2026-10-03T22:56:48Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-huggingface-blog-bd1136d0fcfd",
+          "sourceId": "huggingface-blog",
+          "sourceName": "Hugging Face Blog",
+          "url": "https://huggingface.co/blog/microsoft/thinkingbox",
+          "canonicalUrl": "https://huggingface.co/blog/microsoft/thinkingbox",
+          "title": "ThinkingBox：以数据库终态而非工具调用评估AI智能体可靠性",
+          "summary": "微软与Hugging Face联合发布ThinkingBox基准，通过507个有状态业务工作流、每个任务重复20次，评估AI智能体留下的后端状态和副作用，而非仅看工具调用或最终回复。在121,680次有效试验中，79,853次未通过可执行检查，其中67.24%仍干净终止且无工具错误，但可执行检查发现77.61%存在字段值错误。文章强调一次成功不等于可靠，并讨论一致性成本与失败特征。",
+          "tags": [
+            "AI智能体",
+            "基准测试",
+            "可靠性",
+            "数据库状态"
+          ],
+          "publishedAt": "2026-10-03T22:56:48Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "揭示智能体评估中工具调用与真实数据库状态之间的关键差距，提供可复现的基准方法，对构建可靠企业级智能体有直接参考价值。",
+          "evidenceQuotes": [
+            "An agent can sound correct while leaving the wrong value, changing the wrong record, or creating an extra side effect."
+          ],
+          "scores": [
+            94,
+            94
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 23,
+              "utility": 24,
+              "reason": "该资料聚焦AI智能体在状态化业务工作流中的可靠性评测，提出ThinkingBox基准，以终端后端状态和副作用而非生成文本或工具调用作为评分依据，属于AI评测与智能体工程的核心议题，相关性高。内容包含507个任务、12个模型、121,680次有效试验、79,853次失败及67.24%等具体数据，并给出可执行检查、任务文件与论文附录引用，信息具体且可核验。其“工具调用不等于结果”“一次成功不等于可靠”“20次重复测试”等观点对智能体开发与评测具有明确实践指导价值。标题虽略带叙事性，但正文以数据和可复现方法支撑，非营销口号。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 24,
+              "utility": 23,
+              "reason": "该资料来自 Hugging Face 博客，主题为 AI Agent 在状态化业务工作流中的可靠性评测，与 AI 高度相关。内容具体介绍了 ThinkingBox 基准、507 个任务、20 次重复运行、pass@1/pass@20/20-of-20 指标、失败模式统计及可复现任务示例，信息密度高且非空泛营销。提供了论文、附录、可运行任务文件名等可核验依据，证据充分。对学习 Agent 评测、后端状态检查、可靠性测试有明确实践价值。扣分点在于部分模型名称和日期可能为虚构或未来设定，但基于给定文本仍属具体可核验内容。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "The Agent Said It Was Done. The Database Disagreed.",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "huggingface",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-02ae93ff41c2600273bd",
+      "title": "Ai2 开源 AstaBrief 8B 科学报告生成模型",
+      "summary": "Ai2 开源了 AstaBrief 8B，一个将研究问题与检索到的文献片段转化为带引用报告的模型，已作为 Asta 的 Fast 模式上线。它基于 Qwen3-8B，采用监督微调与直接偏好优化，并改为一次性生成完整报告。在完整 Asta 流程中，Fast 模式平均每份报告 51.1 秒，Thinking 模式为 178.5 秒，约快 3.5 倍。作者称训练与评估多在 2025 年完成，未针对当前前沿模型重跑评估。",
+      "reason": "了解一个面向科学文献合成的开源小模型如何通过数据与流程设计提升报告生成速度，并附开放权重与示例工作流。",
+      "tags": [
+        "科学报告生成",
+        "开源模型",
+        "Ai2",
+        "Asta"
+      ],
+      "publishedAt": "2026-10-02T15:19:50Z",
+      "updatedAt": "2026-10-02T15:19:50Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-huggingface-blog-e81b1dea7ce0",
+          "sourceId": "huggingface-blog",
+          "sourceName": "Hugging Face Blog",
+          "url": "https://huggingface.co/blog/allenai/astabrief",
+          "canonicalUrl": "https://huggingface.co/blog/allenai/astabrief",
+          "title": "Ai2 开源 AstaBrief 8B 科学报告生成模型",
+          "summary": "Ai2 开源了 AstaBrief 8B，一个将研究问题与检索到的文献片段转化为带引用报告的模型，已作为 Asta 的 Fast 模式上线。它基于 Qwen3-8B，采用监督微调与直接偏好优化，并改为一次性生成完整报告。在完整 Asta 流程中，Fast 模式平均每份报告 51.1 秒，Thinking 模式为 178.5 秒，约快 3.5 倍。作者称训练与评估多在 2025 年完成，未针对当前前沿模型重跑评估。",
+          "tags": [
+            "科学报告生成",
+            "开源模型",
+            "Ai2",
+            "Asta"
+          ],
+          "publishedAt": "2026-10-02T15:19:50Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "了解一个面向科学文献合成的开源小模型如何通过数据与流程设计提升报告生成速度，并附开放权重与示例工作流。",
+          "evidenceQuotes": [
+            "We built AstaBrief 8B , a model that turns a research question and retrieved literature excerpts into a cited report."
+          ],
+          "scores": [
+            90,
+            90
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 23,
+              "reason": "该资料介绍开源科学报告生成模型AstaBrief 8B，基于Qwen3-8B，采用SFT+DPO训练，并给出具体速度对比（51.1秒 vs 178.5秒，约3.5倍）和开源权重与训练数据，AI相关性高且信息具体。但摘要为空、正文被截断，部分训练细节和评估数据不完整，可核验依据略受影响；整体对学习开源模型微调与报告生成实践有较高价值。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 23,
+              "reason": "该资料介绍了一个专门用于科学报告生成的开源模型AstaBrief 8B，基于Qwen3-8B微调，采用SFT+DPO训练，并公开权重和训练数据。内容具体涉及模型架构、训练方法、速度提升（3.5倍）及引用接地等，对AI学习社区有较高参考价值。但摘要为空，正文片段不完整，部分细节缺失，且未提供完整实验数据或对比基准，可核验依据稍弱。整体上信息具体、非营销，具有实践指导意义。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Open-sourcing AstaBrief, the fast report-generation model in Asta",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "huggingface",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-44bb7ba5ffcdccc61133",
+      "title": "AutoSynthData：为企业智能体生成训练数据",
+      "summary": "ServiceNow CoreAI 提出 AutoSynthData，用目标模型的失败和更强教师的成功来定位能力缺口，再生成并验证新任务用于后训练。文章以 EnterpriseOps Gym 为例说明流程，并讨论有用智能体任务需满足可行性、真实性与难度，验证器需一致、可靠且完备。",
+      "reason": "介绍如何把企业环境中模型的具体失败转化为可执行、可验证的训练任务，并随模型改进动态调整课程，对智能体训练数据构建有参考价值。",
+      "tags": [
+        "智能体训练",
+        "数据生成",
+        "企业环境",
+        "验证器"
+      ],
+      "publishedAt": "2026-10-02T04:01:31Z",
+      "updatedAt": "2026-10-02T04:01:31Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-huggingface-blog-56c490db0401",
+          "sourceId": "huggingface-blog",
+          "sourceName": "Hugging Face Blog",
+          "url": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata",
+          "canonicalUrl": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata",
+          "title": "AutoSynthData：为企业智能体生成训练数据",
+          "summary": "ServiceNow CoreAI 提出 AutoSynthData，用目标模型的失败和更强教师的成功来定位能力缺口，再生成并验证新任务用于后训练。文章以 EnterpriseOps Gym 为例说明流程，并讨论有用智能体任务需满足可行性、真实性与难度，验证器需一致、可靠且完备。",
+          "tags": [
+            "智能体训练",
+            "数据生成",
+            "企业环境",
+            "验证器"
+          ],
+          "publishedAt": "2026-10-02T04:01:31Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "介绍如何把企业环境中模型的具体失败转化为可执行、可验证的训练任务，并随模型改进动态调整课程，对智能体训练数据构建有参考价值。",
+          "evidenceQuotes": [
+            "It uses a target model’s failures and a stronger teacher’s successes to decide what the model should learn next, then"
+          ],
+          "scores": [
+            90,
+            85
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 23,
+              "reason": "该文来自Hugging Face Blog，主题为企业智能体训练数据自动生成，与AI高度相关。正文具体介绍了AutoSynthData流水线、任务抽象（系统规范、用户提示、验证器）、可行性/真实性/难度三属性及验证器一致性/可靠性/完整性要求，并给出ServiceNow CoreAI的实践案例，信息具体且非空泛口号。有作者、机构、引用（Malay et al., 2026）和数据集链接，可核验依据较充分，但摘要为空且部分细节被截断，故证据分略扣。对智能体训练数据构建有明确学习与实践参考价值。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 20,
+              "evidence": 18,
+              "utility": 22,
+              "reason": "文章聚焦企业级AI智能体训练数据自动生成，属AI核心主题。提出AutoSynthData流水线，包含能力缺口识别、任务生成与验证器设计，并给出任务抽象(task=系统规范+用户提示+验证器)及可行性/真实性/难度三属性，具有具体新信息。来源为Hugging Face Blog，署名ServiceNow-AI团队，引用EnterpriseOps Gym及数据集，可核验依据较充分但缺少实验数据与量化结果。对智能体训练数据构建有明确实践指导价值，但正文片段截断，部分细节未完整呈现。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "AutoSynthData: Generating Training Data for Enterprise Agents",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "huggingface",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-b2a4493a10c424f3ad18",
+      "title": "Gemini 4 Argon：Google DeepMind 发布新一代前沿模型",
+      "summary": "Google DeepMind 宣布推出前沿模型 Gemini 4 Argon，正通过 Fairwind Program 向受信任的网络防御者逐步开放。该模型面向复杂长周期工作流，在软件工程、法律金融等企业知识工作及网络安全防御中展现前沿性能。Google 内部已用于量子算法优化、内存效率提升和 C/C++ 到 Rust 的大规模代码迁移。模型输出 token 上限提升至 100 万，并采用分阶段发布与护栏迭代策略。",
+      "reason": "了解 Google 最新前沿模型的能力边界、内部应用案例与分阶段安全发布策略，对跟踪大模型在软件工程、企业知识工作和网络安全防御中的实际落地有参考价值。",
+      "tags": [
+        "Gemini 4 Argon",
+        "Google DeepMind",
+        "前沿模型",
+        "网络安全防御"
+      ],
+      "publishedAt": "2026-09-30T20:01:45Z",
+      "updatedAt": "2026-09-30T20:01:45Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-deepmind-blog-b49099cde7e9",
+          "sourceId": "deepmind-blog",
+          "sourceName": "Google DeepMind Blog",
+          "url": "https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/",
+          "canonicalUrl": "https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence",
+          "title": "Gemini 4 Argon：Google DeepMind 发布新一代前沿模型",
+          "summary": "Google DeepMind 宣布推出前沿模型 Gemini 4 Argon，正通过 Fairwind Program 向受信任的网络防御者逐步开放。该模型面向复杂长周期工作流，在软件工程、法律金融等企业知识工作及网络安全防御中展现前沿性能。Google 内部已用于量子算法优化、内存效率提升和 C/C++ 到 Rust 的大规模代码迁移。模型输出 token 上限提升至 100 万，并采用分阶段发布与护栏迭代策略。",
+          "tags": [
+            "Gemini 4 Argon",
+            "Google DeepMind",
+            "前沿模型",
+            "网络安全防御"
+          ],
+          "publishedAt": "2026-09-30T20:01:45Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "了解 Google 最新前沿模型的能力边界、内部应用案例与分阶段安全发布策略，对跟踪大模型在软件工程、企业知识工作和网络安全防御中的实际落地有参考价值。",
+          "evidenceQuotes": [
+            "Today, we’re announcing our new frontier model, Gemini 4 Argon, which is rolling out to a set of trusted cyber",
+            "we are",
+            "Argo"
+          ],
+          "scores": [
+            90,
+            87
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 23,
+              "reason": "内容高度聚焦AI前沿模型Gemini 4 Argon，相关性满分。提供了具体新信息：1M输出token、定价、DeepSWE 77.9%、LVBench 91.7%、内部应用案例（量子优化、内存节省、C++转Rust）等，新颖性较高。可核验依据包括多个基准名称和分数、官方博客来源，但部分内部案例缺乏独立验证，证据分略扣。学习/实践价值强，涉及模型能力、定价、企业工作流和网络安全防御，对开发者有参考意义。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 20,
+              "reason": "标题与正文明确介绍Gemini 4 Argon前沿模型，AI相关性高。内容包含具体新信息：1M输出token、定价、DeepSWE 77.9%、Vals Index、LVBench 91.7%、CWE-bench、内部量子优化40%、释放300TiB内存、C/C++转Rust等案例，信息密度较高。可核验依据方面给出多个基准名称、分数和内部案例，但部分数据来自厂商自述，缺少第三方独立验证。学习/实践价值较高，涉及长上下文、代码迁移、企业工作流和网络安全防御，对开发者有参考意义，但营销语气和未公开细节限制其客观性。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Gemini 4 Argon: our next era of frontier intelligence",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "google",
+          "selectedAt": "2026-10-07T10:21:43Z"
+        }
+      ]
+    },
+    {
+      "id": "event-9a9766e52943cb5daa2f",
+      "title": "SynthID Bio：为AI生成蛋白质嵌入可验证水印",
+      "summary": "Google DeepMind 发布 SynthID Bio，一种面向合成生物学的概念验证水印技术，可将不可感知的签名嵌入生物代码，并在合成出的物理蛋白质上验证，同时实验室测试中保持生物功能。该方法针对序列和预测3D结构分别调整氨基酸选择与原子坐标，在三种靶标蛋白的湿实验中，水印设计在命中率、结合亲和力和序列多样性上与未水印版本相当。其目标是加强生物安全与科学诚信，为DNA合成筛查和公共数据库标注提供自动验证信号。",
+      "reason": "了解AI生成蛋白质溯源与生物安全的前沿概念验证，涉及水印如何在不影响功能的前提下嵌入生物设计，对合成生物学和生物安全实践有参考意义。",
+      "tags": [
+        "SynthID Bio",
+        "蛋白质水印",
+        "生物安全",
+        "合成生物学"
+      ],
+      "publishedAt": "2026-09-30T15:03:07Z",
+      "updatedAt": "2026-09-30T15:03:07Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-deepmind-blog-08aa8115cb5d",
+          "sourceId": "deepmind-blog",
+          "sourceName": "Google DeepMind Blog",
+          "url": "https://deepmind.google/blog/introducing-synthid-bio/",
+          "canonicalUrl": "https://deepmind.google/blog/introducing-synthid-bio",
+          "title": "SynthID Bio：为AI生成蛋白质嵌入可验证水印",
+          "summary": "Google DeepMind 发布 SynthID Bio，一种面向合成生物学的概念验证水印技术，可将不可感知的签名嵌入生物代码，并在合成出的物理蛋白质上验证，同时实验室测试中保持生物功能。该方法针对序列和预测3D结构分别调整氨基酸选择与原子坐标，在三种靶标蛋白的湿实验中，水印设计在命中率、结合亲和力和序列多样性上与未水印版本相当。其目标是加强生物安全与科学诚信，为DNA合成筛查和公共数据库标注提供自动验证信号。",
+          "tags": [
+            "SynthID Bio",
+            "蛋白质水印",
+            "生物安全",
+            "合成生物学"
+          ],
+          "publishedAt": "2026-09-30T15:03:07Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "了解AI生成蛋白质溯源与生物安全的前沿概念验证，涉及水印如何在不影响功能的前提下嵌入生物设计，对合成生物学和生物安全实践有参考意义。",
+          "evidenceQuotes": [
+            "SynthID Bio embeds an imperceptible signature directly into the biological code",
+            "these adjustments did not compromise the"
+          ],
+          "scores": [
+            94,
+            94
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 24,
+              "evidence": 22,
+              "utility": 23,
+              "reason": "该资料介绍Google DeepMind推出的SynthID Bio，将水印技术用于AI生成蛋白质，属AI与合成生物学交叉的前沿方向，AI相关性高。内容具体：说明对氨基酸序列和3D坐标的嵌入方法，并给出VEGF-A、SARS-CoV-2 RBD、PD-L1三个靶点的湿实验数据，以及AlphaFold 3扩散网络微调细节，新信息密度高。来源为官方博客并引用专家与Twist Bioscience反馈，可核验性较好，但部分为概念验证且缺少论文链接，证据分略扣。对生物安全、DNA合成筛查和数据库完整性有明确实践价值，学习价值高。无营销口号，标题克制。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 24,
+              "evidence": 22,
+              "utility": 23,
+              "reason": "该资料介绍Google DeepMind推出的SynthID Bio，将水印技术用于AI生成的蛋白质，在保持生物功能的同时嵌入可验证签名。内容与AI高度相关，属于生成式AI在合成生物学的前沿应用；提供了具体技术细节（如微调AlphaFold 3扩散网络、湿实验验证VEGF-A等三个靶点）和可核验来源（DeepMind博客、专家引述），新信息具体且非空泛营销；对生物安全、DNA合成筛查和数据库完整性有明确实践价值。证据部分因缺少论文链接和独立复现细节略扣分，但整体质量高。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Introducing SynthID Bio",
+          "originalSummary": "Proof of concept for watermarking AI-generated proteins while preserving biological function.",
+          "relation": "new",
+          "publisher": "google",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-6c8e3124750234c3bb42",
+      "title": "Open TTS Leaderboard：面向多语言文本转语音与声音克隆的可扩展评估",
+      "summary": "Hugging Face 博客介绍 Open TTS Leaderboard，用客观指标评估开源多语言 TTS 与声音克隆模型，包括可懂度（WER/CER）、速度（RTFx、TTFA）和说话人相似度（SIM）。作者指出，基于人类偏好的竞技场评估难以跟上模型发布速度，且开源模型在竞技场中代表性不足；该榜单不替代人类偏好排名，WER 与 SIM 只是可懂度和音色保持的代理指标，不能直接衡量自然度、表现力或听众偏好。",
+      "reason": "了解 TTS 评估从人类偏好竞技场转向可扩展客观指标的新尝试，以及开源多语言模型在可懂度、速度和声音克隆上的对比方式。",
+      "tags": [
+        "TTS",
+        "语音克隆",
+        "评估榜单",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-30T00:00:00Z",
+      "updatedAt": "2026-09-30T00:00:00Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-huggingface-blog-74c2ff7e2707",
+          "sourceId": "huggingface-blog",
+          "sourceName": "Hugging Face Blog",
+          "url": "https://huggingface.co/blog/open-tts-leaderboard",
+          "canonicalUrl": "https://huggingface.co/blog/open-tts-leaderboard",
+          "title": "Open TTS Leaderboard：面向多语言文本转语音与声音克隆的可扩展评估",
+          "summary": "Hugging Face 博客介绍 Open TTS Leaderboard，用客观指标评估开源多语言 TTS 与声音克隆模型，包括可懂度（WER/CER）、速度（RTFx、TTFA）和说话人相似度（SIM）。作者指出，基于人类偏好的竞技场评估难以跟上模型发布速度，且开源模型在竞技场中代表性不足；该榜单不替代人类偏好排名，WER 与 SIM 只是可懂度和音色保持的代理指标，不能直接衡量自然度、表现力或听众偏好。",
+          "tags": [
+            "TTS",
+            "语音克隆",
+            "评估榜单",
+            "开源模型"
+          ],
+          "publishedAt": "2026-09-30T00:00:00Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "了解 TTS 评估从人类偏好竞技场转向可扩展客观指标的新尝试，以及开源多语言模型在可懂度、速度和声音克隆上的对比方式。",
+          "evidenceQuotes": [
+            "While human preference is the ultimate decider, arenas cannot scale to keep up with the pace of TTS releases",
+            "Importantly,"
+          ],
+          "scores": [
+            92,
+            90
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 22,
+              "utility": 23,
+              "reason": "该资料介绍了一个新的开源多语言TTS评测榜单，属于AI语音合成领域，相关性高。内容具体：提出用WER/CER、RTFx、TTFA、WavLM说话人相似度等客观指标替代或补充人工偏好投票，并给出模型示例、数据集（Seed TTS Eval、CV3 Eval）和硬件（H200）等可核验细节，新信息较充分。证据方面有明确指标、数据集和榜单机制，但缺少具体数值结果，故略扣。对学习与实践有较高价值，可帮助了解TTS评测方法和模型选型，但部分内容偏介绍性。整体非营销口号，评分较高。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 23,
+              "reason": "该资料介绍了一个新的开源多语言TTS排行榜，直接属于AI语音领域。它提供了具体的评估指标（WER、CER、RTFx、TTFA、SIM）、数据集（Seed TTS Eval、CV3 Eval）、模型示例和排名，以及可交互的Listen和Streaming标签，信息具体且可操作。来源为Hugging Face博客，有作者和日期，可核验性较好。虽然部分内容为排行榜介绍而非深度技术细节，但整体对学习TTS评估和实践有较高价值。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Open TTS Leaderboard: Scalable Evaluation for Multilingual Text-to-Speech and Voice Cloning",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "huggingface",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-b0473a8614f0d36319e5",
+      "title": "NVIDIA Kumo Tabular 发布：面向表格预测的开放基础模型",
+      "summary": "NVIDIA 发布 Kumo Tabular，一个面向表格分类与回归的开放基础模型，已在 Hugging Face 上线。给定带标签的表格行，模型无需训练、调参或特征工程，单次前向传播即可预测新行标签。模型仅在人工数据上预训练，提供 28M 至 215M 三种参数规模，通过开源库运行，采用 OpenMDW-1.1 许可供商业使用。据称在 TabArena、BeyondArena、TALENT 和 ScoringBench 四个基准上排名第一。其架构基于 Transformer，使用列、行和上下文注意力，并引入长度感知注意力温度以在表格变长时保持注意力锐度。",
+      "reason": "了解表格数据基础模型这一新方向，以及 NVIDIA 在无需训练和特征工程条件下进行表格预测的尝试，适合关注表格机器学习与基础模型进展的读者。",
+      "tags": [
+        "表格数据",
+        "基础模型",
+        "NVIDIA",
+        "开源"
+      ],
+      "publishedAt": "2026-09-29T15:30:38Z",
+      "updatedAt": "2026-09-29T15:30:38Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-huggingface-blog-dc53fce90c6f",
+          "sourceId": "huggingface-blog",
+          "sourceName": "Hugging Face Blog",
+          "url": "https://huggingface.co/blog/nvidia/kumo-tabular",
+          "canonicalUrl": "https://huggingface.co/blog/nvidia/kumo-tabular",
+          "title": "NVIDIA Kumo Tabular 发布：面向表格预测的开放基础模型",
+          "summary": "NVIDIA 发布 Kumo Tabular，一个面向表格分类与回归的开放基础模型，已在 Hugging Face 上线。给定带标签的表格行，模型无需训练、调参或特征工程，单次前向传播即可预测新行标签。模型仅在人工数据上预训练，提供 28M 至 215M 三种参数规模，通过开源库运行，采用 OpenMDW-1.1 许可供商业使用。据称在 TabArena、BeyondArena、TALENT 和 ScoringBench 四个基准上排名第一。其架构基于 Transformer，使用列、行和上下文注意力，并引入长度感知注意力温度以在表格变长时保持注意力锐度。",
+          "tags": [
+            "表格数据",
+            "基础模型",
+            "NVIDIA",
+            "开源"
+          ],
+          "publishedAt": "2026-09-29T15:30:38Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "了解表格数据基础模型这一新方向，以及 NVIDIA 在无需训练和特征工程条件下进行表格预测的尝试，适合关注表格机器学习与基础模型进展的读者。",
+          "evidenceQuotes": [
+            "Given a table of labeled rows, it predicts the labels of new rows in a single forward pass, with no training, no",
+            "It was"
+          ],
+          "scores": [
+            89,
+            89
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 22,
+              "reason": "内容高度聚焦表格数据基础模型，属AI核心方向。摘要与正文具体介绍了Kumo Tabular的架构（列/行/上下文注意力、长度感知注意力温度）、预训练方式（纯人工数据、结构因果模型）、模型规模（28M-215M）、开源许可及四个基准排名，信息密度高且非空泛营销。提供了GitHub与HuggingFace链接，可核验性较好，但基准排名等关键结论未在片段中给出具体数值或对比细节，证据分略扣。对表格预测实践者有明确参考价值，可了解免训练、免特征工程的in-context学习范式。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 22,
+              "reason": "该资料介绍NVIDIA Kumo Tabular表格基础模型，与AI高度相关。内容具体：模型架构（列/行/上下文注意力、长度感知注意力温度）、预训练方式（人工表格、结构因果模型）、三个模型尺寸、开源库与许可证、四个基准排名，信息密度高且非空泛营销。可核验依据包括GitHub和Hugging Face链接、具体技术细节，但缺少基准数值和独立复现，证据略打折。对学习表格基础模型、上下文学习和工程实践有明确价值。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "NVIDIA Kumo Tabular Sets a New Accuracy-Efficiency Frontier for Tabular Prediction",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "huggingface",
+          "selectedAt": "2026-10-07T10:21:43Z"
+        }
+      ]
+    },
+    {
+      "id": "event-ff0f241393656a57ffa2",
+      "title": "MCP智能体的来源感知验证：ProvenanceGuard",
+      "summary": "工具型LLM智能体通过MCP可调用搜索、数据库等多种工具，将多源证据汇入一个答案，这使事实性检查更复杂：现有验证系统通常只检查主张是否被汇总证据支持，而不检查支持来源是否与答案声称的来源一致。论文提出ProvenanceGuard，一种生成后验证层，保留来源身份，依次分解主张、路由到最相关来源、检查支持、比对来源归属，并输出逐主张判定和答案级允许或阻止决定。在医学智能体281条真实轨迹上测试，人类专家检查40个答案中的361条主张，专家认为139条不应通过，ProvenanceGuard捕获138条，放行1条；同时将67条专家认为支持的主张送审或修复。",
+      "reason": "介绍MCP智能体中的跨源混淆失败模式，并提出保留来源身份的验证方法，对关注LLM事实性与来源归属的读者有参考价值。",
+      "tags": [
+        "MCP",
+        "事实性验证",
+        "来源归属",
+        "LLM智能体"
+      ],
+      "publishedAt": "2026-09-29T13:07:00Z",
+      "updatedAt": "2026-09-29T13:07:00Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-huggingface-blog-afa8c33f8eb7",
+          "sourceId": "huggingface-blog",
+          "sourceName": "Hugging Face Blog",
+          "url": "https://huggingface.co/blog/MultiverseComputingCAI/getting-the-source-right-not-just-the-fact-source",
+          "canonicalUrl": "https://huggingface.co/blog/MultiverseComputingCAI/getting-the-source-right-not-just-the-fact-source",
+          "title": "MCP智能体的来源感知验证：ProvenanceGuard",
+          "summary": "工具型LLM智能体通过MCP可调用搜索、数据库等多种工具，将多源证据汇入一个答案，这使事实性检查更复杂：现有验证系统通常只检查主张是否被汇总证据支持，而不检查支持来源是否与答案声称的来源一致。论文提出ProvenanceGuard，一种生成后验证层，保留来源身份，依次分解主张、路由到最相关来源、检查支持、比对来源归属，并输出逐主张判定和答案级允许或阻止决定。在医学智能体281条真实轨迹上测试，人类专家检查40个答案中的361条主张，专家认为139条不应通过，ProvenanceGuard捕获138条，放行1条；同时将67条专家认为支持的主张送审或修复。",
+          "tags": [
+            "MCP",
+            "事实性验证",
+            "来源归属",
+            "LLM智能体"
+          ],
+          "publishedAt": "2026-09-29T13:07:00Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "介绍MCP智能体中的跨源混淆失败模式，并提出保留来源身份的验证方法，对关注LLM事实性与来源归属的读者有参考价值。",
+          "evidenceQuotes": [
+            "The failure mode we care about is one we call cross-source conflation: a claim that is true somewhere in the evidence,"
+          ],
+          "scores": [
+            89,
+            89
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 22,
+              "reason": "该资料聚焦MCP智能体的来源感知事实性验证，AI相关性高。提出跨源混淆这一具体失败模式，并介绍ProvenanceGuard的验证流程与设计选择，具有新意。给出了论文链接、模型配置、281条真实轨迹、361条人工标注声明及139/138等具体数据，可核验依据较充分，但正文截断且部分结果不完整。对构建工具调用智能体的可信验证层有明确学习与实践价值，非营销空泛内容。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 22,
+              "reason": "该文聚焦MCP智能体的来源感知事实核查，AI相关性高。提出跨源混淆失败模式及ProvenanceGuard验证层，包含具体流程、模型配置和281条真实轨迹、361条人工标注claim的实验数据，新信息较具体。有论文链接、图表和量化结果，可核验依据较强，但正文截断且部分结果不完整。对构建工具调用智能体的可信验证有明确实践价值，非营销空泛内容。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Getting the Source Right, Not Just the Fact: Source-Aware Verification for MCP Agents",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "huggingface",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-4a1f05bdaba581d42fdf",
+      "title": "Holo4：面向通用计算机使用智能体的新模型系列",
+      "summary": "Holo4 是 Hcompany 发布的新系列智能体模型，提供 27B dense 与 35B-A3B Mixture of Experts 两种规模，均可在 H Models API 使用，同时发布 Holotron4 Nano。Holo4 可通过 GUI、代码、MCP 和 API 等任意可用界面与软件交互，在多个平台运行同一模型。其在 OSWorld 2.0 上 27B 得分 61.7%，35B-A3B 为 30.9%，并开源公开基准的轨迹。",
+      "reason": "了解多界面通用计算机使用智能体的模型设计、基准表现与开源轨迹，适合关注智能体实践与评测的读者。",
+      "tags": [
+        "Holo4",
+        "计算机使用智能体",
+        "多界面",
+        "基准评测"
+      ],
+      "publishedAt": "2026-09-28T09:44:05Z",
+      "updatedAt": "2026-09-28T09:44:05Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-huggingface-blog-09d1d26fa19d",
+          "sourceId": "huggingface-blog",
+          "sourceName": "Hugging Face Blog",
+          "url": "https://huggingface.co/blog/Hcompany/holo4",
+          "canonicalUrl": "https://huggingface.co/blog/Hcompany/holo4",
+          "title": "Holo4：面向通用计算机使用智能体的新模型系列",
+          "summary": "Holo4 是 Hcompany 发布的新系列智能体模型，提供 27B dense 与 35B-A3B Mixture of Experts 两种规模，均可在 H Models API 使用，同时发布 Holotron4 Nano。Holo4 可通过 GUI、代码、MCP 和 API 等任意可用界面与软件交互，在多个平台运行同一模型。其在 OSWorld 2.0 上 27B 得分 61.7%，35B-A3B 为 30.9%，并开源公开基准的轨迹。",
+          "tags": [
+            "Holo4",
+            "计算机使用智能体",
+            "多界面",
+            "基准评测"
+          ],
+          "publishedAt": "2026-09-28T09:44:05Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "了解多界面通用计算机使用智能体的模型设计、基准表现与开源轨迹，适合关注智能体实践与评测的读者。",
+          "evidenceQuotes": [
+            "Holo4 builds on our previous model and interacts with software through any available interface: GUIs, code, MCP and"
+          ],
+          "scores": [
+            89,
+            89
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 22,
+              "reason": "内容直接聚焦通用计算机使用智能体模型Holo4，属AI核心主题。给出了模型规模、架构、接口能力、OSWorld 2.0与AutomationBench分数、成本对比及开源轨迹等具体新信息，非空泛营销。可核验依据较充分，含基准分数、模型链接、轨迹查看器和数据集，但部分成本与对比数据来自内部测试或官方榜单，存在口径差异。对学习实践价值高，提供模型、API、轨迹与任务示例，便于复现和评估，但摘要为空且部分宣传性表述需谨慎看待。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 22,
+              "reason": "内容高度相关于AI智能体模型，介绍了Holo4系列模型的具体架构（27B dense和35B-A3B MoE）、多接口交互能力、训练方法（监督与强化学习、Agentic Task Factory）及基准测试成绩（OSWorld 2.0、AutomationBench），并提供了模型、轨迹、API等可核验资源。信息具体且具有实践参考价值，但部分性能对比依赖厂商自测，证据强度略打折扣。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Holo4: powering generalist computer-use agents",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "huggingface",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-04d273c4e475ff9b0a33",
+      "title": "Hugging Face Hub 新增 RL Environments 筛选与框架标签",
+      "summary": "Hugging Face Hub 为强化学习环境新增了 RL Environments 筛选，环境以数据集仓库形式存在，并注册了 Harbor、Verifiers、OpenEnv、NeMo Gym 四个框架标签。博文称环境由任务集和运行时组成，本次发布聚焦任务集；标签用于描述兼容性并生成加载命令，添加标签不会启动任务或沙箱。博文还给出在 Harbor、Verifiers、OpenEnv 中运行示例环境并查看奖励的命令。",
+      "reason": "了解 Hub 如何以数据集仓库承载 RL 环境、用标签表达框架兼容性，以及跨框架运行与查看奖励的示例命令。",
+      "tags": [
+        "Hugging Face Hub",
+        "RL Environments",
+        "数据集",
+        "框架标签"
+      ],
+      "publishedAt": "2026-09-28T00:00:00Z",
+      "updatedAt": "2026-09-28T00:00:00Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-huggingface-blog-eb916b5190e3",
+          "sourceId": "huggingface-blog",
+          "sourceName": "Hugging Face Blog",
+          "url": "https://huggingface.co/blog/rl-environments",
+          "canonicalUrl": "https://huggingface.co/blog/rl-environments",
+          "title": "Hugging Face Hub 新增 RL Environments 筛选与框架标签",
+          "summary": "Hugging Face Hub 为强化学习环境新增了 RL Environments 筛选，环境以数据集仓库形式存在，并注册了 Harbor、Verifiers、OpenEnv、NeMo Gym 四个框架标签。博文称环境由任务集和运行时组成，本次发布聚焦任务集；标签用于描述兼容性并生成加载命令，添加标签不会启动任务或沙箱。博文还给出在 Harbor、Verifiers、OpenEnv 中运行示例环境并查看奖励的命令。",
+          "tags": [
+            "Hugging Face Hub",
+            "RL Environments",
+            "数据集",
+            "框架标签"
+          ],
+          "publishedAt": "2026-09-28T00:00:00Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "了解 Hub 如何以数据集仓库承载 RL 环境、用标签表达框架兼容性，以及跨框架运行与查看奖励的示例命令。",
+          "evidenceQuotes": [
+            "An RL environment on the Hub is a dataset repo that shows up in the new RL Environments filter",
+            "Tags describe",
+            "adding a tag"
+          ],
+          "scores": [
+            94,
+            94
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 23,
+              "utility": 24,
+              "reason": "该资料介绍Hugging Face Hub新增RL Environments功能，与AI智能体强化学习直接相关。内容具体：说明了环境由tasksets和runtimes组成、以数据集仓库承载、通过rl-environment标签和框架标签（Harbor、Verifiers、OpenEnv、NeMo Gym）发现，并给出可复现的命令行示例与版本号，可核验性强。对学习与实践有明确价值，能帮助开发者理解并运行RL环境。虽属平台功能发布而非研究突破，但信息密度高、非营销空泛，故各项评分较高。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 23,
+              "utility": 24,
+              "reason": "该资料介绍 Hugging Face Hub 新增 RL Environments 功能，属于 AI 智能体强化学习基础设施，相关性高。内容具体：说明环境由 tasksets 和 runtimes 组成、以数据集仓库承载、新增 rl-environment 筛选与框架标签，并给出 Harbor、Verifiers、OpenEnv 的实际运行命令和代码片段，信息密度高且可核验。对学习与实践有明确价值，可帮助理解环境托管与跨框架兼容。但部分内容偏产品发布说明，理论深度有限，故 novelty 略扣。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Welcome RL Environments to the hub",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "huggingface",
+          "selectedAt": "2026-10-07T10:14:02Z"
+        }
+      ]
+    },
+    {
+      "id": "event-48ca3548eb6a4ec8ab8b",
+      "title": "GitHub Copilot 应用画布入门：用自然语言构建自定义工作流界面",
+      "summary": "GitHub 博客介绍 GitHub Copilot 应用中的画布（canvas）功能：用户用自然语言描述所需界面，代理即可生成可共享、可双向更新的自定义界面，如看板、发布清单或仪表盘。创建时使用 /create-canvas 技能，描述需涵盖工作流、用户可执行操作及代理可执行操作。画布可保存为扩展供团队或个人复用，社区也通过 Awesome Copilot 分享现成扩展。",
+      "reason": "介绍一种用自然语言生成并双向协作自定义工作流界面的方法，适合想了解 AI 代理如何参与日常开发工作流的读者。",
+      "tags": [
+        "GitHub Copilot",
+        "画布",
+        "工作流",
+        "AI代理"
+      ],
+      "publishedAt": "2026-09-24T20:00:00Z",
+      "updatedAt": "2026-09-25T18:00:00Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-github-ai-4135fa3a0079",
+          "sourceId": "github-ai",
+          "sourceName": "GitHub Blog · AI & ML",
+          "url": "https://github.blog/ai-and-ml/github-copilot/when-chat-is-the-wrong-ui/",
+          "canonicalUrl": "https://github.blog/ai-and-ml/github-copilot/when-chat-is-the-wrong-ui",
+          "title": "当聊天不是合适的用户界面：GitHub Copilot 中的画布",
+          "summary": "GitHub 博客文章讨论聊天作为与 LLM 交互的主要界面可能并不适合大多数任务。文章介绍 GitHub Copilot 应用中的“画布”（canvas），即运行在应用内的全栈小应用，可与 agent 双向通信，并举例用于 Connect 4 游戏、Winget 包管理、SQLite 数据库操作和自动化开发工作流。作者认为让 agent 构建工具比把 agent 本身当工具更节省 token，并建议尝试画布。",
+          "tags": [
+            "GitHub Copilot",
+            "画布",
+            "聊天界面",
+            "AI 工作流"
+          ],
+          "publishedAt": "2026-09-24T20:00:00Z",
+          "fetchedAt": "2026-10-07T05:05:10Z",
+          "reason": "了解在聊天界面之外与 AI 协作的一种思路，以及画布如何用于构建可交互工具和自动化工作流。",
+          "evidenceQuotes": [
+            "But I would like to propose to you that perhaps, just maybe, chat is the wrong UI.",
+            "A canvas is a little full-stack",
+            "It’s"
+          ],
+          "scores": [
+            72,
+            72
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 22,
+              "novelty": 18,
+              "evidence": 12,
+              "utility": 20,
+              "reason": "文章聚焦AI交互界面，提出聊天框并非总是最佳UI，主张用可定制canvas替代，与AI相关性高。具体介绍了GitHub Copilot中的canvas概念、全栈应用能力及Connect 4、Winget、SQLite等实例，提供了较新的实践思路，但多为作者个人体验和观点，缺乏可核验的基准、数据或外部来源，证据支撑偏弱。对开发者理解AI工作流自动化和减少token浪费有实践启发，学习价值较高。"
+            },
+            {
+              "relevance": 22,
+              "novelty": 18,
+              "evidence": 12,
+              "utility": 20,
+              "reason": "文章聚焦AI交互界面（chat vs canvas），与AI相关性高。提出canvas作为可定制UI替代chat的具体概念，并给出Connect 4、Winget、SQLite、Jekyll等实例，有一定新意。但内容多为作者个人观点和演示，缺乏可核验的数据、引用或外部依据，Pinker引语也未给出出处。对开发者理解AI工作流自动化和减少token浪费有实践启发，但部分表述偏营销化、口语化，证据支撑较弱。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "When chat is the wrong UI",
+          "originalSummary": "What is a developer to do when they need something more tangible than a chat box? Enter canvases. The post When chat is the wrong UI appeared first on The GitHub Blog .",
+          "relation": "new",
+          "publisher": "github",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        },
+        {
+          "id": "ext-github-ai-7d128752a2cf",
+          "sourceId": "github-ai",
+          "sourceName": "GitHub Blog · AI & ML",
+          "url": "https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-how-to-build-custom-workflows-with-canvases/",
+          "canonicalUrl": "https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-how-to-build-custom-workflows-with-canvases",
+          "title": "GitHub Copilot 应用画布入门：用自然语言构建自定义工作流界面",
+          "summary": "GitHub 博客介绍 GitHub Copilot 应用中的画布（canvas）功能：用户用自然语言描述所需界面，代理即可生成可共享、可双向更新的自定义界面，如看板、发布清单或仪表盘。创建时使用 /create-canvas 技能，描述需涵盖工作流、用户可执行操作及代理可执行操作。画布可保存为扩展供团队或个人复用，社区也通过 Awesome Copilot 分享现成扩展。",
+          "tags": [
+            "GitHub Copilot",
+            "画布",
+            "工作流",
+            "AI代理"
+          ],
+          "publishedAt": "2026-09-25T18:00:00Z",
+          "fetchedAt": "2026-10-07T05:05:10Z",
+          "reason": "介绍一种用自然语言生成并双向协作自定义工作流界面的方法，适合想了解 AI 代理如何参与日常开发工作流的读者。",
+          "evidenceQuotes": [
+            "A canvas, also called a canvas extension, is a customizable interface that you and the agent share.",
+            "Because the canvas"
+          ],
+          "scores": [
+            80,
+            74
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 18,
+              "evidence": 15,
+              "utility": 22,
+              "reason": "主题为GitHub Copilot画布功能，AI相关性高。内容具体介绍了/create-canvas技能、双向同步、扩展保存与分享等新机制，并给出可复现的提示词示例，具备一定新信息。但正文为博客教程，缺少官方文档链接、版本号或实测数据等可核验依据，证据强度一般。对初学者有明确操作路径和实践价值，故实用性较高。"
+            },
+            {
+              "relevance": 22,
+              "novelty": 18,
+              "evidence": 14,
+              "utility": 20,
+              "reason": "主题高度相关：介绍 GitHub Copilot 应用中的 canvas 自定义工作流，属于 AI 辅助开发工具的具体功能。新信息较具体：/create-canvas 技能、双向共享状态、保存为扩展、Awesome Copilot 社区资源等，非空泛口号。但证据偏弱：正文为官方博客宣传性介绍，缺少版本号、实测截图、限制条件或第三方验证，可核验依据不足。学习/实践价值较高：给出三步提问框架和上手步骤，对想尝试 Copilot canvas 的初学者有直接操作指引。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "GitHub Copilot app for Beginners: How to build custom workflows with canvases",
+          "originalSummary": "Describe the interface you need in plain English, then let the agent build a live surface you can both use and update—so you spend less time adapting to tools and more time getting work done. The post GitHub Copilot app for Beginners: How to build custom workflows with canvases appeared first on Th…",
+          "relation": "same",
+          "publisher": "github",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-302ab6f460cce16e100b",
+      "title": "GitHub Security Lab 发布 AI 驱动的模糊测试 Taskflow Agent",
+      "summary": "GitHub Security Lab 发布 Fuzzing Taskflow，一个基于 Taskflow Agent 框架的自主模糊测试流水线，面向 C/C++ 项目。用户只需提供 GitHub 仓库地址，代理即可识别入口点、分析构建系统、编写 harness、运行 AFL++、读取覆盖率报告、改进 harness、分类崩溃并生成漏洞报告。文章介绍了运行方式、架构分层、覆盖率反馈循环及安全注意事项，强调模糊测试仍需人类参与，并提醒该工具直接在主机上运行构建命令，应在一次性环境中使用。",
+      "reason": "展示了 LLM 代理如何自动化模糊测试中编写 harness、分析覆盖率、分类崩溃等人工环节，对安全测试与 AI 代理实践有参考价值。",
+      "tags": [
+        "模糊测试",
+        "LLM代理",
+        "安全自动化",
+        "GitHub"
+      ],
+      "publishedAt": "2026-09-24T18:26:12Z",
+      "updatedAt": "2026-09-24T18:26:12Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-github-ai-2690558920b6",
+          "sourceId": "github-ai",
+          "sourceName": "GitHub Blog · AI & ML",
+          "url": "https://github.blog/security/application-security/ai-powered-fuzzing-with-the-github-security-lab-taskflow-agent/",
+          "canonicalUrl": "https://github.blog/security/application-security/ai-powered-fuzzing-with-the-github-security-lab-taskflow-agent",
+          "title": "GitHub Security Lab 发布 AI 驱动的模糊测试 Taskflow Agent",
+          "summary": "GitHub Security Lab 发布 Fuzzing Taskflow，一个基于 Taskflow Agent 框架的自主模糊测试流水线，面向 C/C++ 项目。用户只需提供 GitHub 仓库地址，代理即可识别入口点、分析构建系统、编写 harness、运行 AFL++、读取覆盖率报告、改进 harness、分类崩溃并生成漏洞报告。文章介绍了运行方式、架构分层、覆盖率反馈循环及安全注意事项，强调模糊测试仍需人类参与，并提醒该工具直接在主机上运行构建命令，应在一次性环境中使用。",
+          "tags": [
+            "模糊测试",
+            "LLM代理",
+            "安全自动化",
+            "GitHub"
+          ],
+          "publishedAt": "2026-09-24T18:26:12Z",
+          "fetchedAt": "2026-10-07T05:05:10Z",
+          "reason": "展示了 LLM 代理如何自动化模糊测试中编写 harness、分析覆盖率、分类崩溃等人工环节，对安全测试与 AI 代理实践有参考价值。",
+          "evidenceQuotes": [
+            "fuzzing still needs a human in the loop",
+            "the LLM agent owns the decisions, and the MCP tools own the execution",
+            "run it only"
+          ],
+          "scores": [
+            93,
+            91
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 22,
+              "utility": 24,
+              "reason": "该资料直接介绍基于LLM的自主模糊测试流水线，AI相关性高；提供了具体架构、运行方式、模型选择、覆盖率反馈循环等新信息，非空泛营销；有GitHub仓库、脚本、工具名、构建细节等可核验依据；对安全自动化实践有明确学习与复现价值。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 24,
+              "reason": "内容直接围绕LLM驱动的自动化模糊测试流水线，AI相关性高；具体介绍了架构、覆盖率反馈循环、时间预算翻倍、plateau检测、双二进制构建等新信息，非空泛口号；提供了GitHub仓库、运行脚本、模型配置路径等可核验依据，但缺少实验结果或漏洞案例数据；对安全自动化实践者学习价值高，可复现操作步骤明确。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "AI-powered fuzzing with the GitHub Security Lab Taskflow Agent",
+          "originalSummary": "In this blog post, I explain how to use the new fuzzing taskflow based on the GitHub Security Lab Taskflow Agent AI framework. The post AI-powered fuzzing with the GitHub Security Lab Taskflow Agent appeared first on The GitHub Blog .",
+          "relation": "new",
+          "publisher": "github",
+          "selectedAt": "2026-10-07T10:14:02Z"
+        }
+      ]
+    },
+    {
+      "id": "event-c955491df989e7d752bc",
+      "title": "Google DeepMind 发布 Gemini 3.8 Live with Live Avatar",
+      "summary": "Google DeepMind 在 Gemini 3.8 Live 发布后推出 Live Avatar，将实时视频生成与语音结合，为对话式 AI 带来近实时视觉形象。该功能具备精准唇形同步、自然表情和流畅轮次切换，可同时处理视觉与音频输入，并支持异步工具调用，在对话不中断的情况下后台获取数据。其原生多语言语音到语音同步可无缝切换 97 种语言，且不降低视频保真度。该功能现已在 Gemini Enterprise 中提供，自定义头像创建目前仅通过企业允许列表开放。",
+      "reason": "了解 Gemini 在实时多模态对话与虚拟形象方向的最新进展，涉及异步工具调用、多语言同步和 SynthID 水印等企业级功能与安全设计。",
+      "tags": [
+        "Gemini",
+        "多模态",
+        "实时对话",
+        "企业AI"
+      ],
+      "publishedAt": "2026-09-24T16:20:39Z",
+      "updatedAt": "2026-09-24T16:20:39Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-deepmind-blog-6add3dd62456",
+          "sourceId": "deepmind-blog",
+          "sourceName": "Google DeepMind Blog",
+          "url": "https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar/",
+          "canonicalUrl": "https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar",
+          "title": "Google DeepMind 发布 Gemini 3.8 Live with Live Avatar",
+          "summary": "Google DeepMind 在 Gemini 3.8 Live 发布后推出 Live Avatar，将实时视频生成与语音结合，为对话式 AI 带来近实时视觉形象。该功能具备精准唇形同步、自然表情和流畅轮次切换，可同时处理视觉与音频输入，并支持异步工具调用，在对话不中断的情况下后台获取数据。其原生多语言语音到语音同步可无缝切换 97 种语言，且不降低视频保真度。该功能现已在 Gemini Enterprise 中提供，自定义头像创建目前仅通过企业允许列表开放。",
+          "tags": [
+            "Gemini",
+            "多模态",
+            "实时对话",
+            "企业AI"
+          ],
+          "publishedAt": "2026-09-24T16:20:39Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "了解 Gemini 在实时多模态对话与虚拟形象方向的最新进展，涉及异步工具调用、多语言同步和 SynthID 水印等企业级功能与安全设计。",
+          "evidenceQuotes": [
+            "By pairing near real-time video generation with speech, the Live Avatar feature creates an experience that listens,",
+            "With"
+          ],
+          "scores": [
+            76,
+            74
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 18,
+              "evidence": 15,
+              "utility": 18,
+              "reason": "该资料为Google DeepMind官方博客，直接介绍Gemini 3.8 Live with Live Avatar，AI相关性极高。内容包含具体新信息：实时视频生成与语音耦合、异步工具调用、97种语言无缝切换、基于参考图定制头像、SynthID水印等，但多为产品功能描述，缺乏技术细节或性能数据。可核验依据方面，来源权威且提及模型卡和API文档，但正文未提供具体链接或实验数据，证据强度中等。学习/实践价值较高，企业开发者可了解新功能及API接入方向，但缺乏代码示例或架构说明，实用性受限。整体属于官方产品发布，营销语气存在，但信息具体，非空泛口号。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 18,
+              "evidence": 15,
+              "utility": 16,
+              "reason": "该资料是Google DeepMind关于Gemini 3.8 Live with Live Avatar的官方发布，AI相关性极高。内容包含具体新功能：实时视觉化身、异步工具调用、97种语言同步、自定义化身和SynthID水印，具有一定新信息。但摘要为空，正文多为营销性描述，缺乏技术细节、性能数据或可复现的评测依据，可核验性一般。对学习实践而言，提供了产品功能概览和API文档指引，但深度有限，实践价值中等。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Introducing Gemini 3.8 Live with Live Avatar",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "google",
+          "selectedAt": "2026-10-07T10:21:43Z"
+        }
+      ]
+    },
+    {
+      "id": "event-be83ba8ec5df911150d2",
+      "title": "LFM2.5-VL-DSpark：为视觉语言模型加速的推测解码草稿模型",
+      "summary": "Liquid AI 发布实验性 DSpark 草稿模型，为视觉语言模型 LFM2.5-VL-3B 增加推测解码路径。该草稿模型约 280M 参数，使部署参数量增加 8.9%，在设备端解码加速最高 3.13 倍、H100 上最高 2.66 倍，端到端增益最高 2.62 倍和 2.27 倍。推测解码只加速解码，不加速视觉编码或预填充，因此端到端收益受未加速部分限制。该模型首日支持 llama.cpp、MLX-VLM 和 SGLang。",
+      "reason": "了解视觉语言模型推测解码的工程实现、加速数据与局限，适合关注边缘推理和 VLM 部署的读者。",
+      "tags": [
+        "视觉语言模型",
+        "推测解码",
+        "推理加速",
+        "边缘部署"
+      ],
+      "publishedAt": "2026-09-24T14:08:57Z",
+      "updatedAt": "2026-09-24T14:08:57Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-huggingface-blog-280bf64dcca7",
+          "sourceId": "huggingface-blog",
+          "sourceName": "Hugging Face Blog",
+          "url": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark",
+          "canonicalUrl": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark",
+          "title": "LFM2.5-VL-DSpark：为视觉语言模型加速的推测解码草稿模型",
+          "summary": "Liquid AI 发布实验性 DSpark 草稿模型，为视觉语言模型 LFM2.5-VL-3B 增加推测解码路径。该草稿模型约 280M 参数，使部署参数量增加 8.9%，在设备端解码加速最高 3.13 倍、H100 上最高 2.66 倍，端到端增益最高 2.62 倍和 2.27 倍。推测解码只加速解码，不加速视觉编码或预填充，因此端到端收益受未加速部分限制。该模型首日支持 llama.cpp、MLX-VLM 和 SGLang。",
+          "tags": [
+            "视觉语言模型",
+            "推测解码",
+            "推理加速",
+            "边缘部署"
+          ],
+          "publishedAt": "2026-09-24T14:08:57Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "了解视觉语言模型推测解码的工程实现、加速数据与局限，适合关注边缘推理和 VLM 部署的读者。",
+          "evidenceQuotes": [
+            "it adds a speculative decoding path that trades a minimal increase in memory footprint for a larger speedup without",
+            "Specu"
+          ],
+          "scores": [
+            94,
+            94
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 23,
+              "utility": 24,
+              "reason": "该资料介绍LFM2.5-VL-DSpark视觉语言模型推测解码草稿模型，属AI推理加速前沿，相关性高。给出具体架构（4层、块大小9、280M参数、8.9%开销）、多硬件加速数据（M5 Max、M3 Ultra、H100）、MMSpec基准及llama.cpp/MLX-VLM/SGLang代码示例，信息具体且可核验，实践价值强。局限分析（Amdahl定律、仅加速decode）客观。扣分因部分加速数据表述略含糊（如20.4x至2.66x），且为厂商自发布，独立验证有限。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 23,
+              "utility": 24,
+              "reason": "该文介绍LFM2.5-VL-DSpark视觉语言模型推测解码草稿模型，属AI推理加速领域，相关性高。给出了具体架构（4层注意力草稿器、块大小9、280M参数、8.9%开销）、多硬件实测加速比（M5 Max、M3 Ultra、H100）、训练细节及llama.cpp/MLX-VLM/SGLang的完整命令，信息具体且可核验。同时坦诚讨论Amdahl定律下prefill瓶颈的局限，对实践者部署VLM加速有直接参考价值。虽为厂商博客存在一定宣传色彩，但技术细节充分，非空泛口号。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Accelerating vision-language models with LFM2.5-VL-DSpark",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "huggingface",
+          "selectedAt": "2026-10-07T10:14:02Z"
+        }
+      ]
+    },
+    {
+      "id": "event-fb1eeb4e71e5c4aa4e4e",
+      "title": "GitHub Copilot 应用如何渲染超大拉取请求",
+      "summary": "GitHub 博客介绍在 GitHub Copilot 应用中重建拉取请求视图，以打开一个包含 2,200 个文件、超过一百万行改动和 400 多条行内审查评论的开源拉取请求。文章说明纯代码 diff 可通过虚拟化和预先已知行高保持快速，但评论高度依赖渲染时因素，无法提前确定，因此将文档高度拆分为确定性的代码几何与动态块几何，并采用惰性测量与锚定修正。",
+      "reason": "展示在极端规模 diff 与评论场景下，如何通过拆分几何模型和惰性测量维持性能，对前端虚拟化与代码审查工具设计有参考价值。",
+      "tags": [
+        "GitHub Copilot",
+        "拉取请求",
+        "虚拟化",
+        "性能"
+      ],
+      "publishedAt": "2026-09-23T18:29:49Z",
+      "updatedAt": "2026-09-23T18:29:49Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-github-ai-adfc9716558c",
+          "sourceId": "github-ai",
+          "sourceName": "GitHub Blog · AI & ML",
+          "url": "https://github.blog/engineering/user-experience/rendering-huge-pull-requests-in-the-github-copilot-app/",
+          "canonicalUrl": "https://github.blog/engineering/user-experience/rendering-huge-pull-requests-in-the-github-copilot-app",
+          "title": "GitHub Copilot 应用如何渲染超大拉取请求",
+          "summary": "GitHub 博客介绍在 GitHub Copilot 应用中重建拉取请求视图，以打开一个包含 2,200 个文件、超过一百万行改动和 400 多条行内审查评论的开源拉取请求。文章说明纯代码 diff 可通过虚拟化和预先已知行高保持快速，但评论高度依赖渲染时因素，无法提前确定，因此将文档高度拆分为确定性的代码几何与动态块几何，并采用惰性测量与锚定修正。",
+          "tags": [
+            "GitHub Copilot",
+            "拉取请求",
+            "虚拟化",
+            "性能"
+          ],
+          "publishedAt": "2026-09-23T18:29:49Z",
+          "fetchedAt": "2026-10-07T05:05:10Z",
+          "reason": "展示在极端规模 diff 与评论场景下，如何通过拆分几何模型和惰性测量维持性能，对前端虚拟化与代码审查工具设计有参考价值。",
+          "evidenceQuotes": [
+            "we opened the biggest pull request we could find: an open source one with 2,200 files, over a million changed lines,"
+          ],
+          "scores": [
+            90,
+            91
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 23,
+              "reason": "该文来自GitHub官方博客，主题是GitHub Copilot应用中大型PR差异渲染的性能优化，与AI编程工具直接相关。内容具体介绍了虚拟化、双几何域、动态块测量等工程方案，并给出百万行PR、2200文件、400+评论等可核验数据，信息密度高。但正文片段在结尾处截断，部分细节不完整，且未提供代码或基准测试链接，证据略打折。对前端/工具开发者有较强实践参考价值。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 24,
+              "reason": "该资料来自GitHub官方博客，直接涉及AI编程助手Copilot应用的工程实现，AI相关性高。内容具体介绍了在GitHub Copilot应用中渲染百万行级PR diff的架构方案，包括虚拟化、双几何域、动态块测量等具体技术细节，属于新信息而非空泛观点。有明确来源、作者、日期和可核验的技术描述，但正文片段在末尾被截断，部分细节不完整。对前端性能优化、大型diff渲染和AI编程工具开发有较高学习与实践价值。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Rendering huge pull requests in the GitHub Copilot app",
+          "originalSummary": "How we rebuilt the diff surface in the GitHub Copilot app to open a million-line pull request with hundreds of inline review comments. The post Rendering huge pull requests in the GitHub Copilot app appeared first on The GitHub Blog .",
+          "relation": "new",
+          "publisher": "github",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-19daaa1b682a030ff3b3",
+      "title": "Google 为 Private AI Compute 引入安全服务器端记忆",
+      "summary": "Google 发布技术更新，说明将在 Private AI Compute 平台中加入私有服务器端记忆，使 AI 助手能跨设备保留上下文，同时维持类似端侧处理的隐私标准。数据密封在加密存储中，密钥仅存于用户设备；访问时通过端到端加密通道连接云端安全隔离区，在隔离内存中临时解密并即时重新加密。该架构结合硬件强制安全隔离区、加密通道和由设备派生密钥保护的用户数据库。此前该类技术为无状态，任务结束即清除上下文。",
+      "reason": "涉及云端 AI 如何在保留长期记忆的同时维持隐私，适合关注隐私计算、AI 架构与安全隔离区实践的人了解其设计思路与验证方式。",
+      "tags": [
+        "隐私计算",
+        "服务器端记忆",
+        "安全隔离区",
+        "端到端加密"
+      ],
+      "publishedAt": "2026-09-23T16:00:57Z",
+      "updatedAt": "2026-09-23T16:00:57Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-deepmind-blog-1043d9fe8028",
+          "sourceId": "deepmind-blog",
+          "sourceName": "Google DeepMind Blog",
+          "url": "https://deepmind.google/blog/advancing-private-ai-compute-with-secure-server-side-memory/",
+          "canonicalUrl": "https://deepmind.google/blog/advancing-private-ai-compute-with-secure-server-side-memory",
+          "title": "Google 为 Private AI Compute 引入安全服务器端记忆",
+          "summary": "Google 发布技术更新，说明将在 Private AI Compute 平台中加入私有服务器端记忆，使 AI 助手能跨设备保留上下文，同时维持类似端侧处理的隐私标准。数据密封在加密存储中，密钥仅存于用户设备；访问时通过端到端加密通道连接云端安全隔离区，在隔离内存中临时解密并即时重新加密。该架构结合硬件强制安全隔离区、加密通道和由设备派生密钥保护的用户数据库。此前该类技术为无状态，任务结束即清除上下文。",
+          "tags": [
+            "隐私计算",
+            "服务器端记忆",
+            "安全隔离区",
+            "端到端加密"
+          ],
+          "publishedAt": "2026-09-23T16:00:57Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "涉及云端 AI 如何在保留长期记忆的同时维持隐私，适合关注隐私计算、AI 架构与安全隔离区实践的人了解其设计思路与验证方式。",
+          "evidenceQuotes": [
+            "we are sharing how we will bring private, server-side memory to our Private AI Compute platform",
+            "the cryptographic keys"
+          ],
+          "scores": [
+            76,
+            76
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 18,
+              "evidence": 15,
+              "utility": 18,
+              "reason": "主题为私有AI计算与安全服务端记忆，AI相关性高。提出了有状态持久记忆、设备端密钥、安全隔离区等具体架构思路，较此前无状态方案有新意，但属官方博客概述，缺少实现细节与量化结果。可核验依据方面提及技术白皮书、独立审计和公开软件记录，但正文未给出链接、审计机构名称或数据，证据强度中等。对关注隐私AI架构的开发者有参考价值，但偏产品公告，实践指导有限。"
+            },
+            {
+              "relevance": 24,
+              "novelty": 18,
+              "evidence": 16,
+              "utility": 18,
+              "reason": "标题与正文聚焦私有AI计算中的服务端持久记忆架构，属AI隐私与系统设计核心议题，相关性高。内容提出在云端安全隔离区实现跨设备持久记忆、密钥仅存于用户设备、端到端加密通道等具体机制，并提及白皮书、独立审计与可验证软件记录，具备一定新信息。但正文为官方博客概述，缺少具体技术参数、审计结论与可复现细节，证据多为自述与承诺，可核验性中等。对关注隐私计算、可信执行环境与AI记忆架构的读者有学习与实践参考价值，但营销性表述（如“突破”“黄金标准”）削弱了严谨性。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Advancing Private AI Compute with secure, server-side memory",
+          "originalSummary": "Introducing private, server-side memory to Private AI Compute for personal AI.",
+          "relation": "new",
+          "publisher": "google",
+          "selectedAt": "2026-10-07T10:16:03Z"
+        }
+      ]
+    },
+    {
+      "id": "event-3afbf8ea611c132cb0fd",
+      "title": "Gemini 3.8 文本转语音模型发布",
+      "summary": "Google DeepMind 发布 Gemini 3.8 Flash TTS 和 Gemini 3.8 Flash-Lite TTS 两款文本转语音模型，称其为最具表现力的音频生成模型。Flash TTS 面向深度创意指导和角色设计，Flash-Lite TTS 面向高容量、低成本场景。模型支持从自然语言提示创建自定义语音、逐行指导表演，并覆盖 100 多种语言。",
+      "reason": "了解 Gemini 音频模型家族的最新文本转语音能力，以及语音生成从静态预设转向动态创作工具的方向。",
+      "tags": [
+        "Gemini",
+        "文本转语音",
+        "音频生成",
+        "Google DeepMind"
+      ],
+      "publishedAt": "2026-09-23T15:25:14Z",
+      "updatedAt": "2026-09-23T15:25:14Z",
+      "heat": 0,
+      "independentSources": 0,
+      "trend": "new",
+      "reports": [
+        {
+          "id": "ext-deepmind-blog-721de6922a1a",
+          "sourceId": "deepmind-blog",
+          "sourceName": "Google DeepMind Blog",
+          "url": "https://deepmind.google/blog/say-hello-to-gemini-38-text-to-speech/",
+          "canonicalUrl": "https://deepmind.google/blog/say-hello-to-gemini-38-text-to-speech",
+          "title": "Gemini 3.8 文本转语音模型发布",
+          "summary": "Google DeepMind 发布 Gemini 3.8 Flash TTS 和 Gemini 3.8 Flash-Lite TTS 两款文本转语音模型，称其为最具表现力的音频生成模型。Flash TTS 面向深度创意指导和角色设计，Flash-Lite TTS 面向高容量、低成本场景。模型支持从自然语言提示创建自定义语音、逐行指导表演，并覆盖 100 多种语言。",
+          "tags": [
+            "Gemini",
+            "文本转语音",
+            "音频生成",
+            "Google DeepMind"
+          ],
+          "publishedAt": "2026-09-23T15:25:14Z",
+          "fetchedAt": "2026-10-07T05:04:40Z",
+          "reason": "了解 Gemini 音频模型家族的最新文本转语音能力，以及语音生成从静态预设转向动态创作工具的方向。",
+          "evidenceQuotes": [
+            "Gemini 3.8 Flash TTS and Gemini 3.8 Flash-Lite TTS are our most expressive audio generation models yet.",
+            "Gemini 3.8 Flash"
+          ],
+          "scores": [
+            89,
+            89
+          ],
+          "scoreDetails": [
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 22,
+              "reason": "内容直接介绍Gemini 3.8 Flash TTS与Flash-Lite TTS两款新模型，AI相关性高。给出了具体新信息：生成式语音设计、2000+语音库、30秒样本声音复刻、逐行表演控制、双说话人场景、100+语言、Hume AI基准排名等，信息密度较高。可核验依据方面有官方博客来源、模型名称、基准分数和产品入口，但缺少可点击链接与第三方独立验证，部分宣传性表述需谨慎。学习/实践价值较强，对开发者了解TTS能力边界、API/Studio接入和语音应用设计有参考意义，但偏产品发布稿，缺少技术实现细节与成本数据。"
+            },
+            {
+              "relevance": 25,
+              "novelty": 22,
+              "evidence": 20,
+              "utility": 22,
+              "reason": "内容高度相关于AI语音生成，介绍了Gemini 3.8 TTS新模型的具体功能、基准测试排名和语言支持，信息具体且可核验（如Hume AI基准分数），对开发者和创作者有实践指导价值。但摘要为空，部分宣传性表述（如“最富表现力”）需谨慎看待，且缺乏第三方独立验证，故证据分略低。"
+            }
+          ],
+          "threshold": 65,
+          "evidenceBasis": "article",
+          "originalTitle": "Gemini 3.8 text-to-speech says hello",
+          "originalSummary": "",
+          "relation": "new",
+          "publisher": "google",
+          "selectedAt": "2026-10-07T10:26:34Z"
+        }
+      ]
+    }
+  ],
+  "editions": [
+    {
+      "date": "2026-10-07",
+      "status": "in_progress",
+      "total": 1,
+      "items": [
+        {
+          "eventId": "event-da29661ac9859789ccfc",
+          "reportId": "ext-deepmind-blog-2ee55c894d54",
+          "title": "EmbeddingGemma 2：开源轻量多模态嵌入模型",
+          "summary": "Google DeepMind 发布 EmbeddingGemma 2，一个开源轻量多模态嵌入模型，可将文本、图像、音频和视频映射到统一嵌入空间。该模型基于 Gemma 4 架构，采用 Apache 2.0 许可，拥有 7.4 亿参数，面向端侧推理。相比前代，其代码性能在 MTEB Code 上从 68.76 提升至 78.68，并支持 8K token 上下文窗口。模型采用模块化设计，文本任务最低需 270M 参数，可选视觉和音频编码器。",
+          "reason": "该模型展示了端侧多模态嵌入的进展，对开发本地搜索、RAG 和跨模态检索的开发者有参考价值，且开源许可便于实践。",
+          "url": "https://deepmind.google/blog/embeddinggemma-2-an-open-lightweight-multimodal-embedding-model/",
+          "sourceName": "Google DeepMind Blog",
+          "scores": [
+            91,
+            91
+          ],
+          "development": false
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "date": "2026-10-06",
+      "status": "complete",
+      "total": 2,
+      "items": [
+        {
+          "eventId": "event-9567ab8bacf48fe35708",
+          "reportId": "ext-huggingface-blog-fe424883c3ca",
+          "title": "Falcon-Emirati：让大语言模型学习阿联酋方言、文化与细微差别",
+          "summary": "Falcon-Emirati-7B 是在 Falcon-H1-Arabic 基础上构建的方言专用模型，旨在理解和生成阿联酋阿拉伯语，包括词汇、语气和文化背景。文章指出阿联酋方言以口语为主、书面语料少，且含义常非字面，因此方言适配困难。团队通过真实方言网络数据、关于阿联酋文化的 MSA 数据以及受词汇表和风格规则约束的合成数据来构建数据管道，并尝试不同数据混合与训练阶段。",
+          "reason": "文章具体说明方言适配为何困难，并公开了数据来源与训练策略，对关注阿拉伯语 NLP、方言模型或低资源语言适配的读者有参考价值。",
+          "url": "https://huggingface.co/blog/tiiuae/falcon-emirati",
+          "sourceName": "Hugging Face Blog",
+          "scores": [
+            87,
+            83
+          ],
+          "development": false
+        },
+        {
+          "eventId": "event-d2ff147d8fd870a0d5d2",
+          "reportId": "ext-openai-news-00427e47df5e",
+          "title": "OpenAI发布内部前沿模型在数学开放问题上的新结果",
+          "summary": "OpenAI发布了内部前沿模型在数学开放问题上取得的新结果，并在GitHub上分享了Lean证明形式化及研究细节。该进展与数学研究及AI辅助证明的实践相关。",
+          "reason": "了解AI在数学开放问题上的最新进展，以及Lean证明形式化与研究细节的公开分享。",
+          "url": "https://openai.com/index/sharing-ai-progress-in-mathematics",
+          "sourceName": "OpenAI News",
+          "scores": [
+            72,
+            72
+          ],
+          "development": false
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "date": "2026-10-05",
+      "status": "complete",
+      "total": 2,
+      "items": [
+        {
+          "eventId": "event-3f3343fca78a81543359",
+          "reportId": "ext-github-ai-d8885d98544b",
+          "title": "ReviewBench：面向AI代码审查的开放基准",
+          "summary": "GitHub发布ReviewBench，一个基于代表性GitHub拉取请求的代码审查智能体基准，包含多源黄金标准、校准评估和生产对齐指标。该基准分析1.039亿个拉取请求，包含219个拉取请求、19种语言，采用多源发现和统一评分标准，并已由资深工程师独立验证。对学习或实践而言，它提供了可复现的离线评估方法，帮助理解不同审查系统的优劣和权衡。",
+          "reason": "了解如何构建可信的AI代码审查基准，以及离线评估如何预测生产实验方向，对开发或选用代码审查智能体有参考价值。",
+          "url": "https://github.blog/ai-and-ml/github-copilot/reviewbench-an-open-benchmark-for-ai-code-review/",
+          "sourceName": "GitHub Blog · AI & ML",
+          "scores": [
+            90,
+            90
+          ],
+          "development": false
+        },
+        {
+          "eventId": "event-09599b271b808d83d386",
+          "reportId": "ext-openai-news-2d8e70fb45ce",
+          "title": "OpenAI 在 ChatGPT 中推出新视觉广告格式并扩展广告衡量工具",
+          "summary": "OpenAI 宣布在 ChatGPT 中引入一种新的视觉广告格式，并扩展面向广告主的衡量工具、归因合作与品牌适用性功能。该消息来自 OpenAI News，发布时间为 2026 年 10 月 5 日。对于学习或实践而言，这反映了 AI 对话产品中广告形态与效果衡量方式正在发生变化，但公开摘要未提供具体格式细节、合作方或效果数据。",
+          "reason": "了解 ChatGPT 中广告产品的最新动向，以及 AI 对话场景下广告衡量与品牌适用性的扩展方向。",
+          "url": "https://openai.com/index/new-chatgpt-ads-format-and-measurement",
+          "sourceName": "OpenAI News",
+          "scores": [
+            66,
+            66
+          ],
+          "development": false
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "date": "2026-10-04",
+      "status": "complete",
+      "total": 1,
+      "items": [
+        {
+          "eventId": "event-21565f79b2b116956961",
+          "reportId": "ext-huggingface-blog-bd1136d0fcfd",
+          "title": "ThinkingBox：以数据库终态而非工具调用评估AI智能体可靠性",
+          "summary": "微软与Hugging Face联合发布ThinkingBox基准，通过507个有状态业务工作流、每个任务重复20次，评估AI智能体留下的后端状态和副作用，而非仅看工具调用或最终回复。在121,680次有效试验中，79,853次未通过可执行检查，其中67.24%仍干净终止且无工具错误，但可执行检查发现77.61%存在字段值错误。文章强调一次成功不等于可靠，并讨论一致性成本与失败特征。",
+          "reason": "揭示智能体评估中工具调用与真实数据库状态之间的关键差距，提供可复现的基准方法，对构建可靠企业级智能体有直接参考价值。",
+          "url": "https://huggingface.co/blog/microsoft/thinkingbox",
+          "sourceName": "Hugging Face Blog",
+          "scores": [
+            94,
+            94
+          ],
+          "development": false
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "date": "2026-10-03",
+      "status": "complete",
+      "total": 0,
+      "items": [],
+      "revision": 2
+    },
+    {
+      "date": "2026-10-02",
+      "status": "complete",
+      "total": 2,
+      "items": [
+        {
+          "eventId": "event-02ae93ff41c2600273bd",
+          "reportId": "ext-huggingface-blog-e81b1dea7ce0",
+          "title": "Ai2 开源 AstaBrief 8B 科学报告生成模型",
+          "summary": "Ai2 开源了 AstaBrief 8B，一个将研究问题与检索到的文献片段转化为带引用报告的模型，已作为 Asta 的 Fast 模式上线。它基于 Qwen3-8B，采用监督微调与直接偏好优化，并改为一次性生成完整报告。在完整 Asta 流程中，Fast 模式平均每份报告 51.1 秒，Thinking 模式为 178.5 秒，约快 3.5 倍。作者称训练与评估多在 2025 年完成，未针对当前前沿模型重跑评估。",
+          "reason": "了解一个面向科学文献合成的开源小模型如何通过数据与流程设计提升报告生成速度，并附开放权重与示例工作流。",
+          "url": "https://huggingface.co/blog/allenai/astabrief",
+          "sourceName": "Hugging Face Blog",
+          "scores": [
+            90,
+            90
+          ],
+          "development": false
+        },
+        {
+          "eventId": "event-44bb7ba5ffcdccc61133",
+          "reportId": "ext-huggingface-blog-56c490db0401",
+          "title": "AutoSynthData：为企业智能体生成训练数据",
+          "summary": "ServiceNow CoreAI 提出 AutoSynthData，用目标模型的失败和更强教师的成功来定位能力缺口，再生成并验证新任务用于后训练。文章以 EnterpriseOps Gym 为例说明流程，并讨论有用智能体任务需满足可行性、真实性与难度，验证器需一致、可靠且完备。",
+          "reason": "介绍如何把企业环境中模型的具体失败转化为可执行、可验证的训练任务，并随模型改进动态调整课程，对智能体训练数据构建有参考价值。",
+          "url": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata",
+          "sourceName": "Hugging Face Blog",
+          "scores": [
+            90,
+            85
+          ],
+          "development": false
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "date": "2026-10-01",
+      "status": "complete",
+      "total": 1,
+      "items": [
+        {
+          "eventId": "event-b2a4493a10c424f3ad18",
+          "reportId": "ext-deepmind-blog-b49099cde7e9",
+          "title": "Gemini 4 Argon：Google DeepMind 发布新一代前沿模型",
+          "summary": "Google DeepMind 宣布推出前沿模型 Gemini 4 Argon，正通过 Fairwind Program 向受信任的网络防御者逐步开放。该模型面向复杂长周期工作流，在软件工程、法律金融等企业知识工作及网络安全防御中展现前沿性能。Google 内部已用于量子算法优化、内存效率提升和 C/C++ 到 Rust 的大规模代码迁移。模型输出 token 上限提升至 100 万，并采用分阶段发布与护栏迭代策略。",
+          "reason": "了解 Google 最新前沿模型的能力边界、内部应用案例与分阶段安全发布策略，对跟踪大模型在软件工程、企业知识工作和网络安全防御中的实际落地有参考价值。",
+          "url": "https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/",
+          "sourceName": "Google DeepMind Blog",
+          "scores": [
+            90,
+            87
+          ],
+          "development": false
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "date": "2026-09-30",
+      "status": "complete",
+      "total": 2,
+      "items": [
+        {
+          "eventId": "event-9a9766e52943cb5daa2f",
+          "reportId": "ext-deepmind-blog-08aa8115cb5d",
+          "title": "SynthID Bio：为AI生成蛋白质嵌入可验证水印",
+          "summary": "Google DeepMind 发布 SynthID Bio，一种面向合成生物学的概念验证水印技术，可将不可感知的签名嵌入生物代码，并在合成出的物理蛋白质上验证，同时实验室测试中保持生物功能。该方法针对序列和预测3D结构分别调整氨基酸选择与原子坐标，在三种靶标蛋白的湿实验中，水印设计在命中率、结合亲和力和序列多样性上与未水印版本相当。其目标是加强生物安全与科学诚信，为DNA合成筛查和公共数据库标注提供自动验证信号。",
+          "reason": "了解AI生成蛋白质溯源与生物安全的前沿概念验证，涉及水印如何在不影响功能的前提下嵌入生物设计，对合成生物学和生物安全实践有参考意义。",
+          "url": "https://deepmind.google/blog/introducing-synthid-bio/",
+          "sourceName": "Google DeepMind Blog",
+          "scores": [
+            94,
+            94
+          ],
+          "development": false
+        },
+        {
+          "eventId": "event-6c8e3124750234c3bb42",
+          "reportId": "ext-huggingface-blog-74c2ff7e2707",
+          "title": "Open TTS Leaderboard：面向多语言文本转语音与声音克隆的可扩展评估",
+          "summary": "Hugging Face 博客介绍 Open TTS Leaderboard，用客观指标评估开源多语言 TTS 与声音克隆模型，包括可懂度（WER/CER）、速度（RTFx、TTFA）和说话人相似度（SIM）。作者指出，基于人类偏好的竞技场评估难以跟上模型发布速度，且开源模型在竞技场中代表性不足；该榜单不替代人类偏好排名，WER 与 SIM 只是可懂度和音色保持的代理指标，不能直接衡量自然度、表现力或听众偏好。",
+          "reason": "了解 TTS 评估从人类偏好竞技场转向可扩展客观指标的新尝试，以及开源多语言模型在可懂度、速度和声音克隆上的对比方式。",
+          "url": "https://huggingface.co/blog/open-tts-leaderboard",
+          "sourceName": "Hugging Face Blog",
+          "scores": [
+            92,
+            90
+          ],
+          "development": false
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "date": "2026-09-29",
+      "status": "complete",
+      "total": 2,
+      "items": [
+        {
+          "eventId": "event-b0473a8614f0d36319e5",
+          "reportId": "ext-huggingface-blog-dc53fce90c6f",
+          "title": "NVIDIA Kumo Tabular 发布：面向表格预测的开放基础模型",
+          "summary": "NVIDIA 发布 Kumo Tabular，一个面向表格分类与回归的开放基础模型，已在 Hugging Face 上线。给定带标签的表格行，模型无需训练、调参或特征工程，单次前向传播即可预测新行标签。模型仅在人工数据上预训练，提供 28M 至 215M 三种参数规模，通过开源库运行，采用 OpenMDW-1.1 许可供商业使用。据称在 TabArena、BeyondArena、TALENT 和 ScoringBench 四个基准上排名第一。其架构基于 Transformer，使用列、行和上下文注意力，并引入长度感知注意力温度以在表格变长时保持注意力锐度。",
+          "reason": "了解表格数据基础模型这一新方向，以及 NVIDIA 在无需训练和特征工程条件下进行表格预测的尝试，适合关注表格机器学习与基础模型进展的读者。",
+          "url": "https://huggingface.co/blog/nvidia/kumo-tabular",
+          "sourceName": "Hugging Face Blog",
+          "scores": [
+            89,
+            89
+          ],
+          "development": false
+        },
+        {
+          "eventId": "event-ff0f241393656a57ffa2",
+          "reportId": "ext-huggingface-blog-afa8c33f8eb7",
+          "title": "MCP智能体的来源感知验证：ProvenanceGuard",
+          "summary": "工具型LLM智能体通过MCP可调用搜索、数据库等多种工具，将多源证据汇入一个答案，这使事实性检查更复杂：现有验证系统通常只检查主张是否被汇总证据支持，而不检查支持来源是否与答案声称的来源一致。论文提出ProvenanceGuard，一种生成后验证层，保留来源身份，依次分解主张、路由到最相关来源、检查支持、比对来源归属，并输出逐主张判定和答案级允许或阻止决定。在医学智能体281条真实轨迹上测试，人类专家检查40个答案中的361条主张，专家认为139条不应通过，ProvenanceGuard捕获138条，放行1条；同时将67条专家认为支持的主张送审或修复。",
+          "reason": "介绍MCP智能体中的跨源混淆失败模式，并提出保留来源身份的验证方法，对关注LLM事实性与来源归属的读者有参考价值。",
+          "url": "https://huggingface.co/blog/MultiverseComputingCAI/getting-the-source-right-not-just-the-fact-source",
+          "sourceName": "Hugging Face Blog",
+          "scores": [
+            89,
+            89
+          ],
+          "development": false
+        }
+      ],
+      "revision": 3
+    },
+    {
+      "date": "2026-09-28",
+      "status": "complete",
+      "total": 2,
+      "items": [
+        {
+          "eventId": "event-04d273c4e475ff9b0a33",
+          "reportId": "ext-huggingface-blog-eb916b5190e3",
+          "title": "Hugging Face Hub 新增 RL Environments 筛选与框架标签",
+          "summary": "Hugging Face Hub 为强化学习环境新增了 RL Environments 筛选，环境以数据集仓库形式存在，并注册了 Harbor、Verifiers、OpenEnv、NeMo Gym 四个框架标签。博文称环境由任务集和运行时组成，本次发布聚焦任务集；标签用于描述兼容性并生成加载命令，添加标签不会启动任务或沙箱。博文还给出在 Harbor、Verifiers、OpenEnv 中运行示例环境并查看奖励的命令。",
+          "reason": "了解 Hub 如何以数据集仓库承载 RL 环境、用标签表达框架兼容性，以及跨框架运行与查看奖励的示例命令。",
+          "url": "https://huggingface.co/blog/rl-environments",
+          "sourceName": "Hugging Face Blog",
+          "scores": [
+            94,
+            94
+          ],
+          "development": false
+        },
+        {
+          "eventId": "event-4a1f05bdaba581d42fdf",
+          "reportId": "ext-huggingface-blog-09d1d26fa19d",
+          "title": "Holo4：面向通用计算机使用智能体的新模型系列",
+          "summary": "Holo4 是 Hcompany 发布的新系列智能体模型，提供 27B dense 与 35B-A3B Mixture of Experts 两种规模，均可在 H Models API 使用，同时发布 Holotron4 Nano。Holo4 可通过 GUI、代码、MCP 和 API 等任意可用界面与软件交互，在多个平台运行同一模型。其在 OSWorld 2.0 上 27B 得分 61.7%，35B-A3B 为 30.9%，并开源公开基准的轨迹。",
+          "reason": "了解多界面通用计算机使用智能体的模型设计、基准表现与开源轨迹，适合关注智能体实践与评测的读者。",
+          "url": "https://huggingface.co/blog/Hcompany/holo4",
+          "sourceName": "Hugging Face Blog",
+          "scores": [
+            89,
+            89
+          ],
+          "development": false
+        }
+      ],
+      "revision": 3
+    },
+    {
+      "date": "2026-09-27",
+      "status": "complete",
+      "total": 0,
+      "items": [],
+      "revision": 2
+    },
+    {
+      "date": "2026-09-26",
+      "status": "complete",
+      "total": 0,
+      "items": [],
+      "revision": 2
+    },
+    {
+      "date": "2026-09-25",
+      "status": "complete",
+      "total": 3,
+      "items": [
+        {
+          "eventId": "event-302ab6f460cce16e100b",
+          "reportId": "ext-github-ai-2690558920b6",
+          "title": "GitHub Security Lab 发布 AI 驱动的模糊测试 Taskflow Agent",
+          "summary": "GitHub Security Lab 发布 Fuzzing Taskflow，一个基于 Taskflow Agent 框架的自主模糊测试流水线，面向 C/C++ 项目。用户只需提供 GitHub 仓库地址，代理即可识别入口点、分析构建系统、编写 harness、运行 AFL++、读取覆盖率报告、改进 harness、分类崩溃并生成漏洞报告。文章介绍了运行方式、架构分层、覆盖率反馈循环及安全注意事项，强调模糊测试仍需人类参与，并提醒该工具直接在主机上运行构建命令，应在一次性环境中使用。",
+          "reason": "展示了 LLM 代理如何自动化模糊测试中编写 harness、分析覆盖率、分类崩溃等人工环节，对安全测试与 AI 代理实践有参考价值。",
+          "url": "https://github.blog/security/application-security/ai-powered-fuzzing-with-the-github-security-lab-taskflow-agent/",
+          "sourceName": "GitHub Blog · AI & ML",
+          "scores": [
+            93,
+            91
+          ],
+          "development": false
+        },
+        {
+          "eventId": "event-c955491df989e7d752bc",
+          "reportId": "ext-deepmind-blog-6add3dd62456",
+          "title": "Google DeepMind 发布 Gemini 3.8 Live with Live Avatar",
+          "summary": "Google DeepMind 在 Gemini 3.8 Live 发布后推出 Live Avatar，将实时视频生成与语音结合，为对话式 AI 带来近实时视觉形象。该功能具备精准唇形同步、自然表情和流畅轮次切换，可同时处理视觉与音频输入，并支持异步工具调用，在对话不中断的情况下后台获取数据。其原生多语言语音到语音同步可无缝切换 97 种语言，且不降低视频保真度。该功能现已在 Gemini Enterprise 中提供，自定义头像创建目前仅通过企业允许列表开放。",
+          "reason": "了解 Gemini 在实时多模态对话与虚拟形象方向的最新进展，涉及异步工具调用、多语言同步和 SynthID 水印等企业级功能与安全设计。",
+          "url": "https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar/",
+          "sourceName": "Google DeepMind Blog",
+          "scores": [
+            76,
+            74
+          ],
+          "development": false
+        },
+        {
+          "eventId": "event-48ca3548eb6a4ec8ab8b",
+          "reportId": "ext-github-ai-4135fa3a0079",
+          "title": "当聊天不是合适的用户界面：GitHub Copilot 中的画布",
+          "summary": "GitHub 博客文章讨论聊天作为与 LLM 交互的主要界面可能并不适合大多数任务。文章介绍 GitHub Copilot 应用中的“画布”（canvas），即运行在应用内的全栈小应用，可与 agent 双向通信，并举例用于 Connect 4 游戏、Winget 包管理、SQLite 数据库操作和自动化开发工作流。作者认为让 agent 构建工具比把 agent 本身当工具更节省 token，并建议尝试画布。",
+          "reason": "了解在聊天界面之外与 AI 协作的一种思路，以及画布如何用于构建可交互工具和自动化工作流。",
+          "url": "https://github.blog/ai-and-ml/github-copilot/when-chat-is-the-wrong-ui/",
+          "sourceName": "GitHub Blog · AI & ML",
+          "scores": [
+            72,
+            72
+          ],
+          "development": false
+        }
+      ],
+      "revision": 4
+    },
+    {
+      "date": "2026-09-24",
+      "status": "complete",
+      "total": 3,
+      "items": [
+        {
+          "eventId": "event-be83ba8ec5df911150d2",
+          "reportId": "ext-huggingface-blog-280bf64dcca7",
+          "title": "LFM2.5-VL-DSpark：为视觉语言模型加速的推测解码草稿模型",
+          "summary": "Liquid AI 发布实验性 DSpark 草稿模型，为视觉语言模型 LFM2.5-VL-3B 增加推测解码路径。该草稿模型约 280M 参数，使部署参数量增加 8.9%，在设备端解码加速最高 3.13 倍、H100 上最高 2.66 倍，端到端增益最高 2.62 倍和 2.27 倍。推测解码只加速解码，不加速视觉编码或预填充，因此端到端收益受未加速部分限制。该模型首日支持 llama.cpp、MLX-VLM 和 SGLang。",
+          "reason": "了解视觉语言模型推测解码的工程实现、加速数据与局限，适合关注边缘推理和 VLM 部署的读者。",
+          "url": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark",
+          "sourceName": "Hugging Face Blog",
+          "scores": [
+            94,
+            94
+          ],
+          "development": false
+        },
+        {
+          "eventId": "event-fb1eeb4e71e5c4aa4e4e",
+          "reportId": "ext-github-ai-adfc9716558c",
+          "title": "GitHub Copilot 应用如何渲染超大拉取请求",
+          "summary": "GitHub 博客介绍在 GitHub Copilot 应用中重建拉取请求视图，以打开一个包含 2,200 个文件、超过一百万行改动和 400 多条行内审查评论的开源拉取请求。文章说明纯代码 diff 可通过虚拟化和预先已知行高保持快速，但评论高度依赖渲染时因素，无法提前确定，因此将文档高度拆分为确定性的代码几何与动态块几何，并采用惰性测量与锚定修正。",
+          "reason": "展示在极端规模 diff 与评论场景下，如何通过拆分几何模型和惰性测量维持性能，对前端虚拟化与代码审查工具设计有参考价值。",
+          "url": "https://github.blog/engineering/user-experience/rendering-huge-pull-requests-in-the-github-copilot-app/",
+          "sourceName": "GitHub Blog · AI & ML",
+          "scores": [
+            90,
+            91
+          ],
+          "development": false
+        },
+        {
+          "eventId": "event-19daaa1b682a030ff3b3",
+          "reportId": "ext-deepmind-blog-1043d9fe8028",
+          "title": "Google 为 Private AI Compute 引入安全服务器端记忆",
+          "summary": "Google 发布技术更新，说明将在 Private AI Compute 平台中加入私有服务器端记忆，使 AI 助手能跨设备保留上下文，同时维持类似端侧处理的隐私标准。数据密封在加密存储中，密钥仅存于用户设备；访问时通过端到端加密通道连接云端安全隔离区，在隔离内存中临时解密并即时重新加密。该架构结合硬件强制安全隔离区、加密通道和由设备派生密钥保护的用户数据库。此前该类技术为无状态，任务结束即清除上下文。",
+          "reason": "涉及云端 AI 如何在保留长期记忆的同时维持隐私，适合关注隐私计算、AI 架构与安全隔离区实践的人了解其设计思路与验证方式。",
+          "url": "https://deepmind.google/blog/advancing-private-ai-compute-with-secure-server-side-memory/",
+          "sourceName": "Google DeepMind Blog",
+          "scores": [
+            76,
+            76
+          ],
+          "development": false
+        }
+      ],
+      "revision": 3
+    }
+  ]
+}

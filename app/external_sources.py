@@ -269,6 +269,8 @@ def collect(config: dict[str, Any], previous: dict[str, Any] | None, now: dateti
             error = _short_error(exc)
             meta.update(status="failed", lastSuccessAt=old.get("lastSuccessAt"), lastError=error)
             failures.append({"sourceId": cfg["id"], "error": error})
+        if cfg.get("articleHosts"):
+            meta["articleHosts"] = cfg["articleHosts"]
         meta["itemCount"] = len(kept)
         sources.append(meta)
         per_source.append(kept)
@@ -305,6 +307,11 @@ def validate_limits(limits: Any) -> dict[str, Any]:
     return {"timeoutSeconds": float(timeout), "maxBytes": max_bytes, "maxItemsPerSource": max_items}
 
 
+def validate_article_hosts(hosts: Any) -> None:
+    if not isinstance(hosts, list) or len(hosts) > 10 or any(not isinstance(h, str) or not re.fullmatch(r"[a-z0-9]+(?:[.-][a-z0-9]+)*\.[a-z]{2,}", h) for h in hosts):
+        raise ValueError("articleHosts must be a bounded list of hostnames")
+
+
 def validate_config(config: Any) -> None:
     if not isinstance(config, dict) or config.get("schemaVersion") != 1 or not isinstance(config.get("sources"), list) or not config["sources"]:
         raise ValueError("config must be {schemaVersion:1, sources:[...]}")
@@ -319,6 +326,7 @@ def validate_config(config: Any) -> None:
             raise ValueError(f"source {s['id']}: name/https feedUrl required")
         if not safe_http_url(s.get("homepage")) or not str(s["homepage"]).startswith("https://"):
             raise ValueError(f"source {s['id']}: https homepage required")
+        validate_article_hosts(s.get("articleHosts", []))
         if "tags" in s and not isinstance(s.get("tags"), list):
             raise ValueError(f"source {s['id']}: tags must be a list")
 
@@ -335,6 +343,7 @@ def validate_document(doc: Any) -> None:
         sid = source.get("id")
         if not isinstance(sid, str) or not _SOURCE_ID.fullmatch(sid) or sid in source_ids:
             raise ValueError(f"source id invalid or duplicated: {sid}")
+        validate_article_hosts(source.get("articleHosts", []))
         source_ids.add(sid)
         if not _plain(source.get("name"), MAX_NAME):
             raise ValueError(f"source {sid}: invalid name")

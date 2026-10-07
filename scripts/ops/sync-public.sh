@@ -49,7 +49,7 @@ sync_dir hermes
 SCRIPTS_KEEP=(
   build_context_units.py build_people.py extract_flagship.py
   generate_badges.py hermes_to_ledger.py ledger_issues.py markup.py rebuild_essays.py
-  ops/collect_external_sources.py ops/refresh-external-sources.sh
+  ops/collect_external_sources.py ops/curate_external_sources.py ops/refresh-external-sources.sh
 )
 mkdir -p "$WORK/public/scripts"
 for f in "${SCRIPTS_KEEP[@]}"; do
@@ -64,6 +64,7 @@ cp "$MAIN_REPO/scripts/ops/sync-public.sh" "$WORK/public/scripts/ops/sync-public
 echo "→ 同步 scripts（白名单 ${#SCRIPTS_KEEP[@]} 个 + ops/sync-public.sh）"
 mkdir -p "$WORK/public/config"
 cp "$MAIN_REPO/config/external-sources.json" "$WORK/public/config/external-sources.json"
+cp "$MAIN_REPO/config/external-curation.json" "$WORK/public/config/external-curation.json"
 
 # site：代码与静态资源（content 是生产数据，不同步；README/assets 不动）
 sync_dir site/src
