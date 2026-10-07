@@ -1,5 +1,5 @@
 {
-  "source_commit": "64842a1e9d2f7b153284ca04712e9677d088c7fb",
+  "source_commit": "fe8c98784d684c4a8133e66fc81cccf5c3b1ac16",
   "scope": "privacy-safe source snapshot",
   "excluded": [
     "production data and member profiles",
@@ -7,5 +7,5 @@
     "deployment, mail and server scripts",
     "fleet handoffs and local agent instructions"
   ],
-  "synced_at": "2026-10-07T10:38:38.198657+00:00"
+  "synced_at": "2026-10-07T11:16:57.807001+00:00"
 }

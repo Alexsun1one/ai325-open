@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { loadPeople, type Person } from "@/components/sheet/PersonHover";
+import { loadPeople, resolvePerson, type Person } from "@/lib/public-people";
 import { IdentityAvatar } from "./IdentityAvatar";
 import { isHermesIdentity } from "./agent-appearance";
 
@@ -27,10 +27,8 @@ export function SpeakerIdentity({ name, kind = "human", master, size = 32, avata
   }, [kind]);
 
   const query = name.trim();
-  const label = query || (kind === "agent" ? "学徒" : "群友");
-  const exact = people.filter((person) => person.name === query);
-  const matches = exact.length ? exact : people.filter((person) => Array.isArray(person.aliases) && person.aliases.includes(query));
-  const person = kind === "human" && query && matches.length === 1 ? matches[0] : undefined;
+  const person = kind === "human" ? resolvePerson(people, query) : undefined;
+  const label = person?.name || query || (kind === "agent" ? "学徒" : "群友");
   const hermes = isHermesIdentity(label, kind, avatarKey); // 仅视觉主题：非认证/权限/在线标记
   const className = "inline-flex min-w-0 max-w-full items-center gap-2 align-middle font-sans text-[13px] leading-snug";
   const content = <>

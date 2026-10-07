@@ -5,7 +5,7 @@ import type { MemberFocus } from "@/lib/shared";
 import { ToneTag } from "./ToneTag";
 import { FocusFaces } from "./FocusFaces";
 import { Avatar } from "@/components/pages/AvatarRow";
-import { loadPeople, type Person } from "./PersonHover";
+import { loadPeople, resolvePerson, type Person } from "@/lib/public-people";
 
 /** 成员高光：本期最值得看见的人。头像与完整画像在登录后的群像页。 */
 export function MembersFocus({ items, thanks = [] }: { items: MemberFocus[]; thanks?: { name: string; why: string }[] }) {
@@ -20,7 +20,7 @@ export function MembersFocus({ items, thanks = [] }: { items: MemberFocus[]; tha
       setPeopleCount(ps.length);
       const m: Record<string, string> = {};
       for (const it of items) {
-        const p = ps.find((x) => x.name === it.name || x.aliases.includes(it.name));
+        const p = resolvePerson(ps, it.name);
         if (p?.avatar) m[it.name] = p.avatar;
       }
       setAvatars(m);

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { AvatarRow, type Face } from "@/components/pages/AvatarRow";
-import { loadPeople, type Person } from "./PersonHover";
+import { loadPeople, resolvePerson, type Person } from "@/lib/public-people";
 
 /** 成员高光上方的头像行：按本期高光顺序叠排，悬停出名牌（Aceternity animated-tooltip 的品鉴单皮，见 pages/AvatarRow）。 */
 export function FocusFaces({ names }: { names: string[] }) {
@@ -9,7 +9,7 @@ export function FocusFaces({ names }: { names: string[] }) {
   useEffect(() => {
     loadPeople().then((ps: Person[]) => {
       const fs: Face[] = [];
-      for (const n of names) { const p = ps.find((x) => x.name === n || x.aliases.includes(n)); fs.push({ name: p?.name ?? n, role: p?.role ?? "", avatar: p?.avatar ?? undefined }); }
+      for (const n of names) { const p = resolvePerson(ps, n); fs.push({ name: p?.name ?? n, role: p?.role ?? "", avatar: p?.avatar ?? undefined }); }
       setFaces(fs);
     });
   }, [names]);

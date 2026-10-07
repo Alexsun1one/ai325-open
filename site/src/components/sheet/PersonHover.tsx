@@ -2,15 +2,8 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ToneTag } from "./ToneTag";
-import type { Tone } from "@/lib/shared";
-
-export interface Person { name: string; slug: string; aliases: string[]; role: string; msgs: number; tone: Tone; quote: string; tags: string[]; avatar: string | null }
-let cache: Person[] | null = null; let inflight: Promise<Person[]> | null = null;
-export function loadPeople(): Promise<Person[]> {
-  if (cache) return Promise.resolve(cache);
-  if (!inflight) inflight = fetch("/people.json").then((r) => r.json()).then((d: Person[]) => (cache = d)).catch(() => (cache = []));
-  return inflight;
-}
+import { loadPeople, resolvePerson, type Person } from "@/lib/public-people";
+export { loadPeople, type Person } from "@/lib/public-people";
 
 /** 人名章：正文里 [data-person] 悬停出名片（头像 / 角色 / 条数 / 语气 / 一句话），点进群像。 */
 export function PersonHover() {
@@ -20,7 +13,7 @@ export function PersonHover() {
   useEffect(() => {
     const show = async (el: HTMLElement) => {
       const name = el.dataset.person; if (!name) return;
-      const people = await loadPeople(); const p = people.find((x) => x.name === name); if (!p) return;
+      const people = await loadPeople(); const p = resolvePerson(people, name); if (!p) return;
       const r = el.getBoundingClientRect(); const below = r.top < 200;
       setPop({ p, x: Math.min(Math.max(r.left + r.width / 2, 170), window.innerWidth - 170), y: below ? r.bottom + 10 : r.top - 10, below });
     };

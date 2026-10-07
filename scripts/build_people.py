@@ -15,13 +15,20 @@ def slug(name):
     return s or 'p' + hashlib.md5(name.encode()).hexdigest()[:6]
 os.makedirs(f'{pub}/avatars', exist_ok=True)
 people = []
+used_slugs = set()
 for p in d['profiles']:
     name = p['name']
     aliases = MANUAL.get(name) or []
     base = re.sub(r'[（(].*?[）)]', '', name).strip()
     for cand in {name, base, name.split(' ')[0]}:
         if cand and cand not in aliases and len(cand) >= 2 or cand == '张': aliases.append(cand)
-    sl = slug(name); av = None
+    sl = slug(name)
+    if sl in used_slugs:
+        sl = sl + '-' + hashlib.sha256(name.encode()).hexdigest()[:12]
+    if sl in used_slugs:
+        raise ValueError('Duplicate member identity slug')
+    used_slugs.add(sl)
+    av = None
     if p.get('avatar', '').startswith('data:image'):
         b = base64.b64decode(p['avatar'].split(',', 1)[1])
         try:
