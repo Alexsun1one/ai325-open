@@ -1,0 +1,1952 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-07T05:05:57Z",
+  "sources": [
+    {
+      "id": "openai-news",
+      "name": "OpenAI News",
+      "feedUrl": "https://openai.com/news/rss.xml",
+      "homepage": "https://openai.com/news",
+      "tags": [
+        "官方博客",
+        "模型与产品"
+      ],
+      "lastAttemptAt": "2026-10-07T05:05:57Z",
+      "status": "ok",
+      "lastSuccessAt": "2026-10-07T05:05:57Z",
+      "lastError": null,
+      "itemCount": 30
+    },
+    {
+      "id": "huggingface-blog",
+      "name": "Hugging Face Blog",
+      "feedUrl": "https://huggingface.co/blog/feed.xml",
+      "homepage": "https://huggingface.co/blog",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "lastAttemptAt": "2026-10-07T05:05:57Z",
+      "status": "ok",
+      "lastSuccessAt": "2026-10-07T05:05:57Z",
+      "lastError": null,
+      "itemCount": 30
+    },
+    {
+      "id": "deepmind-blog",
+      "name": "Google DeepMind Blog",
+      "feedUrl": "https://deepmind.google/blog/rss.xml",
+      "homepage": "https://deepmind.google/blog/",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "lastAttemptAt": "2026-10-07T05:05:57Z",
+      "status": "ok",
+      "lastSuccessAt": "2026-10-07T05:05:57Z",
+      "lastError": null,
+      "itemCount": 30
+    },
+    {
+      "id": "google-developers",
+      "name": "Google Developers Blog",
+      "feedUrl": "https://developers.googleblog.com/feeds/posts/default/",
+      "homepage": "https://developers.googleblog.com/",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "lastAttemptAt": "2026-10-07T05:05:57Z",
+      "status": "ok",
+      "lastSuccessAt": "2026-10-07T05:05:57Z",
+      "lastError": null,
+      "itemCount": 20
+    },
+    {
+      "id": "github-ai",
+      "name": "GitHub Blog · AI & ML",
+      "feedUrl": "https://github.blog/ai-and-ml/feed/",
+      "homepage": "https://github.blog/ai-and-ml/",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "lastAttemptAt": "2026-10-07T05:05:57Z",
+      "status": "ok",
+      "lastSuccessAt": "2026-10-07T05:05:57Z",
+      "lastError": null,
+      "itemCount": 10
+    }
+  ],
+  "items": [
+    {
+      "id": "ext-deepmind-blog-2ee55c894d54",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/embeddinggemma-2-an-open-lightweight-multimodal-embedding-model/",
+      "canonicalUrl": "https://deepmind.google/blog/embeddinggemma-2-an-open-lightweight-multimodal-embedding-model",
+      "title": "EmbeddingGemma 2: an open, lightweight multimodal embedding model",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-10-06T19:57:04Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-2896758265ce",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/atlassian-partnership",
+      "canonicalUrl": "https://openai.com/index/atlassian-partnership",
+      "title": "Atlassian and OpenAI expand partnership to turn enterprise knowledge into action",
+      "summary": "Atlassian and OpenAI are expanding their partnership to connect frontier models with enterprise knowledge and help teams plan, build, and deliver work.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Company"
+      ],
+      "publishedAt": "2026-10-06T16:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-00427e47df5e",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/sharing-ai-progress-in-mathematics",
+      "canonicalUrl": "https://openai.com/index/sharing-ai-progress-in-mathematics",
+      "title": "Sharing AI progress in mathematics",
+      "summary": "OpenAI publishes new results on open problems in mathematics from an internal frontier model and shares Lean proof formalizations and research details on GitHub.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Research"
+      ],
+      "publishedAt": "2026-10-06T12:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-ebb413cc5359",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/jump-trading",
+      "canonicalUrl": "https://openai.com/index/jump-trading",
+      "title": "How Jump Trading is scaling quant research with ChatGPT",
+      "summary": "Jump Trading uses OpenAI to expand quantitative research. See how longer-running AI workflows combine multiple data sources with human review.",
+      "tags": [
+        "官方博客",
+        "模型与产品"
+      ],
+      "publishedAt": "2026-10-06T12:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-f57eff9c23a4",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/advancing-computer-use-with-ironclad",
+      "canonicalUrl": "https://openai.com/index/advancing-computer-use-with-ironclad",
+      "title": "Advancing computer use with Ironclad",
+      "summary": "Learn how OpenAI and Ironclad are training and evaluating AI agents on complex contracting workflows to advance computer use for professional work.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Publication"
+      ],
+      "publishedAt": "2026-10-06T10:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-fe424883c3ca",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/tiiuae/falcon-emirati",
+      "canonicalUrl": "https://huggingface.co/blog/tiiuae/falcon-emirati",
+      "title": "Falcon-Emirati: When an LLM Learns the Dialect, the Culture, and the Nuance",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-10-06T06:44:39Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-github-ai-d8885d98544b",
+      "sourceId": "github-ai",
+      "sourceName": "GitHub Blog · AI & ML",
+      "url": "https://github.blog/ai-and-ml/github-copilot/reviewbench-an-open-benchmark-for-ai-code-review/",
+      "canonicalUrl": "https://github.blog/ai-and-ml/github-copilot/reviewbench-an-open-benchmark-for-ai-code-review",
+      "title": "ReviewBench: An open benchmark for AI code review",
+      "summary": "We’re launching ReviewBench, a benchmark for code review agents built on representative GitHub pull requests, multi-source ground truth, calibrated evaluation, and production-aligned metrics. The post ReviewBench: An open benchmark for AI code review appeared first on The GitHub Blog .",
+      "tags": [
+        "官方博客",
+        "工程实践",
+        "AI & ML",
+        "GitHub Copilot",
+        "AI",
+        "benchmarking",
+        "code review"
+      ],
+      "publishedAt": "2026-10-05T15:59:40Z",
+      "fetchedAt": "2026-10-07T05:05:10Z"
+    },
+    {
+      "id": "ext-openai-news-d2b5b29b4c81",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/eu-text-provenance",
+      "canonicalUrl": "https://openai.com/index/eu-text-provenance",
+      "title": "Our approach to EU text provenance rules",
+      "summary": "How OpenAI is approaching text watermarking under EU rules. Learn where watermarks apply, how detection works, and why access starts with researchers.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Safety"
+      ],
+      "publishedAt": "2026-10-05T15:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-2d8e70fb45ce",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/new-chatgpt-ads-format-and-measurement",
+      "canonicalUrl": "https://openai.com/index/new-chatgpt-ads-format-and-measurement",
+      "title": "Building advertising for the way people use AI",
+      "summary": "OpenAI introduces a new visual ad format in ChatGPT and expands measurement tools, attribution partnerships, and brand suitability for advertisers.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Product"
+      ],
+      "publishedAt": "2026-10-05T10:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-bd1136d0fcfd",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/microsoft/thinkingbox",
+      "canonicalUrl": "https://huggingface.co/blog/microsoft/thinkingbox",
+      "title": "The Agent Said It Was Done. The Database Disagreed.",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-10-03T22:56:48Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-c38af6e5cae4",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/practical-guide-building-gpt-6",
+      "canonicalUrl": "https://openai.com/index/practical-guide-building-gpt-6",
+      "title": "A model guide for the GPT-6 family",
+      "summary": "Learn how startups can choose GPT-6 models, tune reasoning effort, improve prompts and skills, coordinate tools, and prepare workflows for production.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Product"
+      ],
+      "publishedAt": "2026-10-02T16:15:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-e81b1dea7ce0",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/allenai/astabrief",
+      "canonicalUrl": "https://huggingface.co/blog/allenai/astabrief",
+      "title": "Open-sourcing AstaBrief, the fast report-generation model in Asta",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-10-02T15:19:50Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-github-ai-3adf82e6716a",
+      "sourceId": "github-ai",
+      "sourceName": "GitHub Blog · AI & ML",
+      "url": "https://github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out/",
+      "canonicalUrl": "https://github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out",
+      "title": "AI is changing developer work. Here are three skills to strengthen.",
+      "summary": "Learn to direct AI agents, critically review their output, and keep technical judgment at the center of your workflow. The post AI is changing developer work. Here are three skills to strengthen. appeared first on The GitHub Blog .",
+      "tags": [
+        "官方博客",
+        "工程实践",
+        "AI & ML",
+        "Career growth",
+        "Developer skills",
+        "AI",
+        "career development"
+      ],
+      "publishedAt": "2026-10-02T15:00:00Z",
+      "fetchedAt": "2026-10-07T05:05:10Z"
+    },
+    {
+      "id": "ext-huggingface-blog-56c490db0401",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata",
+      "canonicalUrl": "https://huggingface.co/blog/ServiceNow-AI/autosynthdata",
+      "title": "AutoSynthData: Generating Training Data for Enterprise Agents",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-10-02T04:01:31Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-882596cbc763",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/chatham-financial",
+      "canonicalUrl": "https://openai.com/index/chatham-financial",
+      "title": "Chatham scales its capital markets expertise with OpenAI",
+      "summary": "Chatham Financial uses Codex and GPT-5.6 to build technology and redesign workflows, cutting trade validation from 30 minutes to under 4.",
+      "tags": [
+        "官方博客",
+        "模型与产品"
+      ],
+      "publishedAt": "2026-10-02T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-b8087b88cb63",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/the-eternal-complement",
+      "canonicalUrl": "https://openai.com/index/the-eternal-complement",
+      "title": "The eternal complement",
+      "summary": "Advanced AI may matter most for the routine work behind breakthrough ideas. Explore why execution could shape the next economy and the pace of progress.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Intelligence Age"
+      ],
+      "publishedAt": "2026-10-01T17:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-637d3dfa247f",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/albertsons-reimagining-retail",
+      "canonicalUrl": "https://openai.com/index/albertsons-reimagining-retail",
+      "title": "How Albertsons Companies is reimagining retail from the inside out",
+      "summary": "Albertsons Cos. is using ChatGPT Enterprise and the OpenAI API to help teams work faster and make grocery shopping easier for millions of customers.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Company"
+      ],
+      "publishedAt": "2026-10-01T16:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-2167384f51e2",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/the-den-family-social",
+      "canonicalUrl": "https://openai.com/index/the-den-family-social",
+      "title": "The Den frees up 10-15 hours a week to grow with ChatGPT Work",
+      "summary": "As it opens a new location, the social club prepares grant applications in 2 hours instead of 3 days and liquor-license materials in 3 hours instead of 4 days.",
+      "tags": [
+        "官方博客",
+        "模型与产品"
+      ],
+      "publishedAt": "2026-10-01T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-b49099cde7e9",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/",
+      "canonicalUrl": "https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence",
+      "title": "Gemini 4 Argon: our next era of frontier intelligence",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-09-30T20:01:45Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-08aa8115cb5d",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-synthid-bio/",
+      "canonicalUrl": "https://deepmind.google/blog/introducing-synthid-bio",
+      "title": "Introducing SynthID Bio",
+      "summary": "Proof of concept for watermarking AI-generated proteins while preserving biological function.",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-09-30T15:03:07Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-90249c2a3882",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/disrupting-a-coordinated-model-distillation-campaign",
+      "canonicalUrl": "https://openai.com/index/disrupting-a-coordinated-model-distillation-campaign",
+      "title": "Disrupting a coordinated model-distillation campaign",
+      "summary": "Learn how OpenAI disrupted a campaign to extract protected model reasoning and is strengthening defenses against adversarial distillation.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Security"
+      ],
+      "publishedAt": "2026-09-30T10:30:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-061338e668ed",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/helping-small-businesses-put-ai-to-work",
+      "canonicalUrl": "https://openai.com/index/helping-small-businesses-put-ai-to-work",
+      "title": "Helping small businesses put AI to work",
+      "summary": "OpenAI is partnering with America’s SBDC to expand hands-on AI training and local support for small businesses, alongside a new report on how small teams are using AI.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Global Affairs"
+      ],
+      "publishedAt": "2026-09-30T10:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-74c2ff7e2707",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/open-tts-leaderboard",
+      "canonicalUrl": "https://huggingface.co/blog/open-tts-leaderboard",
+      "title": "Open TTS Leaderboard: Scalable Evaluation for Multilingual Text-to-Speech and Voice Cloning",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-30T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-dc53fce90c6f",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/nvidia/kumo-tabular",
+      "canonicalUrl": "https://huggingface.co/blog/nvidia/kumo-tabular",
+      "title": "NVIDIA Kumo Tabular Sets a New Accuracy-Efficiency Frontier for Tabular Prediction",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-29T15:30:38Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-afa8c33f8eb7",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/MultiverseComputingCAI/getting-the-source-right-not-just-the-fact-source",
+      "canonicalUrl": "https://huggingface.co/blog/MultiverseComputingCAI/getting-the-source-right-not-just-the-fact-source",
+      "title": "Getting the Source Right, Not Just the Fact: Source-Aware Verification for MCP Agents",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-29T13:07:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-6071f63e21f6",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/devday-2026-recap",
+      "canonicalUrl": "https://openai.com/index/devday-2026-recap",
+      "title": "DevDay 2026 Recap",
+      "summary": "Explore more than 20 announcements from OpenAI DevDay 2026, including GPT-6 Astra, ChatGPT, Codex, APIs, security, and new tools for builders.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Company"
+      ],
+      "publishedAt": "2026-09-29T10:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-d6b9f5e651b1",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/introducing-gpt-6-1-sol",
+      "canonicalUrl": "https://openai.com/index/introducing-gpt-6-1-sol",
+      "title": "Introducing GPT-6.1 Sol",
+      "summary": "Meet GPT-6.1 Sol: near-Astra intelligence for coding, computer use, and professional work at one-fifth of Astra’s standard API input and output token prices.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Product"
+      ],
+      "publishedAt": "2026-09-29T10:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-dec620cb7225",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/introducing-dots",
+      "canonicalUrl": "https://openai.com/index/introducing-dots",
+      "title": "Introducing dots",
+      "summary": "Dots by OpenAI are proactive assistants that can keep working across complex projects and everyday tasks. Learn how dots help you stay in control while work moves forward.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Product"
+      ],
+      "publishedAt": "2026-09-29T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-2fc54b690d7b",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/towards-safety-cases-for-frontier-ai-training",
+      "canonicalUrl": "https://openai.com/index/towards-safety-cases-for-frontier-ai-training",
+      "title": "Towards safety cases for frontier AI training",
+      "summary": "Our early guidelines for safety cases in frontier AI training cover technical safeguards, operational practices, and investigating misalignment incidents",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Safety"
+      ],
+      "publishedAt": "2026-09-28T19:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-50d71cd52400",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/how-we-will-do-better-for-australia",
+      "canonicalUrl": "https://openai.com/index/how-we-will-do-better-for-australia",
+      "title": "How we will do better for Australia",
+      "summary": "OpenAI apologises for incidents involving Australian government websites and outlines stronger safeguards and support to strengthen Australia’s cyber defences.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Company"
+      ],
+      "publishedAt": "2026-09-28T19:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-09d1d26fa19d",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/Hcompany/holo4",
+      "canonicalUrl": "https://huggingface.co/blog/Hcompany/holo4",
+      "title": "Holo4: powering generalist computer-use agents",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-28T09:44:05Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-0adf5bb2a473",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/lenfest-ai-collaborative-expansion",
+      "canonicalUrl": "https://openai.com/index/lenfest-ai-collaborative-expansion",
+      "title": "The Lenfest Institute grows landmark program with expanded OpenAI support",
+      "summary": "OpenAI is expanding the Lenfest AI Collaborative and Fellowship Program with $5 million in funding and up to $5 million in software credits and engineering support.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Company"
+      ],
+      "publishedAt": "2026-09-28T07:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-eb916b5190e3",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/rl-environments",
+      "canonicalUrl": "https://huggingface.co/blog/rl-environments",
+      "title": "Welcome RL Environments to the hub",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-28T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-833e9419a34f",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/form/codex-originals",
+      "canonicalUrl": "https://openai.com/form/codex-originals",
+      "title": "Are you a Codex Original?",
+      "summary": "We’re collecting real stories of builders, tinkerers, researchers, and creators who are using Codex to do incredible things. If you want to be a part of the next chapter of the Codex Originals program, tell us more about your story and project below.",
+      "tags": [
+        "官方博客",
+        "模型与产品"
+      ],
+      "publishedAt": "2026-09-28T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-eb674100bb68",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/basis-tax-workbook-with-astra",
+      "canonicalUrl": "https://openai.com/index/basis-tax-workbook-with-astra",
+      "title": "Basis completes a tax workbook 2x faster with GPT-6 Astra",
+      "summary": "GPT-6 Astra completed a 50-tab tax workbook twice as fast as GPT-5.6 Sol, and its stronger understanding of user intent gives Basis more confidence in real-world use.",
+      "tags": [
+        "官方博客",
+        "模型与产品"
+      ],
+      "publishedAt": "2026-09-28T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-9de028fbe46c",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/proaction",
+      "canonicalUrl": "https://openai.com/index/proaction",
+      "title": "Proaction boosts sales 60% and saves 75+ hours with Codex",
+      "summary": "With Codex, GPT-Live-1, and GPT-6 Astra, Proaction builds, operates, and sells modern fleet management faster.",
+      "tags": [
+        "官方博客",
+        "模型与产品"
+      ],
+      "publishedAt": "2026-09-25T19:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-github-ai-7d128752a2cf",
+      "sourceId": "github-ai",
+      "sourceName": "GitHub Blog · AI & ML",
+      "url": "https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-how-to-build-custom-workflows-with-canvases/",
+      "canonicalUrl": "https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-how-to-build-custom-workflows-with-canvases",
+      "title": "GitHub Copilot app for Beginners: How to build custom workflows with canvases",
+      "summary": "Describe the interface you need in plain English, then let the agent build a live surface you can both use and update—so you spend less time adapting to tools and more time getting work done. The post GitHub Copilot app for Beginners: How to build custom workflows with canvases appeared first on Th…",
+      "tags": [
+        "官方博客",
+        "工程实践",
+        "AI & ML",
+        "GitHub Copilot",
+        "GitHub Copilot app",
+        "GitHub Copilot app for Beginners"
+      ],
+      "publishedAt": "2026-09-25T18:00:00Z",
+      "fetchedAt": "2026-10-07T05:05:10Z"
+    },
+    {
+      "id": "ext-openai-news-6c85667bb456",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/wayfair",
+      "canonicalUrl": "https://openai.com/index/wayfair",
+      "title": "Wayfair boosts catalog accuracy and support speed with OpenAI",
+      "summary": "Wayfair uses OpenAI models to improve ecommerce support and product catalog accuracy, automating ticket triage and enhancing millions of product attributes at scale.",
+      "tags": [
+        "官方博客",
+        "模型与产品"
+      ],
+      "publishedAt": "2026-09-25T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-github-ai-4135fa3a0079",
+      "sourceId": "github-ai",
+      "sourceName": "GitHub Blog · AI & ML",
+      "url": "https://github.blog/ai-and-ml/github-copilot/when-chat-is-the-wrong-ui/",
+      "canonicalUrl": "https://github.blog/ai-and-ml/github-copilot/when-chat-is-the-wrong-ui",
+      "title": "When chat is the wrong UI",
+      "summary": "What is a developer to do when they need something more tangible than a chat box? Enter canvases. The post When chat is the wrong UI appeared first on The GitHub Blog .",
+      "tags": [
+        "官方博客",
+        "工程实践",
+        "AI & ML",
+        "GitHub Copilot",
+        "canvases",
+        "GitHub Copilot app"
+      ],
+      "publishedAt": "2026-09-24T20:00:00Z",
+      "fetchedAt": "2026-10-07T05:05:10Z"
+    },
+    {
+      "id": "ext-github-ai-2690558920b6",
+      "sourceId": "github-ai",
+      "sourceName": "GitHub Blog · AI & ML",
+      "url": "https://github.blog/security/application-security/ai-powered-fuzzing-with-the-github-security-lab-taskflow-agent/",
+      "canonicalUrl": "https://github.blog/security/application-security/ai-powered-fuzzing-with-the-github-security-lab-taskflow-agent",
+      "title": "AI-powered fuzzing with the GitHub Security Lab Taskflow Agent",
+      "summary": "In this blog post, I explain how to use the new fuzzing taskflow based on the GitHub Security Lab Taskflow Agent AI framework. The post AI-powered fuzzing with the GitHub Security Lab Taskflow Agent appeared first on The GitHub Blog .",
+      "tags": [
+        "官方博客",
+        "工程实践",
+        "AI & ML",
+        "Application security",
+        "Generative AI",
+        "Security",
+        "Vulnerability research",
+        "agentic AI"
+      ],
+      "publishedAt": "2026-09-24T18:26:12Z",
+      "fetchedAt": "2026-10-07T05:05:10Z"
+    },
+    {
+      "id": "ext-deepmind-blog-6add3dd62456",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar/",
+      "canonicalUrl": "https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar",
+      "title": "Introducing Gemini 3.8 Live with Live Avatar",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-09-24T16:20:39Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-280bf64dcca7",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark",
+      "canonicalUrl": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark",
+      "title": "Accelerating vision-language models with LFM2.5-VL-DSpark",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-24T14:08:57Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-github-ai-adfc9716558c",
+      "sourceId": "github-ai",
+      "sourceName": "GitHub Blog · AI & ML",
+      "url": "https://github.blog/engineering/user-experience/rendering-huge-pull-requests-in-the-github-copilot-app/",
+      "canonicalUrl": "https://github.blog/engineering/user-experience/rendering-huge-pull-requests-in-the-github-copilot-app",
+      "title": "Rendering huge pull requests in the GitHub Copilot app",
+      "summary": "How we rebuilt the diff surface in the GitHub Copilot app to open a million-line pull request with hundreds of inline review comments. The post Rendering huge pull requests in the GitHub Copilot app appeared first on The GitHub Blog .",
+      "tags": [
+        "官方博客",
+        "工程实践",
+        "AI & ML",
+        "Engineering",
+        "GitHub Copilot",
+        "User experience",
+        "GitHub Copilot app",
+        "technical deep dive"
+      ],
+      "publishedAt": "2026-09-23T18:29:49Z",
+      "fetchedAt": "2026-10-07T05:05:10Z"
+    },
+    {
+      "id": "ext-deepmind-blog-1043d9fe8028",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/advancing-private-ai-compute-with-secure-server-side-memory/",
+      "canonicalUrl": "https://deepmind.google/blog/advancing-private-ai-compute-with-secure-server-side-memory",
+      "title": "Advancing Private AI Compute with secure, server-side memory",
+      "summary": "Introducing private, server-side memory to Private AI Compute for personal AI.",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-09-23T16:00:57Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-52e46e8371e1",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/two-years-of-openai-academy",
+      "canonicalUrl": "https://openai.com/index/two-years-of-openai-academy",
+      "title": "Two years of OpenAI Academy",
+      "summary": "Marking two years of OpenAI Academy and bringing AI skills to even more communities.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Company"
+      ],
+      "publishedAt": "2026-09-23T16:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-721de6922a1a",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/say-hello-to-gemini-38-text-to-speech/",
+      "canonicalUrl": "https://deepmind.google/blog/say-hello-to-gemini-38-text-to-speech",
+      "title": "Gemini 3.8 text-to-speech says hello",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-09-23T15:25:14Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-9328fa400dd3",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/openai-extends-cyber-access-to-ukraine-for-civilian-defense",
+      "canonicalUrl": "https://openai.com/index/openai-extends-cyber-access-to-ukraine-for-civilian-defense",
+      "title": "OpenAI extends cyber access to Ukraine for civilian defense",
+      "summary": "OpenAI is extending access to its Daybreak program to the Government of Ukraine to support the cyber defense of civilian infrastructure.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Global Affairs"
+      ],
+      "publishedAt": "2026-09-23T13:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-347b65ce144a",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/sam-altman-un-security-council-remarks",
+      "canonicalUrl": "https://openai.com/index/sam-altman-un-security-council-remarks",
+      "title": "Sam Altman’s remarks at the United Nations Security Council",
+      "summary": "OpenAI CEO Sam Altman discusses AI safety, human control, and international cooperation in remarks to the United Nations Security Council.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Global Affairs"
+      ],
+      "publishedAt": "2026-09-23T12:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-4e56c7312349",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/ringg",
+      "canonicalUrl": "https://openai.com/index/ringg",
+      "title": "Ringg’s AI agents resolve up to 65% of customer calls with OpenAI",
+      "summary": "Using GPT-5.6, Ringg powers multilingual agents across voice, chat, WhatsApp, and web for 90% less cost vs. GPT-4.1.",
+      "tags": [
+        "官方博客",
+        "模型与产品"
+      ],
+      "publishedAt": "2026-09-23T12:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-52b80abd4e04",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/harvey-from-context-to-confidence-with-astra",
+      "canonicalUrl": "https://openai.com/index/harvey-from-context-to-confidence-with-astra",
+      "title": "Harvey turns legal context into stronger drafts with GPT-6 Astra",
+      "summary": "GPT-6 Astra produces more structured, context-aware legal documents, freeing lawyers to focus on strategy.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Startup"
+      ],
+      "publishedAt": "2026-09-23T12:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-f2ff7f760561",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/invideo-builds-with-gpt-6-astra",
+      "canonicalUrl": "https://openai.com/index/invideo-builds-with-gpt-6-astra",
+      "title": "How invideo improves color grading 3x with GPT‑6 Astra",
+      "summary": "With GPT‑6 Astra, invideo plans edits with greater precision, improves color correction and grading threefold, and produces 50 custom effects in one day.",
+      "tags": [
+        "官方博客",
+        "模型与产品"
+      ],
+      "publishedAt": "2026-09-23T12:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-openai-news-3d7b9aab56c8",
+      "sourceId": "openai-news",
+      "sourceName": "OpenAI News",
+      "url": "https://openai.com/index/introducing-mentalhealthbench",
+      "canonicalUrl": "https://openai.com/index/introducing-mentalhealthbench",
+      "title": "Introducing MentalHealthBench",
+      "summary": "MentalHealthBench is an expert-informed benchmark for evaluating helpful and safe AI responses across realistic mental health conversations.",
+      "tags": [
+        "官方博客",
+        "模型与产品",
+        "Publication"
+      ],
+      "publishedAt": "2026-09-23T10:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-689d78c6e007",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/transformers-llama-cpp-quants",
+      "canonicalUrl": "https://huggingface.co/blog/transformers-llama-cpp-quants",
+      "title": "Transformers now runs llama.cpp quants",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-22T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-6b3083011aeb",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/omlx",
+      "canonicalUrl": "https://huggingface.co/blog/omlx",
+      "title": "Jun Kim, oMLX creator and maintainer, joins Hugging Face to support the MLX community",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-22T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-e9f63aa1f7aa",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/evaleval-aisi",
+      "canonicalUrl": "https://huggingface.co/blog/evaleval-aisi",
+      "title": "How UK AISI and EvalEval Are Making Benchmark Results Reproducible",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-22T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-693b3130e25c",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/tokenizers-v1",
+      "canonicalUrl": "https://huggingface.co/blog/tokenizers-v1",
+      "title": "tokenizers v1: encode, decode and scaling, measured",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-21T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-github-ai-b02dba448db7",
+      "sourceId": "github-ai",
+      "sourceName": "GitHub Blog · AI & ML",
+      "url": "https://github.blog/ai-and-ml/should-you-read-the-code-is-rag-dead-and-did-skills-kill-mcp/",
+      "canonicalUrl": "https://github.blog/ai-and-ml/should-you-read-the-code-is-rag-dead-and-did-skills-kill-mcp",
+      "title": "Should you read the code, is RAG dead, and did Skills kill MCP?",
+      "summary": "We dive into these questions and other AI hot takes on the latest episode of the GitHub Podcast. The post Should you read the code, is RAG dead, and did Skills kill MCP? appeared first on The GitHub Blog .",
+      "tags": [
+        "官方博客",
+        "工程实践",
+        "AI & ML",
+        "AI",
+        "GitHub Podcast"
+      ],
+      "publishedAt": "2026-09-18T15:00:00Z",
+      "fetchedAt": "2026-10-07T05:05:10Z"
+    },
+    {
+      "id": "ext-github-ai-71ca52f40c8e",
+      "sourceId": "github-ai",
+      "sourceName": "GitHub Blog · AI & ML",
+      "url": "https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot/",
+      "canonicalUrl": "https://github.blog/ai-and-ml/generative-ai/migrating-the-github-copilot-runtime-to-rust-using-copilot",
+      "title": "Migrating the GitHub Copilot runtime to Rust, using Copilot",
+      "summary": "A rewrite this size wasn't affordable before agents. Here's what porting the Copilot agent runtime to 800,000 lines of production Rust actually took. The post Migrating the GitHub Copilot runtime to Rust, using Copilot appeared first on The GitHub Blog .",
+      "tags": [
+        "官方博客",
+        "工程实践",
+        "AI & ML",
+        "Generative AI",
+        "GitHub Copilot",
+        "AI agents",
+        "developer experience",
+        "Rust"
+      ],
+      "publishedAt": "2026-09-17T00:26:43Z",
+      "fetchedAt": "2026-10-07T05:05:10Z"
+    },
+    {
+      "id": "ext-deepmind-blog-6aae488b1bb6",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-gemini-3-8-live-and-3-8-live-extended-thinking/",
+      "canonicalUrl": "https://deepmind.google/blog/introducing-gemini-3-8-live-and-3-8-live-extended-thinking",
+      "title": "Introducing Gemini 3.8 Live and 3.8 Live Extended Thinking",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-09-15T17:05:57Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-a1d018f16fad",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/ibm-research/altk-evolve-consistency",
+      "canonicalUrl": "https://huggingface.co/blog/ibm-research/altk-evolve-consistency",
+      "title": "Your Agent Aced the Task. Will It Do It Again?",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-15T16:00:44Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-github-ai-30a36306f538",
+      "sourceId": "github-ai",
+      "sourceName": "GitHub Blog · AI & ML",
+      "url": "https://github.blog/ai-and-ml/github-copilot/marketing-ops-as-code-automating-events-from-planning-to-follow-up-on-github/",
+      "canonicalUrl": "https://github.blog/ai-and-ml/github-copilot/marketing-ops-as-code-automating-events-from-planning-to-follow-up-on-github",
+      "title": "Marketing ops as code: Automating events from planning to follow-up on GitHub",
+      "summary": "If you can write down how you do your work, you can automate it. Here's what I did to support GitHub's APAC marketing team. The post Marketing ops as code: Automating events from planning to follow-up on GitHub appeared first on The GitHub Blog .",
+      "tags": [
+        "官方博客",
+        "工程实践",
+        "AI & ML",
+        "GitHub Copilot",
+        "automation",
+        "GitHub Actions",
+        "GitHub Issues"
+      ],
+      "publishedAt": "2026-09-11T18:26:10Z",
+      "fetchedAt": "2026-10-07T05:05:10Z"
+    },
+    {
+      "id": "ext-github-ai-e9d0ce4e62f9",
+      "sourceId": "github-ai",
+      "sourceName": "GitHub Blog · AI & ML",
+      "url": "https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-using-the-diff-terminal-and-browser/",
+      "canonicalUrl": "https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-using-the-diff-terminal-and-browser",
+      "title": "GitHub Copilot app for Beginners: Using the diff, terminal, and browser",
+      "summary": "Checking agent-generated code usually means hopping between tabs. Learn how to view diffs, run terminal commands, and preview web apps side by side in the GitHub Copilot app. The post GitHub Copilot app for Beginners: Using the diff, terminal, and browser appeared first on The GitHub Blog .",
+      "tags": [
+        "官方博客",
+        "工程实践",
+        "AI & ML",
+        "GitHub Copilot",
+        "GitHub Copilot app",
+        "GitHub Copilot app for Beginners"
+      ],
+      "publishedAt": "2026-09-10T21:31:19Z",
+      "fetchedAt": "2026-10-07T05:05:10Z"
+    },
+    {
+      "id": "ext-huggingface-blog-075fed980e67",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/gradio-workflow-1111",
+      "canonicalUrl": "https://huggingface.co/blog/gradio-workflow-1111",
+      "title": "Rebuilding AUTOMATIC1111 with Gradio Workflow",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-10T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-85052f9befba",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/asyncgrpo-lora-hfjobs",
+      "canonicalUrl": "https://huggingface.co/blog/asyncgrpo-lora-hfjobs",
+      "title": "Async GRPO with LoRA across HF Jobs: a bucket, a proxy, and no NCCL",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-10T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-825546b9e9e1",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/alphagenome-atlas-a-predictive-map-of-every-possible-dna-letter-change-in-the-human-genome/",
+      "canonicalUrl": "https://deepmind.google/blog/alphagenome-atlas-a-predictive-map-of-every-possible-dna-letter-change-in-the-human-genome",
+      "title": "AlphaGenome Atlas: A predictive map of every possible DNA letter change in the human genome",
+      "summary": "AlphaGenome Atlas maps the molecular effects of 9 billion single-letter DNA variants across the human genome.",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-09-08T14:00:15Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-d5ea4bcadd66",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-weathernext-3-our-most-advanced-and-accurate-global-weather-ai-model/",
+      "canonicalUrl": "https://deepmind.google/blog/introducing-weathernext-3-our-most-advanced-and-accurate-global-weather-ai-model",
+      "title": "Introducing WeatherNext 3, our most advanced and accurate global weather AI model",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-09-03T15:02:08Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-fffbcba03b0b",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/Hcompany/neomme",
+      "canonicalUrl": "https://huggingface.co/blog/Hcompany/neomme",
+      "title": "NeoMME: an efficient Multimodal-native and Multilingual Encoder",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-03T13:13:48Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-a139f80b1592",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/grpo-with-trl-ifstruct",
+      "canonicalUrl": "https://huggingface.co/blog/grpo-with-trl-ifstruct",
+      "title": "Fine-tuning a 350M Model for Better Structured Outputs in 100 GRPO Steps",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-03T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-b5500bc65035",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/train-to-paint-with-code",
+      "canonicalUrl": "https://huggingface.co/blog/train-to-paint-with-code",
+      "title": "Training a coding model to paint watercolours with TRL and OpenEnv",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-03T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-cdd1118267ee",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/funes",
+      "canonicalUrl": "https://huggingface.co/blog/funes",
+      "title": "Give Your Coding Agents a Memory You Own",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-03T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-bf94848b24bf",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/proactive-cyber-defense-for-governments-and-enterprises/",
+      "canonicalUrl": "https://deepmind.google/blog/proactive-cyber-defense-for-governments-and-enterprises",
+      "title": "Proactive cyber defense for governments and enterprises",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-09-02T16:24:24Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-355be2cf6d2d",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-gemini-3-8-flash-and-38-flash-cyber/",
+      "canonicalUrl": "https://deepmind.google/blog/introducing-gemini-3-8-flash-and-38-flash-cyber",
+      "title": "Introducing Gemini 3.8 Flash and 3.8 Flash Cyber",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-09-02T16:18:31Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-ad90e6779ea3",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/allenai/benchmirt",
+      "canonicalUrl": "https://huggingface.co/blog/allenai/benchmirt",
+      "title": "BenchMIRT: What are LLM benchmarks actually measuring?",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-01T21:39:07Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-6bf5b05134dd",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-agentic-video-in-gemini/",
+      "canonicalUrl": "https://deepmind.google/blog/introducing-agentic-video-in-gemini",
+      "title": "Introducing agentic video understanding with Gemini",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-09-01T17:08:51Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-91dad0068ec2",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/webgpu-kernels",
+      "canonicalUrl": "https://huggingface.co/blog/webgpu-kernels",
+      "title": "Introducing @huggingface/kernels: 200+ WebGPU Kernels for Local AI",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-09-01T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-4d3b17a749f4",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/open-asr-leaderboard-global-south",
+      "canonicalUrl": "https://huggingface.co/blog/open-asr-leaderboard-global-south",
+      "title": "The Open ASR Leaderboard Adds Its First Global South Language",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-08-28T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-90ba20dc32b5",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/gemini-omni-1-1-flash-lets-you-build-with-more-control/",
+      "canonicalUrl": "https://deepmind.google/blog/gemini-omni-1-1-flash-lets-you-build-with-more-control",
+      "title": "Gemini Omni 1.1 Flash lets you build with more control",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-08-27T16:11:32Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-f0dc85dcc6d3",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/piloting-the-worlds-first-double-blind-ai-evaluations/",
+      "canonicalUrl": "https://deepmind.google/blog/piloting-the-worlds-first-double-blind-ai-evaluations",
+      "title": "Piloting the world's first double-blind AI evaluations",
+      "summary": "Piloting the world's first double-blind AI evaluations",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-08-27T12:59:16Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-737331cbffc8",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/intelligent-transcription-with-gemini-3-5-transcribe/",
+      "canonicalUrl": "https://deepmind.google/blog/intelligent-transcription-with-gemini-3-5-transcribe",
+      "title": "Intelligent transcription with Gemini 3.5 Transcribe",
+      "summary": "Now you can get more intelligent speech-to-text transcription with Gemini 3.5 Transcribe.",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-08-26T17:01:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-17177c100c91",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/train-multi-vector-encoder",
+      "canonicalUrl": "https://huggingface.co/blog/train-multi-vector-encoder",
+      "title": "Training and Finetuning Multi-Vector Embedding Models with Sentence Transformers",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-08-26T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-d21068479952",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/ibm-granite/granite-4-2",
+      "canonicalUrl": "https://huggingface.co/blog/ibm-granite/granite-4-2",
+      "title": "Granite 4.2 LLMs: How They're Built",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-08-25T15:14:14Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-f1c76f23a788",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/MultiverseComputingCAI/quantization-aware-healing",
+      "canonicalUrl": "https://huggingface.co/blog/MultiverseComputingCAI/quantization-aware-healing",
+      "title": "Quantization-Aware Healing: a compressed, 4-bit model that outperforms its full-precision original",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-08-25T11:39:24Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-9b54a38fa1b1",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/gradio-workflow-guide",
+      "canonicalUrl": "https://huggingface.co/blog/gradio-workflow-guide",
+      "title": "Wire It, Run It, Deploy It: AI Workflows in Gradio",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-08-25T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-76900827bd8b",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/from-atari-to-eve-online-building-on-15-years-of-ai-research-in-games/",
+      "canonicalUrl": "https://deepmind.google/blog/from-atari-to-eve-online-building-on-15-years-of-ai-research-in-games",
+      "title": "From Atari to EVE Online: Building on 15 Years of AI Research in Games",
+      "summary": "Google DeepMind partners with game studios to prototype breakthrough AI gameplay.",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-08-21T11:59:48Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-966123ef613d",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/pwc-search",
+      "canonicalUrl": "https://huggingface.co/blog/pwc-search",
+      "title": "How Hugging Face Inference Endpoints, Jobs, and Buckets Power Search on Papers with Code",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-08-21T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-huggingface-blog-e3ddd7a65cd3",
+      "sourceId": "huggingface-blog",
+      "sourceName": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/asr-benchmark-optimization",
+      "canonicalUrl": "https://huggingface.co/blog/asr-benchmark-optimization",
+      "title": "Measuring benchmark optimization in speech recognition",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "开源模型"
+      ],
+      "publishedAt": "2026-08-21T00:00:00Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-d8531b3bebba",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-gemini-3-7-flash/",
+      "canonicalUrl": "https://deepmind.google/blog/introducing-gemini-3-7-flash",
+      "title": "Introducing Gemini 3.7 Flash",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-08-13T17:04:18Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-c26c8d5a4e90",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/putting-sign-language-ai-into-users-hands/",
+      "canonicalUrl": "https://deepmind.google/blog/putting-sign-language-ai-into-users-hands",
+      "title": "Putting sign language AI into users’ hands",
+      "summary": "Introducing sign-language-to-text (SL2T), our breakthrough model powering new sign language features for Deaf and hard of hearing users.",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-08-12T14:01:59Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-ebc5821a44c4",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/weathernext-ai-model-achieves-breakthrough-in-forecasting-cyclones/",
+      "canonicalUrl": "https://deepmind.google/blog/weathernext-ai-model-achieves-breakthrough-in-forecasting-cyclones",
+      "title": "WeatherNext: AI model achieves breakthrough in forecasting cyclones",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-08-06T15:06:15Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-c8c2521853f8",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/gemini-robotics-er-2-powering-robotics-with-video-understanding-task-orchestration-and-multi-robot-collaboration/",
+      "canonicalUrl": "https://deepmind.google/blog/gemini-robotics-er-2-powering-robotics-with-video-understanding-task-orchestration-and-multi-robot-collaboration",
+      "title": "Gemini Robotics ER 2: powering robotics with video understanding, task orchestration, and multi-robot collaboration",
+      "summary": "Gemini Robotics ER 2 helps robots reason, collaborate, and solve real-world tasks. It represents a step change in video understanding, tool orchestration, and multi-robot collaboration for robotic applications.",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-07-30T15:00:59Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-c469407231ee",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/were-launching-lyria-35-in-google-flow-music-with-advances-across-musicality-lyrics-vocals-and-creative-control/",
+      "canonicalUrl": "https://deepmind.google/blog/were-launching-lyria-35-in-google-flow-music-with-advances-across-musicality-lyrics-vocals-and-creative-control",
+      "title": "We’re launching Lyria 3.5 in Google Flow Music, with advances across musicality, lyrics, vocals, and creative control",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-07-29T16:02:10Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-bba16244a7af",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/gemini-robotics-2-brings-whole-body-intelligence-to-robots/",
+      "canonicalUrl": "https://deepmind.google/blog/gemini-robotics-2-brings-whole-body-intelligence-to-robots",
+      "title": "Gemini Robotics 2 brings whole body intelligence to robots",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-07-28T13:21:37Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-e08c4d4e6d11",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/accelerating-the-frontiers-of-scientific-discovery-googles-40m-commitment-to-the-genesis-mission/",
+      "canonicalUrl": "https://deepmind.google/blog/accelerating-the-frontiers-of-scientific-discovery-googles-40m-commitment-to-the-genesis-mission",
+      "title": "Accelerating the frontiers of scientific discovery: Google’s $40M commitment to the Genesis Mission",
+      "summary": "Google commits $40M in AI tokens and credits for the Genesis Mission",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-07-22T13:38:54Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-5e431bbf920c",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-gemini-3-6-flash-3-5-flash-lite-and-3-5-flash-cyber/",
+      "canonicalUrl": "https://deepmind.google/blog/introducing-gemini-3-6-flash-3-5-flash-lite-and-3-5-flash-cyber",
+      "title": "Introducing Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber",
+      "summary": "We’re introducing new Gemini models, including Gemini 3.6 Flash, 3.5 Flash-Lite and 3.5 Flash Cyber.",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-07-21T15:16:30Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-969044f63ea6",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-gemini-3-5-flash-cyber/",
+      "canonicalUrl": "https://deepmind.google/blog/introducing-gemini-3-5-flash-cyber",
+      "title": "Introducing Gemini 3.5 Flash Cyber",
+      "summary": "Google introduces Gemini 3.5 Flash Cyber, a lightweight cybersecurity model to find and patch vulnerabilities.",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-07-17T15:00:11Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-16e13c52f7cd",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/our-approach-to-bioresilience/",
+      "canonicalUrl": "https://deepmind.google/blog/our-approach-to-bioresilience",
+      "title": "Our approach to bioresilience",
+      "summary": "Google DeepMind and Isomorphic Labs are sharing our joint approach to bioresilience and AI models.",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-07-16T09:30:42Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-13a6d9819972",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/empowering-indias-next-generation-of-innovators-with-atl-saathi/",
+      "canonicalUrl": "https://deepmind.google/blog/empowering-indias-next-generation-of-innovators-with-atl-saathi",
+      "title": "Empowering India’s next generation of innovators with ATL Saathi",
+      "summary": "Google and AIM launched ATL Saathi, a Gemini-powered AI tool empowering Indian educators in robotics labs.",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-07-13T12:37:28Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-4e2b1466249c",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/google-deepmind-and-a24-announce-first-of-its-kind-research-partnership/",
+      "canonicalUrl": "https://deepmind.google/blog/google-deepmind-and-a24-announce-first-of-its-kind-research-partnership",
+      "title": "Google DeepMind and A24 announce first-of-its-kind research partnership",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-07-03T14:25:43Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-8cc1837ba689",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/start-building-with-nano-banana-2-lite-and-gemini-omni-flash/",
+      "canonicalUrl": "https://deepmind.google/blog/start-building-with-nano-banana-2-lite-and-gemini-omni-flash",
+      "title": "Start building with Nano Banana 2 Lite and Gemini Omni Flash",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-06-30T16:02:40Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-deepmind-blog-72286a4388d1",
+      "sourceId": "deepmind-blog",
+      "sourceName": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-computer-use-in-gemini-3-5-flash/",
+      "canonicalUrl": "https://deepmind.google/blog/introducing-computer-use-in-gemini-3-5-flash",
+      "title": "Introducing computer use in Gemini 3.5 Flash",
+      "summary": "",
+      "tags": [
+        "官方博客",
+        "研究"
+      ],
+      "publishedAt": "2026-06-24T16:30:01Z",
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-1ad5cc735c1c",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/colab-is-now-part-of-your-google-ai-plan/",
+      "canonicalUrl": "https://developers.googleblog.com/colab-is-now-part-of-your-google-ai-plan",
+      "title": "Colab is now part of your Google AI plan",
+      "summary": "Unlock premium Google Colab compute with Google AI. Subscribers now get priority accelerators, Premium GPUs, and background execution for long training runs.",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-242422c3bc1f",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/google-ai-edge-with-embeddinggemma-2/",
+      "canonicalUrl": "https://developers.googleblog.com/google-ai-edge-with-embeddinggemma-2",
+      "title": "Bring multimodal semantic search to the edge with EmbeddingGemma 2",
+      "summary": "EmbeddingGemma 2 is a new 740M open-weight multimodal model that maps text, images, video, and audio into a unified vector space for privacy-first, on-device retrieval. Developers can easily integrate these capabilities cross-platform using MediaPipe Tasks or optimize fine-grained performance acros…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-3449057ace7e",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/",
+      "canonicalUrl": "https://developers.googleblog.com/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents",
+      "title": "The Anatomy of Harness Engineering: How to Evaluate, Iterate, and Guard AI Coding Agents",
+      "summary": "While end-to-end benchmarks like SWE-bench provide broad performance scores for AI agents, they are often expensive, slow, and lack the root-cause diagnostics needed to explain exactly where an agent's logic broke down. To solve this, developers should adopt behavioral evaluations—fast, local, unit…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-4a49b40709d3",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/heygen-x-google-cloud-bringing-avatar-iv-to-tpus/",
+      "canonicalUrl": "https://developers.googleblog.com/heygen-x-google-cloud-bringing-avatar-iv-to-tpus",
+      "title": "HeyGen x Google Cloud: Bringing Avatar IV to TPUs",
+      "summary": "HeyGen ported their 18B+ parameter Avatar IV video generation model to Google Cloud's Trillium (v6e) TPUs via torchax and XLA, utilizing FSDP and Ulysses sequence parallelism across an eight-chip mesh. To achieve a 1.86x speedup for real-time streaming, the engineering team pipelined exposed all-to…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-6ccb5002c634",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/decoding-cosmic-signals-with-deep-learning-and-keras/",
+      "canonicalUrl": "https://developers.googleblog.com/decoding-cosmic-signals-with-deep-learning-and-keras",
+      "title": "Decoding cosmic signals with deep learning and Keras",
+      "summary": "Astroparticle physics sits at the exciting intersection of astrophysics and particle physics and stu...",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-74ce40e66091",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/4-engineering-patterns-behind-the-strongest-ai-agents-challenge-submissions/",
+      "canonicalUrl": "https://developers.googleblog.com/4-engineering-patterns-behind-the-strongest-ai-agents-challenge-submissions",
+      "title": "4 engineering patterns behind the strongest AI Agents Challenge submissions",
+      "summary": "The recent Google for Startups AI Agents Challenge revealed that the most successful multi-agent systems rely on foundational software engineering patterns rather than just raw model power. Winning architectures consistently implemented bidirectional MCP for seamless inter-agent communication, asyn…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-74ed7984251f",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/enterprise-grade-precision-for-long-context-multimodal-embedding-inference-on-cloud-tpu/",
+      "canonicalUrl": "https://developers.googleblog.com/enterprise-grade-precision-for-long-context-multimodal-embedding-inference-on-cloud-tpu",
+      "title": "Enterprise-Grade Precision for Long-Context Multimodal Embedding Inference on Cloud TPU",
+      "summary": "Google Cloud has natively integrated TPU support into the vLLM serving engine, allowing developers to elastically scale high-demand embedding pipelines using Google Kubernetes Engine (GKE). To handle massive 15K+ token contexts for models like Qwen3-Embedding-8B, the engineering team implemented TP…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-7a1ca9590f48",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/driving-developer-excellence-inside-the-program-sprints/",
+      "canonicalUrl": "https://developers.googleblog.com/driving-developer-excellence-inside-the-program-sprints",
+      "title": "Driving Developer Excellence: Inside the Program Sprints",
+      "summary": "The Gemini Enterprise Developer Experience (DevEx) program conducts ongoing sprint testing of end-to-end developer workflows to identify and rapidly resolve friction points without relying on internal shortcuts. This recent sprint focused on optimizing enterprise AI governance, including refining s…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-8c649bf7595e",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/build-zero-trust-ai-agents-that-judge-intent-not-just-syntax/",
+      "canonicalUrl": "https://developers.googleblog.com/build-zero-trust-ai-agents-that-judge-intent-not-just-syntax",
+      "title": "Build zero-trust AI agents that judge intent, not just syntax",
+      "summary": "This blog post explores how to transition AI agents from static, build-time security controls to dynamic runtime governance using the Gemini Enterprise Agent Platform. It highlights three primary managed defenses: Model Armor for screening edge prompts, Semantic Governance Policies for evaluating t…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-93ef07b7ceec",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/agent-anomaly-detection-now-in-private-preview-on-the-gemini-enterprise-agent-platform/",
+      "canonicalUrl": "https://developers.googleblog.com/agent-anomaly-detection-now-in-private-preview-on-the-gemini-enterprise-agent-platform",
+      "title": "Agent Anomaly Detection, now in Private Preview on the Gemini Enterprise Agent Platform",
+      "summary": "Agent Anomaly Detection is a new, out-of-band oversight layer for the Gemini Enterprise Agent Platform that analyzes OpenTelemetry traces and tool calls to catch behavioral risks without adding runtime latency to live requests. It utilizes a multi-tiered detection pipeline—combining lightweight sta…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-9db05248f601",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/why-client-sdk-generation-belongs-in-the-open/",
+      "canonicalUrl": "https://developers.googleblog.com/why-client-sdk-generation-belongs-in-the-open",
+      "title": "Why client SDK generation belongs in the open",
+      "summary": "Google has partnered with Speakeasy to open-source their OpenAPI code generation suite under the AGPLv3 license, a strategic move prompted by the sudden shutdown of Google's previous proprietary SDK provider. The newly open-sourced suite equips developers with deterministic, multi-language SDK gene…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-a81c8502ece8",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/embeddinggemma-2-the-developer-guide/",
+      "canonicalUrl": "https://developers.googleblog.com/embeddinggemma-2-the-developer-guide",
+      "title": "EmbeddingGemma 2: The Developer Guide",
+      "summary": "EmbeddingGemma 2 is a compact, open-source multimodal embedding model that maps text, code, images, video, and audio into a unified 768-dimensional space. Developers can use the sentence-transformers library to selectively load modular modality encoders—ranging from 270M to 740M parameters—to optim…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-b6bf431d3c27",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/build-zero-trust-ai-agents-with-googles-agent-development-kit/",
+      "canonicalUrl": "https://developers.googleblog.com/build-zero-trust-ai-agents-with-googles-agent-development-kit",
+      "title": "Build zero-trust AI agents with Google's Agent Development Kit",
+      "summary": "Building autonomous AI agents that mutate production state requires moving beyond soft system prompts to a robust zero-trust architecture. To secure Google Agent Development Kit (ADK) workflows against prompt injections and malicious execution, developers must implement hardware-backed cryptographi…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-c4232643b9d4",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/how-to-evaluate-live-voice-agents-in-adk/",
+      "canonicalUrl": "https://developers.googleblog.com/how-to-evaluate-live-voice-agents-in-adk",
+      "title": "How to Evaluate Live & Voice Agents in ADK",
+      "summary": "Moving live voice agents from demo to production requires rigorous, automated testing to handle the unpredictability of real multi-turn conversations. ADK now provides native live evaluation, allowing developers to test graph-based agent workflows against LLM-driven simulated users that generate ac…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-c6e24d86fd68",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/introducing-support-for-local-ai-models-in-the-antigravity-sdk/",
+      "canonicalUrl": "https://developers.googleblog.com/introducing-support-for-local-ai-models-in-the-antigravity-sdk",
+      "title": "Introducing Support for Local AI Models in the Antigravity SDK",
+      "summary": "The Google Antigravity SDK now empowers developers to execute offline, agentic workflows locally using models like Gemma 4 26B A4B via LiteRT. This update facilitates powerful hybrid orchestration architectures, allowing a cloud model to act as a lightweight planner while local models securely hand…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-cea8f33fc210",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/accelerating-spatio-temporal-attention-for-video-diffusion-on-tpus/",
+      "canonicalUrl": "https://developers.googleblog.com/accelerating-spatio-temporal-attention-for-video-diffusion-on-tpus",
+      "title": "Accelerating Spatio-Temporal Attention for Video Diffusion on TPUs",
+      "summary": "To address the quadratic latency bottleneck of self-attention in high-resolution video diffusion models, developers implemented Sparse VideoGen (SVG) to dynamically route attention heads to highly structured spatial or temporal sparse masks. Translating this algorithmic sparsity into physical hardw…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-d632c81a1806",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/autonomous-llm-post-training-with-tunix-on-tpus/",
+      "canonicalUrl": "https://developers.googleblog.com/autonomous-llm-post-training-with-tunix-on-tpus",
+      "title": "Autonomous LLM post-training with Tunix on TPUs",
+      "summary": "The \"autofinetune\" project introduces an autonomous research loop that fully automates LLM post-training workflows, including Supervised Fine-Tuning (SFT) and Reinforcement Learning via GRPO. By defining boundary conditions and evaluation metrics in a single Markdown specification, developers can d…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-e7b85f9f4816",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/announcing-adk-for-kotlin-10-building-production-ready-ai-agents-in-kotlin-android-and-beyond/",
+      "canonicalUrl": "https://developers.googleblog.com/announcing-adk-for-kotlin-10-building-production-ready-ai-agents-in-kotlin-android-and-beyond",
+      "title": "Announcing ADK for Kotlin 1.0: Building Production-Ready AI Agents in Kotlin, Android, and Beyond",
+      "summary": "Google has officially released version 1.0 of the Agent Development Kit (ADK) for Kotlin, achieving full feature parity with the Python and Java ADK cores to enable idiomatic, multi-agent AI development. Built on Kotlin Multiplatform (KMP), the framework leverages Kotlin Symbol Processing (KSP) for…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-ec3cda622f47",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/reproducing-olmo-3-7b-pre-training-in-maxtext-case-study-of-large-scale-training-on-tpus/",
+      "canonicalUrl": "https://developers.googleblog.com/reproducing-olmo-3-7b-pre-training-in-maxtext-case-study-of-large-scale-training-on-tpus",
+      "title": "Reproducing Olmo 3 7B Pre-training in MaxText: case study of large scale training on TPUs",
+      "summary": "The MaxText team successfully reproduced Ai2’s Olmo 3 7B language model from scratch on Google Cloud TPUs using JAX/XLA, precisely matching the original PyTorch-on-GPU reference across pre-training and mid-training stages on all held-out evaluations. The implementation achieved up to 57.4% Model Fl…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    },
+    {
+      "id": "ext-google-developers-f67921b9de44",
+      "sourceId": "google-developers",
+      "sourceName": "Google Developers Blog",
+      "url": "https://developers.googleblog.com/turn-your-rest-apis-into-mcp-tools-with-google-cloud-api-gateway/",
+      "canonicalUrl": "https://developers.googleblog.com/turn-your-rest-apis-into-mcp-tools-with-google-cloud-api-gateway",
+      "title": "Turn your REST APIs into MCP tools with Google Cloud API Gateway",
+      "summary": "Google Cloud API Gateway now acts as a native remote Model Context Protocol (MCP) server, eliminating the need to build and maintain custom middleware to expose REST APIs to AI agents. By simply adding specific annotations (like x-google-api-management.mcp) to existing OpenAPI 3.x specifications, d…",
+      "tags": [
+        "官方博客",
+        "工程实践"
+      ],
+      "publishedAt": null,
+      "fetchedAt": "2026-10-07T05:04:40Z"
+    }
+  ]
+}

@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RouteProgress />
         <a href="#main-content" className="skip-link">跳到正文</a>
         <Nav />
-        <div id="main-content" tabIndex={-1}>{children}</div>
+        <div id="main-content" tabIndex={-1} className="site-main">{children}</div>
         <Footer />
       </body>
     </html>

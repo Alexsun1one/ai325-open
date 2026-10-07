@@ -1,37 +1,69 @@
 import { BrandMark } from "./BrandMark";
+import { Icon } from "@/components/ui/Icon";
 import Link from "next/link";
+
+const COLUMNS: { title: string; links: { href: string; label: string; gated?: boolean }[] }[] = [
+  { title: "学习", links: [
+    { href: "/", label: "发现内容" },
+    { href: "/learn/", label: "知识与方法" },
+    { href: "/readings/", label: "书与代码精读" },
+    { href: "/skills/", label: "Skill 技能库" },
+    { href: "/arsenal/", label: "资源库" },
+  ] },
+  { title: "交流", links: [
+    { href: "/community/", label: "实践与交流" },
+    { href: "/agents/", label: "Agent 学堂" },
+    { href: "/events/", label: "活动专区" },
+    { href: "/rankings/", label: "群友排行" },
+  ] },
+  { title: "群内档案", links: [
+    { href: "/archive/", label: "往期 · 线索图" },
+    { href: "/members/", label: "群像", gated: true },
+    { href: "/essays/", label: "窖藏", gated: true },
+    { href: "/library/", label: "文库", gated: true },
+  ] },
+];
 
 export function Footer() {
   return (
-    <footer className="no-print mt-24 border-t border-rule">
-      <div className="mx-auto grid max-w-[1180px] gap-8 px-5 py-12 sm:grid-cols-3 sm:px-8">
-        <div>
-          <div className="flex items-center gap-3 font-serif text-[18px] font-black text-ink"><BrandMark />先锋队台账</div>
-          <p className="mt-2 max-w-[34ch] font-sans text-[13px] leading-relaxed text-ink-3">
-            🌱人民需要AI_智能体先锋队 的学习社区。从每日讨论中整理知识，让人和 Agent 一起验证、交流、积累方法。
-          </p>
+    <footer className="site-footer no-print">
+      <div className="site-footer-inner">
+        <div className="site-footer-brand">
+          <div className="site-footer-name"><BrandMark />先锋队台账</div>
+          <p>🌱人民需要AI_智能体先锋队 的学习社区。从每日讨论中整理知识，让人和 Agent 一起验证、交流、积累方法。</p>
         </div>
-        <div className="font-sans text-[13.5px]">
-          <div className="label mb-3">栏目</div>
-          <ul className="grid grid-cols-2 gap-y-1.5 text-ink-2">
-            <li><Link href="/" className="hover:text-blue-text">发现内容</Link></li>
-            <li><Link href="/archive/" className="hover:text-blue-text">往期 · 线索图</Link></li>
-            <li><Link href="/readings/" className="hover:text-blue-text">书与代码精读</Link></li>
-            <li><Link href="/events/" className="hover:text-blue-text">活动专区</Link></li>
-            <li><Link href="/learn/" className="hover:text-blue-text">知识与方法</Link></li>
-            <li><Link href="/community/" className="hover:text-blue-text">实践与交流</Link></li>
-            <li><Link href="/agents/" className="hover:text-blue-text">Agent 学堂</Link></li>
-            <li><Link href="/skills/" className="hover:text-blue-text">Skill 技能库</Link></li>
-            <li><Link href="/members/" className="hover:text-blue-text">群像（登录）</Link></li>
-            <li><Link href="/essays/" className="hover:text-blue-text">窖藏（登录）</Link></li>
-            <li><Link href="/about/" className="hover:text-blue-text">关于 · 邀请码 · 订阅</Link></li>
-          </ul>
-        </div>
-        <div className="font-sans text-[13px] leading-relaxed text-ink-3">
-          <div className="label mb-3">怎么记的</div>
-          <p>时间一律北京时间（UTC+8）。引文逐字来自群聊原文；「没说破的」为整理者延伸，已用手写体标出。涉隐私内容打码，密码类内容不收录。</p>
-          <p className="mt-2">哪天记录不全，我们会如实标出来。</p>
-        </div>
+        <nav className="site-footer-cols" aria-label="页脚栏目">
+          {COLUMNS.map((col) => (
+            <div key={col.title}>
+              <h2 className="label">{col.title}</h2>
+              <ul>
+                {col.links.map((l) => (
+                  <li key={l.href}>
+                    <Link href={l.href} prefetch={false}>{l.label}{l.gated && <span className="site-footer-gate">需登录</span>}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+        <section className="site-footer-sources" aria-labelledby="footer-sources">
+          <h2 id="footer-sources" className="label">内容从哪来</h2>
+          <dl>
+            <div>
+              <dt><span className="source-dot source-dot-group" aria-hidden />群内整理</dt>
+              <dd>日报来自群讨论，整理后发布。<Link href="/archive/" prefetch={false}>往期</Link>是当天那一期的整理，不是原始聊天。</dd>
+            </div>
+            <div>
+              <dt><span className="source-dot source-dot-public" aria-hidden />公开资料</dt>
+              <dd>书与代码<Link href="/readings/" prefetch={false}>精读</Link>、外部<Link href="/sources/" prefetch={false}>知识来源</Link>都是公开材料，每条连回原文。</dd>
+            </div>
+          </dl>
+          <p className="site-footer-note">时间一律北京时间（UTC+8）。记录不全会如实标出。</p>
+        </section>
+      </div>
+      <div className="site-footer-bar">
+        <span>先锋队台账 · 人与 Agent 的学习社区</span>
+        <a href="#main-content" className="site-footer-top">回到正文开头 <Icon name="arrow" size={12} style={{ transform: "rotate(-90deg)" }} /></a>
       </div>
     </footer>
   );

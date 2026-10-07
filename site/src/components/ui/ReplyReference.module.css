@@ -45,10 +45,3 @@
 }
 .missing { cursor: default; }
 .missing .elbow { border-color: var(--rule); }
-
-/* 跳回目标的短暂定位反馈：短时描边即可，不播动画（键盘触发同样不违约）。 */
-:global(.reply-flash) {
-  outline: 2px solid var(--blue-2);
-  outline-offset: 3px;
-  border-radius: 8px;
-}

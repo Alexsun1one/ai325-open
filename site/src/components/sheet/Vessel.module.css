@@ -1,0 +1,12 @@
+/* 酒液局部色：深琥珀 / 干邑棕，只罩在本组件上，不动全局 --amber*。
+   --liq-surface 略亮于 --liq-top，让液面那一层波仍能接住高光。 */
+.vessel {
+  --liq-top: #a85d1d;
+  --liq-deep: #5d3009;
+  --liq-surface: #b56a26;
+}
+[data-theme="dark"] .vessel {
+  --liq-top: #b06a26;
+  --liq-deep: #6e3a10;
+  --liq-surface: #c07a2e;
+}

@@ -6,6 +6,7 @@ import { readKnowledge } from "./knowledge-content";
 import { readSkillLibrary } from "./skill-content";
 import { readArsenal } from "@/components/pages/arsenaldata";
 import { getLedger, listLedgerDates } from "./content";
+import { readExternalDiscovery } from "./external-sources";
 import type { DiscoveryData, DiscoveryItem } from "./discovery";
 const plain = (value: string) => value.replace(/<[^>]*>/g," ").replace(/[\u0000-\u001f\u007f]/g," ").replace(/\s+/g," ").trim();
 const date = (value: string) => { const match=value.match(/^\d{4}-\d{2}-\d{2}/)?.[0]; if(!match || !Number.isFinite(Date.parse(match))) throw new Error("Invalid discovery source date"); return match; };
@@ -19,6 +20,7 @@ export function readDiscovery(): DiscoveryData {
     ...knowledge.entries.map(e=>({id:key("knowledge",e.id),kind:"knowledge" as const,title:e.title,summary:e.text,url:`/learn/entries/${e.id}/`,date:date(e.revisions.map(r=>r.date).sort().at(-1) ?? knowledge.updatedAt),tags:[topics.get(e.topicId) ?? "知识",e.kind==="method"?"实践方法":e.kind==="principle"?"暂定原则":"编辑金句"],topicId:e.topicId})),
     ...skills.items.map(e=>({id:key("skill",e.id),kind:"skill" as const,title:e.name,summary:e.description,url:`/skills/?q=${encodeURIComponent(e.name)}`,date:date(skills.generatedAt),tags:[e.category,e.author,...e.tags],...(e.sourceUrl?.startsWith("https://")?{sourceUrl:e.sourceUrl}:{})})),
     ...readArsenal().filter(e=>["shelved","featured"].includes(e.status)).map(e=>({id:key("resource",e.id),kind:"resource" as const,title:e.title,summary:e.one_line,url:`/arsenal/#kb-${encodeURIComponent(e.id)}`,date:date(e.collected_at),tags:[e.kind,...e.tags],...(e.source.url?.startsWith("https://")?{sourceUrl:e.source.url}:{})})),
+    ...readExternalDiscovery(),
     ...listLedgerDates().map(d=>{const e=getLedger(d);return {id:key("ledger",d),kind:"ledger" as const,title:e.title,summary:e.lead,url:`/ledger/${d}/`,date:date(d),tags:["每日蒸馏"]};}),
   ].map(e=>({...e,title:plain(e.title).slice(0,240),summary:plain(e.summary).slice(0,2000),tags:[...new Set(e.tags.map(t=>plain(t).slice(0,80)).filter(Boolean))].slice(0,24)}));
   if(items.some(e=>!e.title||!e.summary) || new Set(items.map(e=>e.id)).size!==items.length) throw new Error("Incomplete discovery directory");

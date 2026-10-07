@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useId, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion, AnimatePresence } from "motion/react";
+import styles from "./Vessel.module.css";
 
 /**
  * 酿造器皿（精修 SVG）：一粒种子先微微上抬 → 落进量杯 → 涟漪 → 液位升到「累计批次」的高度
@@ -56,14 +57,14 @@ export function Vessel({ issue, level, label }: { issue: number; level: number; 
   const travel = Math.max(6, SPAN * target - 5);
 
   return (
-    <figure className="flex flex-col items-center">
+    <figure className={`flex flex-col items-center ${styles.vessel}`}>
       <svg viewBox="0 0 240 260" className="h-auto w-[150px] overflow-visible sm:w-[236px]" role="img" aria-label={`酿造器皿：第 ${issue} 批，液位 ${Math.round(level * 100)}%`}>
         <defs>
           <clipPath id={`clip-${uid}`}><path d={INNER} /></clipPath>
           {/* 酒色按杯身绝对高度渐深，不随液位拉伸 */}
           <linearGradient id={`liq-${uid}`} gradientUnits="userSpaceOnUse" x1="0" y1={TOP} x2="0" y2={BOT}>
-            <stop offset="0" stopColor="var(--amber-2)" />
-            <stop offset="1" stopColor="var(--amber-deep)" />
+            <stop offset="0" stopColor="var(--liq-top)" />
+            <stop offset="1" stopColor="var(--liq-deep)" />
           </linearGradient>
           <linearGradient id={`glass-${uid}`} x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="var(--blue)" stopOpacity="0.12" />
@@ -83,7 +84,7 @@ export function Vessel({ issue, level, label }: { issue: number; level: number; 
           {/* 液面：两层缓慢错相的波，波幅压到 2.2 / 1.1，只是「在动」不是「在浪」 */}
           <motion.g style={{ y: surfaceY }}>
             <g className={reduce ? "" : "vessel-wave"}>
-              <path d="M-140,0 Q-120,-2.2 -100,0 T-60,0 T-20,0 T20,0 T60,0 T100,0 T140,0 T180,0 T220,0 T260,0 T300,0 T340,0 T380,0 V20 H-140 Z" fill="var(--amber-2)" opacity="0.9" />
+              <path d="M-140,0 Q-120,-2.2 -100,0 T-60,0 T-20,0 T20,0 T60,0 T100,0 T140,0 T180,0 T220,0 T260,0 T300,0 T340,0 T380,0 V20 H-140 Z" fill="var(--liq-surface)" opacity="0.9" />
             </g>
             <g className={reduce ? "" : "vessel-wave-2"}>
               <path d="M-140,1 Q-125,-1.1 -110,1 T-80,1 T-50,1 T-20,1 T10,1 T40,1 T70,1 T100,1 T130,1 T160,1 T190,1 T220,1 T250,1 T280,1 T310,1 T340,1 T370,1 V20 H-140 Z" fill="var(--paper)" opacity="0.14" />
@@ -115,7 +116,7 @@ export function Vessel({ issue, level, label }: { issue: number; level: number; 
           {/* 涟漪 */}
           <AnimatePresence>
             {ripple > 0 && [0, 1].map((k) => (
-              <motion.ellipse key={`${ripple}-${k}`} cx="120" style={{ y: surfaceY }} cy="0" fill="none" stroke="var(--amber-deep)" strokeWidth="1"
+              <motion.ellipse key={`${ripple}-${k}`} cx="120" style={{ y: surfaceY }} cy="0" fill="none" stroke="var(--liq-deep)" strokeWidth="1"
                 initial={{ rx: 4, ry: 1.5, opacity: 0.7 }} animate={{ rx: 44 + k * 12, ry: 9 + k * 2, opacity: 0 }} transition={{ duration: 1.1 + k * 0.3, ease: "easeOut", delay: k * 0.15 }} />
             ))}
           </AnimatePresence>

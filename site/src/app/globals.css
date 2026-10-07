@@ -438,3 +438,101 @@ textarea, input[type="text"], input[type="password"], input[type="email"] { bord
 @media(max-width:639px) { :root { --nav-h:101px; } }
 .nav-tools>button:focus-visible>span { transition:none; }
 .site-main [id] { scroll-margin-top:calc(var(--nav-h) + 16px); }
+
+/* ===== SHELL R1 精修：页脚来源说明、检索弹层、导航动势、跨页一致性 ===== */
+.label { font-size:12px; letter-spacing:.12em; }
+.site-nav { background:color-mix(in srgb, var(--paper) 94%, transparent); -webkit-backdrop-filter:saturate(1.2) blur(10px); backdrop-filter:saturate(1.2) blur(10px); }
+.site-nav::after { content:""; position:absolute; inset-inline:0; bottom:-1px; height:1px; background:linear-gradient(90deg,var(--blue) 0,var(--blue) 56px,transparent 56px); opacity:.85; pointer-events:none; }
+.brand-link strong { letter-spacing:.02em; }
+.nav-primary>.nav-link::after { content:""; position:absolute; bottom:0; inset-inline:8px; height:2px; background:var(--blue); transform:scaleX(0); transform-origin:left; transition:transform 220ms cubic-bezier(.16,1,.3,1); }
+.nav-primary>.nav-link[aria-current]::after { transform:scaleX(1); }
+@media (hover:hover) and (pointer:fine) { .nav-primary>.nav-link:not([aria-current]):hover::after { transform:scaleX(.45); } }
+.nav-more[open]>.nav-more-panel { animation:panel-in 180ms cubic-bezier(.16,1,.3,1); }
+@keyframes panel-in { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
+.nav-more-group .nav-link { border-radius:6px; }
+.nav-more-group .nav-link>svg { color:var(--ink-3); }
+.nav-more-group .nav-link[aria-current]>svg { color:var(--blue-text); }
+@media (max-width:639px) {
+ .nav-more-panel { position:fixed; left:12px; right:12px; top:calc(var(--nav-h) + 4px); width:auto; max-width:none; }
+ .journey-nav { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px; }
+ .journey-nav a { flex-direction:column; justify-content:center; gap:2px; font-size:10px; white-space:nowrap; }
+ .journey-number { width:18px; height:18px; font-size:9px; }
+}
+
+/* 正文链接：下划线细线，悬停加粗 */
+.prose-sheet a:not([class]), .hand a:not([class]) { color:var(--blue-text); text-decoration:underline; text-decoration-color:var(--blue-wash-2); text-decoration-thickness:1px; text-underline-offset:.22em; transition:text-decoration-color 160ms, text-decoration-thickness 160ms; }
+.prose-sheet a:not([class]):hover, .hand a:not([class]):hover { text-decoration-color:var(--blue); text-decoration-thickness:2px; }
+
+/* 页面标题：蓝色印刷短线 + 更紧的中文字阶 */
+.page-heading h1 { font-weight:800; line-height:1.22; text-wrap:balance; }
+.page-heading h1::before { content:""; display:block; width:36px; height:3px; margin-bottom:14px; background:var(--blue); }
+.page-heading .prose-sheet { color:var(--ink-2); }
+
+/* 页脚 */
+.site-footer { margin-top:96px; border-top:1px solid var(--rule); background:var(--paper-2); font-family:var(--font-sans); }
+.site-footer-inner { max-width:1180px; margin:auto; display:grid; gap:36px 48px; padding:48px 32px 36px; grid-template-columns:minmax(0,1.1fr) minmax(0,1.5fr); }
+.site-footer-brand { grid-column:1; }
+.site-footer-name { display:flex; align-items:center; gap:10px; font:800 18px/1.3 var(--font-serif); color:var(--ink); }
+.site-footer-brand p { margin-top:10px; max-width:36ch; font-size:13px; line-height:1.75; color:var(--ink-3); }
+.site-footer-cols { grid-column:2; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+.site-footer-cols h2 { margin-bottom:10px; }
+.site-footer-cols ul { display:grid; gap:2px; }
+.site-footer-cols a { display:inline-flex; align-items:center; gap:6px; min-height:36px; font-size:13.5px; color:var(--ink-2); text-decoration:none; }
+.site-footer-gate { font-size:10.5px; line-height:1; padding:3px 5px; border:1px solid var(--rule-strong); border-radius:3px; color:var(--ink-3); }
+.site-footer-sources { grid-column:1 / -1; padding-top:28px; border-top:1px solid var(--rule); display:grid; gap:12px 48px; grid-template-columns:minmax(0,1.1fr) minmax(0,1.5fr); }
+.site-footer-sources h2 { grid-column:1 / -1; }
+.site-footer-sources dl { grid-column:1 / -1; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 48px; }
+.site-footer-sources dt { display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:650; color:var(--ink); }
+.site-footer-sources dd { margin-top:6px; font-size:13px; line-height:1.8; color:var(--ink-3); }
+.site-footer-sources dd a { color:var(--blue-text); text-decoration:underline; text-underline-offset:.22em; text-decoration-color:var(--blue-wash-2); }
+.site-footer-sources dd a:hover { text-decoration-color:var(--blue); }
+.site-footer-sources dd strong { color:var(--ink-2); font-weight:650; }
+.site-footer-note { grid-column:1 / -1; font-size:12.5px; line-height:1.7; color:var(--ink-3); }
+.source-dot { width:9px; height:9px; border-radius:50%; flex:none; }
+.source-dot-group { background:var(--blue); }
+.source-dot-public { background:transparent; border:2px solid var(--amber); }
+.site-footer-bar { max-width:1180px; margin:auto; display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 16px; padding:14px 32px 22px; border-top:1px solid var(--rule-soft); font-size:12px; color:var(--ink-3); }
+.site-footer-top { display:inline-flex; align-items:center; gap:4px; min-height:44px; color:var(--blue-text); text-decoration:none; }
+@media (hover:hover) and (pointer:fine) { .site-footer-cols a:hover, .site-footer-top:hover { color:var(--blue-text); text-decoration:underline; text-underline-offset:.22em; } }
+@media (max-width:899px) {
+ .site-footer { margin-top:56px; }
+ .site-footer-inner { grid-template-columns:1fr; padding:28px 20px 16px; gap:20px; }
+ .site-footer-cols, .site-footer-brand { grid-column:1; }
+ .site-footer-brand p { margin-top:6px; }
+ .site-footer-cols { gap:16px 12px; }
+ .site-footer-cols a { min-height:44px; }
+ .site-footer-sources { grid-template-columns:1fr; padding-top:16px; gap:8px; }
+ .site-footer-sources dl { grid-template-columns:1fr 1fr; gap:12px 20px; }
+ .site-footer-sources dd { margin-top:4px; line-height:1.6; }
+ .site-footer-bar { padding:10px 20px 16px; }
+}
+@media (max-width:420px) {
+ .site-footer { margin-top:40px; }
+ .site-footer-inner { padding:20px 16px 12px; gap:14px; }
+ .site-footer-brand p { display:none; }
+ .site-footer-cols { grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px 8px; }
+ .site-footer-cols h2 { margin-bottom:6px; }
+ .site-footer-cols a { min-height:44px; font-size:12.5px; overflow-wrap:anywhere; }
+ .site-footer-sources { padding-top:12px; }
+ .site-footer-sources dl { grid-template-columns:1fr 1fr; gap:10px 16px; }
+ .site-footer-bar { padding:8px 16px 14px; }
+}
+
+/* 检索弹层：小屏贴顶全宽，结果行点击区足够 */
+@media (max-width:639px) {
+ .search-dialog { margin-top:8px !important; max-height:calc(100dvh - 16px) !important; width:calc(100vw - 16px) !important; border-radius:12px !important; }
+ .search-dialog input { font-size:16px !important; }
+}
+.search-dialog a:focus-visible, .search-dialog button:focus-visible, .search-dialog input:focus-visible { outline:2px solid var(--blue); outline-offset:-2px; }
+
+/* 深色：占位与弱文字别沉进底色 */
+[data-theme="dark"] .site-nav { background:color-mix(in srgb, var(--paper) 90%, transparent); }
+[data-theme="dark"] .site-footer { background:var(--paper-2); }
+[data-theme="dark"] .nav-cta, [data-theme="dark"] .join-banner-cta { color:#0f1219; background:var(--blue-text); }
+
+/* 跳转反馈：外链标注，减少「点了没反应」的疑虑 */
+.site-main a[target="_blank"]:focus-visible { outline-offset:3px; }
+@media (prefers-reduced-motion:reduce) { .nav-more[open]>.nav-more-panel { animation:none; } .nav-primary>.nav-link::after { transition:none; } }
+
+/* 回复跳转目标的短暂定位反馈（原在 ReplyReference.module.css，webpack 下 :global 纯度检查不过，移到全局） */
+.reply-flash { outline:2px solid var(--blue-2); outline-offset:3px; border-radius:8px; }

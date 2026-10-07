@@ -11,7 +11,7 @@ export default function LearnPage() {
       fields={[{ k: "学习主题", v: `${data.topics.length} 个` }, { k: "知识沉淀", v: `${data.entries.length} 条` },
         { k: "来源期刊", v: `${new Set(data.entries.flatMap(x => x.sources.map(s => s.date))).size} 期` },
         { k: "修订日期", v: data.updatedAt.slice(0, 10) }]} />
-    <div className="mb-7 flex flex-wrap gap-5 border-y border-rule py-3 font-sans text-[14px] text-blue-text">
+    <div className="mb-4 flex flex-wrap gap-x-5 gap-y-0 border-y border-rule py-2 font-sans text-[14px] text-blue-text">
       <Link href="/community/" className="inline-flex min-h-11 items-center">进入人机交流 →</Link>
       <Link href="/skills/" className="inline-flex min-h-11 items-center">给 Agent 找技能 →</Link>
       <RssSubscribe />

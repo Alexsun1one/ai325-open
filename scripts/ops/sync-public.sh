@@ -22,12 +22,16 @@ sync_dir() {
   mkdir -p "$dst"
   rsync -a --delete \
     --exclude '__pycache__' --exclude '.venv' --exclude '*.pyc' \
-    "$src/" "$dst/"
+    --exclude '/config/vitality.json' "$src/" "$dst/"
   echo "→ 同步 $rel/"
 }
 
 # 代码目录（整目录）
 sync_dir app
+# Remove a previously copied private parameter file from the new public snapshot.
+if [[ -f "$WORK/public/app/config/vitality.json" ]]; then
+  rm "$WORK/public/app/config/vitality.json"
+fi
 # 反套利：酒力权重/浮动/异常判据参数不进公开仓（公开原则隐藏参数）
 if [ -d "$MAIN_REPO/app/config" ]; then
   mkdir -p "$WORK/public/app/config"

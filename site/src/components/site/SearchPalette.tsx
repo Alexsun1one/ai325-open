@@ -30,6 +30,8 @@ export function SearchPalette() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [sel, setSel] = useState(0);
+  const [going, setGoing] = useState("");
+  const [retry, setRetry] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const seq = useRef(0);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -50,7 +52,7 @@ export function SearchPalette() {
   }, []);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) { setGoing(""); return; }
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const timer = setTimeout(() => inputRef.current?.focus(), 30);
     const trap = (event: KeyboardEvent) => {
@@ -114,7 +116,7 @@ export function SearchPalette() {
       clearTimeout(deadline);
       controller.abort();
     };
-  }, [q, open]);
+  }, [q, open, retry]);
 
   const terms = useMemo(() => q.trim().split(/\s+/).filter(Boolean), [q]);
   const groups = useMemo(() => {
@@ -130,7 +132,7 @@ export function SearchPalette() {
   }, [data, q]);
   const flat = useMemo(() => groups.flatMap(([, hs]) => hs), [groups]);
 
-  const goto = useCallback((url: string) => { setOpen(false); window.location.href = url; }, []);
+  const goto = useCallback((url: string) => { setGoing(url); window.location.href = url; }, []);
 
   const onInputKey = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") { e.preventDefault(); setSel((s) => Math.min(s + 1, flat.length - 1)); }
@@ -158,7 +160,7 @@ export function SearchPalette() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
-            className="no-print fixed inset-0 z-50 bg-ink/25 backdrop-blur-[2px]"
+            className="no-print fixed inset-0 z-50 bg-ink/30 backdrop-blur-[3px]"
             onMouseDown={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
           >
             <motion.div
@@ -169,7 +171,7 @@ export function SearchPalette() {
               initial={reduce ? false : { y: -10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className="mx-auto mt-[10vh] flex max-h-[72vh] w-[min(680px,calc(100vw-24px))] flex-col overflow-hidden rounded-[14px] border border-rule bg-paper shadow-[var(--shadow-pop)]"
+              className="mx-auto search-dialog mt-[10vh] flex max-h-[72vh] w-[min(680px,calc(100vw-24px))] flex-col overflow-hidden rounded-[14px] border border-rule bg-paper shadow-[var(--shadow-pop)]"
             >
               <div className="flex items-center gap-3 border-b border-rule px-5 py-3.5">
                 <svg aria-hidden width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="shrink-0 text-ink-3"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.5-4.5" /></svg>
@@ -178,7 +180,7 @@ export function SearchPalette() {
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
                   onKeyDown={onInputKey}
-                  placeholder="搜关键词：某个话题、黑话、人名、工具……"
+                  role="combobox" aria-expanded="true" aria-controls="search-results" aria-label="站内检索关键词" placeholder="搜关键词：某个话题、黑话、人名、工具……"
                   className="w-full bg-transparent font-sans text-[15px] text-ink outline-none placeholder:text-ink-3"
                   maxLength={60}
                 />
@@ -186,8 +188,8 @@ export function SearchPalette() {
                 <kbd className="hidden shrink-0 rounded-[4px] border border-rule px-1.5 py-0.5 font-sans text-[10.5px] text-ink-3 sm:block">ESC</kbd>
               </div>
 
-              <div className="min-h-0 overflow-y-auto px-2 py-2">
-                {err && <p className="px-3 py-4 font-sans text-[13px] text-amber-text">{err}</p>}
+              <div id="search-results" className="min-h-0 overflow-y-auto px-2 py-2" aria-busy={busy || !!going}>
+                {err && <p role="alert" className="flex flex-wrap items-center gap-3 px-3 py-4 font-sans text-[13px] text-amber-text">{err}<button type="button" onClick={() => setRetry((n) => n + 1)} className="min-h-11 rounded-md border border-rule-strong px-3 text-ink-2 hover:bg-paper-2">重试</button></p>}
 
                 {data?.notice && <p className="px-3 py-2 font-sans text-[12px] text-amber-text">{data.notice}</p>}
                 {q.trim() && !busy && !err && <p className="px-3 py-2 font-sans text-[12px] text-ink-3">当前显示 {flat.length} 条结果{data?.morePublic && <> · <a href={`/?q=${encodeURIComponent(q.trim())}`} className="text-blue-text">浏览更多公开内容 →</a></>}</p>}
@@ -274,7 +276,7 @@ export function SearchPalette() {
                   </div>
                 )}
 
-                {busy && <p className="px-3 py-2 font-sans text-[12px] text-ink-3">检索中…</p>}
+                <p role="status" aria-live="polite" className="px-3 py-2 font-sans text-[12px] text-ink-3">{going ? "正在打开…" : busy ? "检索中…" : ""}</p>
               </div>
 
               <div className="flex flex-wrap items-center justify-between gap-2 border-t border-rule px-5 py-2.5 font-sans text-[11.5px] text-ink-3">
