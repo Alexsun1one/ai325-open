@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-07T06:42:01Z",
+  "updatedAt": "2026-10-07T08:35:40Z",
   "sources": [
     {
       "id": "openai-news",
@@ -11,9 +11,9 @@
         "官方博客",
         "模型与产品"
       ],
-      "lastAttemptAt": "2026-10-07T06:42:01Z",
+      "lastAttemptAt": "2026-10-07T08:35:40Z",
       "status": "ok",
-      "lastSuccessAt": "2026-10-07T06:42:01Z",
+      "lastSuccessAt": "2026-10-07T08:35:40Z",
       "lastError": null,
       "itemCount": 30
     },
@@ -26,9 +26,9 @@
         "官方博客",
         "开源模型"
       ],
-      "lastAttemptAt": "2026-10-07T06:42:01Z",
+      "lastAttemptAt": "2026-10-07T08:35:40Z",
       "status": "ok",
-      "lastSuccessAt": "2026-10-07T06:42:01Z",
+      "lastSuccessAt": "2026-10-07T08:35:40Z",
       "lastError": null,
       "itemCount": 30
     },
@@ -41,9 +41,9 @@
         "官方博客",
         "研究"
       ],
-      "lastAttemptAt": "2026-10-07T06:42:01Z",
+      "lastAttemptAt": "2026-10-07T08:35:40Z",
       "status": "ok",
-      "lastSuccessAt": "2026-10-07T06:42:01Z",
+      "lastSuccessAt": "2026-10-07T08:35:40Z",
       "lastError": null,
       "itemCount": 30
     },
@@ -56,9 +56,9 @@
         "官方博客",
         "工程实践"
       ],
-      "lastAttemptAt": "2026-10-07T06:42:01Z",
+      "lastAttemptAt": "2026-10-07T08:35:40Z",
       "status": "ok",
-      "lastSuccessAt": "2026-10-07T06:42:01Z",
+      "lastSuccessAt": "2026-10-07T08:35:40Z",
       "lastError": null,
       "itemCount": 20
     },
@@ -71,9 +71,9 @@
         "官方博客",
         "工程实践"
       ],
-      "lastAttemptAt": "2026-10-07T06:42:01Z",
+      "lastAttemptAt": "2026-10-07T08:35:40Z",
       "status": "ok",
-      "lastSuccessAt": "2026-10-07T06:42:01Z",
+      "lastSuccessAt": "2026-10-07T08:35:40Z",
       "lastError": null,
       "itemCount": 10
     }
