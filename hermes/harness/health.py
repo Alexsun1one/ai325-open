@@ -58,6 +58,23 @@ def combine(args: argparse.Namespace) -> int:
                 "token_usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
             }
     passed = all(bool(result.get("passed")) for result in artifacts.values())
+    # A reviewed ledger may ship with an explicitly recorded arsenal gap.
+    # Preserve the failed artifact in health data rather than relabel it passed.
+    gap_path = getattr(args, "arsenal_gap", None)
+    gap = load(gap_path) if gap_path and gap_path.is_file() else {}
+    ledger = artifacts["ledger"]
+    arsenal = artifacts["arsenal"]
+    degraded = (
+        not passed
+        and isinstance(gap, dict)
+        and gap.get("date") == args.date
+        and gap.get("degraded") is True
+        and ledger.get("passed") is True
+        and int(ledger.get("score", 0) or 0) >= 70
+        and ledger.get("hard_fail") == []
+        and not any("隐私形态" in str(message) for message in (arsenal.get("hard_fail") or arsenal.get("hard") or []))
+    )
+    publishable = passed or degraded
     scores = [int(result.get("score", 0) or 0) for result in artifacts.values()]
     score = min(scores) if scores else 0
     grade = "A" if passed and score >= 85 else "B" if passed else "F"
@@ -78,6 +95,8 @@ def combine(args: argparse.Namespace) -> int:
     payload = {
         "date": args.date,
         "passed": passed,
+        "publishable": publishable,
+        "degraded": degraded,
         "score": score,
         "grade": grade,
         "hard_fail": hard,
@@ -116,7 +135,7 @@ def combine(args: argparse.Namespace) -> int:
                     + "\n"
                 )
     print(json.dumps(payload, ensure_ascii=False))
-    return 0 if passed else 2
+    return 0 if publishable else 2
 
 
 def aggregate(args: argparse.Namespace) -> int:
@@ -136,6 +155,8 @@ def aggregate(args: argparse.Namespace) -> int:
                         {
                             "date": payload.get("date", match.group(1)),
                             "passed": bool(payload.get("passed")),
+                            "publishable": bool(payload.get("publishable", payload.get("passed"))),
+                            "degraded": bool(payload.get("degraded")),
                             "score": int(payload.get("score", 0) or 0),
                             "grade": payload.get("grade", "F"),
                             "redistill_count": int(payload.get("redistill_count", 0) or 0),
@@ -168,6 +189,7 @@ def parse_args() -> argparse.Namespace:
     merge.add_argument("--date", required=True)
     merge.add_argument("--ledger-result", type=Path)
     merge.add_argument("--arsenal-result", type=Path)
+    merge.add_argument("--arsenal-gap", type=Path, help="Explicit dated gap marker; never overrides ledger or privacy failures")
     merge.add_argument("--output", type=Path, required=True)
     merge.add_argument("--alert-file", type=Path)
     merge.add_argument("--export-log", type=Path)

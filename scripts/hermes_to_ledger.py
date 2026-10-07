@@ -10,6 +10,7 @@
 import json, os, sys, glob, re, datetime, sqlite3
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from markup import mark_terms, mark_people, load_people
+from ledger_issues import normalize_issues
 
 mat, out_dir = sys.argv[1], sys.argv[2]
 
@@ -28,21 +29,11 @@ evidence_path = _optional_arg('--docket-evidence')
 c = json.load(open(os.path.join(mat, 'content.json'), encoding='utf-8'))
 stats = json.load(open(os.path.join(mat, 'stats.json'), encoding='utf-8')) if os.path.exists(os.path.join(mat, 'stats.json')) else {}
 date = c['date']
+issue = normalize_issues(out_dir, date)
 
 prev_files = sorted(f for f in glob.glob(os.path.join(out_dir, '*.json')) if os.path.basename(f) < f'{date}.json')
 prev = json.load(open(prev_files[-1], encoding='utf-8')) if prev_files else None
-# 批次号按「日期在全部期里的排位」算，不用 prev+1：
-# 补发一期旧刊（如 2026-09-15 事后补出）时，prev+1 会和后面已发的那期撞号
-# （实测 09-15 与 09-16 双双成了第 025 批）。按排位算则补期自动把后续顶下去。
-_all_dates = sorted(
-    os.path.basename(f)[:-5]
-    for f in glob.glob(os.path.join(out_dir, '*.json'))
-    if re.fullmatch(r'\d{4}-\d{2}-\d{2}', os.path.basename(f)[:-5])
-)
-if date not in _all_dates:
-    _all_dates.append(date)
-    _all_dates.sort()
-issue = _all_dates.index(date) + 1
+# normalize_issues also updates later editions and numeric cross-references.
 
 def slug(s, fallback): return re.sub(r'[^a-z0-9]+', '-', s.lower()).strip('-') or fallback
 def grams(s):
@@ -287,7 +278,7 @@ for t in c.get('themes', []):
         scored = [(len(g & (grams(x['title']) | grams(x['theme']))), x) for x in prev['threads']]
         best = max(scored, key=lambda p: p[0], default=(0, None))
         if best[0] >= 2: tid = best[1]['id']
-    if not tid: tid = slug(t.get('thread_title') or t['h'], f"t{issue:03d}-{len(threads)+1}")
+    if not tid: tid = slug(t.get('thread_title') or t['h'], f"t{date.replace('-', '')}-{len(threads)+1}")
     base = prev_threads.get(tid, {})
     threads.append({'id': tid, 'title': t.get('thread_title') or base.get('title') or re.sub(r'^第.幕\s*·\s*', '', t['h']), 'theme': t['h'],
                     'status': t.get('thread_status', 'ongoing'), 'first_issue': base.get('first_issue', prev['issue'] if tid in prev_threads else issue), 'prev_issue': prev['issue'] if tid in prev_threads else None})
